@@ -1,0 +1,47 @@
+main{
+    margin : 0 auto;
+    width: 1300px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+main .head {
+    display: flex;
+    justify-content: space-between;
+}
+
+main .d-flex{
+    height: 40px;
+    margin-right: 30px;
+}
+
+main .form-control{
+    width: 200px;
+}
+
+main .btn-outline-success{
+    width: 75px;
+}
+
+main .nav-pills {
+    margin-left: 25px;
+}
+
+main .table-hover{
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+main .btn-success{
+    float: right;
+    margin-right: 30px;
+}
+
+main .pagination {
+    justify-content: center;
+    margin-top: 50px;
+    width: 1300px;
+}
+
+
+

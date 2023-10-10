@@ -1,0 +1,75 @@
+@font-face {
+    font-family: 'RixInooAriDuriR';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2207-01@1.0/RixInooAriDuriR.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+  font-family: 'Giants-Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/Giants-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'TTWanjudaedunsancheB';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/TTWanjudaedunsancheB.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'RixYeoljeongdo_Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2102-01@1.0/RixYeoljeongdo_Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LINESeedKR-Bd';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'SUITE-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+#header{
+  box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.2);
+  background-color: white;
+}
+#header .logo a{
+  color: #00AD7C;
+}
+.navbar a, .navbar a:focus{
+  color: #00AD7C;
+}
+.navbar .getstarted, .navbar .getstarted:focus{
+  border: 2px solid #B3E5BE;
+  color: #00AD7C;
+}
+.navbar>ul>li>a:before {
+  background: #00AD7C;
+}
+.navbar a:hover{
+  color: #00AD7C;
+}
+.navbar .getstarted,
+.navbar .getstarted:focus {
+  border: 2px solid #00AD7C;
+}
+#header.header-scrolled,
+#header.header-inner-pages {
+  background: #fff;
+}
+main a:link, main a:visited{
+  color: black;
+}
+#hero{
+  height: 350px;
+}
+.bi-list::before {
+    content: "\f479";
+    color: black;
+    font-size: 35px;
+}

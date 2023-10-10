@@ -1,0 +1,68 @@
+main{
+    margin: 0 auto;
+    width: 1300px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+main .btn-success{
+    float: right;
+    margin-right: 50px;
+}
+
+main .icon{
+    display: flex;
+    list-style-type: none;
+    width: 150px;
+    justify-content: space-between;
+    margin-left: 1070px;
+    margin-top: 10px;
+    font-size:30px;
+    color:#157347
+}
+
+main .notice-btn{
+    width: 170px;
+    display: flex;
+    justify-content: space-between;
+    float: right;
+    margin-right: 50px;
+}
+
+main .notice-subtitle{
+    display: flex;
+    justify-content: space-between;
+}
+
+main .content{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+main .head{
+    margin-bottom: 15px;
+    width: 1300px;
+    padding-left: 20px;
+}
+
+main .content{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+main .otherdetail{
+    margin-top: 10px;
+    margin-left: 20px;
+    font-size: 20px;
+    list-style-type: none;
+}
+main .notice-title{
+    font-size: 40px;
+    margin-bottom: 5px;
+}
+
+main .notice-info{
+    font-size: 20px;
+    width: 300px;
+    display: flex;
+}

@@ -1,0 +1,66 @@
+.in-progress-bar {
+    width: 40%;
+    background: #A8DF8E;
+    animation: progressBarAnimation 1s ease-in-out;
+}
+@keyframes progressBarAnimation {
+    from {
+        width: 20%;
+    }
+    to {
+        width: 40%;
+    }
+}
+.selectBtn, .pic-Add-Btn {
+    border: none;
+    background: none;
+}
+.selectBtn > img {
+    width: 30px;
+}
+#submit_btn_box {
+    display: flex;
+    justify-content: center;
+}
+#submitBtn {
+    width: 200px;
+    height: 50px;
+}
+ul > li {
+    list-style: none;
+}
+.add-pic {
+    width: 90px;
+    font-size: 15px;
+}
+.img-preview {
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-bottom: 10px; /* 각 리스트 아이템 간격 설정 */
+    width: 100%;
+    height: 150px;
+}
+main div {
+    border-radius: 10px;
+    margin-right: 10px;
+}
+/* 이미지 스타일 */
+.img-preview > img {
+    display: flex;
+    align-items: center;
+    max-width: 100%; /* 이미지가 부모 요소의 최대 너비에 맞게 크기 조정 */
+    max-height: 100%; /* 이미지가 부모 요소의 최대 높이에 맞게 크기 조정 */
+}
+.file-Add-Div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.pic-Add-Btn > img {
+    width: 90px;
+}
+.file-Add-Td {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}

@@ -1,0 +1,66 @@
+main {
+    width: 1300px;
+    margin: 0 auto;
+}
+
+
+.counter-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(#00AD7C 20%, #009378);
+    text-align: center;
+    height: 80px;
+}
+
+.counter-box p {
+    margin: 5px 0 0;
+    padding: 0;
+    color: #909090;
+    font-size: 18px;
+    font-weight: 500
+}
+
+.counter-box i {
+    font-size: 60px;
+    margin: 0 0 15px;
+    color: #4365BC;
+}
+
+.counter { 
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    color: #666;
+    line-height: 28px
+}
+
+.counter-box.colored {
+    background: linear-gradient(#00AD7C 20%, #009378);
+}
+
+
+.counter-box.colored p,
+.counter-box.colored i,
+.counter-box.colored .counter {
+    color: #fff
+}   
+
+h4 {
+    color: #fff;
+    margin: 0;
+}
+
+.table th,td{
+    height: 60px;
+}
+
+
+.region-btn {
+    background: #20754e;
+    border-radius: 20px;
+
+}
+.region-btn:hover {
+    background: #43bc8a;
+}

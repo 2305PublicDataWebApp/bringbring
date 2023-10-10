@@ -1,0 +1,27 @@
+.in-progress-bar {
+    width: 80%;
+    background: #A8DF8E;
+    animation: progressBarAnimation 1s ease-in-out;
+}
+@keyframes progressBarAnimation {
+    from {
+        width: 60%;
+    }
+    to {
+        width: 80%;
+    }
+}
+#payment-card {
+    width: 150px;
+}
+#card-form {
+    display: flex;
+}
+#flexRadioDefault1 {
+    margin-top: 68px;
+}
+#card-img {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
