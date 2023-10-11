@@ -66,8 +66,8 @@
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 
 <%--  얘 지우면 작동 안됨--%>
-<%--  <script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>--%>
-  <script type='text/javascript' src='../../../resources/assets/js/reservation/jquery-1.8.3.js'></script>
+  <script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
+<%--  <script type='text/javascript' src='../../../resources/assets/js/reservation/jquery-1.8.3.js'></script>--%>
 
 
 <!-- 얘 지우면 오류도 안 나고 작동도 안됨 -->
@@ -382,7 +382,7 @@
 
   //마커를 미리 생성
   var marker = new daum.maps.Marker({
-    position: new daum.maps.LatLng(37.537187, 127.005476),
+    // position: new daum.maps.LatLng(37.537187, 127.005476),
     map: map
   });
 

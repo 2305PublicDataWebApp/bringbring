@@ -104,18 +104,18 @@
   <div class="container">
     <div id="category_box">
 <!--      포기한다..!!!!!!!!!!!! -->
-      <button type="button" class="btn btn-outline-success">가구</button>
-      <button type="button" class="btn btn-outline-success">가전</button>
-      <button type="button" class="btn btn-outline-success">운동용품</button>
-      <button type="button" class="btn btn-outline-success">생활/주방</button>
-      <button type="button" class="btn btn-outline-success">악기</button>
-      <button type="button" class="btn btn-outline-success">디지털</button>
-      <button type="button" class="btn btn-outline-success">기타</button>
+      <button type="button" class="btn btn-outline-success" id="furniture" value="가구" onclick="wasteSelect(this);">가구</button>
+      <button type="button" class="btn btn-outline-success" id="electronics" value="가전" onclick="wasteSelect(this);">가전</button>
+      <button type="button" class="btn btn-outline-success" id="appliance" value="운동용품" onclick="wasteSelect(this);">운동용품</button>
+      <button type="button" class="btn btn-outline-success" id="household" value="생활/주방" onclick="wasteSelect(this);">생활/주방</button>
+      <button type="button" class="btn btn-outline-success" id="instrument" value="악기" onclick="wasteSelect(this);">악기</button>
+      <button type="button" class="btn btn-outline-success" id="digital" value="디지털" onclick="wasteSelect(this);">디지털</button>
+      <button type="button" class="btn btn-outline-success" id="other" value="기타" onclick="wasteSelect(this);">기타</button>
     </div>
   </div>
   <div>
     <div>
-      <table class="table">
+      <table class="table" id="listTable">
         <tbody>
         <tr>
           <td>
@@ -286,6 +286,90 @@
     }
 
   }
+
+  // 버튼 선택 시 리스트 출력
+  function wasteSelect(button) {
+
+    let selectItem = button.value;
+    console.log("선택된 값: " + selectItem);
+
+    $.ajax({
+      url : "/reservation/selectItem.do",
+      data : selectItem,
+      type : "GET",
+      success : function (data) {
+          var tableBody = $('#listTable');
+
+          // data를 반복하여 각 항목을 테이블에 추가
+          for (let i = 0; i < data.length; i++) {
+            var item = data[i];
+
+            var row = $('<tr>'); // 새로운 행을 생성
+
+            // 첫 번째 열 (체크박스와 레이블)
+            var firstCell = $('<td>');
+            var checkbox = $('<input>').attr({
+              type: "checkbox",
+              value: item.name
+            });
+            var label = $('<label>').text(item.name);
+
+            firstCell.append(checkbox, label);
+
+            // 두 번째 열 (select 박스)
+            var secondCell = $('<td>');
+            var selectBox = $('<select>').attr('name', item.name);
+
+            for (let j = 0; j < item.options.length; j++) {
+              var option = $('<option>').text(item.options[j]);
+              selectBox.append(option);
+            }
+
+            secondCell.append(selectBox);
+
+            // 세 번째 열 (요금)
+            var thirdCell = $('<td>');
+            var feeDiv = $('<div>').addClass('fee');
+            var feeParagraph = $('<p>').text(item.fee + '원');
+            feeDiv.append(feeParagraph);
+            thirdCell.append(feeDiv);
+
+            // 네 번째 열 (버튼)
+            var fourthCell = $('<td>');
+            var minusButton = $('<button>').addClass('selectBtn').attr({
+              onclick: "count('minus')",
+              value: '+'
+            });
+            var minusImg = $('<img>').attr('src', '../../../resources/assets/img/reservation/minus.png');
+            var numberInput = $('<input>').attr({
+              type: 'number',
+              minlength: 0,
+              maxlength: 10,
+              id: 'numberInput',
+              value: 0
+            });
+            var plusButton = $('<button>').addClass('selectBtn').attr({
+              onclick: "count('plus')",
+              value: '-'
+            });
+            var plusImg = $('<img>').attr('src', '../../../resources/assets/img/reservation/plus.png');
+
+            minusButton.append(minusImg);
+            plusButton.append(plusImg);
+            fourthCell.append(minusButton, numberInput, plusButton);
+
+            // 행을 테이블에 추가
+            row.append(firstCell, secondCell, thirdCell, fourthCell);
+            tableBody.append(row);
+      }
+    })
+
+
+  }
+
+
+
+
 
 
 
