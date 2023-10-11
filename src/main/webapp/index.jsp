@@ -11,28 +11,6 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
-
-  <!-- Favicons -->
-  <link href="../resources/assets/img/main/title-icon.png" rel="icon">
-  <link href="../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="../resources/assets/css/style.css" rel="stylesheet">
-
   <!-- =======================================================
   * Template Name: Arsha
   * Updated: Sep 18 2023 with Bootstrap v5.3.2
@@ -63,12 +41,6 @@
       font-family: 'RixYeoljeongdo_Regular';
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2102-01@1.0/RixYeoljeongdo_Regular.woff') format('woff');
       font-weight: normal;
-      font-style: normal;
-  }
-  @font-face {
-      font-family: 'LINESeedKR-Bd';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
-      font-weight: 700;
       font-style: normal;
   }
   @font-face {
@@ -370,60 +342,60 @@
         <div class="clients-slider swiper">
           <div class="swiper-wrapper align-items-center">
             <!-- 서울 -->
-            <div class="swiper-slide seoul"><img src="assets/img/localGovernments/seoul1.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide seoul"><img src="assets/img/localGovernments/seoul2.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide seoul"><img src="assets/img/localGovernments/seoul3.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide seoul"><img src="assets/img/localGovernments/seoul4_20230316.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide seoul"><img src="/resources/assets/img/localGovernments/seoul1.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide seoul"><img src="/resources/assets/img/localGovernments/seoul2.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide seoul"><img src="/resources/assets/img/localGovernments/seoul3.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide seoul"><img src="/resources/assets/img/localGovernments/seoul4_20230316.jpg" class="img-fluid" alt=""></div>
             <!-- 경기 -->
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg1.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg2.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg3.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg4.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg5.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg6.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg1.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg2.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg3.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg4.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg5.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg6.jpg" class="img-fluid" alt=""></div>
             <!-- 인천 -->
-            <div class="swiper-slide incheon"><img src="assets/img/localGovernments/incheon1_20230316.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide incheon"><img src="assets/img/localGovernments/incheon3.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide incheon"><img src="assets/img/localGovernments/incheon4.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide incheon"><img src="assets/img/localGovernments/incheon5.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide incheon"><img src="/resources/assets/img/localGovernments/incheon1_20230316.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide incheon"><img src="/resources/assets/img/localGovernments/incheon3.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide incheon"><img src="/resources/assets/img/localGovernments/incheon4.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide incheon"><img src="/resources/assets/img/localGovernments/incheon5.jpg" class="img-fluid" alt=""></div>
             <!-- 충청 -->
-            <div class="swiper-slide chungcheong"><img src="assets/img/localGovernments/cc1.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide chungcheong"><img src="assets/img/localGovernments/cc2.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide chungcheong"><img src="assets/img/localGovernments/cc3.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide chungcheong"><img src="assets/img/localGovernments/대전시 서구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide chungcheong"><img src="/resources/assets/img/localGovernments/cc1.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide chungcheong"><img src="/resources/assets/img/localGovernments/cc2.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide chungcheong"><img src="/resources/assets/img/localGovernments/cc3.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide chungcheong"><img src="/resources/assets/img/localGovernments/대전시 서구.jpg" class="img-fluid" alt=""></div>
             <!-- 강원 -->
-            <div class="swiper-slide gangwon"><img src="assets/img/localGovernments/kw1.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gangwon"><img src="/resources/assets/img/localGovernments/kw1.jpg" class="img-fluid" alt=""></div>
             <!-- 경상 -->
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/경상 사천시.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/경상 밀양시.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/경상 울진군.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/경상 산청군.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/대구 달서구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/대구 동구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/대구 북구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/대구 수성구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/울산 동구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/경상 사천시.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/경상 밀양시.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/경상 울진군.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/경상 산청군.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/대구 달서구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/대구 동구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/대구 북구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/대구 수성구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/울산 동구.jpg" class="img-fluid" alt=""></div>
             <!-- 전라 -->
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla1.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla2.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla3.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla4.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla5.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla6.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla7.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla8.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주광역시.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주 광산구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주 남구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주 동구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주 북구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주 서구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla1.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla2.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla3.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla4.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla5.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla6.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla7.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla8.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주광역시.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주 광산구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주 남구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주 동구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주 북구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주 서구.jpg" class="img-fluid" alt=""></div>
             <!-- 부산 -->
-            <div class="swiper-slide busan"><img src="assets/img/localGovernments/부산광역시.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide busan"><img src="assets/img/localGovernments/부산 강서구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide busan"><img src="assets/img/localGovernments/부산 기장군.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide busan"><img src="assets/img/localGovernments/부산 연제구.png" class="img-fluid" alt=""></div>
-            <div class="swiper-slide busan"><img src="assets/img/localGovernments/부산 중구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide busan"><img src="/resources/assets/img/localGovernments/부산광역시.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide busan"><img src="/resources/assets/img/localGovernments/부산 강서구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide busan"><img src="/resources/assets/img/localGovernments/부산 기장군.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide busan"><img src="/resources/assets/img/localGovernments/부산 연제구.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide busan"><img src="/resources/assets/img/localGovernments/부산 중구.jpg" class="img-fluid" alt=""></div>
             </div>
             <!-- <div class="swiper-pagination"></div> -->
           </div>
@@ -680,53 +652,53 @@
         // 모든 이미지 추가
         // 예시로 서울, 경기, 인천, 충청, 강원 이미지를 추가합니다. 필요에 따라 수정하세요.
         sliderWrapper.innerHTML = `
-        	<div class="swiper-slide seoul"><img src="assets/img/localGovernments/seoul1.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide seoul"><img src="assets/img/localGovernments/seoul2.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide seoul"><img src="assets/img/localGovernments/seoul3.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide seoul"><img src="assets/img/localGovernments/seoul4_20230316.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg1.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg2.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg3.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg4.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg5.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeonggi"><img src="assets/img/localGovernments/kg6.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide incheon"><img src="assets/img/localGovernments/incheon1_20230316.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide incheon"><img src="assets/img/localGovernments/incheon3.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide incheon"><img src="assets/img/localGovernments/incheon4.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide incheon"><img src="assets/img/localGovernments/incheon5.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide chungcheong"><img src="assets/img/localGovernments/cc1.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide chungcheong"><img src="assets/img/localGovernments/cc2.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide chungcheong"><img src="assets/img/localGovernments/cc3.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide chungcheong"><img src="assets/img/localGovernments/대전시 서구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gangwon"><img src="assets/img/localGovernments/kw1.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/경상 사천시.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/경상 밀양시.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/경상 울진군.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/경상 산청군.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/대구 달서구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/대구 동구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/대구 북구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/대구 수성구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide gyeongsang"><img src="assets/img/localGovernments/울산 동구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla1.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla2.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla3.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla4.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla5.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla6.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla7.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/jeolla8.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주광역시.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주 광산구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주 남구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주 동구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주 북구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide jeolla"><img src="assets/img/localGovernments/광주 서구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide busan"><img src="assets/img/localGovernments/부산광역시.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide busan"><img src="assets/img/localGovernments/부산 강서구.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide busan"><img src="assets/img/localGovernments/부산 기장군.jpg" class="img-fluid" alt=""></div>
-            <div class="swiper-slide busan"><img src="assets/img/localGovernments/부산 연제구.png" class="img-fluid" alt=""></div>
-            <div class="swiper-slide busan"><img src="assets/img/localGovernments/부산 중구.jpg" class="img-fluid" alt=""></div>
+        	<div class="swiper-slide seoul"><img src="/resources/assets/img/localGovernments/seoul1.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide seoul"><img src="/resources/assets/img/localGovernments/seoul2.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide seoul"><img src="/resources/assets/img/localGovernments/seoul3.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide seoul"><img src="/resources/assets/img/localGovernments/seoul4_20230316.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg1.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg2.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg3.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg4.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg5.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeonggi"><img src="/resources/assets/img/localGovernments/kg6.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide incheon"><img src="/resources/assets/img/localGovernments/incheon1_20230316.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide incheon"><img src="/resources/assets/img/localGovernments/incheon3.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide incheon"><img src="/resources/assets/img/localGovernments/incheon4.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide incheon"><img src="/resources/assets/img/localGovernments/incheon5.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide chungcheong"><img src="/resources/assets/img/localGovernments/cc1.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide chungcheong"><img src="/resources/assets/img/localGovernments/cc2.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide chungcheong"><img src="/resources/assets/img/localGovernments/cc3.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide chungcheong"><img src="/resources/assets/img/localGovernments/대전시 서구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gangwon"><img src="/resources/assets/img/localGovernments/kw1.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/경상 사천시.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/경상 밀양시.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/경상 울진군.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/경상 산청군.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/대구 달서구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/대구 동구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/대구 북구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/대구 수성구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide gyeongsang"><img src="/resources/assets/img/localGovernments/울산 동구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla1.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla2.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla3.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla4.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla5.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla6.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla7.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/jeolla8.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주광역시.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주 광산구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주 남구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주 동구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주 북구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide jeolla"><img src="/resources/assets/img/localGovernments/광주 서구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide busan"><img src="/resources/assets/img/localGovernments/부산광역시.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide busan"><img src="/resources/assets/img/localGovernments/부산 강서구.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide busan"><img src="/resources/assets/img/localGovernments/부산 기장군.jpg" class="img-fluid" alt=""></div>
+            <div class="swiper-slide busan"><img src="/resources/assets/img/localGovernments/부산 연제구.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide busan"><img src="/resources/assets/img/localGovernments/부산 중구.jpg" class="img-fluid" alt=""></div>
         `;
     });
     // 서울 버튼 클릭 시
