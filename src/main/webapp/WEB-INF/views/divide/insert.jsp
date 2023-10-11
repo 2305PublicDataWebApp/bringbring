@@ -13,8 +13,8 @@
 
 
   <!-- Favicons -->
-  <link href="../assets/img/main/title-icon.png" rel="icon">
-  <link href="../assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../resources/assets/img/main/title-icon.png" rel="icon">
+  <link href="../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -22,17 +22,17 @@
     rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <!-- <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet"> -->
-  <!-- <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet"> -->
-  <!-- <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"> -->
+  <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <!-- <link href="../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet"> -->
+  <!-- <link href="../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet"> -->
+  <!-- <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"> -->
 
   <!-- Template Main CSS File -->
-  <link href="../assets/css/style.css" rel="stylesheet">
-  <link href="../assets/css/common.css" rel="stylesheet">
+  <link href="../resources/assets/css/style.css" rel="stylesheet">
+  <link href="../resources/assets/css/common.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Arsha
@@ -47,8 +47,11 @@
   integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
   crossorigin="anonymous"></script>
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-  <script src="../assets/js/summernote/summernote-lite.js"></script>
-  <script src="../assets/js/summernote/lang/summernote-ko-KR.js"></script>
+  <script src="../resources/assets/js/summernote/summernote-lite.js"></script>
+  <script src="../resources/assets/js/summernote/lang/summernote-ko-KR.js"></script>
+<!--   카카오 api 관련 -->
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=043e510b873d1287a23e00d8444a6b47&libraries=services"></script>
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <style>
     /* 여기서부터 이 html의 css */
     main ul li{
@@ -91,32 +94,8 @@
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top ">
-    <div class="container d-flex align-items-center">
-      <img src="../assets/img/main/title-icon.png" style="width: 26px;border-radius: 3px;margin: 0px 5px 4px 0px;" alt="">
-      <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.html">브링브링</a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link scrollto" href="#about">배출안내</a></li>
-          <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
-          <li><a class="nav-link   scrollto" href="#portfolio">공지사항</a></li>
-          <li><a class="nav-link scrollto" href="#team">문의게시판</a></li>
-          <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
-          
-          </li>
-          <li><button class="getstarted scrollto">로그인</button>
-            <!-- <a  href="#login">로그인</a> -->
-          </li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-    </div>
-  </header><!-- End Header -->
+  <!-- 헤더 -->
+  <jsp:include page="/include/header.jsp"></jsp:include>
 
   <div style="width: 100%;height: 74px;"></div>
     
@@ -139,7 +118,7 @@
           </li>
           <li>
             <label for="region">지역</label>
-            <select name="" id="region" style="width: 60px;margin-right: 15px;">
+            <select name="" id="region" style="width: 100px;margin-right: 15px;">
               <option value="seoul">서울</option>
               <option value="seoul">경기</option>
               <option value="seoul">경상</option>
@@ -147,7 +126,7 @@
               <option value="seoul">강원</option>
               <option value="seoul">전라</option>
             </select>
-            <select name="" id="" style="width: 100px;margin-right: 15px;">
+            <select name="" id="" style="width: 150px;margin-right: 15px;">
               <option value="seoul">서울</option>
               <option value="seoul">경기</option>
               <option value="seoul">경상</option>
@@ -155,7 +134,6 @@
               <option value="seoul">강원</option>
               <option value="seoul">전라</option>
             </select>
-            <input type="text" placeholder="상세주소를 입력해주세요" style="width: 409px;">
           </li>
           <li>
             <label for="type">종류</label>
@@ -174,11 +152,14 @@
           </li>
           <li>
             <label for="location">거래 희망 장소</label>
-            <input type="text" id="location">
+            <input style="width: 500px;margin-right: 15px;" id="location" type="text" id="location">
+            <button class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
+            <input type="hidden" id="coordinateX">
+            <input type="hidden" id="coordinateY">
           </li>
           <li>
-            <label for="map">지도 미리보기</label>
-            <input type="text" id="map" style="height: 300px;">
+            <label>지도 미리보기</label>
+            <div id="map" style="height: 300px;width: 600px;border: 1px solid rgba(133, 133, 133, 0.5);border-radius: 5px;"></div>
           </li>
         </ul>
       </div>
@@ -189,90 +170,25 @@
   </main>
   <!-- 메인 -->
 <!-- End #main -->
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
 
-          <div class="col-lg-3 col-md-6 footer-contact">
-            <h3>브링브링</h3>
-            <p>
-              A108 Adam Street <br>
-              New York, NY 535022<br>
-              United States <br><br>
-              <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> info@example.com<br>
-            </p>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#"></a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Services</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Social Networks</h4>
-            <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
-            <div class="social-links mt-3">
-              <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-              <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-              <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-              <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-              <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="container footer-bottom clearfix">
-      <div class="copyright">
-        &copy; Copyright <strong><span>Arsha</span></strong>. All Rights Reserved
-      </div>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </div>
-  </footer><!-- End Footer -->
+  <!-- 푸터 -->
+  <jsp:include page="/include/footer.jsp"></jsp:include>
 
   <div id="preloader"></div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
       class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../assets/vendor/aos/aos.js"></script>
-  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../resources/assets/vendor/aos/aos.js"></script>
+  <script src="../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="../resources/assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="../assets/js/main.js"></script>
+  <script src="../resources/assets/js/main.js"></script>
   
   <!-- 채널톡 api -->
   <script>
@@ -343,7 +259,105 @@
         // 페이지가 로드될 때 위의 함수를 실행
         document.addEventListener('DOMContentLoaded', removeAfterPseudoElement);
   </script>
+ 
   
+  <script type="text/javascript">
+	// 지도에 장소 표시할 거~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!
+	  var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+	          mapOption = {
+	            center: new kakao.maps.LatLng(37.566535, 126.9779692), // 지도의 중심좌표
+	            level: 3 // 지도의 확대 레벨
+	          };
+	
+	  console.log("지도 생성");
+	  // 지도를 생성합니다
+	  var map = new kakao.maps.Map(mapContainer, mapOption);
+	
+	  // 주소-좌표 변환 객체를 생성합니다
+	  var geocoder = new kakao.maps.services.Geocoder();
+	
+	  //마커를 미리 생성
+	  var marker = new daum.maps.Marker({
+// 	    position: new daum.maps.LatLng(37.566535, 126.9779692),
+	    map: map
+	  });
+	
+	
+	  function sample5_execDaumPostcode() {
+	    new daum.Postcode({
+	      oncomplete: function (data) {
+	        var addr = data.address; // 최종 주소 변수
+	        var postCode = data.zonecode;
+	        // 주소 정보를 해당 필드에 넣는다.
+	        document.getElementById("location").value = addr;
+	//         document.getElementById("sample6_postcode").value = postCode;
+	        // 주소로 상세 정보를 검색
+	        geocoder.addressSearch(data.address, function (results, status) {
+	          // 정상적으로 검색이 완료됐으면
+	          if (status === daum.maps.services.Status.OK) {
+	
+	            var result = results[0]; //첫번째 결과의 값을 활용
+	
+	            // 해당 주소에 대한 좌표를 받아서
+	            var coords = new daum.maps.LatLng(result.y, result.x);
+	            document.getElementById("coordinateX").value = result.x;
+	            document.getElementById("coordinateY").value = result.y;
+	            map.relayout();
+	            // 지도 중심을 변경한다.
+	            map.setCenter(coords);
+	            // 마커를 결과값으로 받은 위치로 옮긴다.
+	            marker.setPosition(coords)
+	          }
+	        });
+	      }
+	    }).open();
+	  }
+  </script>
+ 
+  <script type="text/javascript">
+
+	//주소-좌표 변환 객체를 생성합니다
+	var geocoder = new kakao.maps.services.Geocoder();
+	
+	var marker = new kakao.maps.Marker(); // 클릭한 위치를 표시할 마커입니다
+// 	  infowindow = new kakao.maps.InfoWindow({zindex:1}); // 클릭한 위치에 대한 주소를 표시할 인포윈도우입니다
+	
+	
+	//지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
+	kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+	  searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+	      if (status === kakao.maps.services.Status.OK) {
+	          
+	          
+	          document.getElementById("location").value = result[0].address.address_name;
+					
+	          // 마커를 클릭한 위치에 표시합니다 
+	          marker.setPosition(mouseEvent.latLng);
+	          document.getElementById("coordinateX").value = mouseEvent.latLng.La;
+	          document.getElementById("coordinateY").value = mouseEvent.latLng.Ma;
+	          
+	          marker.setMap(map);
+	
+	          // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
+// 	          infowindow.open(map, marker);
+	      }   
+	  });
+	});
+	
+
+	
+	function searchAddrFromCoords(coords, callback) {
+	  // 좌표로 행정동 주소 정보를 요청합니다
+	  geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+	}
+	
+	function searchDetailAddrFromCoords(coords, callback) {
+	  // 좌표로 법정동 상세 주소 정보를 요청합니다
+	  geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+	}
+	
+	
+  </script>
   
 </body>
 
