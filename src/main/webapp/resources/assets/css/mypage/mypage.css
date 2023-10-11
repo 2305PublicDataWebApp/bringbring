@@ -3,15 +3,16 @@ main .mypage_top {
     min-height: 900px;
     padding: 50px;
     margin-top: 60px !important;
-    --border: 1px solid #cccccc;
 }
 
-main .recent_enroll_list img {
+main .recent_enroll_list img 
+, main .enroll_list img {
     width: 150px;
     height: 150px;
 }
 
-main .mypage_profile_img {
+main .mypage_profile_img 
+, main .modal-body img {
     width: 120px;
     height: 120px;
 }
@@ -28,6 +29,44 @@ main .mypage_sidebar a {
     vertical-align: middle; 
 }
 
-main .mypage_top_div {
+main .mypage_top_div 
+, main .modal_border_bottom {
     border-bottom: 2px solid #00AD7C;
 }
+
+main .modal-body
+, main .modal-footer {
+    border: 0px;
+}
+
+main .modal-header {
+    background-color: #00AD7C;
+}
+
+main .modal-header {
+    color: white;
+}
+
+main .cancel_reservation_btn {
+    height: 52px;
+    color: white; 
+    padding: 5px 20px;
+    display: inline-block;
+    margin-top: 16px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0,0,0,0.21);
+    border-bottom-color: rgba(0,0,0,0.34);
+    text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+                0 2px 0 -1px rgba(0,0,0,0.13), 
+                0 3px 0 -1px rgba(0,0,0,0.08), 
+                0 3px 13px -1px rgba(0,0,0,0.21);
+    background-color: #00AD7C !important;
+    }
+
+main .cancel_reservation_btn:active {
+    top: 1px;
+    border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+    position: relative;
+    }
