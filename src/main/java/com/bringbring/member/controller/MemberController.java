@@ -33,7 +33,7 @@ public class MemberController {
 	
 	@PostMapping("/member/insert.do")
 	public String registerMember(
-			@Valid @ModelAttribute Member member
+			@ModelAttribute Member member
 			, Model model) {
 
 //			String str = null;
