@@ -41,6 +41,10 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   
   <link rel="stylesheet" href="../../../resources/assets/css/reservation/wasteSelect.css">
   <link rel="stylesheet" href="../../../resources/assets/css/reservation/common.css">
@@ -287,85 +291,97 @@
 
   }
 
+</script>
+
+<script type="text/javascript">
   // 버튼 선택 시 리스트 출력
   function wasteSelect(button) {
 
     let selectItem = button.value;
     console.log("선택된 값: " + selectItem);
 
+    let encodedItem = encodeURIComponent(selectItem);
+    let url = "/reservation/selectItem.do?" + encodedItem;
+
     $.ajax({
-      url : "/reservation/selectItem.do",
-      data : selectItem,
-      type : "GET",
-      success : function (data) {
-          var tableBody = $('#listTable');
+      url: url,
+      data: {selectItem: selectItem},
+      type: "GET",
+      success: function (data) {
+        // for (var i = 0; i < data.length; i++) {
+        //   var item = data[i];
+        //   console.log(item);
+        //   console.log("wasteCategoryName: " + item.wasteType.wasteTypeName);
+        //   console.log("wasteInfoStandard: " + item.wasteInfo.wasteInfoStandard);
+        //   console.log("wasteInfoFee: " + item.wasteInfo.wasteInfoFee);
+        //   // 추가로 데이터를 화면에 표시하거나 원하는 동작 수행
+        // }
 
-          // data를 반복하여 각 항목을 테이블에 추가
-          for (let i = 0; i < data.length; i++) {
-            var item = data[i];
+        // 이전 테이블을 삭제 (만약 이미 테이블이 있는 경우)
+        var tableBody = document.getElementById('listTable');
+        while (tableBody.firstChild) {
+          tableBody.removeChild(tableBody.firstChild);
+        }
 
-            var row = $('<tr>'); // 새로운 행을 생성
+        var groupedData = {}; // wasteType를 기준으로 데이터를 그룹화할 객체
 
-            // 첫 번째 열 (체크박스와 레이블)
-            var firstCell = $('<td>');
-            var checkbox = $('<input>').attr({
-              type: "checkbox",
-              value: item.name
-            });
-            var label = $('<label>').text(item.name);
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i];
+          var wasteTypeName = item.wasteType.wasteTypeName;
 
-            firstCell.append(checkbox, label);
+          if (!groupedData[wasteTypeName]) {
+            // 그룹이 존재하지 않는 경우 새로운 그룹을 만들고 초기화
+            groupedData[wasteTypeName] = {
+              wasteCategoryName: wasteTypeName,
+              wasteInfoStandards: [], // wasteInfoStandard 값을 저장할 배열
+              wasteInfoFees: [] // wasteInfoFee 값을 저장할 배열
+            };
+          }
 
-            // 두 번째 열 (select 박스)
-            var secondCell = $('<td>');
-            var selectBox = $('<select>').attr('name', item.name);
+          // 데이터를 해당 그룹에 추가
+          groupedData[wasteTypeName].wasteInfoStandards.push(item.wasteInfo.wasteInfoStandard);
+          groupedData[wasteTypeName].wasteInfoFees.push(item.wasteInfo.wasteInfoFee);
+        }
 
-            for (let j = 0; j < item.options.length; j++) {
-              var option = $('<option>').text(item.options[j]);
-              selectBox.append(option);
-            }
+// 테이블을 생성하고 그룹화된 데이터를 사용하여 행을 추가
+        var tableBody = document.getElementById('listTable');
 
-            secondCell.append(selectBox);
+        for (var wasteTypeName in groupedData) {
+          var item = groupedData[wasteTypeName];
+          var row = document.createElement('tr');
 
-            // 세 번째 열 (요금)
-            var thirdCell = $('<td>');
-            var feeDiv = $('<div>').addClass('fee');
-            var feeParagraph = $('<p>').text(item.fee + '원');
-            feeDiv.append(feeParagraph);
-            thirdCell.append(feeDiv);
+          // 첫 번째 열 (wasteTypeName)
+          var firstCell = document.createElement('td');
+          firstCell.textContent = item.wasteCategoryName;
 
-            // 네 번째 열 (버튼)
-            var fourthCell = $('<td>');
-            var minusButton = $('<button>').addClass('selectBtn').attr({
-              onclick: "count('minus')",
-              value: '+'
-            });
-            var minusImg = $('<img>').attr('src', '../../../resources/assets/img/reservation/minus.png');
-            var numberInput = $('<input>').attr({
-              type: 'number',
-              minlength: 0,
-              maxlength: 10,
-              id: 'numberInput',
-              value: 0
-            });
-            var plusButton = $('<button>').addClass('selectBtn').attr({
-              onclick: "count('plus')",
-              value: '-'
-            });
-            var plusImg = $('<img>').attr('src', '../../../resources/assets/img/reservation/plus.png');
+          // 두 번째 열 (wasteInfoStandards)
+          var secondCell = document.createElement('td');
+          var selectElement = document.createElement('select');
 
-            minusButton.append(minusImg);
-            plusButton.append(plusImg);
-            fourthCell.append(minusButton, numberInput, plusButton);
+          // 각 wasteInfoStandard을 option으로 추가
+          item.wasteInfoStandards.forEach(function (standard) {
+            var option = document.createElement('option');
+            option.textContent = standard;
+            selectElement.appendChild(option);
+          });
+          secondCell.appendChild(selectElement);
 
-            // 행을 테이블에 추가
-            row.append(firstCell, secondCell, thirdCell, fourthCell);
-            tableBody.append(row);
+          // 세 번째 열 (wasteInfoFees)
+          var thirdCell = document.createElement('td');
+          thirdCell.textContent = item.wasteInfoFees.join(', ');
+
+          // 네 번째 열 (버튼 또는 다른 필드)
+
+          // 행을 테이블에 추가
+          row.appendChild(firstCell);
+          row.appendChild(secondCell);
+          row.appendChild(thirdCell);
+          tableBody.appendChild(row);
+        }
+
       }
-    })
-
-
-  }
+      })
+    }
 
 
 

@@ -5,9 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -15,7 +12,7 @@ import java.util.Map;
 public class ReservationController {
 
     private final ReservationService reservationService;
-// 페이지 이동
+    // 페이지 이동
     @GetMapping("/select.do")
     public String showWasteSelect() {
         return "/reservation/wasteSelect";
@@ -37,12 +34,14 @@ public class ReservationController {
         return "/reservation/payComplete";
     }
 
-    @ResponseBody
-    @GetMapping
-    public String selectWasteList() {
+//    @ResponseBody
+//    @GetMapping("/selectItem.do")
+//    public String selectWasteList(@RequestParam String selectItem) {
+//        List<WasteData> wasteList = reservationService.selectWasteList(selectItem);
+//
+//        return "";
+//    }
 
-        return "";
-    }
 
 
 

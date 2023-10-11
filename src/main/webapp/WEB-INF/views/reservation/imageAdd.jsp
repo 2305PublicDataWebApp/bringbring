@@ -41,6 +41,9 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   
   <link rel="stylesheet" href="../../../resources/assets/css/reservation/imageAdd.css">
   <link rel="stylesheet" href="../../../resources/assets/css/reservation/common.css">
