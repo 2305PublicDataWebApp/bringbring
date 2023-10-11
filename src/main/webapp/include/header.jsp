@@ -10,10 +10,10 @@
 	  <!-- ======= Header ======= -->
 	  <header id="header" class="fixed-top ">
 	    <div class="container d-flex align-items-center">
-	      <img src="./../resources/assets/img/main/cargo-truck.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
+	      <img src="../resources/assets/img/main/icon-title.png" style="width: 26px;border-radius: 3px;margin: 0px 5px 3px 0px;" alt="">
 	      <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.html">브링브링</a></h1>
 	      <!-- Uncomment below if you prefer to use an image logo -->
-	      <!-- <a href="index.html" class="logo me-auto"><img src="../resources/assets/img/logo.png" alt="" class="img-fluid"></a>-->
+	      <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 	
 	      <nav id="navbar" class="navbar">
 	        <ul>
