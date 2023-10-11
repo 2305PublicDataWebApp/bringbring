@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -10,16 +11,6 @@
   <title>브링브링</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
-
-
-  <!-- Favicons -->
-  <link href="../resources/assets/img/main/title-icon.png" rel="icon">
-  <link href="../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
@@ -104,6 +95,8 @@
     <div style="margin: 0 auto;text-align: center;margin: 30px 0px 70px 0px;">
       <h2>나눔 게시판 글 작성</h2>
     </div>
+<form action="">
+</form>
     <div style="width: 1000px; margin: 0 auto; border: 2px solid #ccc;padding: 20px 0px;">
       <div style="margin: 0 auto;width: 800px;">
         <ul class="divide-insert-menu" style="padding: 0px;">
@@ -119,7 +112,7 @@
           <li>
             <label for="region">지역</label>
             <select name="" id="region" style="width: 100px;margin-right: 15px;">
-              <option value="seoul">서울</option>
+			  <option value="seoul">서울</option>
               <option value="seoul">경기</option>
               <option value="seoul">경상</option>
               <option value="seoul">충청</option>
@@ -138,10 +131,9 @@
           <li>
             <label for="type">종류</label>
             <select name="" id="type" style="width: 176px;margin-right: 15px;">
-              <option value="seoul">가전제품</option>
-              <option value="seoul">생활용품</option>
-              <option value="seoul">가구</option>
-              <option value="seoul">기타</option>
+				<c:forEach var="wCategory" items="${wList}" >			
+					<option value="${wCategory.wasteCategoryNo}">${wCategory.wasteCategoryName}</option>
+				</c:forEach>
             </select>
           </li>
           <li>

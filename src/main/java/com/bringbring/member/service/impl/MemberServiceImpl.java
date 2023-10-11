@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class MemberServiceImpl implements MemberService{
 
-	
 	private final MemberStore mStore;
 	
 	@Override
