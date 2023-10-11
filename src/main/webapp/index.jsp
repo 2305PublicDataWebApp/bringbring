@@ -10,7 +10,23 @@
   <title>브링브링</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
+  
+  <!-- Favicons -->
+  <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
+  
+  <!-- Vendor CSS Files -->
+  <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+  <!-- Template Main CSS File -->
+  <link href="../resources/assets/css/style.css" rel="stylesheet">
+  
   <!-- =======================================================
   * Template Name: Arsha
   * Updated: Sep 18 2023 with Bootstrap v5.3.2

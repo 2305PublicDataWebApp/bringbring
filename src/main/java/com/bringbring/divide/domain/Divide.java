@@ -1,4 +1,4 @@
-package com.bringbring.config.divide.domain;
+package com.bringbring.divide.domain;
 
 import java.time.LocalDateTime;
 

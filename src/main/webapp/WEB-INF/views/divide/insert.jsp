@@ -12,14 +12,15 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
+  <!-- Favicons -->
+  <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
+  
   <!-- Vendor CSS Files -->
   <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <!-- <link href="../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet"> -->
-  <!-- <link href="../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet"> -->
-  <!-- <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"> -->
 
   <!-- Template Main CSS File -->
   <link href="../resources/assets/css/style.css" rel="stylesheet">
@@ -32,15 +33,16 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
   <!-- include summernote css/js -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-  integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-  crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
   <script src="../resources/assets/js/summernote/summernote-lite.js"></script>
   <script src="../resources/assets/js/summernote/lang/summernote-ko-KR.js"></script>
-<!--   카카오 api 관련 -->
+  
+  <!-- 카카오 api 관련 -->
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=043e510b873d1287a23e00d8444a6b47&libraries=services"></script>
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <style>
@@ -80,6 +82,12 @@
     main select{
       height: 35px;
     }
+    .fileLayOut{
+    	font-size: 15px;
+    	border: 1px solid rgba(133, 133, 133, 0.5);
+    	width: 570px;
+    	border-radius: 3px;
+    }
   </style>
 </head>
 
@@ -95,70 +103,72 @@
     <div style="margin: 0 auto;text-align: center;margin: 30px 0px 70px 0px;">
       <h2>나눔 게시판 글 작성</h2>
     </div>
-<form action="">
-</form>
-    <div style="width: 1000px; margin: 0 auto; border: 2px solid #ccc;padding: 20px 0px;">
-      <div style="margin: 0 auto;width: 800px;">
-        <ul class="divide-insert-menu" style="padding: 0px;">
-          <li>
-            <label for="title">제목</label>
-            <input type="text" id="title">
-          </li>
-          <li class="file-li" style="padding-bottom: 10px;">
-            <label for="image">파일</label>
-            <i style="font-size: 20px;width: 30px;" class="bi bi-plus-circle-fill" id="addFileInput"></i>
-            <input style="font-size: 15px;border: 1px solid rgba(133, 133, 133, 0.5);width: 570px;border-radius: 3px;" class="form-control" type="file" id="image">
-          </li>
-          <li>
-            <label for="region">지역</label>
-            <select name="" id="region" style="width: 100px;margin-right: 15px;">
-			  <option value="seoul">서울</option>
-              <option value="seoul">경기</option>
-              <option value="seoul">경상</option>
-              <option value="seoul">충청</option>
-              <option value="seoul">강원</option>
-              <option value="seoul">전라</option>
-            </select>
-            <select name="" id="" style="width: 150px;margin-right: 15px;">
-              <option value="seoul">서울</option>
-              <option value="seoul">경기</option>
-              <option value="seoul">경상</option>
-              <option value="seoul">충청</option>
-              <option value="seoul">강원</option>
-              <option value="seoul">전라</option>
-            </select>
-          </li>
-          <li>
-            <label for="type">종류</label>
-            <select name="" id="type" style="width: 176px;margin-right: 15px;">
-				<c:forEach var="wCategory" items="${wList}" >			
-					<option value="${wCategory.wasteCategoryNo}">${wCategory.wasteCategoryName}</option>
-				</c:forEach>
-            </select>
-          </li>
-          <li>
-            <label for="summernote">내용</label>
-            <div id="" class="d-flex justify-content-center flex-column" style="width: 600px;">
-              <textarea id="summernote" spellcheck="false" required></textarea>
-            </div>
-          </li>
-          <li>
-            <label for="location">거래 희망 장소</label>
-            <input style="width: 500px;margin-right: 15px;" id="location" type="text" id="location">
-            <button class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
-            <input type="hidden" id="coordinateX">
-            <input type="hidden" id="coordinateY">
-          </li>
-          <li>
-            <label>지도 미리보기</label>
-            <div id="map" style="height: 300px;width: 600px;border: 1px solid rgba(133, 133, 133, 0.5);border-radius: 5px;"></div>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div style="margin: 0 auto;text-align: center;margin-top: 100px;">
-      <button type="button" class="btn btn-success btn-lg">글 작성 완료</button>
-    </div>
+	<form name="insertForm" action="/divide/insert.do" method="post">
+	    <div style="width: 1000px; margin: 0 auto; border: 2px solid #ccc;padding: 20px 0px;">
+	      <div style="margin: 0 auto;width: 800px;">
+	        <ul class="divide-insert-menu" style="padding: 0px;">
+	          <li>
+	            <label for="divTitle">제목</label>
+	            <input name="divTitle" id="divTitle" type="text" id="title">
+	          </li>
+	          <li class="file-li" style="padding-bottom: 10px;">
+	            <label for="image">파일</label>
+	            <i style="font-size: 20px;width: 30px;" class="bi bi-plus-circle-fill" id="addFileInput"></i>
+	            <input name="uploadFiles" class="form-control fileLayOut" type="file" id="image">
+	          </li>
+	          <li>
+	            <label for="cityNo">지역</label>
+	            <select name="cityNo" id="cityNo" style="width: 100px;margin-right: 15px;">
+	              <option value="0">지역 선택</option>
+				  <option value="1">서울</option>
+	              <option value="2">경기</option>
+	              <option value="3">경상</option>
+	              <option value="4">충청</option>
+	              <option value="5">강원</option>
+	              <option value="6">전라</option>
+	            </select>
+	            <select name="districtNo" id="districtNo" style="width: 150px;margin-right: 15px;">
+	              <option value="1">서울</option>
+	              <option value="2">경기</option>
+	              <option value="3">경상</option>
+	              <option value="4">충청</option>
+	              <option value="5">강원</option>
+	              <option value="6">전라</option>
+	            </select>
+	          </li>
+	          <li>
+	            <label for="wasteCategoryNo">종류</label>
+	            <select name="wasteCategoryNo" id="wasteCategoryNo" style="width: 176px;margin-right: 15px;">
+					<option value="0">종류 선택</option>
+					<c:forEach var="wCategory" items="${wList}" >			
+						<option value="${wCategory.wasteCategoryNo}">${wCategory.wasteCategoryName}</option>
+					</c:forEach>
+	            </select>
+	          </li>
+	          <li>
+	            <label for="summernote">내용</label>
+	            <div id="" class="d-flex justify-content-center flex-column" style="width: 600px;">
+	              <textarea name="divContent" id="summernote" spellcheck="false" required></textarea>
+	            </div>
+	          </li>
+	          <li>
+	            <label for="location">거래 희망 장소</label>
+	            <input style="width: 500px;margin-right: 15px;" id="location" type="text" id="location">
+	            <button class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
+	            <input name="divXCoordinate" type="hidden" id="coordinateX">
+	            <input name="divYCoordinate" type="hidden" id="coordinateY">
+	          </li>
+	          <li>
+	            <label>지도 미리보기</label>
+	            <div id="map" style="height: 300px;width: 600px;border: 1px solid rgba(133, 133, 133, 0.5);border-radius: 5px;"></div>
+	          </li>
+	        </ul>
+	      </div>
+	    </div>
+	    <div style="margin: 0 auto;text-align: center;margin-top: 100px;">
+	      <button type="button" class="btn btn-success btn-lg">글 작성 완료</button>
+	    </div>
+	</form>
   </main>
   <!-- 메인 -->
 <!-- End #main -->
@@ -194,7 +204,7 @@
         // "플러스" 아이콘 클릭 이벤트 처리
         $('#addFileInput').click(function () {
             // 새로운 input 요소 생성
-            var newInput = '<li style="margin: 0px 0px 10px 195px; padding: 0;"><input class="form-control" style="font-size: 15px;border: 1px solid rgba(133, 133, 133, 0.5);width: 570px;border-radius: 3px;" type="file"></li>';
+            var newInput = '<li style="margin: 0px 0px 10px 195px; padding: 0;"><input name="uploadFiles" class="form-control fileLayOut" type="file"></li>';
             // 새로운 input 요소를 다음 li로 추가
             $(this).parent().after(newInput);
         });
@@ -221,22 +231,11 @@
                     ['insert',['link']],
                     ['view', ['fullscreen', 'help']]
                 ],
-                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
+                fontNames: ['LINESeedKR-Bd','SUITE-Regular','Giants-Bold', 'Comic Sans MS','맑은 고딕','굴림체','굴림','돋움체','바탕체'],
                 fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']
             });
         });
         
-        // 이미지 업로드 미리보기
-        // function setThumbnail(event){
-        //     for(const image of event.target.files){
-        //         const reader = new FileReader();
-        //         reader.onload = function(event){
-        //           const img = document.getElementById("imagePreview");
-        //           img.src = event.target.result;
-        //         }
-        //         reader.readAsDataURL(image);
-        //     }
-        // }   
 
         function removeAfterPseudoElement() {
             // 선택한 요소의 가상 요소를 가져옵니다.
@@ -348,7 +347,29 @@
 	  geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
 	}
 	
-	
+	// insert form 유효성 검사
+	const form = document.forms.insertForm;
+    form.querySelector('button[type="button"]').addEventListener("click", function (event) {
+      event.preventDefault();
+      const divTitle = form.querySelector("#divTitle").value;
+      const divContent = form.querySelector("#summernote").value;
+      const cityNo = form.querySelector("#cityNo").value;
+      const wasteCategoryNo = form.querySelector("#wasteCategoryNo").value;
+
+      // 유효성 검사
+      if (divTitle.trim() === "") {
+        alert("제목을 입력해주세요.");
+      } else if (cityNo === "0") {
+        alert("지역을 선택해주세요.");
+      } else if (wasteCategoryNo === "0") {
+        alert("종류를 선택해주세요.");
+      } else if (divContent.trim() === "") {
+        alert("내용을 입력해주세요.");
+      } else {
+        // 폼 제출 (만약 추가 유효성 검사가 필요하다면 여기에 추가)
+        form.submit();
+      }
+    });
   </script>
   
 </body>
