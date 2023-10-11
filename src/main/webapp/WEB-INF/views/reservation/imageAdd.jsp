@@ -13,8 +13,8 @@
 
 
   <!-- Favicons -->
-  <link href="../../assets/img/main/title-icon.png" rel="icon">
-    <link href="../../assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../../../resources/assets/img/main/title-icon.png" rel="icon">
+    <link href="../../../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -22,17 +22,17 @@
           rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="../../assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="../../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="../../assets/css/style.css" rel="stylesheet">
-  <link href="../../assets/css/common.css" rel="stylesheet">
+  <link href="../../../resources/assets/css/style.css" rel="stylesheet">
+  <link href="../../../resources/assets/css/common.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Arsha
@@ -42,8 +42,8 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
   
-  <link rel="stylesheet" href="../../assets/css/reservation/imageAdd.css">
-  <link rel="stylesheet" href="../../assets/css/reservation/common.css">
+  <link rel="stylesheet" href="../../../resources/assets/css/reservation/imageAdd.css">
+  <link rel="stylesheet" href="../../../resources/assets/css/reservation/common.css">
 </head>
 
 <body>
@@ -85,7 +85,7 @@
       <h4 style="color: rgb(189, 245, 229);">폐기물 사진을 추가해주세요</h4>
     </div>
     <div style="display: flex;flex-direction: row;justify-content: flex-end;">
-      <img src="../../assets/img/reservation/picture.png" style="width: 250px;" alt="">
+      <img src="../../../resources/assets/img/reservation/picture.png" style="width: 250px;" alt="">
     </div>
   </div>
 
@@ -111,7 +111,7 @@
           <td>3,000원</td>
           <td>1개</td>
           <td>
-            <button class="selectBtn"><img src="../../assets/img/reservation/X.png"></button>
+            <button class="selectBtn"><img src="../../../resources/assets/img/reservation/X.png"></button>
           </td>
         </tr>
         <tr>
@@ -119,7 +119,7 @@
             <div class="file-Add-Td">
               <div class="file-Add-Div">
                 <div class="pic-Add-Btn">
-                  <img src="../../assets/img/reservation/pic-add.png">
+                  <img src="../../../resources/assets/img/reservation/pic-add.png">
                 </div>
                 <input type="file" id="uploadImg" class="uploadImg" accept="image/*" required multiple style="display: none;">
                 <div class="pic-Add-Btn">
@@ -221,16 +221,16 @@
         class="bi bi-arrow-up-short"></i></a>
 
 <!-- Vendor JS Files -->
-<script src="../../assets/vendor/aos/aos.js"></script>
-<script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="../../assets/vendor/glightbox/js/glightbox.min.js"></script>
-<script src="../../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-<script src="../../assets/vendor/swiper/swiper-bundle.min.js"></script>
-<script src="../../assets/vendor/waypoints/noframework.waypoints.js"></script>
-<script src="../../assets/vendor/php-email-form/validate.js"></script>
+<script src="../../../resources/assets/vendor/aos/aos.js"></script>
+<script src="../../../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="../../../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="../../../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="../../../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
+<script src="../../../resources/assets/vendor/php-email-form/validate.js"></script>
 
 <!-- Template Main JS File -->
-<script src="../../assets/js/main.js"></script>
+<script src="../../../resources/assets/js/main.js"></script>
 
 <!-- 채널톡 api -->
 <script>

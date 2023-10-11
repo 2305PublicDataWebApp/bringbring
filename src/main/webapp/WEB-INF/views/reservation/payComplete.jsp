@@ -13,8 +13,8 @@
 
 
   <!-- Favicons -->
-  <link href="../../assets/img/main/title-icon.png" rel="icon">
-    <link href="../../assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../../../resources/assets/img/main/title-icon.png" rel="icon">
+    <link href="../../../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -22,17 +22,17 @@
           rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="../../assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="../../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../../../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="../../assets/css/style.css" rel="stylesheet">
-  <link href="../../assets/css/common.css" rel="stylesheet">
+  <link href="../../../resources/assets/css/style.css" rel="stylesheet">
+  <link href="../../../resources/assets/css/common.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Arsha
@@ -43,7 +43,7 @@
   ======================================================== -->
 
 <!--  달력-->
-<!--  <link rel="stylesheet" href="../../assets/css/reservation/bootstrap-material-datetimepicker.css" />-->
+<!--  <link rel="stylesheet" href="../../../resources/assets/css/reservation/bootstrap-material-datetimepicker.css" />-->
 <!--  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
   <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
 <!--  <link rel="stylesheet" href="/css/jquery-ui.min.css">-->
@@ -55,8 +55,8 @@
 
 
 
-  <link rel="stylesheet" href="../../assets/css/reservation/paymentComplete.css">
-  <link rel="stylesheet" href="../../assets/css/reservation/common.css">
+  <link rel="stylesheet" href="../../../resources/assets/css/reservation/paymentComplete.css">
+  <link rel="stylesheet" href="../../../resources/assets/css/reservation/common.css">
 </head>
 
 <body>
@@ -64,7 +64,7 @@
 <!-- ======= Header ======= -->
 <header id="header" class="fixed-top ">
   <div class="container d-flex align-items-center">
-    <img src="../../assets/img/main/cargo-truck-green.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
+    <img src="../../../resources/assets/img/main/cargo-truck-green.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
     <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.html">브링브링</a></h1>
     <!-- Uncomment below if you prefer to use an image logo -->
     <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
@@ -98,7 +98,7 @@
       <h4 style="color: rgb(189, 245, 229);">결제가 완료되었습니다</h4>
     </div>
     <div style="display: flex;flex-direction: row;justify-content: flex-end;">
-      <img src="../../assets/img/reservation/payment.png" style="width: 250px;" alt="">
+      <img src="../../../resources/assets/img/reservation/payment.png" style="width: 250px;" alt="">
     </div>
   </div>
 
@@ -260,16 +260,16 @@
         class="bi bi-arrow-up-short"></i></a>
 
 <!-- Vendor JS Files -->
-<script src="../../assets/vendor/aos/aos.js"></script>
-<script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="../../assets/vendor/glightbox/js/glightbox.min.js"></script>
-<script src="../../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-<script src="../../assets/vendor/swiper/swiper-bundle.min.js"></script>
-<script src="../../assets/vendor/waypoints/noframework.waypoints.js"></script>
-<script src="../../assets/vendor/php-email-form/validate.js"></script>
+<script src="../../../resources/assets/vendor/aos/aos.js"></script>
+<script src="../../../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="../../../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="../../../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="../../../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
+<script src="../../../resources/assets/vendor/php-email-form/validate.js"></script>
 
 <!-- Template Main JS File -->
-<script src="../../assets/js/main.js"></script>
+<script src="../../../resources/assets/js/main.js"></script>
 
 <!--주소 api 사용 script-->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
