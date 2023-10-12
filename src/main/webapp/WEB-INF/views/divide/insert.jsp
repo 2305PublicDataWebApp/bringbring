@@ -122,7 +122,8 @@
 					  <option value="${city.cityNo}">${city.cityName}</option>
 				  </c:forEach>
 	            </select>
-	            <select name="districtNo" id="districtNo"></select>
+	            <select name="districtNo" id="districtNo" style="width: 150px;">
+				</select>
 	          </li>
 	          <li>
 	            <label for="wasteCategoryNo">종류</label>
@@ -360,8 +361,32 @@
     });
   </script>
   <script type="text/javascript">
+	  $(document).ready(function() {
+		  $.ajax({
+			  url: "/divide/selectDistrict.do",
+			  data: { cityNo: 1 },
+			  type: "POST",
+			  success: function(data) {
+				  var districtNo = document.getElementById("districtNo");
+
+				  for (var i = 0; i < data.length; i++) {
+					  var option = document.createElement("option");
+					  option.value = data[i].cityNo;
+					  option.text = data[i].districtName;
+					  districtNo.appendChild(option);
+				  }
+			  },
+			  error: function() {
+				  alert("Ajax 오류! 관리자에게 문의하세요");
+			  }
+		  });
+	  });
+
+
   	function citySelect() {
   		var cityNo = document.getElementById("cityNo").value;
+		var districtNo = document.querySelector("#districtNo");
+		districtNo.innerHTML = "";
   		if(cityNo !== "0"){
   			$.ajax({
 				url : "/divide/selectDistrict.do",
@@ -370,9 +395,9 @@
 				success : function(data) {
 						for (var i = 0; i < data.length; i++) {
 							var option = document.createElement("option");
-							option.value = data[i].districtNo;
+							option.value = data[i].cityNo;
 							option.text = data[i].districtName;
-							document.querySelector("#districtNo").appendChild(option);
+							districtNo.appendChild(option);
 						}
 				},
 				error : function() {
