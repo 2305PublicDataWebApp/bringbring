@@ -126,6 +126,8 @@
           "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
         });
 
+    <!-- 로그인, 로그아웃 -->
+    <jsp:include page="/include/loginJs.jsp"></jsp:include>
   </script>
     
 </body>

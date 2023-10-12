@@ -243,6 +243,9 @@
 
         // 페이지가 로드될 때 위의 함수를 실행
         document.addEventListener('DOMContentLoaded', removeAfterPseudoElement);
+        
+        <!-- 로그인, 로그아웃 -->
+        <jsp:include page="/include/loginJs.jsp"></jsp:include>
   </script>
   
   
