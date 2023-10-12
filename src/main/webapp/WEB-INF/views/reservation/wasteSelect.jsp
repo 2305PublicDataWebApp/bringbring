@@ -41,6 +41,10 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   
   <link rel="stylesheet" href="../../../resources/assets/css/reservation/wasteSelect.css">
   <link rel="stylesheet" href="../../../resources/assets/css/reservation/common.css">
@@ -104,18 +108,18 @@
   <div class="container">
     <div id="category_box">
 <!--      포기한다..!!!!!!!!!!!! -->
-      <button type="button" class="btn btn-outline-success">가구</button>
-      <button type="button" class="btn btn-outline-success">가전</button>
-      <button type="button" class="btn btn-outline-success">운동용품</button>
-      <button type="button" class="btn btn-outline-success">생활/주방</button>
-      <button type="button" class="btn btn-outline-success">악기</button>
-      <button type="button" class="btn btn-outline-success">디지털</button>
-      <button type="button" class="btn btn-outline-success">기타</button>
+      <button type="button" class="btn btn-outline-success" id="furniture" value="가구" onclick="wasteSelect(this);">가구</button>
+      <button type="button" class="btn btn-outline-success" id="electronics" value="가전" onclick="wasteSelect(this);">가전</button>
+      <button type="button" class="btn btn-outline-success" id="appliance" value="운동용품" onclick="wasteSelect(this);">운동용품</button>
+      <button type="button" class="btn btn-outline-success" id="household" value="생활/주방" onclick="wasteSelect(this);">생활/주방</button>
+      <button type="button" class="btn btn-outline-success" id="instrument" value="악기" onclick="wasteSelect(this);">악기</button>
+      <button type="button" class="btn btn-outline-success" id="digital" value="디지털" onclick="wasteSelect(this);">디지털</button>
+      <button type="button" class="btn btn-outline-success" id="other" value="기타" onclick="wasteSelect(this);">기타</button>
     </div>
   </div>
   <div>
     <div>
-      <table class="table">
+      <table class="table" id="listTable">
         <tbody>
         <tr>
           <td>
@@ -286,6 +290,102 @@
     }
 
   }
+
+</script>
+
+<script type="text/javascript">
+  // 버튼 선택 시 리스트 출력
+  function wasteSelect(button) {
+
+    let selectItem = button.value;
+    console.log("선택된 값: " + selectItem);
+
+    let encodedItem = encodeURIComponent(selectItem);
+    let url = "/reservation/selectItem.do?" + encodedItem;
+
+    $.ajax({
+      url: url,
+      data: {selectItem: selectItem},
+      type: "GET",
+      success: function (data) {
+        // for (var i = 0; i < data.length; i++) {
+        //   var item = data[i];
+        //   console.log(item);
+        //   console.log("wasteCategoryName: " + item.wasteType.wasteTypeName);
+        //   console.log("wasteInfoStandard: " + item.wasteInfo.wasteInfoStandard);
+        //   console.log("wasteInfoFee: " + item.wasteInfo.wasteInfoFee);
+        //   // 추가로 데이터를 화면에 표시하거나 원하는 동작 수행
+        // }
+
+        // 이전 테이블을 삭제 (만약 이미 테이블이 있는 경우)
+        var tableBody = document.getElementById('listTable');
+        while (tableBody.firstChild) {
+          tableBody.removeChild(tableBody.firstChild);
+        }
+
+        var groupedData = {}; // wasteType를 기준으로 데이터를 그룹화할 객체
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i];
+          var wasteTypeName = item.wasteType.wasteTypeName;
+
+          if (!groupedData[wasteTypeName]) {
+            // 그룹이 존재하지 않는 경우 새로운 그룹을 만들고 초기화
+            groupedData[wasteTypeName] = {
+              wasteCategoryName: wasteTypeName,
+              wasteInfoStandards: [], // wasteInfoStandard 값을 저장할 배열
+              wasteInfoFees: [] // wasteInfoFee 값을 저장할 배열
+            };
+          }
+
+          // 데이터를 해당 그룹에 추가
+          groupedData[wasteTypeName].wasteInfoStandards.push(item.wasteInfo.wasteInfoStandard);
+          groupedData[wasteTypeName].wasteInfoFees.push(item.wasteInfo.wasteInfoFee);
+        }
+
+// 테이블을 생성하고 그룹화된 데이터를 사용하여 행을 추가
+        var tableBody = document.getElementById('listTable');
+
+        for (var wasteTypeName in groupedData) {
+          var item = groupedData[wasteTypeName];
+          var row = document.createElement('tr');
+
+          // 첫 번째 열 (wasteTypeName)
+          var firstCell = document.createElement('td');
+          firstCell.textContent = item.wasteCategoryName;
+
+          // 두 번째 열 (wasteInfoStandards)
+          var secondCell = document.createElement('td');
+          var selectElement = document.createElement('select');
+
+          // 각 wasteInfoStandard을 option으로 추가
+          item.wasteInfoStandards.forEach(function (standard) {
+            var option = document.createElement('option');
+            option.textContent = standard;
+            selectElement.appendChild(option);
+          });
+          secondCell.appendChild(selectElement);
+
+          // 세 번째 열 (wasteInfoFees)
+          var thirdCell = document.createElement('td');
+          thirdCell.textContent = item.wasteInfoFees.join(', ');
+
+          // 네 번째 열 (버튼 또는 다른 필드)
+
+          // 행을 테이블에 추가
+          row.appendChild(firstCell);
+          row.appendChild(secondCell);
+          row.appendChild(thirdCell);
+          tableBody.appendChild(row);
+        }
+
+      }
+      })
+    }
+
+
+
+
 
 
 
