@@ -84,7 +84,7 @@
 
   <!-- 메인 -->
   <main id="main" class="main">
-    <form class="notice-form" action="notice/insert.do" method="post">
+    <form class="notice-form" action="notice/insert.do" method="post" enctype="multipart/form-data">
       <h2>공지사항 작성</h2>
       <hr>
       <div class="container">
@@ -100,6 +100,7 @@
         </div>
 
         <!-- 카테고리에서 서비스 선택시 지역 선택버튼이 보임-->
+        <c:if>
         <div class="row mb-3">
           <label class="col-sm-1 col-form-label pt-0">지역</label>
           <div class="col-sm-10">
@@ -109,6 +110,7 @@
             </div>
           </div>
         </div>
+        </c:if>
 
         <div class="row mb-3">
           <label for="noticeTitle" class="col-sm-1 col-form-label">제목</label>
