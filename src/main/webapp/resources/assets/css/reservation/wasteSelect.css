@@ -49,49 +49,49 @@ input[type=number] {
 #category_box button {
     width: 100px;
 }
-
-/*label {*/
-/*    margin-left: 5px;*/
-/*    width: 170px;*/
-/*}*/
-/*select {*/
-/*    width: 400px;*/
-/*    margin-right: 20px;*/
-/*}*/
 .fee {
     margin-right: 20px;
 }
 #listDiv {
     height: 500px;
-    overflow: auto;
+    overflow-y: auto;
+}
+#listTable {
+    width: 100%;
+    padding-right: 17px;
+
 }
 #listTable > select {
     width: 400px;
     margin-right: 20px;
 }
+#listTable > tr {
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 1px solid #ccc;
+}
 .firstTd {
-    width: 15%;
+    width: 30%;
     display: flex;
     align-items: center;
 }
 .secondTd {
     width: 40%;
+    display: flex;
+    align-items: center;
 }
 .thirdTd {
     width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-textarea {
-    resize: none;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    color: #000000;
+.thirdTd > .listTableP {
+    height: 50%;
 }
-/*textarea.vertical-center {*/
-/*    text-align: center; !* 텍스트를 수직 가운데 정렬 *!*/
-/*    display: flex;*/
-/*    align-items: center; !* 수직 중앙 정렬을 위한 Flexbox 사용 *!*/
-/*    justify-content: center; !* 수평 중앙 정렬을 위한 Flexbox 사용 *!*/
-/*    height: 100%; !* 부모 요소의 높이를 100%로 설정하여 수직 가운데 정렬 *!*/
-/*    width: 100%; !* 부모 요소의 너비를 100%로 설정하여 수평 가운데 정렬 *!*/
-/*}*/
+.fourthTd {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
