@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bringbring.divide.domain.Divide;
 import com.bringbring.divide.service.DivideService;
+import com.bringbring.region.domain.City;
+import com.bringbring.region.service.RegionService;
 import com.bringbring.reservation.domain.WasteCategory;
 
 import lombok.RequiredArgsConstructor;
@@ -25,11 +27,13 @@ import lombok.RequiredArgsConstructor;
 public class DivideController {
 
 	private final DivideService divideService;
+	private final RegionService regionService;
 	
 	@GetMapping("/insert.do")
 	public ModelAndView showDivideInsert(ModelAndView mv) {
 		List<WasteCategory> wList = divideService.selectWasteCategoryList();
-		mv.addObject("wList", wList);
+		List<City> cList = regionService.selectCityList();
+		mv.addObject("wList", wList).addObject("cList", cList);
 		mv.setViewName("divide/insert");
 		return mv;
 	}

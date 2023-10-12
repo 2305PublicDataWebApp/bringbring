@@ -118,14 +118,11 @@
 	          </li>
 	          <li>
 	            <label for="cityNo">지역</label>
-	            <select name="cityNo" id="cityNo" style="width: 100px;margin-right: 15px;">
+	            <select name="cityNo" id="cityNo" onchange="citySelect();" style="width: 100px;margin-right: 15px;">
 	              <option value="0">지역 선택</option>
-				  <option value="1">서울</option>
-	              <option value="2">경기</option>
-	              <option value="3">경상</option>
-	              <option value="4">충청</option>
-	              <option value="5">강원</option>
-	              <option value="6">전라</option>
+	              <c:forEach var="city" items="${cList}" >			
+					  <option value="${city.cityNo}">${city.cityName}</option>
+				  </c:forEach>
 	            </select>
 	            <select name="districtNo" id="districtNo" style="width: 150px;margin-right: 15px;">
 	              <option value="1">서울</option>
@@ -371,7 +368,30 @@
       }
     });
   </script>
-  
+  <script type="text/javascript">
+  	function citySelect() {
+  		var cityNo = document.getElementById("cityNo").value;
+  		if(selectedCityNo !== "0"){
+  			$.ajax({
+				url : "/divide/selectDistrict.do",
+				data : {cityNo : cityNo},
+				type : "POST",
+				success : function(data) {
+					let str = "";
+					for(let i = 0; i < data.length; i++){
+						str += "아이디 : " + data[i].userId + " 비번 : " + data[i].userPw + "<br>";
+					}
+				},
+				error : function() {
+					alert("Ajax 오류! 관리자에게 문의하세요");
+				}
+			})		
+  		}
+  	}
+  	
+  	<!-- 로그인, 로그아웃 -->
+    <jsp:include page="/include/loginJs.jsp"></jsp:include>
+  </script>
 </body>
 
 </html>
