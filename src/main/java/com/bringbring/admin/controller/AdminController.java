@@ -38,16 +38,16 @@ public class AdminController {
 // 회원 관리
 
 	//회원 리스트
-//	@GetMapping("/memberList.do")
-//	public ModelAndView userListManagement(ModelAndView mv
-//			,@RequestParam(value="page", required=false, defaultValue="1") Integer currentPage) {
-//		int userCount = userService.selectListCount();
-//		PageInfo pInfo = this.getPageInfo(currentPage, userCount);
-//		List<User> userList = userService.selectUserList(pInfo);
-//		mv.addObject("userList", userList).addObject("pInfo", pInfo).setViewName("/admin/memberManagement");
-//		mv.addObject("userCount", userCount);
-//		return mv;
-//	}
+	@GetMapping("/memberList.do")
+	public ModelAndView userListManagement(ModelAndView mv
+			,@RequestParam(value="page", required=false, defaultValue="1") Integer currentPage) {
+		int userCount = userService.selectListCount();
+		PageInfo pInfo = this.getPageInfo(currentPage, userCount);
+		List<User> userList = userService.selectUserList(pInfo);
+		mv.addObject("userList", userList).addObject("pInfo", pInfo).setViewName("/admin/memberManagement");
+		mv.addObject("userCount", userCount);
+		return mv;
+	}
 
 	//관리자 임명
 	@PostMapping("/insertAdmin.do")
