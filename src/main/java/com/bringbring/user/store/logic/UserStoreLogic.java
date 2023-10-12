@@ -2,6 +2,7 @@ package com.bringbring.user.store.logic;
 
 import java.util.List;
 
+import com.bringbring.common.PageInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
