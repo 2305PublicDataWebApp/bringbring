@@ -27,5 +27,15 @@ public class UserStoreLogic implements UserStore{
 
 	@Override
 	public List<User> selectUserList(PageInfo pInfo) { return sqlSession.selectList("UserMapper.selectUserList"); }
+
+	@Override
+	public int insertUser(User user) {
+		return sqlSession.insert("UserMapper.insertUser", user);
+	}
+
+	@Override
+	public User selectOneByName(User user) {
+		return sqlSession.selectOne("UserMapper.selectOneByName", user);
+	}
 	
 }
