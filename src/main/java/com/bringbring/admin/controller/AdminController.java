@@ -37,13 +37,17 @@ public class AdminController {
 
 // 회원 관리
 
-	//회원 리스트
+	//회원,관리자 리스트
 	@GetMapping("/memberList.do")
 	public ModelAndView userListManagement(ModelAndView mv
 			,@RequestParam(value="page", required=false, defaultValue="1") Integer currentPage) {
 		int userCount = userService.selectListCount();
+		int adminCount = adminService.selectListCount();
 		PageInfo pInfo = this.getPageInfo(currentPage, userCount);
+		List<Admin> adminList = adminService.selectAdminList(pInfo);
 		List<User> userList = userService.selectUserList(pInfo);
+		mv.addObject("adminList", adminList).addObject("pInfo", pInfo).setViewName("/admin/memberManagement");
+		mv.addObject("adminCount", adminCount);
 		mv.addObject("userList", userList).addObject("pInfo", pInfo).setViewName("/admin/memberManagement");
 		mv.addObject("userCount", userCount);
 		return mv;
@@ -67,17 +71,6 @@ public class AdminController {
 		return mv;
 	}
 
-	//관리자 조회
-	@GetMapping("/adminList.do")
-	public ModelAndView adminListManagement(ModelAndView mv
-			,@RequestParam(value="page", required=false, defaultValue="1") Integer currentPage) {
-		int adminCount = adminService.selectListCount();
-		PageInfo pInfo = this.getPageInfo(currentPage, adminCount);
-		List<Admin> adminList = adminService.selectAdminList(pInfo);
-		mv.addObject("adminList", adminList).addObject("pInfo", pInfo).setViewName("/admin/memberManagement");
-		mv.addObject("adminCount", adminCount);
-		return mv;
-	}
 
 //	신고 관리
 	@GetMapping("/reportM.do")

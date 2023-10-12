@@ -2,6 +2,7 @@ package com.bringbring.user.service;
 
 import java.util.List;
 
+import com.bringbring.common.PageInfo;
 import com.bringbring.user.domain.User;
 
 public interface UserService {
