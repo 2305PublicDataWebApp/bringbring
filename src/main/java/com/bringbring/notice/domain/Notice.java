@@ -22,6 +22,6 @@ public class Notice {
 	private String noticeContent;
 	private LocalDate noticeCreateDate;
 	private int noticeViewCount;
-	private int IsNoticeDeleted;
+	private int isNoticeDeleted;
 	
 }
