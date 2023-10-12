@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bringbring.member.domain.Member;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
 
@@ -32,13 +34,12 @@ public class UserController {
 	// 로그인 기능
 	@PostMapping("/login.do")
 	public String userLogin(
-			@Valid @ModelAttribute User user
+			@ModelAttribute User user
 			, Model model
 			, HttpSession session) {
-		
-		int result = userService.selectCheckLogin(user);
-		if(result>0) {
-			session.setAttribute("sessionId", user.getUserId());
+		User userOne = userService.selectCheckLogin(user);
+		if(userOne != null) {
+			session.setAttribute("sessionId", userOne.getUserId());
 			//성공하면 로그인페이지
 			return "redirect:/";
 		} else {
@@ -67,9 +68,12 @@ public class UserController {
 	}
 	
 	// 회원가입 기능
-//	@PostMapping("/insert.do")
-//	public String insertUser() {
-//		return"";
-//	}
+	@PostMapping("/insert.do")
+	public String insertUser(
+			Model model) {
+
+		
+		return"";
+	}
 
 }

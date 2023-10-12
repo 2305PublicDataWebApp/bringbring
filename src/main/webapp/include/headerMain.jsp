@@ -28,13 +28,11 @@
 	          <li><a class="nav-link scrollto" href="#team">문의게시판</a></li>
 	          <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
 	          
-	          </li>
 	          <li>
-	            <c:if test="${empty sessionScope.sessionId}">
+	            <c:if test="${sessionScope.sessionId eq null}">
 		          	<button onclick="login();" class="getstarted scrollto">로그인</button>
 	          	</c:if>
-	          	
-	          	<c:if test="${not empty sessionScope.sessionId} ">
+	          	<c:if test="${sessionScope.sessionId ne null} ">
 		          	<button onclick="logout();" class="getstarted scrollto">로그아웃</button>
 	          	</c:if>
 	          </li>

@@ -12,7 +12,7 @@ public interface UserService {
 	 * @param user
 	 * @return int
 	 */
-	public int selectCheckLogin(User user);
+	public User selectCheckLogin(User user);
 	
 	/**
 	 * 회원 수 조회 service
@@ -23,7 +23,7 @@ public interface UserService {
 	/**
 	 * 회원 리스트 조회 service
 	 * @param pInfo
-	 * @return List<User></User>
+	 * @return List<User>
 	 */
 	List<User> selectUserList(PageInfo pInfo);
 
