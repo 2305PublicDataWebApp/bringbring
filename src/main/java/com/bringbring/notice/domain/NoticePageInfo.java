@@ -11,7 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PageInfo {
+public class NoticePageInfo {
 	private int currentPage;
 	private int totalCount;
 	private int naviTotalCount;

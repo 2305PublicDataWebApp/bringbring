@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bringbring.notice.domain.Notice;
-import com.bringbring.notice.domain.PageInfo;
+import com.bringbring.notice.domain.NoticePageInfo;
 import com.bringbring.notice.service.NoticeService;
 import com.bringbring.notice.store.NoticeStore;
 
@@ -35,7 +35,7 @@ public class NoticeServiceImpl implements NoticeService{
 	
 	// 게시글 목록 조회
 	@Override
-	public List<Notice> selectNoticeList(PageInfo noticeInfo) {
+	public List<Notice> selectNoticeList(NoticePageInfo noticeInfo) {
 		List<Notice> noticeList = noticeStore.selectNoticeByList(noticeInfo);
 		return noticeList;
 	}

@@ -34,7 +34,7 @@
   <!-- Template Main CSS File -->
   <link href="../resources/assets/css/style.css" rel="stylesheet">
   <link href="../resources/assets/css/common.css" rel="stylesheet">
-  <link href="../resources/assets/css/notice/modify.css" rel="stylesheet">
+  <link href="../resources/assets/css/notice/update.css" rel="stylesheet">
 
   <!-- summernote CSS File -->
   <link rel="stylesheet" href="../resources/assets/css/notice/summernote/summernote-lite.css">

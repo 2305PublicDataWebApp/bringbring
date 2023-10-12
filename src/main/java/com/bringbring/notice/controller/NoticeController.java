@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bringbring.notice.domain.Notice;
-import com.bringbring.notice.domain.PageInfo;
+import com.bringbring.notice.domain.NoticePageInfo;
 import com.bringbring.notice.service.NoticeService;
 
 import lombok.RequiredArgsConstructor;
@@ -69,14 +69,14 @@ public class NoticeController {
 			@RequestParam(value="page", required = false, defaultValue = "1") Integer currentPage
 			, Model model) {
 		Integer totalCount = noticeService.getListCount();
-		PageInfo noticeInfo = this.getPageInfo(currentPage, totalCount);
+		NoticePageInfo noticeInfo = this.getNoticePageInfo(currentPage, totalCount);
 		List<Notice> noticeList = noticeService.selectNoticeList(noticeInfo);
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("noticeInfo", noticeInfo);
 		return "redirect:/notice/list.do";
 	}
 	
-	private PageInfo getPageInfo(Integer currentPage, int totalCount) {
+	private NoticePageInfo getNoticePageInfo(Integer currentPage, int totalCount) {
 		int recordCountPerPage = 10;
 		int naviCountPerPage = 10;
 		int naviTotalCount;
@@ -87,7 +87,7 @@ public class NoticeController {
 		if(endNavi > naviTotalCount) {
 			endNavi = naviTotalCount;
 		}
-		PageInfo noticeInfo = new PageInfo(currentPage, totalCount, naviTotalCount, recordCountPerPage, naviCountPerPage, startNavi, endNavi);
+		NoticePageInfo noticeInfo = new NoticePageInfo(currentPage, totalCount, naviTotalCount, recordCountPerPage, naviCountPerPage, startNavi, endNavi);
 		return noticeInfo;
 	}
 
