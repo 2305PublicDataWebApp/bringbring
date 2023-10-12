@@ -2,6 +2,7 @@ package com.bringbring.divide.store.logic;
 
 import java.util.List;
 
+import com.bringbring.region.domain.District;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -17,11 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class DivideStoreLogic implements DivideStore{
 
 	private final SqlSession sqlSession;
-	
-	@Override
-	public List<WasteCategory> selectWasteCategoryList() {
-		return sqlSession.selectList("DivideMapper.selectWasteCategoryList");
-	}
 
 	@Override
 	public int insertDivide(Divide divide) {

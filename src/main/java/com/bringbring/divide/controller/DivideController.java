@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.bringbring.region.domain.District;
+import com.bringbring.reservation.service.ReservationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,10 +30,11 @@ public class DivideController {
 
 	private final DivideService divideService;
 	private final RegionService regionService;
+	private final ReservationService reservationService;
 	
 	@GetMapping("/insert.do")
 	public ModelAndView showDivideInsert(ModelAndView mv) {
-		List<WasteCategory> wList = divideService.selectWasteCategoryList();
+		List<WasteCategory> wList = reservationService.selectWasteCategoryList();
 		List<City> cList = regionService.selectCityList();
 		mv.addObject("wList", wList).addObject("cList", cList);
 		mv.setViewName("divide/insert");
@@ -61,7 +64,6 @@ public class DivideController {
 		mv.setViewName("divide/detail");
 		return mv;
 	}
-	
-	
+
 }
 

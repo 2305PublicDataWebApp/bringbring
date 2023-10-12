@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bringbring.region.domain.District;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,12 +28,6 @@ import lombok.RequiredArgsConstructor;
 public class DivideServiceImpl implements DivideService{
 
 	private final DivideStore divideStore;
-	
-	@Override
-	@Transactional(readOnly = true)
-	public List<WasteCategory> selectWasteCategoryList() {
-		return divideStore.selectWasteCategoryList();
-	}
 
 	@Override
 	public int insertDivide(Divide divide, MultipartFile[] uploadFiles, HttpServletRequest request) {
@@ -56,8 +51,8 @@ public class DivideServiceImpl implements DivideService{
 			}
 			return result;
 	}
-	
-	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
+
+    private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
 		Map<String, Object> fileInfoMap = new HashMap<String, Object>();
 		try {
 			//업로드 저장 경로생성
