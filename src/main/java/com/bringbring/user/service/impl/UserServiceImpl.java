@@ -29,5 +29,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> selectUserList(PageInfo pInfo) { return userStore.selectUserList(pInfo);}
+
+	@Override
+	public int insertUser(User user) {
+		return userStore.insertUser(user);
+	}
+
+	@Override
+	public User selectOneByName(User user) {
+		return userStore.selectOneByName(user);
+	}
 	
 }

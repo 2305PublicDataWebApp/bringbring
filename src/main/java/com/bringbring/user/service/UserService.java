@@ -10,7 +10,7 @@ public interface UserService {
 	/**
 	 * 로그인 service
 	 * @param user
-	 * @return int
+	 * @return User
 	 */
 	public User selectCheckLogin(User user);
 	
@@ -26,5 +26,19 @@ public interface UserService {
 	 * @return List<User>
 	 */
 	List<User> selectUserList(PageInfo pInfo);
+
+	/**
+	 * 회원가입 service
+	 * @param user
+	 * @return int
+	 */
+	public int insertUser(User user);
+
+	/**
+	 * 아이디(이메일) 찾기 service
+	 * @param user
+	 * @return User
+	 */
+	public User selectOneByName(User user);
 
 }

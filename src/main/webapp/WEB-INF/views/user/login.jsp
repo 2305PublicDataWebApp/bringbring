@@ -48,7 +48,7 @@
 <body>
 
 	<!-- 헤더 -->
-  	<jsp:include page="/include/headerMain.jsp"></jsp:include>
+  	<jsp:include page="/include/header.jsp"></jsp:include>
   	
     <!-- ======= Hero Section ======= -->
     <!-- <div id="hero" style="width: 100%;margin: 0 auto;height: 70px;" ></div> -->
@@ -73,9 +73,9 @@
             </form>
 
             <div class="my-3 text-center">
-                <a href="#" class="link-secondary">비밀번호 찾기</a> | 
-                <a href="#" class="link-secondary">아이디 찾기</a> | 
-                <a href="#" class="link-secondary">회원가입</a>
+                <a href="/user/findPwd.do" class="link-secondary">비밀번호 찾기</a> | 
+                <a href="/user/findEmail.do" class="link-secondary">아이디 찾기</a> | 
+                <a href="/user/insert.do" class="link-secondary">회원가입</a>
             </div>
 
             <div class="sns_buttons_div">

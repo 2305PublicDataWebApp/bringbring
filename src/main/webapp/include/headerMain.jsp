@@ -28,14 +28,17 @@
 	          <li><a class="nav-link scrollto" href="#team">문의게시판</a></li>
 	          <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
 	          
-	          <li>
-	            <c:if test="${sessionScope.sessionId eq null}">
-		          	<button onclick="login();" class="getstarted scrollto">로그인</button>
-	          	</c:if>
-	          	<c:if test="${sessionScope.sessionId ne null} ">
-		          	<button onclick="logout();" class="getstarted scrollto">로그아웃</button>
-	          	</c:if>
-	          </li>
+			<c:if test="${sessionScope.sessionId eq null}">
+				<li>
+					<button onclick="login();" class="getstarted scrollto">로그인</button>
+				</li>
+			</c:if>
+			<c:if test="${sessionScope.sessionId ne null}">
+				<li><a class="nav-link scrollto" href="/mypage/main.do">${sessionScope.sessionName }님</a></li>
+			    <li>
+			    	<button onclick="logout();" class="getstarted scrollto">로그아웃</button>
+			    </li>
+			</c:if>
 	        </ul>
 	        <i class="bi bi-list mobile-nav-toggle"></i>
 	      </nav><!-- .navbar -->

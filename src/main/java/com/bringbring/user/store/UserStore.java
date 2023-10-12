@@ -26,4 +26,18 @@ public interface UserStore {
 	 * @return List<User>
 	 */
 	List<User> selectUserList(PageInfo pInfo);
+
+	/**
+	 * 회원가입 store
+	 * @param user
+	 * @return int
+	 */
+	public int insertUser(User user);
+
+	/**
+	 * 아이디(이메일) 찾기 store
+	 * @param user
+	 * @return
+	 */
+	public User selectOneByName(User user);
 }
