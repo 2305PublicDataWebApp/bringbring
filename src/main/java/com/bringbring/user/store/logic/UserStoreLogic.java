@@ -18,8 +18,8 @@ public class UserStoreLogic implements UserStore{
 	private final SqlSession sqlSession;
 
 	@Override
-	public int selectCheckLogin(User user) {
-		return sqlSession.selectOne("UserMapper.selectCheckLogin");
+	public User selectCheckLogin(User user) {
+		return sqlSession.selectOne("UserMapper.selectCheckLogin", user);
 	}
 
 	@Override

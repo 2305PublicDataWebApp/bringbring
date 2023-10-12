@@ -12,7 +12,7 @@ public interface UserStore {
 	 * @param user
 	 * @return int
 	 */
-	public int selectCheckLogin(User user);
+	public User selectCheckLogin(User user);
 
 	/**
 	 * 회원 수 조회 store
