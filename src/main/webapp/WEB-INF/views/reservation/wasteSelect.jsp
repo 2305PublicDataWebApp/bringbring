@@ -121,30 +121,30 @@
       <div id="listDiv">
         <table class="table" id="listTable">
           <tbody>
-<%--          <tr>--%>
-<%--            <td>--%>
-<%--              <input class="form-check-input me-1" type="checkbox" value="거울">--%>
-<%--              <label class="align-items-center">--%>
-<%--                거울--%>
-<%--              </label>--%>
-<%--            </td>--%>
-<%--            <td>--%>
-<%--              <select name="mirror" class="form-select selectBox">--%>
-<%--                <option>높이 50cm 이상</option>--%>
-<%--                <option>높이 50cm 미만</option>--%>
-<%--              </select>--%>
-<%--            </td>--%>
-<%--            <td>--%>
-<%--              <div class="fee">--%>
-<%--                <p class="m-0">3,000원</p>--%>
-<%--              </div>--%>
-<%--            </td>--%>
-<%--            <td>--%>
-<%--              <button class="selectBtn" onclick="count('minus');" value='+'><img src="../../../resources/assets/img/reservation/minus.png"></button>--%>
-<%--              <input type="number" minlength="0" maxlength="10" id="numberInput" value="0">--%>
-<%--              <button class="selectBtn" onclick="count('plus');" value='-'><img src="../../../resources/assets/img/reservation/plus.png"></button>--%>
-<%--            </td>--%>
-<%--          </tr>--%>
+          <%--          <tr>--%>
+          <%--            <td>--%>
+          <%--              <input class="form-check-input me-1" type="checkbox" value="거울">--%>
+          <%--              <label class="align-items-center">--%>
+          <%--                거울--%>
+          <%--              </label>--%>
+          <%--            </td>--%>
+          <%--            <td>--%>
+          <%--              <select name="mirror" class="form-select selectBox">--%>
+          <%--                <option>높이 50cm 이상</option>--%>
+          <%--                <option>높이 50cm 미만</option>--%>
+          <%--              </select>--%>
+          <%--            </td>--%>
+          <%--            <td>--%>
+          <%--              <div class="fee">--%>
+          <%--                <p class="m-0">3,000원</p>--%>
+          <%--              </div>--%>
+          <%--            </td>--%>
+          <%--            <td>--%>
+          <%--              <button class="selectBtn" onclick="count('minus');" value='+'><img src="../../../resources/assets/img/reservation/minus.png"></button>--%>
+          <%--              <input type="number" minlength="0" maxlength="10" id="numberInput" value="0">--%>
+          <%--              <button class="selectBtn" onclick="count('plus');" value='-'><img src="../../../resources/assets/img/reservation/plus.png"></button>--%>
+          <%--            </td>--%>
+          <%--          </tr>--%>
           </tbody>
         </table>
       </div>
@@ -153,7 +153,7 @@
     <div>
       <p class="title">선택한 물품</p>
       <hr>
-      <table class="table">
+      <table class="table" id="selectTable">
         <tbody>
         <tr>
           <th scope="row">선택 1</th>
@@ -355,19 +355,17 @@
           checkbox.setAttribute('class', 'form-check-input me-1');
           checkbox.setAttribute('type', 'checkbox');
           checkbox.setAttribute('value', item.wasteCategoryName);
+          checkbox.setAttribute('id', item.wasteCategoryName);
 
           var label = document.createElement('label');
           label.setAttribute('class', 'align-items-center');
+          label.setAttribute('for', item.wasteCategoryName);
 
-          var textarea = document.createElement('textarea');
-          textarea.value = item.wasteCategoryName;
-          textarea.disabled = true; // Optional: To make the textarea read-only
-          textarea.className = "vertical-center";
-
-          label.appendChild(textarea);
+          label.textContent = item.wasteCategoryName;
           firstCell.appendChild(checkbox);
           firstCell.appendChild(label);
 
+          // css
           firstCell.className = "firstTd";
 
 
@@ -393,10 +391,55 @@
           var pTag = document.createElement('p');
           var initialMatchingFee = item.wasteInfoFees[0];
           pTag.innerText = initialMatchingFee;
+          pTag.setAttribute('class', 'listTableP')
           thirdCell.appendChild(pTag);
 
           // css
           thirdCell.className = "thirdTd";
+
+          // 네 번째 열 (count)
+          var fourthCell = document.createElement('td');
+
+          // "minus" 버튼 생성
+          var minusButton = document.createElement('button');
+          minusButton.setAttribute('class', 'selectBtn');
+          minusButton.setAttribute('onclick', 'count("minus")');
+          minusButton.setAttribute('value', '+');
+
+          // 이미지 엘리먼트 생성
+          var minusImage = document.createElement('img');
+          minusImage.setAttribute('src', '../../../resources/assets/img/reservation/minus.png');
+
+          // "plus" 버튼 생성
+          var plusButton = document.createElement('button');
+          plusButton.setAttribute('class', 'selectBtn');
+          plusButton.setAttribute('onclick', 'count("plus")');
+          plusButton.setAttribute('value', '-');
+
+          // 이미지 엘리먼트 생성
+          var plusImage = document.createElement('img');
+          plusImage.setAttribute('src', '../../../resources/assets/img/reservation/plus.png');
+
+          // 숫자 입력 엘리먼트 생성
+          var numberInput = document.createElement('input');
+          numberInput.setAttribute('type', 'number');
+          numberInput.setAttribute('min', '0');
+          numberInput.setAttribute('max', '10');
+          numberInput.setAttribute('id', 'numberInput');
+          numberInput.setAttribute('value', '0');
+
+          // 버튼과 이미지 엘리먼트를 버튼 엘리먼트에 추가
+          minusButton.appendChild(minusImage);
+          plusButton.appendChild(plusImage);
+
+          // 버튼, 숫자 입력, 버튼을 네 번째 열에 추가
+          fourthCell.appendChild(minusButton);
+          fourthCell.appendChild(numberInput);
+          fourthCell.appendChild(plusButton);
+
+          // CSS 클래스 추가
+          fourthCell.className = 'fourthTd';
+
 
           // 이벤트 리스너 감지 후 실행됨
           selectElement.addEventListener('change', createChangeListener(pTag, item, selectElement));
@@ -404,15 +447,73 @@
           trTag.appendChild(firstCell);
           trTag.appendChild(secondCell);
           trTag.appendChild(thirdCell);
+          trTag.appendChild(fourthCell);
           tableBody.appendChild(trTag);
-        }
 
+
+// 체크박스 이벤트 리스너 추가
+          checkbox.addEventListener('change', function (event) {
+            if (event.target.checked) {
+              // 해당 체크박스의 부모 tr(테이블 행) 엘리먼트를 찾습니다.
+              var trElement = event.target.closest('tr');
+
+              // trElement로부터 필요한 데이터를 추출할 수 있습니다.
+              var wasteCategoryName = trElement.querySelector('label').textContent;
+              var wasteInfoStandard = trElement.querySelector('.selectBox').value;
+              var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
+
+              // 데이터를 객체로 만들거나 필요한 작업을 수행할 수 있습니다.
+              var selectedItem = {
+                wasteCategoryName: wasteCategoryName,
+                wasteInfoStandard: wasteInfoStandard,
+                wasteInfoFee: wasteInfoFee
+              };
+
+              // 호출할 함수를 통해 선택한 데이터를 추가합니다.
+              addToSelectTable(selectedItem);
+            }
+          });
+
+
+          // 선택한 물품 추가 함수
+          function addToSelectTable(item) {
+            var selectTable = document.getElementById('selectTable');
+            var newRow = selectTable.querySelector('tbody').insertRow();
+
+            // Create cells and populate with item data
+            var cell1 = newRow.insertCell(0);
+            cell1.textContent = "선택 1"; // You can customize this as needed
+            var cell2 = newRow.insertCell(1);
+            cell2.textContent = item.wasteCategoryName;
+            var cell3 = newRow.insertCell(2);
+            cell3.textContent = item.wasteInfoStandard;
+            var cell4 = newRow.insertCell(3);
+            cell4.textContent = item.wasteInfoFee;
+            var cell5 = newRow.insertCell(4);
+            cell5.textContent = "1개";
+            var cell6 = newRow.insertCell(5);
+
+            // Add a button with an image
+            var button = document.createElement('button');
+            button.className = 'selectBtn';
+            var image = document.createElement('img');
+            image.src = '../../../resources/assets/img/reservation/X.png';
+            button.appendChild(image);
+            cell6.appendChild(button);
+          }
+        }
+      },
+      error: function() {
+        alert("Ajax 오류! 관리자에게 문의하세요");
       }
     });
 
   }
 </script>
 
+<script type="text/javascript">
+
+</script>
 
 </body>
 
