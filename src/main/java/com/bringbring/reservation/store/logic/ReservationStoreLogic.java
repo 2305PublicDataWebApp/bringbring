@@ -1,5 +1,6 @@
 package com.bringbring.reservation.store.logic;
 
+import com.bringbring.reservation.domain.WasteCategory;
 import com.bringbring.reservation.domain.WasteData;
 import com.bringbring.reservation.store.ReservationStore;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +18,10 @@ public class ReservationStoreLogic implements ReservationStore {
     @Override
     public List<WasteData> selectWasteList(String selectItem) {
         return this.sqlSession.selectList("ReservationMapper.selectWasteList", selectItem);
+    }
+
+    @Override
+    public List<WasteCategory> selectWasteCategoryList() {
+        return sqlSession.selectList("ReservationMapper.selectWasteCategoryList");
     }
 }

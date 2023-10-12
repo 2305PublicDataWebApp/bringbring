@@ -6,6 +6,6 @@
   		SELECT * FROM CITY_TBL
   	</select>
   	<select id="selectDistrictList" resultType="District">
-  		SELECT * FROM DISTRICT_TBL WHERE CITY_NO = #{value}
+  		SELECT * FROM DISTRICT_TBL WHERE CITY_NO = #{cityNo}
   	</select>
 </mapper>

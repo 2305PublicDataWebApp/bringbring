@@ -33,16 +33,15 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-  
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
-  <!-- include summernote css/js -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-  <script src="../resources/assets/js/summernote/summernote-lite.js"></script>
-  <script src="../resources/assets/js/summernote/lang/summernote-ko-KR.js"></script>
-  
-  <!-- 카카오 api 관련 -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<!-- include summernote css/js -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+	<script src="../resources/assets/js/summernote/summernote-lite.js"></script>
+	<script src="../resources/assets/js/summernote/lang/summernote-ko-KR.js"></script>
+
+	<!-- 카카오 api 관련 -->
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=043e510b873d1287a23e00d8444a6b47&libraries=services"></script>
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <style>
@@ -119,19 +118,11 @@
 	          <li>
 	            <label for="cityNo">지역</label>
 	            <select name="cityNo" id="cityNo" onchange="citySelect();" style="width: 100px;margin-right: 15px;">
-	              <option value="0">지역 선택</option>
 	              <c:forEach var="city" items="${cList}" >			
 					  <option value="${city.cityNo}">${city.cityName}</option>
 				  </c:forEach>
 	            </select>
-	            <select name="districtNo" id="districtNo" style="width: 150px;margin-right: 15px;">
-	              <option value="1">서울</option>
-	              <option value="2">경기</option>
-	              <option value="3">경상</option>
-	              <option value="4">충청</option>
-	              <option value="5">강원</option>
-	              <option value="6">전라</option>
-	            </select>
+	            <select name="districtNo" id="districtNo"></select>
 	          </li>
 	          <li>
 	            <label for="wasteCategoryNo">종류</label>
@@ -149,11 +140,11 @@
 	            </div>
 	          </li>
 	          <li>
-	            <label for="location">거래 희망 장소</label>
-	            <input style="width: 500px;margin-right: 15px;" id="location" type="text" id="location">
-	            <button class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
-	            <input name="divXCoordinate" type="hidden" id="coordinateX">
-	            <input name="divYCoordinate" type="hidden" id="coordinateY">
+				<label for="location">거래 희망 장소</label>
+				<input style="width: 500px;margin-right: 15px;" id="location" type="text" id="location">
+				<button class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
+				<input name="divXCoordinate" type="hidden" id="coordinateX">
+				<input name="divYCoordinate" type="hidden" id="coordinateY">
 	          </li>
 	          <li>
 	            <label>지도 미리보기</label>
@@ -371,16 +362,18 @@
   <script type="text/javascript">
   	function citySelect() {
   		var cityNo = document.getElementById("cityNo").value;
-  		if(selectedCityNo !== "0"){
+  		if(cityNo !== "0"){
   			$.ajax({
 				url : "/divide/selectDistrict.do",
 				data : {cityNo : cityNo},
 				type : "POST",
 				success : function(data) {
-					let str = "";
-					for(let i = 0; i < data.length; i++){
-						str += "아이디 : " + data[i].userId + " 비번 : " + data[i].userPw + "<br>";
-					}
+						for (var i = 0; i < data.length; i++) {
+							var option = document.createElement("option");
+							option.value = data[i].districtNo;
+							option.text = data[i].districtName;
+							document.querySelector("#districtNo").appendChild(option);
+						}
 				},
 				error : function() {
 					alert("Ajax 오류! 관리자에게 문의하세요");
