@@ -5,4 +5,13 @@
   	<select id="selectCheckLogin">
   		SELECT * FROM USER_TBL WHERE USER_ID = #{userId } AND USER_PWD = #{userPwd }
   	</select>
+  	
+  	<select id="selectUserList" resultType="User">
+	    SELECT * FROM USER_TBL ORDER BY USER_NO DESC
+	</select>
+	
+	<select id="selectListCount" resultType="_int">
+	    SELECT COUNT(*) FROM USER_TBL
+	</select>
+	
 </mapper>
