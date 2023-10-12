@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AdminMapper">
+
+	<insert id="insertAdmin">
+		INSERT INTO ADMIN_TBL VALUES (SEQ_ADMIN_NO.NEXTVAL, #{userNo}, #{regionNo}, #{adminOrg}, default, SYSDATTE)
+	</insert>
+
+
+	<select id="selectAdminList" resultType="Admin">
+		SELECT * FROM ADMIN_TBL ORDER BY ADMIN_NO DESC
+	</select>
+
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*) FROM ADMiN_TBL
+	</select>
+</mapper>
