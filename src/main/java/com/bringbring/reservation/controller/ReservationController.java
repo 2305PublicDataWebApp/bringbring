@@ -1,5 +1,6 @@
 package com.bringbring.reservation.controller;
 
+import com.bringbring.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/reservation")
 public class ReservationController {
 
-//    private final
-// 페이지 이동
+    private final ReservationService reservationService;
+    // 페이지 이동
     @GetMapping("/select.do")
     public String showWasteSelect() {
         return "/reservation/wasteSelect";
@@ -32,6 +33,15 @@ public class ReservationController {
     public String showPayComplete() {
         return "/reservation/payComplete";
     }
+
+//    @ResponseBody
+//    @GetMapping("/selectItem.do")
+//    public String selectWasteList(@RequestParam String selectItem) {
+//        List<WasteData> wasteList = reservationService.selectWasteList(selectItem);
+//
+//        return "";
+//    }
+
 
 
 

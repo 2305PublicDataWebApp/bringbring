@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReservationMapper">
+    <resultMap id="wasteDataResultMap" type="com.bringbring.reservation.domain.WasteData">
+        <association property="wasteCategory" resultMap="wasteCategory"/>
+        <association property="wasteType" resultMap="wasteType"/>
+        <association property="wasteInfo" resultMap="wasteInfo"/>
+    </resultMap>
+    <resultMap id="wasteCategory" type="com.bringbring.reservation.domain.WasteCategory">
+        <id property="wasteCategoryNo" column="WASTE_CATEGORY_NO" />
+        <result property="wasteCategoryName" column="WASTE_CATEGORY_NAME" />
+    </resultMap>
+    <resultMap id="wasteType" type="com.bringbring.reservation.domain.WasteType">
+        <id property="wasteTypeNo" column="WASTE_TYPE_NO" />
+        <result property="wasteTypeName" column="WASTE_TYPE_NAME" />
+        <result property="wasteCategoryNo" column="WASTE_CATEGORY_NO" />
+    </resultMap>
+    <resultMap id="wasteInfo" type="com.bringbring.reservation.domain.WasteInfo">
+        <id property="wasteInfoNo" column="WASTE_INFO_NO" />
+        <result property="wasteTypeNo" column="WASTE_TYPE_NO" />
+        <result property="wasteInfoStandard" column="WASTE_INFO_STANDARD" />
+        <result property="wasteInfoFee" column="WASTE_INFO_FEE" />
+    </resultMap>
+
+
+    <select id="selectWasteList" resultMap="wasteDataResultMap">
+        select * from WASTE_CATEGORY_TBL JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO) JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
+        where WASTE_CATEGORY_NAME=#{wasteCategoryName}
+
+    </select>
+
+</mapper>
