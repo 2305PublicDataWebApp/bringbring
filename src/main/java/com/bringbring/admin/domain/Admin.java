@@ -16,8 +16,8 @@ import lombok.ToString;
 public class Admin {
 	private int adminNo;
 	private int userNo;
-	private String managedRegion;
-	private String managedOrganization;
+	private int regionNo;
+	private String adminOrg;
 	private int adminGrade;
 	private LocalDate adminCreateDate; 
 }
