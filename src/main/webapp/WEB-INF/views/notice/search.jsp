@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -13,8 +15,8 @@
 
 
   <!-- Favicons -->
-  <link href="../../assets/img/main/title-icon.png" rel="icon">
-    <link href="../../assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../resources/assets/img/main/title-icon.png" rel="icon">
+  <link href="../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -22,20 +24,20 @@
     rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="../../assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="../../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-  <link href="../../assets/vendor/bootstrap/css/bootstrap.notice.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../resources/assets/vendor/bootstrap/css/bootstrap.notice.css" rel="stylesheet">
 
 
   <!-- Template Main CSS File -->
-  <link href="../../assets/css/style.css" rel="stylesheet">
-  <link href="../../assets/css/common.css" rel="stylesheet">
-  <link href="../../assets/css/notice/search.css" rel="stylesheet">
+  <link href="../resources/assets/css/style.css" rel="stylesheet">
+  <link href="../resources/assets/css/common.css" rel="stylesheet">
+  <link href="../resources/assets/css/notice/search.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Arsha
@@ -50,33 +52,9 @@
 <body>
 
   <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top ">
-    <div class="container d-flex align-items-center">
-      <img src="../../assets/img/main/cargo-truck-green.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
-      <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="../../index.html">브링브링</a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link scrollto" href="#about">배출안내</a></li>
-          <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
-          <li><a class="nav-link   scrollto" href="#portfolio">공지사항</a></li>
-          <li><a class="nav-link scrollto" href="#team">문의게시판</a></li>
-          <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
-
-          </li>
-          <li><button class="getstarted scrollto">로그인</button>
-            <!-- <a  href="#login">로그인</a> -->
-          </li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-    </div>
-  </header><!-- End Header -->
-
-  <div style="width: 100%;height: 74px;"></div>
+  <jsp:include page="/include/header.jsp"></jsp:include>
+  
+  
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
     <div style="width: 1300px;margin: 0 auto;">
@@ -86,7 +64,7 @@
         <h4 style="color: rgb(189, 245, 229);">브링브링의 업데이트 정보 등 다양한 소식을 알려드립니다.</h4>
       </div>
       <div style="display: flex;flex-direction: row;justify-content: flex-end;">
-        <img src="../../assets/img/notice/free-icon-noticeboard-3000428.png" style="width: 250px;" alt="">
+        <img src="../resources/assets/img/notice/free-icon-noticeboard-3000428.png" style="width: 250px;" alt="">
       </div>
     </div>
 
@@ -114,7 +92,7 @@
         </li>
       </ul>
 
-      <form class="d-flex" action="./search.html" method="get">
+      <form class="d-flex" action="./search.jsp" method="get">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchKeyword"
           value="${searchKeyword}">
         <button class="btn btn-outline-success" type="submit">검색</button>
@@ -137,86 +115,27 @@
               </tr>
             </thead>
             <tbody>
+            <c:forEach var="notice" items="${nList }" varStatus="i">
               <tr>
-                <th scope="row">1</th>
-                <td>서비스</td>
-                <td>강남구</td>
-                <td style="width: 641.15px;">브링브링 서비스 이용약관 개정 공지문</td>
-                <td>45</td>
-                <td>2023-09-30</td>
+                <th scope="row">${i.count }</th>
+                <td>${notice.noticeType }</td>
+                <td>카테고리</td>
+                <td style="width: 641.15px;">
+                	<a href="${detailUrl }">${notice.noticeTitle }</a>
+                	<!-- 글 작성일기준 일주일동안 new이미지 띄우기 -->
+                	<c:set var="oneWeekAgo" value="${now - 7 * 24 * 60 * 60 * 1000}" />
+      				<c:choose>
+        				<c:when test="${notice.noticeCreateDate.time >= oneWeekAgo}">
+          					<img src="../resources/assets/img/notice/new_icon.png" />
+        				</c:when>
+      				</c:choose>
+                </td>
+                <td>조회수</td>
+                <td>
+                	<fmt:formatDate pattern="yyyy-MM-dd" value="${notice.noticeCreateDate }" />
+                </td>
               </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>브링브링 비정기 업데이트 소식</td>
-                <td>68</td>
-                <td>2023-09-25</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>서비스</td>
-                <td>은평구</td>
-                <td>브링브링 서비스 접속 정상화 안내</td>
-                <td>4455</td>
-                <td>2023-09-25</td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>서비스</td>
-                <td>성북구</td>
-                <td>브링브링 서비스 접근 제한 공지</td>
-                <td>564</td>
-                <td>2023-09-23</td>
-              </tr>
-              <tr>
-                <th scope="row">5</th>
-                <td>서비스</td>
-                <td>강남구</td>
-                <td>주소 입력 방법 안내</td>
-                <td>879</td>
-                <td>2023-09-22</td>
-              </tr>
-              <tr>
-                <th scope="row">6</th>
-                <td>서비스</td>
-                <td>강남구</td>
-                <td>결제 수단 일부 서비스 종료 안내</td>
-                <td>356</td>
-                <td>2023-09-18</td>
-              </tr>
-              <tr>
-                <th scope="row">7</th>
-                <td>서비스</td>
-                <td>강남구</td>
-                <td>브링브링 서비스 공식 지원 환경 변경 사전 안내</td>
-                <td>869</td>
-                <td>2023-09-14</td>
-              </tr>
-              <tr>
-                <th scope="row">8</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>[중요] 브링브링 V3.7 정기 업데이트 소식</td>
-                <td>13</td>
-                <td>2023-09-14</td>
-              </tr>
-              <tr>
-                <th scope="row">9</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>[중요]브링브링 일부 기능의 사양 변경 및 종료 안내</td>
-                <td>578</td>
-                <td>2023-09-08</td>
-              </tr>
-              <tr>
-                <th scope="row">10</th>
-                <td>서비스</td>
-                <td>강남구</td>
-                <td>브링브링 일부 기능 종료 안내</td>
-                <td>988</td>
-                <td>2023-09-05</td>
-              </tr>
+              </c:forEach>
             </tbody>
           </table>
         </div>
@@ -235,86 +154,27 @@
               </tr>
             </thead>
             <tbody>
+            <c:forEach var="notice" items="${nList }" varStatus="i">
               <tr>
-                <th scope="row">1</th>
+                <th scope="row">${i.count }</th>
+                <td>${notice.noticeType }</td>
                 <td>서비스</td>
-                <td>강남구</td>
-                <td style="width: 641.15px;">브링브링 서비스 이용약관 개정 공지문</td>
-                <td>45</td>
-                <td>2023-09-30</td>
+                <td style="width: 641.15px;">
+                	<a href="${detailUrl }">${notice.noticeTitle }</a>
+                	<!-- 글 작성일기준 일주일동안 new이미지 띄우기 -->
+                	<c:set var="oneWeekAgo" value="${now - 7 * 24 * 60 * 60 * 1000}" />
+      				<c:choose>
+        				<c:when test="${notice.noticeCreateDate.time >= oneWeekAgo}">
+          					<img src="../resources/assets/img/notice/new_icon.png" />
+        				</c:when>
+      				</c:choose>
+                </td>
+                <td>조회수</td>
+                <td>
+                	<fmt:formatDate pattern="yyyy-MM-dd" value="${notice.noticeCreateDate }" />
+                </td>
               </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>서비스</td>
-                <td>은평구</td>
-                <td>[중요]브링브링 일부 기능의 사양 변경 및 종료 안내</td>
-                <td>68</td>
-                <td>2023-09-25</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>서비스</td>
-                <td>은평구</td>
-                <td>은평구 브링브링 서비스 이용 중단 및 안내 사항</td>
-                <td>4455</td>
-                <td>2023-09-25</td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>서비스</td>
-                <td>성북구</td>
-                <td>브링브링 서비스 접근 제한 공지</td>
-                <td>564</td>
-                <td>2023-09-23</td>
-              </tr>
-              <tr>
-                <th scope="row">5</th>
-                <td>서비스</td>
-                <td>강남구</td>
-                <td>주소 입력 방법 안내</td>
-                <td>879</td>
-                <td>2023-09-22</td>
-              </tr>
-              <tr>
-                <th scope="row">6</th>
-                <td>서비스</td>
-                <td>강남구</td>
-                <td>결제 수단 일부 서비스 종료 안내</td>
-                <td>356</td>
-                <td>2023-09-18</td>
-              </tr>
-              <tr>
-                <th scope="row">7</th>
-                <td>서비스</td>
-                <td>성북구</td>
-                <td>서비스제목</td>
-                <td>869</td>
-                <td>2023-09-14</td>
-              </tr>
-              <tr>
-                <th scope="row">8</th>
-                <td>서비스</td>
-                <td>서비스</td>
-                <td>서비스제목</td>
-                <td>13</td>
-                <td>2023-09-14</td>
-              </tr>
-              <tr>
-                <th scope="row">9</th>
-                <td>서비스</td>
-                <td>강남구</td>
-                <td>서비스제목</td>
-                <td>578</td>
-                <td>2023-09-08</td>
-              </tr>
-              <tr>
-                <th scope="row">10</th>
-                <td>서비스</td>
-                <td>강남구</td>
-                <td>브링브링 일부 기능 종료 안내</td>
-                <td>988</td>
-                <td>2023-09-05</td>
-              </tr>
+              </c:forEach>
             </tbody>
           </table>
         </div>
@@ -333,86 +193,27 @@
               </tr>
             </thead>
             <tbody>
+            <c:forEach var="notice" items="${nList }" varStatus="i">
               <tr>
-                <th scope="row">1</th>
+                <th scope="row">${i.count }</th>
+                <td>${notice.noticeType }</td>
                 <td>업데이트</td>
-                <td>전체</td>
-                <td style="width: 641.15px;">업데이트내용</td>
-                <td>45</td>
-                <td>2023-09-30</td>
+                <td style="width: 641.15px;">
+                	<a href="${detailUrl }">${notice.noticeTitle }</a>
+                	<!-- 글 작성일기준 일주일동안 new이미지 띄우기 -->
+                	<c:set var="oneWeekAgo" value="${now - 7 * 24 * 60 * 60 * 1000}" />
+      				<c:choose>
+        				<c:when test="${notice.noticeCreateDate.time >= oneWeekAgo}">
+          					<img src="../resources/assets/img/notice/new_icon.png" />
+        				</c:when>
+      				</c:choose>
+                </td>
+                <td>조회수</td>
+                <td>
+                	<fmt:formatDate pattern="yyyy-MM-dd" value="${notice.noticeCreateDate }" />
+                </td>
               </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>업데이트내용</td>
-                <td>68</td>
-                <td>2023-09-25</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>업데이트내용</td>
-                <td>4455</td>
-                <td>2023-09-25</td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>업데이트내용</td>
-                <td>564</td>
-                <td>2023-09-23</td>
-              </tr>
-              <tr>
-                <th scope="row">5</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>업데이트내용</td>
-                <td>879</td>
-                <td>2023-09-22</td>
-              </tr>
-              <tr>
-                <th scope="row">6</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>업데이트내용</td>
-                <td>356</td>
-                <td>2023-09-18</td>
-              </tr>
-              <tr>
-                <th scope="row">7</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>업데이트내용</td>
-                <td>869</td>
-                <td>2023-09-14</td>
-              </tr>
-              <tr>
-                <th scope="row">8</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>업데이트내용</td>
-                <td>13</td>
-                <td>2023-09-14</td>
-              </tr>
-              <tr>
-                <th scope="row">9</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>업데이트내용</td>
-                <td>578</td>
-                <td>2023-09-08</td>
-              </tr>
-              <tr>
-                <th scope="row">10</th>
-                <td>업데이트</td>
-                <td>전체</td>
-                <td>업데이트내용</td>
-                <td>988</td>
-                <td>2023-09-05</td>
-              </tr>
+              </c:forEach>
             </tbody>
           </table>
         </div>
@@ -445,89 +246,24 @@
   <!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
-
-          <div class="col-lg-3 col-md-6 footer-contact">
-            <h3>브링브링</h3>
-            <p>
-              A108 Adam Street <br>
-              New York, NY 535022<br>
-              United States <br><br>
-              <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> info@example.com<br>
-            </p>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#"></a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Services</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Social Networks</h4>
-            <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
-            <div class="social-links mt-3">
-              <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-              <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-              <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-              <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-              <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="container footer-bottom clearfix">
-      <div class="copyright">
-        &copy; Copyright <strong><span>Arsha</span></strong>. All Rights Reserved
-      </div>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </div>
-  </footer><!-- End Footer -->
+  <jsp:include page="/include/footer.jsp"></jsp:include>
+  
 
   <div id="preloader"></div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
       class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../../assets/vendor/aos/aos.js"></script>
-  <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../../assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="../../assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../../assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="../../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../resources/assets/vendor/aos/aos.js"></script>
+  <script src="../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="../resources/assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="../../assets/js/main.js"></script>
+  <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
   <script>
@@ -538,10 +274,11 @@
     });
 
   </script>
+  
   <!-- 버튼 script -->
   <script>
     function showInsertForm() {
-      window.location.href = "./insert.html"
+      window.location.href = "./insert.jsp"
     }
   </script>
 
