@@ -3,7 +3,7 @@ package com.bringbring.notice.service;
 import java.util.List;
 
 import com.bringbring.notice.domain.Notice;
-import com.bringbring.notice.domain.PageInfo;
+import com.bringbring.notice.domain.NoticePageInfo;
 
 public interface NoticeService {
 
@@ -25,7 +25,7 @@ public interface NoticeService {
 	 * @param noticeInfo
 	 * @return
 	 */
-	List<Notice> selectNoticeList(PageInfo noticeInfo);
+	List<Notice> selectNoticeList(NoticePageInfo noticeInfo);
 
 	/**
 	 * 게시글 번호에 맞는 게시글 상세 조회 Service

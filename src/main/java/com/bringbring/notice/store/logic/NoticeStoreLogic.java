@@ -7,7 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.bringbring.notice.domain.Notice;
-import com.bringbring.notice.domain.PageInfo;
+import com.bringbring.notice.domain.NoticePageInfo;
 import com.bringbring.notice.store.NoticeStore;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class NoticeStoreLogic implements NoticeStore{
 
 	// 게시글 목록 조회
 	@Override
-	public List<Notice> selectNoticeByList(PageInfo noticeInfo) {
+	public List<Notice> selectNoticeByList(NoticePageInfo noticeInfo) {
 		int limit = noticeInfo.getRecordCountPerPage();
 		int offset = (noticeInfo.getCurrentPage()-1)*limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
