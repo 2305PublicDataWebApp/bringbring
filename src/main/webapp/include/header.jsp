@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>       
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
@@ -30,7 +31,14 @@
 	          <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
 	          
 	          </li>
-	          <li><button class="getstarted scrollto">로그인</button>
+	          <li>
+	          	<c:if test="${empty sessionScope.sessionId}">
+		          	<button onclick="login();" class="getstarted scrollto">로그인</button>
+	          	</c:if>
+	          	
+	          	<c:if test="${not empty sessionScope.sessionId} ">
+		          	<button onclick="logout();" class="getstarted scrollto">로그아웃</button>
+	          	</c:if>
 	            <!-- <a  href="#login">로그인</a> -->
 	          </li>
 	        </ul>

@@ -28,5 +28,8 @@
         where WASTE_CATEGORY_NAME=#{wasteCategoryName}
 
     </select>
+    <select id="selectWasteCategoryList" resultType="WasteCategory">
+        select * from WASTE_CATEGORY_TBL
+    </select>
 
 </mapper>

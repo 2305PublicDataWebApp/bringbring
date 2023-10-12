@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -104,7 +106,7 @@
       <div class="row">
         <div class="four col-md-3">
           <div class="counter-box colored">
-            <h4>회원 수 : 100</h4>
+            <h4>회원 수 : ${userCount}</h4>
           </div>
         </div>
         <div class="col-md-3">
@@ -149,67 +151,59 @@
                     <th>회원 아이디</th>
                     <th>핸드폰 번호</th>
                     <th>가입일</th>
-                    <th>회원 상태</th>
+                    <th>회원 여부</th>
                     <th>-</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>khuser01@gmail.com</td>
-                  <td>01012345678</td>
-                  <td>2023-10-01</td>
-                  <td>활성화</td>
-                  <td><button class="btn btn-success">관리자 임명</button></td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>khuser01@gmail.com</td>
-                  <td>01012345678</td>
-                  <td>2023-10-01</td>
-                  <td>활성화</td>
-                  <td><button class="btn btn-success">관리자 임명</button></td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>khuser01@gmail.com</td>
-                  <td>01012345678</td>
-                  <td>2023-10-01</td>
-                  <td>활성화</td>
-                  <td><button class="btn btn-success">관리자 임명</button></td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>khuser01@gmail.com</td>
-                  <td>01012345678</td>
-                  <td>2023-10-01</td>
-                  <td>활성화</td>
-                  <td><button class="btn btn-success">관리자 임명</button></td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>khuser01@gmail.com</td>
-                  <td>01012345678</td>
-                  <td>2023-10-01</td>
-                  <td>활성화</td>
-                  <td><button class="btn btn-success">관리자 임명</button></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>khuser02@gmail.com</td>
-                  <td>01022222222</td>
-                  <td>2023-10-01</td>
-                  <td>비활성화</td>
-                  <td><button class="btn btn-success">회원 탈퇴</button>&nbsp;<button class="btn btn-success">관리자 임명</button></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>khuser03@gmail.com</td>
-                  <td>01022223333</td>
-                  <td>2023-10-02</td>
-                  <td>비활성화</td>
-                  <td><button class="btn btn-success">회원 탈퇴</button>&nbsp;<button class="btn btn-success">관리자 임명</button></td>
-                </tr>
+                <c:forEach var="user" items="${userList}" varStatus="u">
+                  <tr>
+                    <td>${user.userNo}</td>
+                    <td>${user.userId}</td>
+                    <td>${user.userPhone}</td>
+                    <td>
+                     ${user.userCreateDate}
+                    </td>
+                    <td>
+                      ${user.isUserDeleted}
+                    </td>
+                    <td>
+                    <button class="btn btn-success" data-toggle="modal" data-target="#myModal${user.userNo}">관리자 임명</button>
+                    <!-- 모달창 시작 -->
+                    <div class="modal fade" id="myModal${user.userNo}" role="dialog">
+                      <div class="modal-dialog">
+                        <!-- 모달 내용 -->
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">관리자 정보 입력</h4>
+                          </div>
+                          <div class="modal-body">
+                            <form id="adminForm${user.userNo}">
+                              <input type="hidden" name="userNo" value="${user.userNo}">
+                              <div class="form-group">
+                                <label for="regionNo">리전 번호:</label>
+                                <select class="form-control" name="regionNo" id="regionNo${user.userNo}">
+                                  <!-- 리전 정보를 동적으로 로드하는 옵션들을 여기에 추가 -->
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <label for="adminOrg">기관명:</label>
+                                <input type="text" class="form-control" name="adminOrg" id="adminOrg${user.userNo}" required>
+                              </div>
+                              <button type="button" class="btn btn-primary" onclick="submitAdminForm(${user.userNo})">저장</button>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- 모달창 끝 -->
+                    </td>
+                  </tr>
+                </c:forEach>
             </tbody>
         </table>
     </div>
@@ -402,7 +396,16 @@
             $('#wrapper').toggleClass('toggled');
       });  
     });
+    function submitAdminForm(userNo) {
+      var regionNo = document.getElementById("regionNo" + userNo).value;
+      var adminOrg = document.getElementById("adminOrg" + userNo).value;
 
+      // 서버로 데이터를 보내고 관리자 정보를 인서트하는 API 호출
+      // 여기에 AJAX 호출 코드를 추가해야 합니다.
+
+      // 모달을 닫음
+      $('#myModal' + userNo).modal('hide');
+    }
   </script>
   
   

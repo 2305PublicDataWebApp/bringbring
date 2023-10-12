@@ -361,6 +361,9 @@
             }
         });
     });
+    
+    <!-- 로그인, 로그아웃 -->
+    <jsp:include page="/include/loginJs.jsp"></jsp:include>
   </script>
 </body>
 

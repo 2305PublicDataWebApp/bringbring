@@ -39,7 +39,6 @@ public class UserController {
 		int result = userService.selectCheckLogin(user);
 		if(result>0) {
 			session.setAttribute("sessionId", user.getUserId());
-			session.setAttribute("sessionPwd", user.getUserPwd());
 			//성공하면 로그인페이지
 			return "redirect:/";
 		} else {
@@ -51,6 +50,16 @@ public class UserController {
 		}
 	}
 	
+	// 로그아웃 기능
+	@GetMapping("/logout.do")
+	public String userLogout(
+			HttpSession session) {
+		if(session != null) {
+			session.invalidate();
+		}
+		return "redirect:/";
+	}
+	
 	// 회원가입
 	@GetMapping("/insert.do")
 	public String showInsertUserForm() {
@@ -58,9 +67,9 @@ public class UserController {
 	}
 	
 	// 회원가입 기능
-	@PostMapping("/insert.do")
-	public String insertUser() {
-		return"";
-	}
+//	@PostMapping("/insert.do")
+//	public String insertUser() {
+//		return"";
+//	}
 
 }

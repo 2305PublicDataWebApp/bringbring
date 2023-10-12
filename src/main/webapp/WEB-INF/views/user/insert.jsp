@@ -79,17 +79,14 @@
                 <div class="form-floating mb-4">
                     <input type="password" id="floatingPassword" class="form-control" placeholder="Password" required>
                     <label for="floatingPassword">비밀번호</label>
-                    <div class="invalid-feedback">
+                    <div id="" class="invalid-feedback">
                         비밀번호를 입력해주세요.
                     </div>
                 </div>
                 <div class="form-floating mb-4">
                     <input type="password" id="floatingPasswordCheck" class="form-control" placeholder="Password" required>
                     <label for="floatingPasswordCheck">비밀번호 확인</label>
-                    <div id="member_pw_check_div" class="invalid-feedback">
-                        <!-- 비밀번호를 한번 더 입력해주세요. -->
-                    </div>
-                    <!-- <div id="check_pw"></div> -->
+                    <div id="user_pwd_check_error" class="invalid-feedback"></div>
                 </div>
                 <div class="form-floating mb-4">
                     <input type="text" class="form-control" id="floatingName" placeholder="Name" required>
@@ -101,9 +98,7 @@
                 <div class="form-floating mb-4">
                     <input type="text" id="floatingPhone" class="form-control" placeholder="Phone" required>
                     <label for="floatingPhone">전화번호</label>
-                    <div class="invalid-feedback">
-                        전화번호를 입력해주세요.
-                    </div>
+                    <div id="user_phone_check_error" class="invalid-feedback"></div>
                 </div>
                 <div class="container">
                     <div class="row mb-4">
@@ -115,7 +110,7 @@
                             </div>
                         </div>
                         <div class="col-2 pe-0">
-                            <input type="button" class="address_input w-100 rounded" value="우편 번호">
+                            <input type="button" onclick="daumPostcode_btn();" class="address_input w-100 rounded" value="우편 번호">
                         </div>
                     </div>
                 </div>
@@ -137,7 +132,7 @@
                     <input type="checkbox" class="form-check-input">
                     <label class="form-check-label">동의하기</label>
                 </div>
-                <p class="ps-4 pe-4">실명 인증된 아이디로 가입, 위치기반 서비스 이용약관(선택), 이벤트 혜택 정보 수신 (선택) 동의를 포함합니다. </p>
+                <p class="ps-4 pe-4">위치기반 서비스 이용약관(선택), 이벤트 혜택 정보 수신 (선택) 동의를 포함합니다. </p>
                 
                 <input type="submit" id="register_btn" class="insert_btn_input w-100 text-center fw-bold fs-4 rounded" value="회원가입">
                 
@@ -165,78 +160,115 @@
 
     <!-- Template Main JS File -->
     <script src="../resources/assets/js/main.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-    <!-- 회원가입 유효성 -->
     <script type="text/javascript">
+    // 회원가입 유효성
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('register_form');
-        const password_check = document.getElementById('member_pw_check_div');
+    	const form = document.getElementById('register_form');
+        const pwdCheckError = document.getElementById('user_pwd_check_error');
+        const phoneError = document.getElementById("user_phone_check_error");
 
-        form.addEventListener('submit', function (event) {
+	    form.addEventListener('submit', function (event) {
+            
             if (!form.checkValidity()) {
                 // 폼 유효성 검사가 실패하면
                 event.preventDefault(); // 폼 제출 방지
                 event.stopPropagation(); // 이벤트 버블링 중지
             }
-            password_check.innerHTML="비밀번호를 한번 더 입력해주세요."
+            pwdCheckError.innerHTML="비밀번호를 한번 더 입력해주세요."
+            phoneError.innerHTML="전화번호를 입력해주세요."
             form.classList.add('was-validated'); // 부트스트랩 유효성 클래스 추가
         
         });
-    });
-    // 비밀번호 재확인(최종하려면 JQuery CDN 지워야 함)
-    document.getElementById('floatingPasswordCheck').addEventListener('keyup', function() {
-        var pass1 = document.getElementById('floatingPassword').value;
-        var pass2 = this.value; // 현재 이벤트가 발생한 요소 (member_pw_check)의 값
-
-        var member_pw_Check_Div = document.getElementById('member_pw_check_div');
-
-        member_pw_Check_Div.classList.remove('invalid-feedback');
-        member_pw_Check_Div.classList.add('mt-1')
-        member_pw_Check_Div.style.fontSize = "14px";
-        member_pw_Check_Div.style.height = "10px";
-        if (pass1 !== "" || pass2 !== "") {
-            if (pass1 === pass2) {
-                member_pw_Check_Div.innerHTML = "비밀번호가 일치합니다.";
-                member_pw_Check_Div.style.color = "green";
-            } else {
-                member_pw_Check_Div.innerHTML = "비밀번호가 일치하지 않습니다.";
-                member_pw_Check_Div.style.color = "red";
+        
+     	// 입력란에서 입력이 발생할 때 전화번호 유효성 검사
+        document.getElementById('floatingPhone').addEventListener("input", function () {
+	        const phoneValue = document.getElementById('floatingPhone').value;
+			
+            // 전화번호 유효성 검사 (예: 숫자로만 이루어져야 함)
+            if (!/^\d+$/.test(phoneValue)) {
+		        phoneError.classList.remove('invalid-feedback');
+		        phoneError.classList.add('mt-1')
+		        phoneError.style.fontSize = "14px";
+		        phoneError.style.height = "10px";
+                phoneError.innerHTML = "숫자만 입력 가능합니다.";
+                phoneError.style.color = "red";
+            }else {
+            	phoneError.innerHTML = "전화번호를 입력해주세요.";
+            	phoneError.classList.remove('mt-1')
+	            phoneError.classList.add('invalid-feedback');
             }
-        }
-
-        if (pass2 === "") {
-            member_pw_Check_Div.innerHTML = "비밀번호를 한번 더 입력해주세요.";
-            member_pw_Check_Div.classList.remove('mt-1')
-            member_pw_Check_Div.classList.add('invalid-feedback');
-        }
+        });
+    
+	    // 비밀번호 재확인
+	    document.getElementById('floatingPasswordCheck').addEventListener('keyup', function() {
+	        var pass1 = document.getElementById('floatingPassword').value;
+	        var pass2 = this.value; // 현재 이벤트가 발생한 요소 (floatingPasswordCheck)의 값
+	
+	        pwdCheckError.classList.remove('invalid-feedback');
+	        pwdCheckError.classList.add('mt-1')
+	        pwdCheckError.style.fontSize = "14px";
+	        pwdCheckError.style.height = "10px";
+	        if (pass1 !== "" || pass2 !== "") {
+	            if (pass1 === pass2) {
+	            	pwdCheckError.innerHTML = "비밀번호가 일치합니다.";
+	            	pwdCheckError.style.color = "green";
+	            } else {
+	            	pwdCheckError.innerHTML = "비밀번호가 일치하지 않습니다.";
+	            	pwdCheckError.style.color = "red";
+	            }
+	        }
+	
+	        if (pass2 === "") {
+	        	pwdCheckError.innerHTML = "비밀번호를 한번 더 입력해주세요.";
+	        	pwdCheckError.classList.remove('mt-1')
+	            pwdCheckError.classList.add('invalid-feedback');
+	        }
+	    });
+// 	    ** JQuery **
+// 	    $('#member_pw_check').keyup(function() {
+// 	        const pass1 = $('#member_pw').val(); 
+// 			const pass2 = $('#member_pw_check').val();
+// 	        const password_check = document.getElementById('member_pw_check_div');
+	
+// 			if (pass1 != "" || pass2 != "") {
+// 				if (pass1 == pass2) {
+// 					$('#check_pw').text("비밀번호가 일치합니다.");  // .innerHTML는 자바스크립트
+// 					$('#check_pw').css("color", "green");
+// 					$('#check_pw').css("font-size", "14px");
+// 					$('#check_pw').css("margin-top", "4px");
+// 	            }else if(pass2 == "") {
+// 	            $('#check_pw').text(""); 
+// 	            } else {
+// 					$('#check_pw').text("비밀번호가 일치하지 않습니다.");
+// 					$('#check_pw').css("color", "red");
+// 					$('#check_pw').css("font-size", "14px");
+// 					$('#check_pw').css("margin-top", "4px");
+// 				}
+// 	            password_check.classList.replace('invalid-feedback', 'd-none');
+// 			}
+// 	        if(pass2 == "") {
+// 	            password_check.classList.replace('d-none', 'invalid-feedback');
+// 	        }
+			
+// 		});
     });
-    // ** JQuery **
-    // $('#member_pw_check').keyup(function() {
-    //     const pass1 = $('#member_pw').val(); 
-	// 	const pass2 = $('#member_pw_check').val();
-    //     const password_check = document.getElementById('member_pw_check_div');
-
-	// 	if (pass1 != "" || pass2 != "") {
-	// 		if (pass1 == pass2) {
-	// 			$('#check_pw').text("비밀번호가 일치합니다.");  // .innerHTML는 자바스크립트
-	// 			$('#check_pw').css("color", "green");
-	// 			$('#check_pw').css("font-size", "14px");
-	// 			$('#check_pw').css("margin-top", "4px");
-    //         }else if(pass2 == "") {
-    //         $('#check_pw').text(""); 
-    //         } else {
-	// 			$('#check_pw').text("비밀번호가 일치하지 않습니다.");
-	// 			$('#check_pw').css("color", "red");
-	// 			$('#check_pw').css("font-size", "14px");
-	// 			$('#check_pw').css("margin-top", "4px");
-	// 		}
-    //         password_check.classList.replace('invalid-feedback', 'd-none');
-	// 	}
-    //     if(pass2 == "") {
-    //         password_check.classList.replace('d-none', 'invalid-feedback');
-    //     }
-		
-	// });
+    
+    // 주소 API
+    function daumPostcode_btn() {
+    	new daum.Postcode({
+    		oncomplete: function(data) {
+    			
+    			// 우편번호와 주소 정보를 해당 필드에 넣는다.
+    			document.getElementById('floatingPostcode').value = "("+ data.zonecode +")";
+    			document.getElementById('floatingAddress').value = data.roadAddress +", "+ data.buildingName;
+    			
+    			// 커서를 상세주소 필드로 이동한다.
+                document.getElementById("floatingAddressDetail").focus();
+    		}
+    	}).open();
+    }
     </script>
     <!-- 채널톡 api -->
     <script>

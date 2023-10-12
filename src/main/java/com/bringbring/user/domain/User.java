@@ -28,5 +28,5 @@ public class User {
 	private String userProfileRename;
 	private String userProfilePath;
 	private int userProfileLength;
-	private char idUserDeleted;
+	private char isUserDeleted;
 }

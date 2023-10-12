@@ -4,11 +4,10 @@ import java.util.List;
 
 import com.bringbring.divide.domain.Divide;
 import com.bringbring.image.domain.Image;
+import com.bringbring.region.domain.District;
 import com.bringbring.reservation.domain.WasteCategory;
 
 public interface DivideStore {
-
-	List<WasteCategory> selectWasteCategoryList();
 
 	int insertDivide(Divide divide);
 
