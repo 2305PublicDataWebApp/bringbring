@@ -60,11 +60,11 @@
         <div class="form_insert w-100 m-auto rounded">
             <h1 class="h3 mb-3 fw-normal text-center">회원가입</h1>
 
-            <form id="register_form" action="#" method="post" novalidate>
+            <form id="register_form" action="/user/insert.do" method="post" novalidate>
                 <div class="container">
                     <div class="row mb-4">
                         <div class="form-floating col-10 p-0">
-                            <input type="email" id="floatingEmail" class="form-control" placeholder="name@example.com" required>
+                            <input type="email" id="floatingEmail" class="form-control" name="userId" placeholder="name@example.com" required>
                             <label for="floatingEmail">이메일 주소</label>
                             <div class="invalid-feedback">
                                 이메일을 입력해주세요.
@@ -77,7 +77,7 @@
                 </div>
                 
                 <div class="form-floating mb-4">
-                    <input type="password" id="floatingPassword" class="form-control" placeholder="Password" required>
+                    <input type="password" id="floatingPassword" class="form-control" name="userPwd" placeholder="Password" required>
                     <label for="floatingPassword">비밀번호</label>
                     <div id="" class="invalid-feedback">
                         비밀번호를 입력해주세요.
@@ -89,21 +89,21 @@
                     <div id="user_pwd_check_error" class="invalid-feedback"></div>
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="text" class="form-control" id="floatingName" placeholder="Name" required>
+                    <input type="text" class="form-control" id="floatingName" name="userName" placeholder="Name" required>
                     <label for="floatingName">이름</label>
                     <div class="invalid-feedback">
                         이름을 입력해주세요.
                     </div>
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="text" id="floatingPhone" class="form-control" placeholder="Phone" required>
+                    <input type="text" id="floatingPhone" class="form-control" name="userPhone" placeholder="Phone" required>
                     <label for="floatingPhone">전화번호</label>
                     <div id="user_phone_check_error" class="invalid-feedback"></div>
                 </div>
                 <div class="container">
                     <div class="row mb-4">
                         <div class="form-floating col-10 p-0">
-                            <input type="text" id="floatingPostcode" class="form-control" placeholder="Postcode" required>
+                            <input type="text" id="floatingPostcode" class="form-control" name="userPostCode" placeholder="Postcode" required>
                             <label for="floatingPostcode">우편번호</label>
                             <div class="invalid-feedback">
                                 주소를 검색하여 입력해주세요.
@@ -115,14 +115,14 @@
                     </div>
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="text" id="floatingAddress" class="form-control" placeholder="Address" required>
+                    <input type="text" id="floatingAddress" class="form-control" name="userAddress" placeholder="Address" required>
                     <label for="floatingAddress">주소</label>
                     <div class="invalid-feedback">
                         주소를 검색하여 선택해주세요.
                     </div>
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="text" id="floatingAddressDetail" class="form-control" placeholder="AddressDetail" required>
+                    <input type="text" id="floatingAddressDetail" class="form-control" name="userAddressDetail" placeholder="AddressDetail" required>
                     <label for="floatingAddressDetail">상세주소</label>
                     <div class="invalid-feedback">
                         상세주소를 입력해주세요.
@@ -261,7 +261,7 @@
     		oncomplete: function(data) {
     			
     			// 우편번호와 주소 정보를 해당 필드에 넣는다.
-    			document.getElementById('floatingPostcode').value = "("+ data.zonecode +")";
+    			document.getElementById('floatingPostcode').value = data.zonecode;
     			document.getElementById('floatingAddress').value = data.roadAddress +", "+ data.buildingName;
     			
     			// 커서를 상세주소 필드로 이동한다.

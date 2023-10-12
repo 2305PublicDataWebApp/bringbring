@@ -1,6 +1,9 @@
 package com.bringbring.notice.store;
 
+import java.util.List;
+
 import com.bringbring.notice.domain.Notice;
+import com.bringbring.notice.domain.NoticePageInfo;
 
 public interface NoticeStore {
 
@@ -10,5 +13,25 @@ public interface NoticeStore {
 	 * @return
 	 */
 	int insertNotice(Notice notice);
+
+	/** 
+	 * 게시글 전체 갯수 Store
+	 * @return
+	 */
+	int selectListCount();
+
+	/**
+	 * 게시글 목록 조회 Store
+	 * @param noticeInfo
+	 * @return
+	 */
+	List<Notice> selectNoticeByList(NoticePageInfo noticeInfo);
+
+	/**
+	 * 게시글 번호에 맞는 게시글 상세 조회 Store
+	 * @param noticeNo
+	 * @return
+	 */
+	Notice selectNoticeByNo(Integer noticeNo);
 
 }

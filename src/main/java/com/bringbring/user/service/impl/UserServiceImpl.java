@@ -2,10 +2,10 @@ package com.bringbring.user.service.impl;
 
 import java.util.List;
 
-import com.bringbring.common.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bringbring.common.PageInfo;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
 import com.bringbring.user.store.UserStore;
@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 	private final UserStore userStore;
 
 	@Override
-	public int selectCheckLogin(User user) {
+	public User selectCheckLogin(User user) {
 		return userStore.selectCheckLogin(user);
 	}
 	
@@ -29,5 +29,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> selectUserList(PageInfo pInfo) { return userStore.selectUserList(pInfo);}
+
+	@Override
+	public int insertUser(User user) {
+		return userStore.insertUser(user);
+	}
+
+	@Override
+	public User selectOneByName(User user) {
+		return userStore.selectOneByName(user);
+	}
 	
 }
