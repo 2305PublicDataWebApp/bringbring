@@ -35,8 +35,8 @@ public class DivideServiceImpl implements DivideService{
 			// 1. 여행정보 db에 먼저 저장
 			result = divideStore.insertDivide(divide);
 			// 2. 저장성공시 파일업로드
-			if(result > 0) {									 
-				int imageGroupNo = divide.getCityNo();
+			if(result > 0) {
+				int imageGroupNo = divideStore.selectMaxNo();
 				for(MultipartFile uploadFile : uploadFiles) {
 					if(uploadFile != null && !uploadFile.isEmpty()) {
 						//파일저장 메소드 호출
@@ -73,7 +73,7 @@ public class DivideServiceImpl implements DivideService{
 				
 			//Map 저장
 			fileInfoMap.put("imageName", imageName);
-			fileInfoMap.put("imageName", imageName);
+			fileInfoMap.put("imageRename", imageRename);
 			fileInfoMap.put("imagePath", savePath);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
