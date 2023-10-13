@@ -2,6 +2,7 @@ package com.bringbring.admin.service.impl;
 
 
 import com.bringbring.admin.domain.Admin;
+import com.bringbring.admin.domain.AdminDetails;
 import com.bringbring.admin.store.AdminStore;
 import com.bringbring.common.PageInfo;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,5 @@ public class AdminServiceImpl implements AdminService  {
     public int selectListCount() { return adminStore.selectListCount(); }
 
     @Override
-    public List<Admin> selectAdminList(PageInfo pInfo) { return adminStore.selectAdminList(pInfo); }
+    public List<AdminDetails> selectAdminDetailsList(PageInfo pInfo) { return adminStore.selectAdminDetailsList(pInfo); }
 }

@@ -2,6 +2,7 @@ package com.bringbring.region.service.impl;
 
 import java.util.List;
 
+import com.bringbring.region.domain.Region;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,5 +25,8 @@ public class RegionServiceImpl implements RegionService {
 
 	@Override
 	public List<District> selectDistrictList(int cityNo) { return regionStore.selectDistrictList(cityNo); }
-	
+
+	@Override
+	public List<Region> selectRegionList(int cityNo) { return regionStore.selectRegionList(cityNo);}
+
 }

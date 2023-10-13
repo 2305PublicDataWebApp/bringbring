@@ -23,7 +23,7 @@ public interface UserService {
 	/**
 	 * 회원 리스트 조회 service
 	 * @param pInfo
-	 * @return List<User></User>
+	 * @return List<User>
 	 */
 	List<User> selectUserList(PageInfo pInfo);
 
