@@ -60,10 +60,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public User selectOneByuserId(String userId) {
-		return userStore.selectOneByuserId(userId);
-	}
-	@Override
 	public User selectOneById(String userId) { return userStore.selectOneById(userId); }
+
+	@Override
+	public int updateUser(User user) {
+		return userStore.updateUser(user);
+	}
 
 }

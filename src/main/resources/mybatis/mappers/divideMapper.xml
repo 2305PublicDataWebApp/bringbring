@@ -4,7 +4,7 @@
 <mapper namespace="DivideMapper">
 
   	<select id="selectMaxNo" resultType="_int">
-  		SELECT MAX(IMAGE_GROUP_NO) FROM DIVIDE_TBL;
+  		SELECT MAX(DIV_NO) FROM DIVIDE_TBL
   	</select>
   	<insert id="insertDivide">
   		INSERT INTO DIVIDE_TBL VALUES (

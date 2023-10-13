@@ -15,5 +15,6 @@ public class AdminDetails {
     private String userPhone;
     private LocalDate adminCreateDate;
     private String regionName;
+
 }
 
