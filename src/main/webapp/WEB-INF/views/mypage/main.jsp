@@ -72,7 +72,7 @@
             <div class="mypage_top_div ps-5 pb-3 mt-3" style="height:75px;">
                 <h1 class="d-inline">일용자님</h1>
                 <div class="d-inline">
-                    <a href="#">
+                    <a href="/user/update.do">
                         <img src="../resources/assets/img/mypage/mypage_gear.png" class="h-100 pb-3">
                     </a>
                 </div>
