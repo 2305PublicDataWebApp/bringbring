@@ -42,9 +42,17 @@ public interface UserStore {
 	public User selectOneByName(User user);
 
 	/**
+	 * 아이디(이메일) 중복 확인 store
+	 * @param userId
+	 * @return
+	 */
+	public User selectOneByuserId(String userId);
+
+  /**
 	 * 아이디로 회원정보 불러오기 store
 	 * @param userId
 	 * @return
 	 */
 	public User selectOneById(String userId);
+
 }

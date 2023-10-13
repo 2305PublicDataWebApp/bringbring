@@ -66,12 +66,12 @@
                         <div class="form-floating col-10 p-0">
                             <input type="email" id="floatingEmail" class="form-control" name="userId" placeholder="name@example.com" required>
                             <label for="floatingEmail">이메일 주소</label>
-                            <div class="invalid-feedback">
+                            <div id="user_Email_check_error" class="invalid-feedback">
                                 이메일을 입력해주세요.
                             </div>
                         </div>
                         <div class="col-2 pe-0">
-                            <input type="button" id="email_check_input" class="email_check_input w-100 rounded" value="중복 확인">
+                            <input type="button" onclick="id_check_btn();" id="email_check_input" class="email_check_input w-100 rounded" value="중복 확인">
                         </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                 <div class="form-floating mb-4">
                     <input type="password" id="floatingPassword" class="form-control" name="userPwd" placeholder="Password" required>
                     <label for="floatingPassword">비밀번호</label>
-                    <div id="" class="invalid-feedback">
+                    <div class="invalid-feedback">
                         비밀번호를 입력해주세요.
                     </div>
                 </div>
@@ -168,6 +168,7 @@
     	const form = document.getElementById('register_form');
         const pwdCheckError = document.getElementById('user_pwd_check_error');
         const phoneError = document.getElementById("user_phone_check_error");
+        const EmailCheckError = document.getElementById("user_Email_check_error");
 
 	    form.addEventListener('submit', function (event) {
             
@@ -178,6 +179,7 @@
             }
             pwdCheckError.innerHTML="비밀번호를 한번 더 입력해주세요."
             phoneError.innerHTML="전화번호를 입력해주세요."
+            EmailCheckError.innerHTML="이메일을 입력해주세요."
             form.classList.add('was-validated'); // 부트스트랩 유효성 클래스 추가
         
         });
@@ -254,6 +256,44 @@
 			
 // 		});
     });
+    
+    function id_check_btn() {
+    	// 입력된 이메일 값 가져오기
+    	var userId = $('#floatingEmail').val();
+    	var userIdCheck_div = $('#user_Email_check_error');
+    	
+    	// 서버로 이메일 중복 확인 요청
+    	$.ajax({
+    		url: '/user/Email_check.do',
+    		type: 'POST',
+    		data: { "userId" : userId },
+    		success: function(response) {
+    			// 서버에서 받은 데이터 글로 나타내기
+    			if(userId !== "") {    				
+	    			userIdCheck_div.removeClass('invalid-feedback').addClass('mt-1');
+	    			userIdCheck_div.css({
+	    				'font-size': '14px',
+	    				'height': '10px'
+    				})
+	    			if(response.unavailable != null) {
+	    				userIdCheck_div.html(response.unavailable);
+	    				userIdCheck_div.css('color', 'red');
+	    			}else if(response.available != null) {
+	    				userIdCheck_div.html(response.available);
+	    				userIdCheck_div.css('color','green')
+	    			}
+    			}else if(userId === ""){
+    				userIdCheck_div.text("이메일을 입력해주세요.");
+    				userIdCheck_div.removeClass('mt-1').addClass('invalid-feedback').css('color', 'red');;
+    			}
+    		},
+    		error: function() {
+    			// Ajax 요청 실패 시 실행할 코드
+    			alert('Ajax 오류! 관리자에게 문의하세요.');
+    		}
+    		
+    	})
+    }
     
     // 주소 API
     function daumPostcode_btn() {

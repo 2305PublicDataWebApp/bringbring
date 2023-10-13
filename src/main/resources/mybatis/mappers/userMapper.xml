@@ -3,7 +3,7 @@
 <mapper namespace="UserMapper">
 
   	<select id="selectCheckLogin" resultType="User">
-  		SELECT * FROM USER_TBL WHERE USER_ID = #{userId } AND USER_PWD = #{userPwd }
+  		SELECT * FROM USER_TBL WHERE USER_ID = #{userId } AND USER_PWD = #{userPwd } AND IS_USER_DELETED = 'N'
   	</select>
   	
   	<select id="selectUserList" resultType="User">
@@ -22,6 +22,11 @@
 	<select id="selectOneByName" resultType="User">
 		SELECT * FROM USER_TBL WHERE USER_NAME = #{userName } AND USER_PHONE = #{userPhone }
 	</select>
+
+	<select id="selectOneByuserId" resultType="User">
+		SELECT * FROM USER_TBL WHERE USER_ID = #{userId } AND IS_USER_DELETED = 'N'
+  </select>
+
 	<select id="selectOneById" resultType="User">
 		SELECT * FROM USER_TBL WHERE USER_ID = #{userId}
 	</select>
