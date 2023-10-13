@@ -7,6 +7,8 @@ import javax.servlet.http.HttpSession;
 
 import com.bringbring.region.domain.District;
 import com.bringbring.reservation.service.ReservationService;
+import com.bringbring.user.domain.User;
+import com.bringbring.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,7 @@ public class DivideController {
 	private final DivideService divideService;
 	private final RegionService regionService;
 	private final ReservationService reservationService;
+	private final UserService userService;
 
 	@GetMapping("/insert.do")
 	public ModelAndView showDivideInsert(ModelAndView mv) {
@@ -47,8 +50,11 @@ public class DivideController {
 			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
 			, HttpServletRequest request
 			, HttpSession session) {
-		
-		String userId = (String)session.getAttribute("userId");
+
+		String userId = (String)session.getAttribute("sessionId");
+		User user = userService.selectOneById(userId);
+		divide.setUserNo(user.getUserNo());
+		System.out.println(divide);
 		int result = divideService.insertDivide(divide, uploadFiles, request);
 		if(result > 0) {
 			mv.setViewName("divide/detail");
