@@ -37,5 +37,10 @@ public class UserStoreLogic implements UserStore{
 	public User selectOneByName(User user) {
 		return sqlSession.selectOne("UserMapper.selectOneByName", user);
 	}
+
+	@Override
+	public User selectOneByuserId(String userId) {
+		return sqlSession.selectOne("UserMapper.selectOneByuserId", userId);
+	}
 	
 }

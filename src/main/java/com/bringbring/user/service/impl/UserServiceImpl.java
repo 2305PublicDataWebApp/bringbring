@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService {
 	private final UserStore userStore;
 
 	@Override
+	@Transactional(readOnly = true)
 	public User selectCheckLogin(User user) {
 		return userStore.selectCheckLogin(user);
 	}
@@ -36,8 +37,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public User selectOneByName(User user) {
 		return userStore.selectOneByName(user);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public User selectOneByuserId(String userId) {
+		return userStore.selectOneByuserId(userId);
 	}
 	
 }
