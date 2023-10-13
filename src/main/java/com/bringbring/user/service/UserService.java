@@ -12,7 +12,7 @@ public interface UserService {
 	 * @param user
 	 * @return User
 	 */
-	public User selectCheckLogin(User user);
+	User selectCheckLogin(User user);
 	
 	/**
 	 * 회원 수 조회 service
@@ -32,27 +32,27 @@ public interface UserService {
 	 * @param user
 	 * @return int
 	 */
-	public int insertUser(User user);
+	int insertUser(User user);
 
 	/**
-	 * 아이디(이메일) 찾기 service
+	 * 이름,전화번호로 아이디 찾기 service
 	 * @param user
 	 * @return User
 	 */
-	public User selectOneByName(User user);
+	User selectOneByName(User user);
 
 	/**
-	 * 아이디(이메일) 중복 확인 service
-	 * @param userId
-	 * @return
-	 */
-	public User selectOneByuserId(String userId);
-
-  /**
 	 * 아이디로 회원정보 가져오기 service
 	 * @param userId
 	 * @return User
 	 */
     User selectOneById(String userId);
+
+    /**
+     * 회원정보 수정 service
+     * @param user
+     * @return int
+     */
+    int updateUser(User user);
 
 }

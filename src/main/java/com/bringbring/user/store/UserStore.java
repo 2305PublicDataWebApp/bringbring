@@ -37,22 +37,22 @@ public interface UserStore {
 	/**
 	 * 아이디(이메일) 찾기 store
 	 * @param user
-	 * @return
+	 * @return User
 	 */
 	public User selectOneByName(User user);
-
-	/**
-	 * 아이디(이메일) 중복 확인 store
-	 * @param userId
-	 * @return
-	 */
-	public User selectOneByuserId(String userId);
 
   /**
 	 * 아이디로 회원정보 불러오기 store
 	 * @param userId
-	 * @return
+	 * @return User
 	 */
 	public User selectOneById(String userId);
+
+	/**
+	 * 회원정보 수정 store
+	 * @param user 
+	 * @return int
+	 */
+	public int updateUser(User user);
 
 }
