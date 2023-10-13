@@ -22,4 +22,7 @@
 	<select id="selectOneByName" resultType="User">
 		SELECT * FROM USER_TBL WHERE USER_NAME = #{userName } AND USER_PHONE = #{userPhone }
 	</select>
+	<select id="selectOneById" resultType="User">
+		SELECT * FROM USER_TBL WHERE USER_ID = #{userId}
+	</select>
 </mapper>
