@@ -2,6 +2,7 @@ package com.bringbring.divide.store;
 
 import java.util.List;
 
+import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.Divide;
 import com.bringbring.image.domain.Image;
 import com.bringbring.region.domain.District;
@@ -15,4 +16,7 @@ public interface DivideStore {
 
 	void insertImage(Image image);
 
+	int getListCount();
+
+	List<Divide> selectDivideList(PageInfo pInfo);
 }

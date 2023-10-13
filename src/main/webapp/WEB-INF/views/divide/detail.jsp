@@ -12,8 +12,8 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="../resources/assets/img/main/title-icon.png" rel="icon">
-  <link href="../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -98,15 +98,15 @@
       </div>
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <div style="width: 850px; height: 600px; background-image: url(../resources/assets/img/divide/냄비.webp); background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;"">
+          <div style="width: 850px; height: 600px; background-image: url(/resources/assets/img/divide/냄비.webp); background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;">
           </div>
         </div>
         <div class="carousel-item">
-          <div style="width: 850px; height: 600px; background-image: url(../resources/assets/img/divide/스팸.webp); background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;"">
+          <div style="width: 850px; height: 600px; background-image: url(/resources/assets/img/divide/스팸.webp); background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;">
           </div>
         </div>
         <div class="carousel-item">
-          <div style="width: 850px; height: 600px; background-image: url(../resources/assets/img/divide/옛날\ 시계.webp); background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;"">
+          <div style="width: 850px; height: 600px; background-image: url(/resources/assets/img/divide/냄비.webp); background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;">
           </div>
         </div>
       </div>
@@ -124,11 +124,11 @@
       <!-- 프로필 영역 -->
       <div style="width: 100%;height: 130px;border-bottom: 2px solid #ccc;border-top: 2px solid #ccc;">
         <div style="float: left;">
-          <img style="width: 50px;height: 50px;margin-top: 35px;margin-left: 10px;" src="../resources/assets/img/divide/free-icon-user-847969.png" alt="">
+          <img style="width: 50px;height: 50px;margin-top: 35px;margin-left: 10px;" src="../../../resources/assets/img/divide/free-icon-user-847969.png" alt="">
         </div>
         <div style="float: left;padding: 35px 15px;">
           <h5>닉네임</h5>
-          <p">서울특별시 중구</p>
+          <p>서울특별시 중구</p>
         </div>
         <div style="display: flex;float: right;height: 100%;flex-direction: column;justify-content: space-evenly;">
           <button type="button" class="btn btn-success">글 수정</button>
@@ -146,7 +146,7 @@
       <!-- 내용 영역 -->
       <div data-aos="fade-up" style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;">
         <div style="padding: 35px 15px;">
-          <textarea name="" id="" cols="88" rows="15" style="resize: none; border: none; outline: none; width: 100%;">내용이 들어갈 자리입니다.</textarea>
+          <textarea cols="88" rows="15" style="resize: none; border: none; outline: none; width: 100%;">내용이 들어갈 자리입니다.</textarea>
         </div>
         <div style="margin: 0px 10px 7px 0px;">
           <i class="bi bi-chat"></i>
@@ -211,18 +211,18 @@
       class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../resources/assets/vendor/aos/aos.js"></script>
-  <script src="../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="../resources/assets/vendor/php-email-form/validate.js"></script>
+  <script src="../../../resources/assets/vendor/aos/aos.js"></script>
+  <script src="../../../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../../../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../../../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../../../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../../../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="../../../resources/assets/vendor/php-email-form/validate.js"></script>
 
   <!-- jquery -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <!-- Template Main JS File -->
-  <script src="../resources/assets/js/main.js"></script>
+  <script src="../../../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
   <script>

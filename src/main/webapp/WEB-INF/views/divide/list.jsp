@@ -1,38 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+         pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>브링브링</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+    <title>브링브링</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
 
+    <!-- Favicons -->
+    <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+    <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 
-  <!-- Favicons -->
-  <link href="../assets/img/main/title-icon.png" rel="icon">
-  <link href="../assets/img/main/title-icon.png" rel="apple-touch-icon">
+    <!-- Vendor CSS Files -->
+    <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
 
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <!-- <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet"> -->
-  <!-- <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet"> -->
-  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="../assets/css/style.css" rel="stylesheet">
-  <link href="../assets/css/common.css" rel="stylesheet">
+    <!-- Template Main CSS File -->
+    <link href="../resources/assets/css/style.css" rel="stylesheet">
+    <link href="../resources/assets/css/common.css" rel="stylesheet">
 
 
   <!-- =======================================================
@@ -59,7 +52,7 @@
           <h4 style="color: rgb(189, 245, 229);">당신의 낡고 병든 추억이 누군가에겐 도움이 될 수 있습니다.</h4>
         </div>
         <div style="display: flex;flex-direction: row;justify-content: flex-end;">
-          <img src="../assets/img/divide/free-icon-gift-3835774.png" style="width: 250px;" alt="">
+          <img src="../resources/assets/img/divide/free-icon-gift-3835774.png" style="width: 250px;" alt="">
         </div>
       </div>
     </section>
@@ -91,29 +84,38 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-              <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                  <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                  <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                  </div>
-              </td >
-              <td style="text-align: left;font-size: 17px;">
-                  <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                      <a href="#">제목</a>
-                  </h4> 
-                  <br>
-                  나눔 지역 : <br>
-                  카테고리 : 
-              </td>
-              <td style="width: 100px;">
-                  <div style="margin-top: 110px;">
-                    <i class="bi bi-chat"></i>
-                    2 &nbsp;
-                    <i class="bi bi-heart"></i>
-                    2
-                  </div>
-              </td>
-              </tr>
+            <c:forEach var="divide" items="${dList}" varStatus="i">
+                <tr>
+                    <c:url var="detailUrl" value="/divide/detail.do">
+                        <c:param name="divNo" value="${divide.boardNo }"></c:param>
+                    </c:url>
+                    <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
+                        <div class="card" style="width: 200px;height: 120px;overflow: hidden">
+                            <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${divide.imagePath}); background-position: center center;"></div>
+                        </div>
+                    </td >
+                    <td style="text-align: left;font-size: 17px;">
+                        <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
+                            <a href="${detailUrl}">${divide.divTitle}</a>
+                        </h4>
+                        <br>
+                        나눔 지역 : <br>
+                        카테고리 :
+                    </td>
+                    /////////////////////////////
+                    <td id="tr">
+                        <a href="${detailUrl}">${divide.divTitle}</a>
+                    </td>
+                    <td class="tr">${divide.userNickname }</td>
+                    <td class="tr">
+                        <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${divide.divCreateDate }" />
+                    </td>
+                    <td>좋아요 수</td>
+                    <td class="tr">
+                        <fmt:formatNumber pattern="##,###,###" value="${divide.viewCount}"></fmt:formatNumber>
+                    </td>
+                </tr>
+            </c:forEach>
               <!-- 아 -->
               <tr>
                 <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
@@ -329,13 +331,37 @@
     <div style="width: 1000px;margin: 0 auto;margin-top: 60px;">
       <nav aria-label="Page navigation example" style="display: flex;">
         <ul class="pagination" style="margin: 0 auto;">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">4</a></li>
-          <li class="page-item"><a class="page-link" href="#">5</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            <c:if test="${pInfo.startNavi ne 1}">
+                <c:url var="bPageUrl" value="/divide/list.do">
+                    <c:param name="page" value="${pInfo.startNavi-1}"></c:param>
+                </c:url>
+                <li class="page-item">
+                    <a style="color: black;" class="page-link" href="${bPageUrl}">Previous</a>
+                </li>
+            </c:if>
+            <c:forEach begin="${pInfo.startNavi}" end="${pInfo.endNavi}" var="p">
+                <c:url var="pageUrl" value="/divide/list.do">
+                    <c:param name="page" value="${p}"></c:param>
+                </c:url>
+                <li class="page-item">
+                    <a style="color: black;" class="page-link" href="${pageUrl}">${p}</a>
+                </li>
+            </c:forEach>
+            <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount}">
+                <c:url var="nPageUrl" value="/divide/list.do">
+                    <c:param name="page" value="${pInfo.endNavi+1}"></c:param>
+                </c:url>
+                <li class="page-item">
+                    <a style="color: black;" class="page-link" href="${nPageUrl}">Next</a>
+                </li>
+            </c:if>
+<%--          <li class="page-item"><a class="page-link" href="#">Previous</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">1</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">2</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">3</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">4</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">5</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">Next</a></li>--%>
         </ul>
       </nav>
     </div>
@@ -351,16 +377,16 @@
       class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../assets/vendor/aos/aos.js"></script>
-  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../resources/assets/vendor/aos/aos.js"></script>
+  <script src="../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="../resources/assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="../assets/js/main.js"></script>
+  <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
   <script>

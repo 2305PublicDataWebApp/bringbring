@@ -113,9 +113,12 @@
 	          <li class="file-li" style="padding-bottom: 10px;">
 	            <label for="image">파일</label>
 	            <i style="font-size: 20px;width: 30px;" class="bi bi-plus-circle-fill" id="addFileInput"></i>
-	            <input name="uploadFiles" class="form-control fileLayOut" type="file" id="image">
+	            <input  accept="image/*" name="uploadFiles" class="form-control fileLayOut" type="file" id="image">
+<%--				  <div style="width: 50px;height: 50px;overflow: hidden;">--%>
+<%--					  <img name="uploadFiles"  src="/resources/assets/img/divide/스팸.webp" alt="">--%>
+<%--				  </div>--%>
 	          </li>
-	          <li>
+	          <li id="regionArea">
 	            <label for="cityNo">지역</label>
 	            <select name="cityNo" id="cityNo" onchange="citySelect();" style="width: 100px;margin-right: 15px;">
 	              <c:forEach var="city" items="${cList}" >			
@@ -193,9 +196,9 @@
         // "플러스" 아이콘 클릭 이벤트 처리
         $('#addFileInput').click(function () {
             // 새로운 input 요소 생성
-            var newInput = '<li style="margin: 0px 0px 10px 195px; padding: 0;"><input name="uploadFiles" class="form-control fileLayOut" type="file"></li>';
+            var newInput = '<li style="margin: 0px 0px 10px 195px; padding: 0;"><input accept="image/*" name="uploadFiles" class="form-control fileLayOut" type="file"></li>';
             // 새로운 input 요소를 다음 li로 추가
-            $(this).parent().after(newInput);
+            $('#regionArea').prev().after(newInput);
         });
     });
 

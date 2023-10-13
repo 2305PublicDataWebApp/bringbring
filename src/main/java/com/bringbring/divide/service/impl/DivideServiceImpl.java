@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bringbring.common.PageInfo;
 import com.bringbring.region.domain.District;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +53,13 @@ public class DivideServiceImpl implements DivideService{
 			return result;
 	}
 
-    private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
+	@Override
+	public int getListCount() { return divideStore.getListCount(); }
+
+	@Override
+	public List<Divide> selectDivideList(PageInfo pInfo) { return divideStore.selectDivideList(pInfo); }
+
+	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
 		Map<String, Object> fileInfoMap = new HashMap<String, Object>();
 		try {
 			//업로드 저장 경로생성

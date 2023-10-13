@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.bringbring.common.PageInfo;
 import com.bringbring.region.domain.District;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
@@ -37,9 +38,9 @@ public class DivideController {
 
 	@GetMapping("/insert.do")
 	public ModelAndView showDivideInsert(ModelAndView mv) {
-		List<WasteCategory> wList = reservationService.selectWasteCategoryList();
+		List<WasteCategory> wasteCategories = reservationService.selectWasteCategoryList();
 		List<City> cList = regionService.selectCityList();
-		mv.addObject("wList", wList).addObject("cList", cList);
+		mv.addObject("wList", wasteCategories).addObject("cList", cList);
 		mv.setViewName("divide/insert");
 		return mv;
 	}
@@ -72,9 +73,37 @@ public class DivideController {
 	}
 
 	@GetMapping("/list.do")
-	public ModelAndView showDivideList(ModelAndView mv) {
+	public ModelAndView showDivideList(ModelAndView mv
+			, @RequestParam(value= "page", required = false, defaultValue="1") Integer currentPage) {
+		int totalCount = divideService.getListCount();
+		PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
+		List<Divide> divideList = divideService.selectDivideList(pInfo);
+		mv.addObject("dList", divideList).addObject("pInfo", pInfo);
 		mv.setViewName("divide/list");
 		return mv;
+	}
+
+	public PageInfo getPageInfo(int currentPage, int totalCount) {
+
+		PageInfo pi = null;
+		int recordCountPerPage = 10;
+		int naviCountPerPage = 5;
+		int naviTotalCount;
+		int startNavi;
+		int endNavi;
+
+		naviTotalCount = (int)((double) totalCount / recordCountPerPage + 0.9);
+
+		startNavi = (((int) ((double) currentPage / naviCountPerPage + 0.9)) - 1) * naviCountPerPage + 1;
+
+		endNavi = startNavi + naviCountPerPage - 1;
+		if (endNavi > naviTotalCount) {
+			endNavi = naviTotalCount;
+		}
+
+		pi = new PageInfo(currentPage, totalCount, naviTotalCount, recordCountPerPage, naviCountPerPage,
+		 startNavi, endNavi);
+		return pi;
 	}
 }
 

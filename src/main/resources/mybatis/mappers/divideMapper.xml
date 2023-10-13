@@ -3,9 +3,66 @@
 
 <mapper namespace="DivideMapper">
 
+	<resultMap id="responceDataResultMap" type="com.bringbring.divide.domain.ResponseData">
+		<association property="Image" resultMap="imageResultMap"/>
+		<association property="City" resultMap="cityResultMap"/>
+		<association property="District" resultMap="districtResultMap"/>
+	</resultMap>
+
+	<resultMap id="divideResultMap" type="com.bringbring.divide.domain.Divide">
+		<id property="div_no" column="DIV_NO" />
+		<result property="userNo" column="USER_NO" />
+		<result property="divTitle" column="DIV_TITLE" />
+		<result property="divContent" column="DIV_CONTENT" />
+		<result property="wasteCategoryNo" column="WASTE_CATEGORY_NO" />
+		<result property="divCreateDate" column="DIV_CREATE_DATE" />
+		<result property="divUpdateDate" column="DIV_UPDATE_DATE" />
+		<result property="divYn" column="DIV_YN" />
+		<result property="viewCount" column="VIEW_COUNT" />
+		<result property="isDivDeleted" column="IS_DIV_DELETED" />
+		<result property="cityNo" column="CITY_NO" />
+		<result property="districtNo" column="DISTRICT_NO" />
+		<result property="divXCoordinate" column="DIV_X_COORDINATE" />
+		<result property="divYCoordinate" column="DIV_Y_COORDINATE" />
+		<result property="imagePath" column="IMAGE_PATH" />
+	</resultMap>
+
+	<resultMap id="imageResultMap" type="com.bringbring.image.domain.Image">
+		<id property="imageNo" column="IMAGE_NO" />
+		<result property="tableName" column="TABLE_NAME" />
+		<result property="imageGroupNo" column="IMAGE_GROUP_NO" />
+		<result property="imageName" column="IMAGE_NAME" />
+		<result property="imageRename" column="IMAGE_RENAME" />
+		<result property="imagePath" column="IMAGE_PATH" />
+	</resultMap>
+
+	<resultMap id="cityResultMap" type="com.bringbring.region.domain.City">
+		<id property="cityNo" column="CITY_NO" />
+		<result property="cityName" column="CITY_NAME" />
+	</resultMap>
+
+	<resultMap id="districtResultMap" type="com.bringbring.region.domain.District">
+		<id property="districtNo" column="DISTRICT_NO" />
+		<result property="districtName" column="DISTRICT_NAME" />
+		<result property="cityNo" column="CITY_NO" />
+	</resultMap>
+
   	<select id="selectMaxNo" resultType="_int">
   		SELECT MAX(DIV_NO) FROM DIVIDE_TBL
   	</select>
+	<select id="getListCount" resultType="_int">
+		SELECT COUNT(*) FROM DIVIDE_TBL WHERE  IS_DIV_DELETED = 'N'
+	</select>
+	<select id="selectDivideList" resultType="Divide">
+		SELECT  A.DIV_NO, A.USER_NO,  A.WASTE_CATEGORY_NO, A.DIV_TITLE, A.DIV_CONTENT
+			 , A.DIV_CREATE_DATE, A.DIV_UPDATE_DATE,  A.VIEW_COUNT, A.DIV_YN, A.CITY_NO
+			 , A.DISTRICT_NO, A.DIV_X_COORDINATE,  A.DIV_Y_COORDINATE
+			 , B.IMAGE_PATH
+		FROM    DIVIDE_TBL A, IMAGE_TBL B
+		WHERE 	A.DIV_NO = B.IMAGE_GROUP_NO
+		  AND 	A.IS_DIV_DELETED = 'N'
+		  AND 	B.IMAGE_NO = (SELECT min(IMAGE_NO) FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = A.DIV_NO);
+	</select>
   	<insert id="insertDivide">
   		INSERT INTO DIVIDE_TBL VALUES (
       SEQ_DIV_NO.NEXTVAL , #{userNo}, #{wasteCategoryNo}, #{divTitle}, #{divContent},

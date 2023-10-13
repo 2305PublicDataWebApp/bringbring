@@ -2,7 +2,9 @@ package com.bringbring.divide.store.logic;
 
 import java.util.List;
 
+import com.bringbring.common.PageInfo;
 import com.bringbring.region.domain.District;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -32,6 +34,17 @@ public class DivideStoreLogic implements DivideStore{
 	@Override
 	public void insertImage(Image image) {
 		sqlSession.insert("DivideMapper.insertImage", image);
+	}
+
+	@Override
+	public int getListCount() { return sqlSession.selectOne("DivideMapper.getListCount"); }
+
+	@Override
+	public List<Divide> selectDivideList(PageInfo pInfo) {
+		int limit = pInfo.getRecordCountPerPage();
+		int offset = (pInfo.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return sqlSession.selectList("DivideMapper.selectDivideList", pInfo, rowBounds);
 	}
 
 }
