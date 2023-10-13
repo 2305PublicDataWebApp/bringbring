@@ -33,6 +33,7 @@ public class DivideController {
 	private final DivideService divideService;
 	private final RegionService regionService;
 	private final ReservationService reservationService;
+	private final UserService userService;
 
 	@GetMapping("/insert.do")
 	public ModelAndView showDivideInsert(ModelAndView mv) {
