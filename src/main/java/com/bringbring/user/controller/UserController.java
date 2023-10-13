@@ -90,6 +90,26 @@ public class UserController {
 		}
 	}
 	
+	// 아이디(이메일) 중복 확인
+	@ResponseBody
+	@PostMapping("/Email_check.do")
+	public Map<String, String>  selectOneByuserId(
+			@RequestParam("userId") String userId) {
+		Map<String, String> response = new HashMap<>();
+		
+		User userOne = userService.selectOneByuserId(userId);
+		if(userOne != null) {
+			if(userId.equals(userOne.getUserId())) {
+				response.put("unavailable", "이미 사용중인 이메일입니다.");
+			}else {				
+				response.put("available", "사용가능한 이메일입니다.");
+			}
+		}else {
+			response.put("available", "사용가능한 이메일입니다.");
+		}
+		return response;
+	}
+	
 	// 아이디(이메일) 찾기
 	@GetMapping("/findEmail.do")
 	public String showFindEmailForm() {
@@ -108,7 +128,7 @@ public class UserController {
 		if(userOne != null) {
 			String result = userOne.getUserId();
 			response.put("userId", result);
-		} else {
+		}else {
 			response.put("error","정보를 찾을 수 없습니다.");
 		}
 		return response;
@@ -120,5 +140,10 @@ public class UserController {
 		return "user/findPwd";
 	}
 	
+	@PostMapping("/findPWd.do")
+	public String selectOneByuserId() {
+		
+		return "";
+	}
 
 }

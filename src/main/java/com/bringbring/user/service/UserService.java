@@ -42,9 +42,17 @@ public interface UserService {
 	public User selectOneByName(User user);
 
 	/**
+	 * 아이디(이메일) 중복 확인 service
+	 * @param userId
+	 * @return
+	 */
+	public User selectOneByuserId(String userId);
+
+  /**
 	 * 아이디로 회원정보 가져오기 service
 	 * @param userId
 	 * @return User
 	 */
     User selectOneById(String userId);
+
 }
