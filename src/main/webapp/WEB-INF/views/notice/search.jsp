@@ -242,6 +242,32 @@
         </li>
       </ul>
     </nav>
+    
+    
+    
+        <c:if test="${noticeInfo.noticeStartNavi != 1}">
+    	<c:url var="preUrl" value="/notice/list.do">
+    		<c:param name="page" value="${noticeInfo.noticeStartNavi-1  }" />
+    	</c:url>
+    	<a href="${preUrl }">[이전]</a>
+    </c:if>
+    
+    <c:forEach begin="${noticeInfo.noticeStartNavi }" end="${noticeInfo.noticeStartNavi }" var="n">
+    	<c:url vat="pageUrl" value="/notice/list.do">
+    		<c:param name="page" value="${n}"></c:param>
+    	</c:url>
+    	<a href="${preUrl }">${n}</a>
+    </c:forEach>
+    
+    
+        <c:if test="${noticeInfo.noticeEndNavi != noticeInfo.noticeNaviTotalCount}">
+    	<c:url var="nextUrl" value="/notice/list.do">
+    		<c:param name="page" value="${noticeInfo.noticeStartEndNavi+1  }" />
+    	</c:url>
+    	<a href="${nextUrl }">[다음]</a>
+    </c:if>
+    
+    
   </main>
   <!-- End #main -->
 

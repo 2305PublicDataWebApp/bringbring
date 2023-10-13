@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -77,21 +78,21 @@
   <!-- 메인 -->
   <main id="main" class="main">
     <div class="head">
-      <div class="notice-title"><h1>[서울] 제목</h1></div>
+      <div class="notice-title"><h1>[서울] ${notice.noticeTitle }</h1></div>
       <div class="notice-subtitle">
         <div class="notice-info">
-          2023.09.30 | 서비스
+          2023.09.30 | ${notice.noticeType }
         </div>
         <div class="notice-btn"> <!-- 관리자만 보이는 버튼 -->
-          <button class="btn btn-primary" onclick="showModify()">수정하기</button>
-          <button class="btn btn-primary" onclick="deleteNotice()">삭제하기</button>
+        <c:if test="${adminNo ne null }">
+          <button class="btn btn-primary" onclick="showModify('${modiUrl}');">수정하기</button>
+          <button class="btn btn-primary" onclick="deleteNotice('${delUrl}');">삭제하기</button>
+        </c:if>
         </div>
       </div>
       <div class="icon"> <!-- 푸터에 트위터, 페북, 인스타가 있어서 이렇게 했는데 카카오 로그인이 가능하니 하나를 빼고 카카오톡을 넣는게 나을지 고민중임 -->
         <li>
-          <i class="material-symbols-outlined" onclick="copyURL()">
-            share
-          </i>
+          <i class="material-symbols-outlined" onclick="copyURL()">share</i>
         </li>
         <li>
           <i class="fi fi-brands-twitter" onclick="shareTwitter()"></i>
@@ -149,15 +150,16 @@
 
   <!-- 기능 script -->
   <script>
-    function showModify() {
-      window.location.href = "./modify.jsp"
+    function showModify(modifyUrl) {
+      location.href = modifyUrl;
     }
-    function deleteNotice() {
-
+    function deleteNotice(delUrl) {
+    	location.href = delUrl;
     }
     function goList() {
       window.location.href = "./list.jsp"
     }
+    
     function copyURL() {
       var pageUrl = window.location.href;
       // 임시 input 엘리먼트 생성

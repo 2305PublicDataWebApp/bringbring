@@ -34,7 +34,7 @@
   <!-- Template Main CSS File -->
   <link href="../resources/assets/css/style.css" rel="stylesheet">
   <link href="../resources/assets/css/common.css" rel="stylesheet">
-  <link href="../resources/assets/css/notice/modify.css" rel="stylesheet">
+  <link href="../resources/assets/css/notice/update.css" rel="stylesheet">
 
   <!-- summernote CSS File -->
   <link rel="stylesheet" href="../resources/assets/css/notice/summernote/summernote-lite.css">
@@ -84,7 +84,7 @@
 
   <!-- 메인 -->
   <main id="main" class="main">
-    <form class="notice-form" action="notice/update.do" method="post">
+    <form class="notice-form" action="notice/update.do" method="post" enctype="multipart/form-data">
       <h2>공지사항 수정</h2>
       <hr>
       <div class="container">
@@ -102,15 +102,17 @@
         </div>
 
         <!-- 카테고리에서 서비스 선택시 지역 선택버튼이 보임-->
+        <c:if>
         <div class="row mb-3">
           <label class="col-sm-1 col-form-label pt-0">지역</label>
           <div class="col-sm-10">
             <div class="from-check">
               <input class="from-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-              <label class="from-check-label" for="gridRadios1">담당구역</label>
+              <label class="from-check-label" for="gridRadios1">담당지역</label>
             </div>
           </div>
         </div>
+        </c:if>
 
         <div class="row mb-3">
           <label for="inputText" class="col-sm-1 col-form-label">제목</label>

@@ -8,7 +8,7 @@
   	</select>
   	<insert id="insertDivide">
   		INSERT INTO DIVIDE_TBL VALUES (
-      SEQ_DIV_NO.NEXTVAL , #{userNo}, #{divTitle}, #{divContent}, #{wasteCategoryNo},
+      SEQ_DIV_NO.NEXTVAL , #{userNo}, #{wasteCategoryNo}, #{divTitle}, #{divContent},
       DEFAULT, DEFAULT, DEFAULT, 0, DEFAULT,
       #{cityNo}, #{districtNo}, #{divXCoordinate}, #{divYCoordinate}
     	)
