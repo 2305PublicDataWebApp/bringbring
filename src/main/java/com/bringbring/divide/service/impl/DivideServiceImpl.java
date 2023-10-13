@@ -36,7 +36,7 @@ public class DivideServiceImpl implements DivideService{
 			result = divideStore.insertDivide(divide);
 			// 2. 저장성공시 파일업로드
 			if(result > 0) {									 
-				int imageGroupNo = divideStore.selectMaxNo();
+				int imageGroupNo = divide.getCityNo();
 				for(MultipartFile uploadFile : uploadFiles) {
 					if(uploadFile != null && !uploadFile.isEmpty()) {
 						//파일저장 메소드 호출
@@ -45,7 +45,7 @@ public class DivideServiceImpl implements DivideService{
 						String imageRename = (String)imageMap.get("imageRename");
 						String imagePath = (String)imageMap.get("imagePath");
 						Image image = new Image("divide" ,imageGroupNo, imageName, imageRename, imagePath);
-						divideStore.insertImage(image);	
+						divideStore.insertImage(image);
 					}
 				}
 			}

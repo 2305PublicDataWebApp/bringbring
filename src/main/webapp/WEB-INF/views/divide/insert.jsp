@@ -142,7 +142,7 @@
 	          </li>
 	          <li>
 				<label for="location">거래 희망 장소</label>
-				<input style="width: 500px;margin-right: 15px;" id="location" type="text" id="location">
+				<input style="width: 500px;margin-right: 15px;" type="text" id="location">
 				<button class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
 				<input name="divXCoordinate" type="hidden" id="coordinateX">
 				<input name="divYCoordinate" type="hidden" id="coordinateY">
@@ -344,11 +344,17 @@
       const divContent = form.querySelector("#summernote").value;
       const cityNo = form.querySelector("#cityNo").value;
       const wasteCategoryNo = form.querySelector("#wasteCategoryNo").value;
+		// 파일 input 엘리먼트 가져오기
+		const fileInput = form.querySelector("#image");
+		// 선택된 파일 가져오기
+		const selectedFile = fileInput.files[0];
 
       // 유효성 검사
       if (divTitle.trim() === "") {
         alert("제목을 입력해주세요.");
-      } else if (cityNo === "0") {
+      } else if (!selectedFile) {
+		  alert("사진은 한 개 이상 둥록해주세요.");
+	  } else if (cityNo === "0") {
         alert("지역을 선택해주세요.");
       } else if (wasteCategoryNo === "0") {
         alert("종류를 선택해주세요.");

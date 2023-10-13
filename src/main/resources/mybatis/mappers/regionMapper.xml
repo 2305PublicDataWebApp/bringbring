@@ -8,4 +8,8 @@
   	<select id="selectDistrictList" resultType="District">
   		SELECT * FROM DISTRICT_TBL WHERE CITY_NO = #{cityNo}
   	</select>
+
+	<select id="selectRegionList" resultType="Region">
+		SELECT * FROM REGION_TBL  WHERE CITY_NO = #{cityNo}
+	</select>
 </mapper>

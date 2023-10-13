@@ -47,5 +47,7 @@ public class UserServiceImpl implements UserService {
 	public User selectOneByuserId(String userId) {
 		return userStore.selectOneByuserId(userId);
 	}
-	
+	@Override
+	public User selectOneById(String userId) { return userStore.selectOneById(userId); }
+
 }
