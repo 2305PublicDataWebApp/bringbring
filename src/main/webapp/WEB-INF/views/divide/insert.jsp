@@ -102,7 +102,7 @@
     <div style="margin: 0 auto;text-align: center;margin: 30px 0px 70px 0px;">
       <h2>나눔 게시판 글 작성</h2>
     </div>
-	<form name="insertForm" action="/divide/insert.do" method="post">
+	<form name="insertForm" action="/divide/insert.do" method="post" enctype="multipart/form-data">
 	    <div style="width: 1000px; margin: 0 auto; border: 2px solid #ccc;padding: 20px 0px;">
 	      <div style="margin: 0 auto;width: 800px;">
 	        <ul class="divide-insert-menu" style="padding: 0px;">
@@ -143,7 +143,7 @@
 	          <li>
 				<label for="location">거래 희망 장소</label>
 				<input style="width: 500px;margin-right: 15px;" type="text" id="location">
-				<button class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
+				<button type="button" class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
 				<input name="divXCoordinate" type="hidden" id="coordinateX">
 				<input name="divYCoordinate" type="hidden" id="coordinateY">
 	          </li>
@@ -155,7 +155,7 @@
 	      </div>
 	    </div>
 	    <div style="margin: 0 auto;text-align: center;margin-top: 100px;">
-	      <button type="button" class="btn btn-success btn-lg">글 작성 완료</button>
+	      <button type="button" class="btn btn-success btn-lg" onclick="checkSubmit();">글 작성 완료</button>
 	    </div>
 	</form>
   </main>
@@ -281,12 +281,15 @@
 	            // 해당 주소에 대한 좌표를 받아서
 	            var coords = new daum.maps.LatLng(result.y, result.x);
 	            document.getElementById("coordinateX").value = result.x;
+				console.log(result.x);
 	            document.getElementById("coordinateY").value = result.y;
+				  console.log(result.y);
 	            map.relayout();
 	            // 지도 중심을 변경한다.
 	            map.setCenter(coords);
 	            // 마커를 결과값으로 받은 위치로 옮긴다.
-	            marker.setPosition(coords)
+	            marker.setPosition(coords);
+				return false;
 	          }
 	        });
 	      }
@@ -314,7 +317,9 @@
 	          // 마커를 클릭한 위치에 표시합니다 
 	          marker.setPosition(mouseEvent.latLng);
 	          document.getElementById("coordinateX").value = mouseEvent.latLng.La;
+			  console.log(mouseEvent.latLng.La);
 	          document.getElementById("coordinateY").value = mouseEvent.latLng.Ma;
+			  console.log(mouseEvent.latLng.Ma);
 	          
 	          marker.setMap(map);
 	
@@ -338,8 +343,8 @@
 	
 	// insert form 유효성 검사
 	const form = document.forms.insertForm;
-    form.querySelector('button[type="button"]').addEventListener("click", function (event) {
-      event.preventDefault();
+    function checkSubmit(){
+      // event.preventDefault();
       const divTitle = form.querySelector("#divTitle").value;
       const divContent = form.querySelector("#summernote").value;
       const cityNo = form.querySelector("#cityNo").value;
@@ -364,7 +369,7 @@
         // 폼 제출 (만약 추가 유효성 검사가 필요하다면 여기에 추가)
         form.submit();
       }
-    });
+    }
   </script>
   <script type="text/javascript">
 	  $(document).ready(function() {

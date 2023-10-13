@@ -44,8 +44,8 @@ public class DivideController {
 		return mv;
 	}
 	
-//	@PostMapping("/insert.do")
-/**/	public ModelAndView insertDivide(ModelAndView mv
+	@PostMapping("/insert.do")
+    public ModelAndView insertDivide(ModelAndView mv
 			, Divide divide
 			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
 			, HttpServletRequest request
@@ -71,5 +71,10 @@ public class DivideController {
 		return mv;
 	}
 
+	@GetMapping("/list.do")
+	public ModelAndView showDivideList(ModelAndView mv) {
+		mv.setViewName("divide/list");
+		return mv;
+	}
 }
 
