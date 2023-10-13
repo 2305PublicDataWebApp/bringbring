@@ -16,3 +16,4 @@ public class AdminDetails {
     private LocalDate adminCreateDate;
     private String regionName;
 }
+
