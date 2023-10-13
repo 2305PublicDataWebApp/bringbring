@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.bringbring.admin.service.AdminService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +27,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/user")
 public class UserController {
 	
-	
+	private final AdminService adminService;
 	private final UserService userService;
-	
+
 	// 로그인 
 	@GetMapping("/login.do")
 	public String showLoginform() {
@@ -77,7 +78,6 @@ public class UserController {
 	public String insertUser(
 			@ModelAttribute User user
 			, Model model) {
-		
 		int result = userService.insertUser(user);
 		if(result>0) {
 			return "user/login";
@@ -89,7 +89,7 @@ public class UserController {
 			return "common/error";
 		}
 	}
-	
+
 	// 아이디(이메일) 중복 확인
 	@ResponseBody
 	@PostMapping("/Email_check.do")

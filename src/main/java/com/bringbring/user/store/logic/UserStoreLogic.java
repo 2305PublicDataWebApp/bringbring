@@ -47,4 +47,7 @@ public class UserStoreLogic implements UserStore{
   @Override
   public User selectOneById(String userId) { return sqlSession.selectOne("UserMapper.selectOneById", userId); }
 
+	@Override
+	public int selectOneByNo(User user) { return sqlSession.selectOne("UserMapper.selectOneByMaxNo", user);}
+
 }

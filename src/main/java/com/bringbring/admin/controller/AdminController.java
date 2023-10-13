@@ -82,11 +82,11 @@ public class AdminController {
 		int result = adminService.insertAdmin(admin);
 		if(result>0){
 			mv.addObject("msg", "관리자 임명 완료");
-			mv.addObject("url", "/memberM.do");
+			mv.addObject("url", "/admin/memberList.do");
 			mv.setViewName("common/error");
 		} else {
 			mv.addObject("msg", "관리자 임명 실패");
-			mv.addObject("url", "/memberM.do");
+			mv.addObject("url", "/admin/memberList.do");
 			mv.setViewName("common/error");
 		}
 		return mv;

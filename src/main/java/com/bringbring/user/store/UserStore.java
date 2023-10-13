@@ -55,4 +55,10 @@ public interface UserStore {
 	 */
 	public User selectOneById(String userId);
 
+	/**
+	 * 맥스 시퀀스 조회 store
+	 * @param user
+	 * @return
+	 */
+	int selectOneByNo(User user);
 }
