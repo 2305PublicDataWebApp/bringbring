@@ -142,7 +142,7 @@
 	          </li>
 	          <li>
 				<label for="location">거래 희망 장소</label>
-				<input style="width: 500px;margin-right: 15px;" id="location" type="text" id="location">
+				<input style="width: 500px;margin-right: 15px;" type="text" id="location">
 				<button class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
 				<input name="divXCoordinate" type="hidden" id="coordinateX">
 				<input name="divYCoordinate" type="hidden" id="coordinateY">

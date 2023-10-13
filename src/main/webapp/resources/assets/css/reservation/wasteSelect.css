@@ -49,15 +49,49 @@ input[type=number] {
 #category_box button {
     width: 100px;
 }
-
-label {
-    margin-left: 5px;
-    width: 170px;
+.fee {
+    margin-right: 20px;
 }
-select {
+#listDiv {
+    height: 500px;
+    overflow-y: auto;
+}
+#listTable {
+    width: 100%;
+    padding-right: 17px;
+
+}
+#listTable > select {
     width: 400px;
     margin-right: 20px;
 }
-.fee {
-    margin-right: 20px;
+#listTable > tr {
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 1px solid #ccc;
+}
+.firstTd {
+    width: 30%;
+    display: flex;
+    align-items: center;
+}
+.secondTd {
+    width: 40%;
+    display: flex;
+    align-items: center;
+}
+.thirdTd {
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.thirdTd > .listTableP {
+    height: 50%;
+}
+.fourthTd {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

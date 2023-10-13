@@ -57,15 +57,15 @@
     <main>
         <div class="form_login w-100 m-auto rounded">
             <h1 class="h3 mb-4 fw-normal text-center">로그인</h1>
-            <form action="#" method="post">
+            <form action="/user/login.do" method="post">
         
                 <div class="form-floating mb-4">
-                    <input type="email" id="floatingInput" class="form-control" placeholder="name@example.com" required>
+                    <input type="email" id="floatingInput" class="form-control" name="userId" placeholder="name@example.com" required>
                     <label for="floatingInput">이메일 주소</label>
                 </div>
 
                 <div class="form-floating mb-4">
-                    <input type="password" id="floatingPassword" class="form-control" placeholder="Password" required>
+                    <input type="password" id="floatingPassword" class="form-control" name="userPwd" placeholder="Password" required>
                     <label for="floatingPassword">비밀번호</label>
                 </div>
                 <input type="submit" class="login_btn_input w-100 text-center fw-bold fs-4 rounded" value="로그인">
@@ -73,9 +73,9 @@
             </form>
 
             <div class="my-3 text-center">
-                <a href="#" class="link-secondary">비밀번호 찾기</a> | 
-                <a href="#" class="link-secondary">아이디 찾기</a> | 
-                <a href="#" class="link-secondary">회원가입</a>
+                <a href="/user/findPwd.do" class="link-secondary">비밀번호 찾기</a> | 
+                <a href="/user/findEmail.do" class="link-secondary">아이디 찾기</a> | 
+                <a href="/user/insert.do" class="link-secondary">회원가입</a>
             </div>
 
             <div class="sns_buttons_div">

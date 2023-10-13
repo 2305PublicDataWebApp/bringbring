@@ -114,7 +114,7 @@
               </tr>
             </thead>
             <tbody>
-            <c:forEach var="notice" items="${nList }" varStatus="i">
+            <c:forEach begin="0" end="10" var="notice" items="${nList }" varStatus="i">
               <tr>
                 <th scope="row">${i.count }</th>
                 <td>${notice.noticeType }</td>
@@ -192,7 +192,7 @@
               </tr>
             </thead>
             <tbody>
-            <c:forEach var="notice" items="${nList }" varStatus="i">
+            <c:forEach var="notice" items="${noticeList }" varStatus="i">
               <tr>
                 <th scope="row">${i.count }</th>
                 <td>업데이트</td>
@@ -219,25 +219,40 @@
       </div>
     </div>
     <!-- 글쓰기버튼 관리자만 보임 -->
+    <c:if test="${adminNo ne null }">
     <button type="button" class="btn btn-success" onclick="showInsertForm()">글쓰기</button>
+    </c:if>
 
     <!-- 페이징 -->
     <nav aria-label="Page navigation example">
-      <ul class="pagination">
+      <ul class="pagination">      
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Previous">
+        	<c:if test="${noticeInfo.StartNavi != 1}">
+        	  <c:url var="preUrl" value="/notice/list.do">
+        	  	<c:param name="page" value="${noticeInfo.StartNavi-1 }" />
+        	  </c:url>
+          <a class="page-link" href="${preUrl }" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">4</a></li>
-        <li class="page-item"><a class="page-link" href="#">5</a></li>
+          </c:if>
+        </li>   
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next">
+        <c:forEach begin="${noticeInfo.StartNavi }" end="${noticeInfo.StartNavi }" var="n">
+    	<c:url var="pageUrl" value="/notice/list.do">
+    		<c:param name="page" value="${n}"></c:param>
+    	</c:url>        
+        <a class="page-link" href="${preUrl }">${n }</a>
+        </c:forEach>
+        </li> 
+        <li class="page-item">
+        <c:if test="${noticeInfo.EndNavi != noticeInfo.NaviTotalCount}">
+            	<c:url var="nextUrl" value="/notice/list.do">
+    		<c:param name="page" value="${noticeInfo.StartEndNavi+1  }" />
+    	</c:url>
+          <a class="page-link" href="${nextUrl }" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
+          </c:if>
         </li>
       </ul>
     </nav>
