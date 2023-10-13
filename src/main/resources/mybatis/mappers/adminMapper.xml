@@ -4,8 +4,16 @@
 <mapper namespace="AdminMapper">
 
 	<insert id="insertAdmin">
-		INSERT INTO ADMIN_TBL VALUES (SEQ_ADMIN_NO.NEXTVAL, #{userNo}, #{regionNo}, #{adminOrg}, default, SYSDATTE)
+		INSERT INTO ADMIN_TBL VALUES (SEQ_ADMIN_NO.NEXTVAL, #{userNo}, #{regionNo}, #{adminOrg}, DEFAULT, DEFAULT)
 	</insert>
+
+	<insert id="insertRole">
+		INSERT INTO ROLE_TBL VALUES (SEQ_ROLE_NO.NEXTVAL, SEQ_USER_R_NO.NEXTVAL, DEFAULT)
+	</insert>
+
+	<update id="updateRole">
+		UPDATE ROLE_TBL SET USER_GRADE = 2 WHERE USER_NO = #{userNo}
+	</update>
 
 	<resultMap id="adminResultMap"  type="com.bringbring.admin.domain.AdminDetails">
 		<id property="adminNo" column="ADMIN_NO"/>

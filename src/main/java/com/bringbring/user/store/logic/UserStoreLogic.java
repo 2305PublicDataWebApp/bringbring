@@ -46,5 +46,7 @@ public class UserStoreLogic implements UserStore{
 		return sqlSession.update("UserMapper.updateUser", user);
 	}
 
-	
+	@Override
+	public int selectOneByNo(User user) { return sqlSession.selectOne("UserMapper.selectOneByMaxNo", user);}
+
 }
