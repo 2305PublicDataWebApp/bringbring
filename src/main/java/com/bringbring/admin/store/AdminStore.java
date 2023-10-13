@@ -1,6 +1,7 @@
 package com.bringbring.admin.store;
 
 import com.bringbring.admin.domain.Admin;
+import com.bringbring.admin.domain.AdminDetails;
 import com.bringbring.common.PageInfo;
 
 import java.util.List;
@@ -25,5 +26,5 @@ public interface AdminStore {
      * @param pInfo
      * @return List<Admin>
      */
-    List<Admin> selectAdminList(PageInfo pInfo);
+    List<AdminDetails> selectAdminDetailsList(PageInfo pInfo);
 }

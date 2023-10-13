@@ -33,8 +33,7 @@ public class DivideController {
 	private final DivideService divideService;
 	private final RegionService regionService;
 	private final ReservationService reservationService;
-	private final UserService userService;
-	
+
 	@GetMapping("/insert.do")
 	public ModelAndView showDivideInsert(ModelAndView mv) {
 		List<WasteCategory> wList = reservationService.selectWasteCategoryList();
@@ -44,8 +43,8 @@ public class DivideController {
 		return mv;
 	}
 	
-	@PostMapping("/insert.do")
-	public ModelAndView insertDivide(ModelAndView mv
+//	@PostMapping("/insert.do")
+/**/	public ModelAndView insertDivide(ModelAndView mv
 			, Divide divide
 			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
 			, HttpServletRequest request

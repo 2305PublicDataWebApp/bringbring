@@ -1,6 +1,7 @@
 package com.bringbring.admin.store.logic;
 
 import com.bringbring.admin.domain.Admin;
+import com.bringbring.admin.domain.AdminDetails;
 import com.bringbring.common.PageInfo;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
@@ -23,5 +24,5 @@ public class AdminStoreLogic implements AdminStore {
     public int selectListCount() { return sqlSession.selectOne("AdminMapper.selectListCount"); }
 
     @Override
-    public List<Admin> selectAdminList(PageInfo pInfo) { return sqlSession.selectList("AdminMapper.selectAdminList"); }
+    public List<AdminDetails> selectAdminDetailsList(PageInfo pInfo) { return sqlSession.selectList("AdminMapper.selectAdminDetailsList"); }
 }

@@ -7,9 +7,20 @@
 		INSERT INTO ADMIN_TBL VALUES (SEQ_ADMIN_NO.NEXTVAL, #{userNo}, #{regionNo}, #{adminOrg}, default, SYSDATTE)
 	</insert>
 
+	<resultMap id="adminResultMap"  type="com.bringbring.admin.domain.AdminDetails">
+		<id property="adminNo" column="ADMIN_NO"/>
+		<result property="userId" column="USER_ID"/>
+		<result property="userPhone" column="USER_PHONE"/>
+		<result property="adminCreateDate" column="ADMIN_CREATE_DATE"/>
+		<result property="regionName" column="REGION_NAME"/>
+	</resultMap>
 
-	<select id="selectAdminList" resultType="Admin">
-		SELECT * FROM ADMIN_TBL ORDER BY ADMIN_NO DESC
+	<!-- 매핑된 결과를 사용하는 SELECT 쿼리 -->
+	<select id="selectAdminDetailsList" resultMap="adminResultMap">
+		SELECT a.ADMIN_NO, u.USER_ID, u.USER_PHONE, a.ADMIN_CREATE_DATE, r.REGION_NAME
+		FROM ADMIN_TBL a
+				 JOIN USER_TBL u ON a.USER_NO = u.USER_NO
+				 JOIN REGION_TBL r ON a.REGION_NO = r.REGION_NO
 	</select>
 
 	<select id="selectListCount" resultType="_int">

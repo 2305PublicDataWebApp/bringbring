@@ -24,7 +24,6 @@
   <link
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
     rel="stylesheet">
-
   <!-- Vendor CSS Files -->
   <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -33,7 +32,7 @@
   <link href="../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <!-- Template Main CSS File -->
   <link href="../resources/assets/css/style.css" rel="stylesheet">
   <link href="../resources/assets/css/common.css" rel="stylesheet">
@@ -111,7 +110,7 @@
         </div>
         <div class="col-md-3">
           <div class="counter-box colored">
-              <h4>관리자 수 : 50</h4>
+              <h4>관리자 수 : ${adminCount}</h4>
           </div>
         </div>
         <div class="col-md-3">
@@ -120,9 +119,9 @@
           </div>
         </div>
         <div class="col-md-3">
-          <div class="counter-box colored">
-              <h4>최근 가입한 회원 : 100</h4>
-          </div>
+          <button onclick="location.href='/admin/adminList.do'" class="region-btn" style="width: 300px; height: 80px; border: none;">
+            <h4>관리자 조회</h4>
+          </button>
         </div>
       </div>
     </section>
@@ -151,8 +150,8 @@
                     <th>회원 아이디</th>
                     <th>핸드폰 번호</th>
                     <th>가입일</th>
-                    <th>회원 여부</th>
-                    <th>-</th>
+                    <th>탈퇴 여부</th>
+                    <th>관리자 여부</th>
                 </tr>
             </thead>
             <tbody>
@@ -168,179 +167,107 @@
                       ${user.isUserDeleted}
                     </td>
                     <td>
-                    <button class="btn btn-success" data-toggle="modal" data-target="#myModal${user.userNo}">관리자 임명</button>
-                    <!-- 모달창 시작 -->
-                    <div class="modal fade" id="myModal${user.userNo}" role="dialog">
-                      <div class="modal-dialog">
-                        <!-- 모달 내용 -->
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">관리자 정보 입력</h4>
-                          </div>
-                          <div class="modal-body">
-                            <form id="adminForm${user.userNo}">
-                              <input type="hidden" name="userNo" value="${user.userNo}">
-                              <div class="form-group">
-                                <label for="regionNo">리전 번호:</label>
-                                <select class="form-control" name="regionNo" id="regionNo${user.userNo}">
-                                  <!-- 리전 정보를 동적으로 로드하는 옵션들을 여기에 추가 -->
-                                </select>
+                      <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                              data-bs-target="#adminModal">
+                        관리자 임명
+                      </button>
+                      <c:if test="${user.isUserDeleted.toString() eq 'Y'}">
+                        <button type="button" class="btn btn-success">
+                          탈퇴 승인
+                        </button>
+                      </c:if>
+
+                    </td>
+                  </tr>
+<%--                  <td id="adminData${user.userNo}" style="display: none;">--%>
+<%--                      <!-- 동적으로 추가될 관리자 정보 입력 폼 -->--%>
+<%--                      <input type="hidden" id="regionNo${user.userNo}" name="userNo" value="${user.userNo}">--%>
+<%--                      <input type="text" id="regionNo${user.userNo}" name="regionNo" placeholder="관할지역을 입력하세요">--%>
+<%--                      <input type="text" id="adminOrg${user.userNo}" name="adminOrg" placeholder="관리기관명을 입력하세요">--%>
+
+                  </td>
+                  <!-- 회원정보 수정 모달 -->
+                  <div class="modal fade" id="adminModal" tabindex="-1"
+                       aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">관리자 임명</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form class="sign-form" action="/admin/insertAdmin.do" method="post">
+                            <input type="hidden" name="userNo" value="${user.userNo}">
+                            <div class="mb-3 custom-input">
+                              <label class="form-label">관할지역</label>
+                              <div class="input-group">
+                                <select name="cityNo" id="cityNo" onchange="citySelect();" style="width: 100px;margin-right: 15px;">
+                                  <c:forEach var="city" items="${cList}" >
+                                    <option value="${city.cityNo}">${city.cityName}</option>
+                                  </c:forEach>
+                                  </select>
+                                  <select name="regionNo" id="regionNo" style="width: 150px;">
+                                  </select>
+<%--                                <select name="regionNo" id="regionNo" onchange="citySelect();" style="width: 100px;margin-right: 15px;">--%>
+<%--                                  <c:forEach var="region" items="${regionList}" >--%>
+<%--                                    <option value="${region.regionNo}">${region.regionName}</option>--%>
+<%--                                  </c:forEach>--%>
+<%--                                </select>--%>
                               </div>
-                              <div class="form-group">
-                                <label for="adminOrg">기관명:</label>
-                                <input type="text" class="form-control" name="adminOrg" id="adminOrg${user.userNo}" required>
+                            </div>
+                            <div class="mb-3 custom-input">
+                              <label for="adminOrg" class="form-label">기관명</label>
+                              <div class="input-group">
+                                <input type="text" class="form-control" id="adminOrg"
+                                       name="adminOrg" required placeholder="기관 명을 입력해 주세요">
                               </div>
-                              <button type="button" class="btn btn-primary" onclick="submitAdminForm(${user.userNo})">저장</button>
-                            </form>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-                          </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary"
+                                      data-bs-dismiss="modal">닫기</button>
+                              <button type="submit" class="btn btn-success">관리자 임명</button>
+                            </div>
+                          </form>
+                          <!--2안  -->
                         </div>
                       </div>
                     </div>
-                    <!-- 모달창 끝 -->
-                    </td>
-                  </tr>
+                  </div>
                 </c:forEach>
             </tbody>
         </table>
-    </div>
-    </section>
-    <section>
-      <div style="display: flex; justify-content: space-between">
-        <div>
-          <h2>관리자 리스트</h2>
+        <div class="mt-5 d-flex justify-content-center">
+          <nav aria-label="Page navigation exampler">
+            <ul class="pagination">
+              <c:if test="${pInfo.startNavi ne '1' }">
+                <li class="page-item"><a class="page-link" href="/admin/memberList.do?page=${pInfo.startNavi-1 }" class="first"><i class="bi bi-chevron-left"></i></a></li>
+              </c:if>
+              <c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }" var="p">
+                <c:url var="pageUrl" value="/admin/memberList.do">
+                  <c:param name="page" value="${p }"></c:param>
+                </c:url>
+                <c:choose>
+                  <c:when test="${p == pInfo.currentPage}">
+                    <li class="page-item active" ><a href="${pageUrl}" class="page-link" style="background-color:#00AD7C; border-color: #00AD7C">${p}</a></li>
+                  </c:when>
+                  <c:otherwise>
+                    <li class="page-item"><a href="${pageUrl}" class="page-link">${p}</a></li>
+                  </c:otherwise>
+                </c:choose>
+              </c:forEach>
+              <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount }">
+                <li class="page-item"><a class="page-link" href="/admin/memberList.do?page=${pInfo.endNavi+1 }" class="last"><i class="bi bi-chevron-right"></i></a></li>
+              </c:if>
+            </ul>
+          </nav>
         </div>
-        <div class="input-group" style="width: 400px; height: 30px;">
-          <select class="form-select" aria-label=".form-select-lg example" style="width: 20%;">
-            <option selected>아이디</option>
-            <option value="1">회원번호</option>
-            <option value="2">전화번호</option>
-            <option value="3">관활지역</option>
-          </select>
-          <input type="search" class="form-control rounded" placeholder="검색" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
-          <button type="button" class="btn btn-outline-success" id="user-serch-btn">검색</button>
-        </div>
-      </div>
-      <br/>
-      <div class="table-responsive">
-        <table class="table align-middle text-center">
-            <thead class="table-light align-middle">
-                <tr>
-                    <th>번호</th>
-                    <th>회원 아이디</th>
-                    <th>담당자 번호</th>
-                    <th>가입일</th>
-                    <th>회원 상태</th>
-                    <th>관할 지역</th>
-                    <th>-</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>khuser01@gmail.com</td>
-                  <td>01012345678</td>
-                  <td>2023-10-01</td>
-                  <td>활성화</td>
-                  <td>동대문구</td>
-                  <td><button class="btn btn-success">관리자 해임</button></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>khuser02@gmail.com</td>
-                  <td>01022222222</td>
-                  <td>2023-10-01</td>
-                  <td>활성화</td>
-                  <td>의정부</td>
-                  <td><button class="btn btn-success">관리자 해임</button></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>khuser03@gmail.com</td>
-                  <td>01022223333</td>
-                  <td>2023-10-02</td>
-                  <td>활성화</td>
-                  <td>강북구</td>
-                  <td><button class="btn btn-success">관리자 해임</button></td>
-                </tr>
-            </tbody>
-        </table>
     </div>
     </section>
   </main>
 <!-- End #main -->
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
-
-          <div class="col-lg-3 col-md-6 footer-contact">
-            <h3>브링브링</h3>
-            <p>
-              A108 Adam Street <br>
-              New York, NY 535022<br>
-              United States <br><br>
-              <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> info@example.com<br>
-            </p>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#"></a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Services</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Social Networks</h4>
-            <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
-            <div class="social-links mt-3">
-              <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-              <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-              <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-              <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-              <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="container footer-bottom clearfix">
-      <div class="copyright">
-        &copy; Copyright <strong><span>Arsha</span></strong>. All Rights Reserved
-      </div>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </div>
-  </footer><!-- End Footer -->
+  <!-- 푸터 -->
+  <jsp:include page="/include/footer.jsp"></jsp:include>nd Footer -->
 
   <div id="preloader"></div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
@@ -355,6 +282,7 @@
   <script src="../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
   <script src="../resources/assets/vendor/php-email-form/validate.js"></script>
   <script src="../resources/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
 
 
   <!-- Template Main JS File -->
@@ -396,19 +324,67 @@
             $('#wrapper').toggleClass('toggled');
       });  
     });
-    function submitAdminForm(userNo) {
-      var regionNo = document.getElementById("regionNo" + userNo).value;
-      var adminOrg = document.getElementById("adminOrg" + userNo).value;
 
-      // 서버로 데이터를 보내고 관리자 정보를 인서트하는 API 호출
-      // 여기에 AJAX 호출 코드를 추가해야 합니다.
-
-      // 모달을 닫음
-      $('#myModal' + userNo).modal('hide');
+    function showAdminForm(userNo) {
+      var adminFormContainer = document.getElementById("adminData" + userNo);
+      adminFormContainer.style.display = adminFormContainer.style.display === "none" ? "table-row" : "none";
     }
+
+    function showAdminForm(userNo) {
+      // 모달 창 표시
+      $('#adminModal').modal('show');
+
+      // 모달 내용을 채워넣는 로직을 추가할 수 있습니다.
+      // userNo를 사용하여 필요한 데이터를 가져와 모달 내부에 채워넣을 수 있습니다.
+    }
+
+    $(document).ready(function () {
+      // 모달이 열릴 때의 이벤트 리스너 등록
+      $('#adminModal').on('show.bs.modal', function (e) {
+        updateRegionOptions();
+      });
+
+      // citySelect의 change 이벤트에 대한 이벤트 핸들러 등록
+      $('#cityNo').change(function () {
+        updateRegionOptions();
+      });
+
+      function updateRegionOptions() {
+        var citySelect = document.getElementById("cityNo");
+        var regionSelect = document.getElementById("regionNo");
+        var cityNo = citySelect.value;
+
+        // 시티넘버가 0이 아닌 경우에만 AJAX 요청 보내기
+        if (cityNo !== "0") {
+          $.ajax({
+            url: "/admin/selectRegion.do",
+            data: { cityNo: cityNo },
+            type: "POST",
+            success: function (data) {
+              // 서버에서 받은 데이터로 리전 셀렉트 박스 업데이트
+              regionSelect.innerHTML = "";
+              for (var i = 0; i < data.length; i++) {
+                var option = document.createElement("option");
+                option.value = data[i].regionNo;
+                option.text = data[i].regionName;
+                regionSelect.appendChild(option);
+              }
+            },
+            error: function () {
+              alert("Ajax 오류! 관리자에게 문의하세요");
+            }
+          });
+        } else {
+          // 시티넘버가 0인 경우에 대한 처리 (예: 경고 메시지 표시)
+          alert("시티넘버가 선택되지 않았습니다.");
+        }
+      }
+    });
+
+
   </script>
-  
-  
+
+
 </body>
 
 </html>
