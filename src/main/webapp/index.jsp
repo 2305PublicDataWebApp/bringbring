@@ -76,7 +76,7 @@
 
 <body>
   <!-- 헤더 -->
-  <jsp:include page="/include/headerMain.jsp"></jsp:include>
+  <jsp:include page="/include/header.jsp"></jsp:include>
   
 
   <!-- ======= Hero Section ======= -->
