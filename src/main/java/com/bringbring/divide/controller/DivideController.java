@@ -49,13 +49,10 @@ public class DivideController {
 			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
 			, HttpServletRequest request
 			, HttpSession session) {
-		System.out.println("1");
+
 		String userId = (String)session.getAttribute("sessionId");
-		System.out.println("2");
 		User user = userService.selectOneById(userId);
-		System.out.println("3");
 		divide.setUserNo(user.getUserNo());
-		System.out.println("4");
 		System.out.println(divide);
 		int result = divideService.insertDivide(divide, uploadFiles, request);
 		if(result > 0) {
