@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import com.bringbring.region.domain.District;
 import com.bringbring.reservation.service.ReservationService;
+import com.bringbring.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,7 @@ public class DivideController {
 	private final DivideService divideService;
 	private final RegionService regionService;
 	private final ReservationService reservationService;
-
+	private final UserService userService;
 	@GetMapping("/insert.do")
 	public ModelAndView showDivideInsert(ModelAndView mv) {
 		List<WasteCategory> wList = reservationService.selectWasteCategoryList();
