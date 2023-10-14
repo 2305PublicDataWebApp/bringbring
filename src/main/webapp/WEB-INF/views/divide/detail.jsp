@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -31,7 +34,7 @@
 
   <!-- Template Main CSS File -->
   <link href="../resources/assets/css/style.css" rel="stylesheet">
-  <link href="../resources/assets/css/common.css" rel="stylesheet">
+<%--  <link href="../resources/assets/css/common.css" rel="stylesheet">--%>
 
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=043e510b873d1287a23e00d8444a6b47"></script>
   <style>
@@ -78,6 +81,13 @@
         font-size: 30px;
         cursor: pointer;
     }
+    main .divideImg{
+      width: 850px;
+      height: 600px;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
   </style>
 </head>
 
@@ -92,23 +102,17 @@
     <!-- 캐러셀 영역 -->
     <div id="carouselExampleIndicators" data-aos="fade-up" class="carousel slide" style="margin-bottom: 45px;">
       <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <c:forEach var="image" items="${iList}" varStatus="loop">
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${loop.index}" class="<c:if test='${loop.first}'>active</c:if>" aria-label="Slide ${loop.index + 1}"></button>
+        </c:forEach>
       </div>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div style="width: 850px; height: 600px; background-image: url(/resources/assets/img/divide/냄비.webp); background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;">
+      <div class="carousel-inner" style="position: relative;">
+        <c:forEach var="image" items="${iList}" varStatus="loop">
+          <div class="carousel-item <c:if test='${loop.first}'>active</c:if>">
+            <div class="divideImg" style="background-image: url(${image.imagePath});" data-bs-interval="4000"></div>
           </div>
-        </div>
-        <div class="carousel-item">
-          <div style="width: 850px; height: 600px; background-image: url(/resources/assets/img/divide/스팸.webp); background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;">
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div style="width: 850px; height: 600px; background-image: url(/resources/assets/img/divide/냄비.webp); background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;">
-          </div>
-        </div>
+        </c:forEach>
+        <div style="width: 850px;height: 50px;position:absolute;bottom: 50px;background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));"></div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: #222;border-radius: 20px;"></span>
@@ -127,26 +131,28 @@
           <img style="width: 50px;height: 50px;margin-top: 35px;margin-left: 10px;" src="../../../resources/assets/img/divide/free-icon-user-847969.png" alt="">
         </div>
         <div style="float: left;padding: 35px 15px;">
-          <h5>닉네임</h5>
-          <p>서울특별시 중구</p>
+          <h5>${dData.user.userName}</h5>
+          <p>${dData.city.cityName} ${dData.district.districtName}</p>
         </div>
         <div style="display: flex;float: right;height: 100%;flex-direction: column;justify-content: space-evenly;">
-          <button type="button" class="btn btn-success">글 수정</button>
-          <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" class="btn btn-success">글 삭제</button>
+          <c:if test="${sessionId eq dData.user.userId}">
+            <button type="button" class="btn btn-success">글 수정</button>
+            <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" class="btn btn-success">글 삭제</button>
+          </c:if>
         </div>
       </div>
       <!-- 제목 영역 -->
       <div style="width: 100%;border-bottom: 1px solid #ccc;" data-aos="fade-up">
         <div style="padding: 35px 15px;">
-          <h3>제목이 들어갈 자리입니다.</h3>
-          <p style="margin-bottom: 5px;">카테고리</p>
-          <p style="margin: 0px;">2023.10.05</p>
+          <h3>${dData.divide.divTitle}</h3>
+          <p style="margin-bottom: 5px;">${dData.wasteCategory.wasteCategoryName}</p>
+          <p style="margin: 0px;">${dData.divide.divCreateDate}</p>
         </div>
       </div>
       <!-- 내용 영역 -->
       <div data-aos="fade-up" style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;">
         <div style="padding: 35px 15px;">
-          <textarea cols="88" rows="15" style="resize: none; border: none; outline: none; width: 100%;">내용이 들어갈 자리입니다.</textarea>
+          <textarea cols="88" rows="15" style="resize: none; border: none; outline: none; width: 100%;" readonly>${dData.divide.divContent}</textarea>
         </div>
         <div style="margin: 0px 10px 7px 0px;">
           <i class="bi bi-chat"></i>
@@ -159,7 +165,14 @@
       <div data-aos="fade-up" style="width: 100%;">
         <div style="padding: 35px 15px;">
           <h3>거래 희망 장소</h3>
-          <p style="margin-bottom: 5px;">서울시 중구 남대문로 15</p>
+          <p style="margin-bottom: 5px;">
+            <c:if test="${dData.divide.divXCoordinate eq null}">
+              아직 선택되지 않았습니다.
+            </c:if>
+            <c:if test="${dData.divide.divXCoordinate ne null}">
+              서울시 중구 남대문로 15
+            </c:if>
+          </p>
         </div>
       </div>
       <!-- 지도 영역 -->

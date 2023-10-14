@@ -25,7 +25,7 @@
 
     <!-- Template Main CSS File -->
     <link href="../resources/assets/css/style.css" rel="stylesheet">
-    <link href="../resources/assets/css/common.css" rel="stylesheet">
+<%--    <link href="../resources/assets/css/common.css" rel="stylesheet">--%>
 
 
   <!-- =======================================================
@@ -35,6 +35,23 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+    <style>
+        main .imgArea{
+            width: 200px;
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+        main .imgArea img{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        main tr{
+            border-bottom: 1px solid #d4d0d0;
+        }
+    </style>
 </head>
 
 <body>
@@ -70,10 +87,10 @@
               <button class="btn btn-outline-success" style="border-bottom-right-radius: 5px;border-top-right-radius: 5px;z-index: 1;width: 80px;" type="submit" >Search</button>
           </div>
           <div style="float: right;">
-            <button type="button" class="btn btn-success">글 등록</button>
+            <button onclick="showDivdeInsert();" type="button" class="btn btn-success">글 등록</button>
           </div>
           <div style="width: 100%;float: left;border-top: 1px solid #ccc;margin-top: 15px;padding: 10px 0px">
-              <p style="float:left;font-size: 18px;margin: 0;padding: 5px;font-weight: 600;font-family: 'SUITE-Regular';letter-spacing: 2px;padding-left: 15px;"># 20건</p>
+              <p style="float:left;font-size: 18px;margin: 0;padding: 5px;font-weight: 600;font-family: 'SUITE-Regular';letter-spacing: 2px;padding-left: 15px;"># ${pInfo.totalCount}건</p>
               <p style="margin: 0;padding: 7px 13px 0px 8px;margin-left: 3px;float: right;">
               <a href="/community/certify.tp" style="text-decoration:underline;">최신순 </a>|
               <a href="/community/certify.tp?sortType=likeDESC">추천순</a>
@@ -84,246 +101,36 @@
               </tr>
             </thead>
             <tbody>
-            <c:forEach var="divide" items="${dList}" varStatus="i">
+            <c:forEach var="data" items="${rData}" varStatus="i">
                 <tr>
                     <c:url var="detailUrl" value="/divide/detail.do">
-                        <c:param name="divNo" value="${divide.boardNo }"></c:param>
+                        <c:param name="divNo" value="${data.divide.divNo }"></c:param>
                     </c:url>
-                    <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                        <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                            <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${divide.imagePath}); background-position: center center;"></div>
+                    <td style="width: 220px;padding-top: 10px;padding-bottom: 10px;">
+                        <div class="card imgArea">
+                            <img src="${data.image.imagePath}">
+<%--                            <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${data.image.imagePath}); background-position: center center;"></div>--%>
                         </div>
                     </td >
                     <td style="text-align: left;font-size: 17px;">
                         <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                            <a href="${detailUrl}">${divide.divTitle}</a>
+                            <a href="${detailUrl}">${data.divide.divTitle}</a>
                         </h4>
                         <br>
-                        나눔 지역 : <br>
-                        카테고리 :
+                        나눔 지역 : ${data.city.cityName} ${data.district.districtName}<br>
+                        카테고리 : ${data.wasteCategory.wasteCategoryName}
                     </td>
-                    /////////////////////////////
-                    <td id="tr">
-                        <a href="${detailUrl}">${divide.divTitle}</a>
-                    </td>
-                    <td class="tr">${divide.userNickname }</td>
-                    <td class="tr">
-                        <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${divide.divCreateDate }" />
-                    </td>
-                    <td>좋아요 수</td>
-                    <td class="tr">
-                        <fmt:formatNumber pattern="##,###,###" value="${divide.viewCount}"></fmt:formatNumber>
+                    <td style="width: 100px;position: relative;">
+                        <div style="position: absolute;bottom: 10px;">
+                            <i class="bi bi-chat"></i>
+                            2 &nbsp;
+                            <i class="bi bi-heart"></i>
+                            2
+                        </div>
                     </td>
                 </tr>
             </c:forEach>
               <!-- 아 -->
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
             </tbody>
           </table>
       </div>
@@ -398,6 +205,10 @@
 
     <!-- 로그인, 로그아웃 -->
     <jsp:include page="/include/loginJs.jsp"></jsp:include>
+
+    function showDivdeInsert() {
+        location.href = "/divide/insert.do";
+    }
   </script>
   
   

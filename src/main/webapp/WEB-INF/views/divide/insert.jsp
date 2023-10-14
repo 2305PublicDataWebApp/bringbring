@@ -24,7 +24,7 @@
 
   <!-- Template Main CSS File -->
   <link href="../resources/assets/css/style.css" rel="stylesheet">
-  <link href="../resources/assets/css/common.css" rel="stylesheet">
+<%--  <link href="../resources/assets/css/common.css" rel="stylesheet">--%>
 
   <!-- =======================================================
   * Template Name: Arsha

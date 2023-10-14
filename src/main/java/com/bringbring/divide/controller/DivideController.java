@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.divide.domain.DetailData;
+import com.bringbring.divide.domain.ResponseData;
+import com.bringbring.image.domain.Image;
 import com.bringbring.region.domain.District;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
@@ -39,8 +42,8 @@ public class DivideController {
 	@GetMapping("/insert.do")
 	public ModelAndView showDivideInsert(ModelAndView mv) {
 		List<WasteCategory> wasteCategories = reservationService.selectWasteCategoryList();
-		List<City> cList = regionService.selectCityList();
-		mv.addObject("wList", wasteCategories).addObject("cList", cList);
+		List<City> cityList = regionService.selectCityList();
+		mv.addObject("wList", wasteCategories).addObject("cList", cityList);
 		mv.setViewName("divide/insert");
 		return mv;
 	}
@@ -58,7 +61,8 @@ public class DivideController {
 		System.out.println(divide);
 		int result = divideService.insertDivide(divide, uploadFiles, request);
 		if(result > 0) {
-			mv.setViewName("divide/detail");
+			int max = divideService.selectMaxNo();
+			mv.setViewName("divide/detail?divNo="+max);
 			return mv;
 		}else {
 			mv.setViewName("/");
@@ -67,8 +71,14 @@ public class DivideController {
 	}
 	
 	@GetMapping("/detail.do")
-	public ModelAndView showDivideDetail(ModelAndView mv) {
+	public ModelAndView showDivideDetail(ModelAndView mv
+			, int divNo) {
+
+		List<Image> imageList = divideService.selectImageListByNo(divNo);
+		DetailData detailData = divideService.selectDetailDataByNo(divNo);
+//		date.format(DateTimeFormatter.ISO_DATE);
 		mv.setViewName("divide/detail");
+		mv.addObject("iList", imageList).addObject("dData", detailData);
 		return mv;
 	}
 
@@ -77,8 +87,8 @@ public class DivideController {
 			, @RequestParam(value= "page", required = false, defaultValue="1") Integer currentPage) {
 		int totalCount = divideService.getListCount();
 		PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
-		List<Divide> divideList = divideService.selectDivideList(pInfo);
-		mv.addObject("dList", divideList).addObject("pInfo", pInfo);
+		List<ResponseData> rData = divideService.selectResPonseDataList(pInfo);
+		mv.addObject("rData", rData).addObject("pInfo", pInfo);
 		mv.setViewName("divide/list");
 		return mv;
 	}

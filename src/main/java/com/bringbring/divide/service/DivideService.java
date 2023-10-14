@@ -5,6 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.divide.domain.DetailData;
+import com.bringbring.divide.domain.ResponseData;
+import com.bringbring.image.domain.Image;
 import com.bringbring.region.domain.District;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,5 +21,11 @@ public interface DivideService {
 
 	int getListCount();
 
-	List<Divide> selectDivideList(PageInfo pInfo);
+	List<ResponseData> selectResPonseDataList(PageInfo pInfo);
+
+    int selectMaxNo();
+
+    DetailData selectDetailDataByNo(int divNo);
+
+	List<Image> selectImageListByNo(int divNo);
 }
