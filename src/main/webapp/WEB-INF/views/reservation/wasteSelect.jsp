@@ -94,9 +94,9 @@
   </div>
 
 </section>
-<div style="width: 100%;height: 1000px;">
+<div style="width: 100%;">
 
-  <main>
+  <main>1
     <h2 class="subject">대형 폐기물 수거 신청</h2>
     <div>
       <div class="progress-bar out-progress-bar">
@@ -121,30 +121,8 @@
       <div id="listDiv">
         <table class="table" id="listTable">
           <tbody>
-          <%--          <tr>--%>
-          <%--            <td>--%>
-          <%--              <input class="form-check-input me-1" type="checkbox" value="거울">--%>
-          <%--              <label class="align-items-center">--%>
-          <%--                거울--%>
-          <%--              </label>--%>
-          <%--            </td>--%>
-          <%--            <td>--%>
-          <%--              <select name="mirror" class="form-select selectBox">--%>
-          <%--                <option>높이 50cm 이상</option>--%>
-          <%--                <option>높이 50cm 미만</option>--%>
-          <%--              </select>--%>
-          <%--            </td>--%>
-          <%--            <td>--%>
-          <%--              <div class="fee">--%>
-          <%--                <p class="m-0">3,000원</p>--%>
-          <%--              </div>--%>
-          <%--            </td>--%>
-          <%--            <td>--%>
-          <%--              <button class="selectBtn" onclick="count('minus');" value='+'><img src="../../../resources/assets/img/reservation/minus.png"></button>--%>
-          <%--              <input type="number" minlength="0" maxlength="10" id="numberInput" value="0">--%>
-          <%--              <button class="selectBtn" onclick="count('plus');" value='-'><img src="../../../resources/assets/img/reservation/plus.png"></button>--%>
-          <%--            </td>--%>
-          <%--          </tr>--%>
+<%--          Ajax 요청을 통해 리스트가 출력됨--%>
+          <p id="listDiv-p">물품을 선택해주세요</p>
           </tbody>
         </table>
       </div>
@@ -155,16 +133,6 @@
       <hr>
       <table class="table" id="selectTable">
         <tbody>
-        <tr>
-          <th scope="row">선택 1</th>
-          <td>거울</td>
-          <td>높이 50cm 이상</td>
-          <td>3,000원</td>
-          <td>1개</td>
-          <td>
-            <button class="selectBtn"><img src="../../../resources/assets/img/reservation/X.png"></button>
-          </td>
-        </tr>
         </tbody>
       </table>
     </div>
@@ -270,33 +238,15 @@
   ChannelIO('boot', {
     "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
   });
-
-  // document.getElementById('minus').addEventListener("click" , (e)=> {
-  //   let inputNumber = document.querySelector("#numberInput");
-  //   inputNumber.val-1;
-  // });
-  function count(type) {
-    const result = document.querySelector("#numberInput");
-    let i = parseInt(result.value);
-
-    if (type === 'plus' && i < 10) {
-      i++;
-      result.value = i;
-      console.log(i);
-    } else if (type === 'minus' && i > 0) {
-      i--;
-      result.value = i;
-      console.log(i);
-    }
-
-  }
-
 </script>
 
 <script type="text/javascript">
+  // 선택한 아이템을 저장할 배열
+  let selectedItems = [];
+
   // 버튼 선택 시 리스트 출력
   function wasteSelect(button) {
-
+    let cellNum = 1;
     let selectItem = button.value;
     console.log("선택된 값: " + selectItem);
 
@@ -308,7 +258,12 @@
       data: { selectItem: selectItem },
       type: "GET",
       success: function (data) {
+        const seletMsg = document.querySelector('#listDiv-p');
+        seletMsg.style.display='none';
+
         var tableBody = document.getElementById('listTable');
+
+        // 기존 목록을 모두 삭제
         while (tableBody.firstChild) {
           tableBody.removeChild(tableBody.firstChild);
         }
@@ -323,33 +278,33 @@
             groupedData[wasteTypeName] = {
               wasteCategoryName: wasteTypeName,
               wasteInfoStandards: [],
-              wasteInfoFees: []
+              wasteInfoFees: [],
             };
           }
 
           groupedData[wasteTypeName].wasteInfoStandards.push(item.wasteInfo.wasteInfoStandard);
           groupedData[wasteTypeName].wasteInfoFees.push(item.wasteInfo.wasteInfoFee);
+
         }
 
         var tableBody = document.getElementById('listTable');
 
-
-        // change 이벤트 리스너를 추가하는 함수
+        // 체크박스 변경 이벤트 리스너를 추가하는 함수
         function createChangeListener(pTag, item, selectElement) {
-          return function() {
+
+          return function () {
             var selectedOptionIndex = selectElement.selectedIndex;
             var matchingFee = item.wasteInfoFees[selectedOptionIndex];
             pTag.innerText = matchingFee;
           };
         }
 
-
-        // 이벤트 리스너 연결
+        // 이벤트 리스너 연결 및 선택한 아이템을 배열에 추가 또는 제거
         for (var wasteTypeName in groupedData) {
           var item = groupedData[wasteTypeName];
           var trTag = document.createElement('tr');
 
-          // 첫번째 td
+          // 첫번째 열 (체크박스)
           var firstCell = document.createElement('td');
           var checkbox = document.createElement('input');
           checkbox.setAttribute('class', 'form-check-input me-1');
@@ -360,16 +315,12 @@
           var label = document.createElement('label');
           label.setAttribute('class', 'align-items-center');
           label.setAttribute('for', item.wasteCategoryName);
-
           label.textContent = item.wasteCategoryName;
           firstCell.appendChild(checkbox);
           firstCell.appendChild(label);
-
-          // css
           firstCell.className = "firstTd";
 
-
-          // 두번째 td
+          // 두번째 열 (선택 상품)
           var secondCell = document.createElement('td');
           var selectElement = document.createElement('select');
           selectElement.setAttribute('name', 'wasteInfoStandard');
@@ -382,39 +333,58 @@
           });
           selectElement.value = item.wasteInfoStandards[0];
           secondCell.appendChild(selectElement);
-
-          // css
           secondCell.className = "secondTd";
 
-          // 세번째 td
+          // 세번째 열 (가격)
           var thirdCell = document.createElement('td');
           var pTag = document.createElement('p');
           var initialMatchingFee = item.wasteInfoFees[0];
           pTag.innerText = initialMatchingFee;
-          pTag.setAttribute('class', 'listTableP')
+          pTag.setAttribute('class', 'listTableP');
           thirdCell.appendChild(pTag);
-
-          // css
           thirdCell.className = "thirdTd";
 
-          // 네 번째 열 (count)
+          // 네 번째 열 (갯수 및 추가/제거 버튼)
           var fourthCell = document.createElement('td');
 
-          // "minus" 버튼 생성
+          // "마이너스" 버튼 생성
           var minusButton = document.createElement('button');
           minusButton.setAttribute('class', 'selectBtn');
-          minusButton.setAttribute('onclick', 'count("minus")');
-          minusButton.setAttribute('value', '+');
+          minusButton.setAttribute('value', '-');
+          minusButton.addEventListener('click', function () {
+            var trElement = this.closest('tr'); // 해당 "마이너스" 버튼이 속한 행(tr) 찾기
+            var checkbox = trElement.querySelector('input[type=checkbox]');
+            var wasteCategoryName = checkbox.value;
+            var wasteInfoStandard = trElement.querySelector('.selectBox').value;
+            var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
+            count("minus", this, { wasteCategoryName, wasteInfoStandard, wasteInfoFee });
+
+            // 아이템 제거 함수 호출
+            removeFromSelectTable({ wasteCategoryName, wasteInfoStandard, wasteInfoFee });
+          });
+
 
           // 이미지 엘리먼트 생성
           var minusImage = document.createElement('img');
           minusImage.setAttribute('src', '../../../resources/assets/img/reservation/minus.png');
+          minusButton.appendChild(minusImage);
 
-          // "plus" 버튼 생성
+          // "플러스" 버튼 생성
           var plusButton = document.createElement('button');
           plusButton.setAttribute('class', 'selectBtn');
-          plusButton.setAttribute('onclick', 'count("plus")');
-          plusButton.setAttribute('value', '-');
+          plusButton.setAttribute('value', '+');
+          // plusButton.addEventListener('click', function () {
+          //   count("plus", this, item);
+          // });
+          // "플러스" 버튼 클릭 이벤트 리스너 연결
+          plusButton.addEventListener('click', function () {
+            var trElement = this.closest('tr'); // 해당 "플러스" 버튼이 속한 행(tr) 찾기
+            var checkbox = trElement.querySelector('input[type=checkbox]');
+            var wasteCategoryName = checkbox.value;
+            var wasteInfoStandard = trElement.querySelector('.selectBox').value;
+            var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
+            count("plus", this, { wasteCategoryName, wasteInfoStandard, wasteInfoFee });
+          });
 
           // 이미지 엘리먼트 생성
           var plusImage = document.createElement('img');
@@ -425,7 +395,6 @@
           numberInput.setAttribute('type', 'number');
           numberInput.setAttribute('min', '0');
           numberInput.setAttribute('max', '10');
-          numberInput.setAttribute('id', 'numberInput');
           numberInput.setAttribute('value', '0');
 
           // 버튼과 이미지 엘리먼트를 버튼 엘리먼트에 추가
@@ -436,12 +405,35 @@
           fourthCell.appendChild(minusButton);
           fourthCell.appendChild(numberInput);
           fourthCell.appendChild(plusButton);
-
-          // CSS 클래스 추가
           fourthCell.className = 'fourthTd';
 
 
-          // 이벤트 리스너 감지 후 실행됨
+          // 체크박스를 선택했을 때 동작하도록 하는 이벤트 핸들러
+          checkbox.addEventListener('change', function (event) {
+            var trElement = event.target.closest('tr');
+
+            var wasteCategoryName = trElement.querySelector('label').textContent;
+            var wasteInfoStandard = trElement.querySelector('.selectBox').value;
+            var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
+
+            var selectedItem = [];
+            selectedItem.push({
+              wasteCategoryName: wasteCategoryName,
+              wasteInfoStandard: wasteInfoStandard,
+              wasteInfoFee: wasteInfoFee
+            });
+            // 이 값을 보내야 함
+            console.log(selectedItem);
+            if (event.target.checked) {
+
+
+              count("plus", this, item, selectedItem);
+            } else {
+
+            }
+          });
+
+          // 이벤트 리스너 연결
           selectElement.addEventListener('change', createChangeListener(pTag, item, selectElement));
 
           trTag.appendChild(firstCell);
@@ -450,68 +442,165 @@
           trTag.appendChild(fourthCell);
           tableBody.appendChild(trTag);
 
-
-// 체크박스 이벤트 리스너 추가
-          checkbox.addEventListener('change', function (event) {
-            if (event.target.checked) {
-              // 해당 체크박스의 부모 tr(테이블 행) 엘리먼트를 찾습니다.
-              var trElement = event.target.closest('tr');
-
-              // trElement로부터 필요한 데이터를 추출할 수 있습니다.
-              var wasteCategoryName = trElement.querySelector('label').textContent;
-              var wasteInfoStandard = trElement.querySelector('.selectBox').value;
-              var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
-
-              // 데이터를 객체로 만들거나 필요한 작업을 수행할 수 있습니다.
-              var selectedItem = {
-                wasteCategoryName: wasteCategoryName,
-                wasteInfoStandard: wasteInfoStandard,
-                wasteInfoFee: wasteInfoFee
-              };
-
-              // 호출할 함수를 통해 선택한 데이터를 추가합니다.
-              addToSelectTable(selectedItem);
-            }
-          });
-
-
-          // 선택한 물품 추가 함수
-          function addToSelectTable(item) {
-            var selectTable = document.getElementById('selectTable');
-            var newRow = selectTable.querySelector('tbody').insertRow();
-
-            // Create cells and populate with item data
-            var cell1 = newRow.insertCell(0);
-            cell1.textContent = "선택 1"; // You can customize this as needed
-            var cell2 = newRow.insertCell(1);
-            cell2.textContent = item.wasteCategoryName;
-            var cell3 = newRow.insertCell(2);
-            cell3.textContent = item.wasteInfoStandard;
-            var cell4 = newRow.insertCell(3);
-            cell4.textContent = item.wasteInfoFee;
-            var cell5 = newRow.insertCell(4);
-            cell5.textContent = "1개";
-            var cell6 = newRow.insertCell(5);
-
-            // Add a button with an image
-            var button = document.createElement('button');
-            button.className = 'selectBtn';
-            var image = document.createElement('img');
-            image.src = '../../../resources/assets/img/reservation/X.png';
-            button.appendChild(image);
-            cell6.appendChild(button);
-          }
         }
       },
-      error: function() {
+      error: function () {
         alert("Ajax 오류! 관리자에게 문의하세요");
       }
     });
-
   }
-</script>
 
-<script type="text/javascript">
+  // 실제로 선택한 목록에 추가하는 count 함수
+  function count(type, obj, selectedItem) {
+
+    const checkbox = document.querySelector('input[type=checkbox]:checked');
+
+    const tdElement = obj.parentElement;
+    const trElement = tdElement.parentElement;
+
+    // tr의 첫 번째 td
+    const firstTd = trElement.querySelector('td:first-child');
+    const lastTd = trElement.querySelector('td:last-child');
+
+    // 첫 번째 td의 체크박스
+    const trCheckbox = firstTd.querySelector('input[type=checkbox]');
+
+    if (checkbox && trCheckbox.checked) {
+
+      if (type === 'plus') {
+        var numberInput = obj.parentElement.querySelector('input[type=number]');
+        var currentValue = parseInt(numberInput.value);
+        var maxValue = parseInt(numberInput.getAttribute('max'));
+
+        if (currentValue < maxValue) {
+          currentValue++;
+          numberInput.value = currentValue; // input 값을 증가시킴
+          addToSelectTable(selectedItem);
+        }
+      } else if (type === 'minus') {
+        var numberInput = obj.parentElement.querySelector('input[type=number]');
+        var currentValue = parseInt(numberInput.value);
+        var minValue = parseInt(numberInput.getAttribute('min'));
+
+        if (currentValue > minValue) {
+          currentValue--;
+          numberInput.value = currentValue; // input 값을 감소시킴
+          removeFromSelectTable(selectedItem);
+        }
+      }
+  }
+
+    // 선택한 물품에 추가
+  function addToSelectTable(selectedItem) {
+    if (selectedItems.length >= 10) {
+      alert("최대 10개까지 추가할 수 있습니다.");
+      return;
+    }
+
+    selectedItems.push(selectedItem);
+    console.log(selectedItem);
+
+    displaySelectedItems();
+  }
+
+    // 삭제
+  function removeFromSelectTable(item) {
+    const index = selectedItems.findIndex((selectedItem) => {
+      return (
+              selectedItem.wasteCategoryName === item.wasteCategoryName &&
+              selectedItem.wasteInfoStandard === item.wasteInfoStandard &&
+              selectedItem.wasteInfoFee === item.wasteInfoFee
+      );
+    });
+
+    if (index !== -1) {
+      selectedItems.splice(index, 1);
+
+      displaySelectedItems();
+    }
+  }
+
+  function displaySelectedItems() {
+    var selectTable = document.getElementById('selectTable');
+    var tbody = selectTable.querySelector('tbody');
+
+    // 테이블 내용 지우기
+    tbody.innerHTML = '';
+
+    // 선택한 아이템을 반복하며 표시
+    selectedItems.forEach(function (item, index) {
+      var newRow = tbody.insertRow();
+
+      // 선택 표시
+      var cell1 = newRow.insertCell(0);
+      cell1.textContent = "선택 " + (index + 1);
+
+      // 타입 이름
+      var cell2 = newRow.insertCell(1);
+      cell2.textContent = item.wasteCategoryName;
+
+      // 규격
+      var cell3 = newRow.insertCell(2);
+      cell3.textContent = item.wasteInfoStandard;
+
+      // 수수료
+      var cell4 = newRow.insertCell(3);
+      cell4.textContent = item.wasteInfoFee;
+
+      // 삭제 버튼
+      var cell5 = newRow.insertCell(4);
+      var removeButton = document.createElement('button');
+      removeButton.className = 'selectBtn';
+      var removeImage = document.createElement('img');
+      removeImage.src = '../../../resources/assets/img/reservation/X.png';
+      removeButton.appendChild(removeImage);
+
+      // 제거 버튼에 클릭 이벤트를 추가하여 선택한 아이템을 제거합니다.
+      removeButton.addEventListener('click', function () {
+        removeFromSelectTable(item);
+        var numberInput = trElement.querySelector('input[type=number]');
+        numberInput.value = parseInt(numberInput.value) - 1;
+      });
+
+      cell5.appendChild(removeButton);
+    });
+  }
+  }
+
+  function sendSelectedItems() {
+    if (selectedItems.length === 0) {
+      alert('선택된 목록이 없습니다.'); // 선택된 목록이 없는 경우 경고 표시
+      return;
+    }
+
+    // 폼 엘리먼트를 생성
+    var form = document.createElement('form');
+    form.action = '/reservation/select/insert.do'; // 서버 엔드포인트 URL로 설정
+    form.method = 'POST'; // POST 요청 사용
+
+    // 선택한 아이템을 반복하여 폼 필드로 추가
+    selectedItems.forEach(function (item, index) {
+      // 아이템 정보를 hidden으로 추가하기
+      var itemInput = document.createElement('input');
+      itemInput.type = 'hidden';
+      itemInput.name = 'selectedItems[' + index + '].wasteCategoryName'; // 서버에서 사용할 필드 이름
+      itemInput.value = item.wasteCategoryName;
+      form.appendChild(itemInput);
+    });
+
+    // 폼을 문서에 추가
+    document.body.appendChild(form);
+
+    console.log(form);
+    // 폼을 자동으로 제출
+    form.submit();
+  }
+
+  // "신청하기" 버튼을 클릭할 때 폼을 전송하는 이벤트 핸들러
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    sendSelectedItems();
+  });
+
 
 </script>
 

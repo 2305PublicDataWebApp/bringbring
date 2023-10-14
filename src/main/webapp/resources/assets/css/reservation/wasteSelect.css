@@ -95,3 +95,13 @@ input[type=number] {
     align-items: center;
     justify-content: center;
 }
+#listDiv-p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 1.5em;
+}
+#selectTable {
+    height: 100%;
+}
