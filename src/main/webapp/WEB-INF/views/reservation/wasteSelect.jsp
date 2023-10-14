@@ -273,17 +273,20 @@
         for (var i = 0; i < data.length; i++) {
           var item = data[i];
           var wasteTypeName = item.wasteType.wasteTypeName;
+          let wasteInfoNo = item.wasteInfo.wasteInfoNo;
 
           if (!groupedData[wasteTypeName]) {
             groupedData[wasteTypeName] = {
               wasteCategoryName: wasteTypeName,
               wasteInfoStandards: [],
               wasteInfoFees: [],
+              wasteInfoNo:[]
             };
           }
 
           groupedData[wasteTypeName].wasteInfoStandards.push(item.wasteInfo.wasteInfoStandard);
           groupedData[wasteTypeName].wasteInfoFees.push(item.wasteInfo.wasteInfoFee);
+          groupedData[wasteTypeName].wasteInfoNo.push(item.wasteInfo.wasteInfoNo);
 
         }
 
@@ -344,6 +347,16 @@
           thirdCell.appendChild(pTag);
           thirdCell.className = "thirdTd";
 
+          // 정보를 보내기 위한 태그 추가
+          var noInfoCell = document.createElement('td');
+          var inputTag = document.createElement('input');
+          var infoNo = item.wasteInfoNo[0];
+          inputTag.setAttribute("name", 'wasteInfoNo');
+          inputTag.setAttribute("class", 'wasteInfoNo');
+          inputTag.type='hidden';
+          inputTag.value=infoNo;
+          noInfoCell.appendChild(inputTag);
+
           // 네 번째 열 (갯수 및 추가/제거 버튼)
           var fourthCell = document.createElement('td');
 
@@ -357,10 +370,11 @@
             var wasteCategoryName = checkbox.value;
             var wasteInfoStandard = trElement.querySelector('.selectBox').value;
             var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
-            count("minus", this, { wasteCategoryName, wasteInfoStandard, wasteInfoFee });
+            var wasteInfoNo = trElement.querySelector('.wasteInfoNo').value;
+            count("minus", this, { wasteCategoryName, wasteInfoStandard, wasteInfoFee, wasteInfoNo});
 
             // 아이템 제거 함수 호출
-            removeFromSelectTable({ wasteCategoryName, wasteInfoStandard, wasteInfoFee });
+            removeFromSelectTable({ wasteCategoryName, wasteInfoStandard, wasteInfoFee, wasteInfoNo });
           });
 
 
@@ -383,7 +397,8 @@
             var wasteCategoryName = checkbox.value;
             var wasteInfoStandard = trElement.querySelector('.selectBox').value;
             var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
-            count("plus", this, { wasteCategoryName, wasteInfoStandard, wasteInfoFee });
+            var wasteInfoNo = trElement.querySelector('.wasteInfoNo').value;
+            count("plus", this, { wasteCategoryName, wasteInfoStandard, wasteInfoFee, wasteInfoNo});
           });
 
           // 이미지 엘리먼트 생성
@@ -415,12 +430,14 @@
             var wasteCategoryName = trElement.querySelector('label').textContent;
             var wasteInfoStandard = trElement.querySelector('.selectBox').value;
             var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
+            var wasteInfoNo = trElement.querySelector('wasteInfoNo').value;
 
             var selectedItem = [];
             selectedItem.push({
               wasteCategoryName: wasteCategoryName,
               wasteInfoStandard: wasteInfoStandard,
-              wasteInfoFee: wasteInfoFee
+              wasteInfoFee: wasteInfoFee,
+              wasteInfoNo: wasteInfoNo
             });
             // 이 값을 보내야 함
             console.log(selectedItem);
@@ -439,6 +456,7 @@
           trTag.appendChild(firstCell);
           trTag.appendChild(secondCell);
           trTag.appendChild(thirdCell);
+          trTag.appendChild(noInfoCell);
           trTag.appendChild(fourthCell);
           tableBody.appendChild(trTag);
 
@@ -509,7 +527,8 @@
       return (
               selectedItem.wasteCategoryName === item.wasteCategoryName &&
               selectedItem.wasteInfoStandard === item.wasteInfoStandard &&
-              selectedItem.wasteInfoFee === item.wasteInfoFee
+              selectedItem.wasteInfoFee === item.wasteInfoFee &&
+              selectedItem.wasteInfoNo === item.wasteInfoNo
       );
     });
 
@@ -555,6 +574,11 @@
       removeImage.src = '../../../resources/assets/img/reservation/X.png';
       removeButton.appendChild(removeImage);
 
+      // infoNum(전송되어야 하는 데이터)
+      let infoNo = newRow.insertCell(5);
+      infoNo.setAttribute('name', 'wasteInfoNo');
+      infoNo.setAttribute('value', item.wasteInfoNo);
+
       // 제거 버튼에 클릭 이벤트를 추가하여 선택한 아이템을 제거합니다.
       removeButton.addEventListener('click', function () {
         removeFromSelectTable(item);
@@ -575,7 +599,7 @@
 
     // 폼 엘리먼트를 생성
     var form = document.createElement('form');
-    form.action = '/reservation/select/insert.do'; // 서버 엔드포인트 URL로 설정
+    form.action = '/reservation/select/insert.do';
     form.method = 'POST'; // POST 요청 사용
 
     // 선택한 아이템을 반복하여 폼 필드로 추가
@@ -583,10 +607,12 @@
       // 아이템 정보를 hidden으로 추가하기
       var itemInput = document.createElement('input');
       itemInput.type = 'hidden';
-      itemInput.name = 'selectedItems[' + index + '].wasteCategoryName'; // 서버에서 사용할 필드 이름
-      itemInput.value = item.wasteCategoryName;
+      itemInput.name = 'wasteInfoNoList'; // 서버에서 사용할 필드 이름
+      itemInput.value = item.wasteInfoNo;
       form.appendChild(itemInput);
     });
+
+    console.log(form);
 
     // 폼을 문서에 추가
     document.body.appendChild(form);
@@ -594,6 +620,7 @@
     console.log(form);
     // 폼을 자동으로 제출
     form.submit();
+
   }
 
   // "신청하기" 버튼을 클릭할 때 폼을 전송하는 이벤트 핸들러

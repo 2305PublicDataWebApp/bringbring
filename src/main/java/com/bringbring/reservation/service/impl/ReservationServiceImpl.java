@@ -28,4 +28,9 @@ public class ReservationServiceImpl implements ReservationService {
     public List<WasteCategory> selectWasteCategoryList() {
         return reservationStore.selectWasteCategoryList();
     }
+
+    @Override
+    public WasteData selectInfoNoData(Integer wasteInfoNo) {
+        return reservationStore.selectInfoNoData(wasteInfoNo);
+    }
 }
