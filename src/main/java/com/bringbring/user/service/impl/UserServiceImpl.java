@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public User selectOneByName(User user) {
-		return userStore.selectOneByName(user);
+	public User selectOneFindEmail(User user) {
+		return userStore.selectOneFindEmail(user);
 	}
 
 	@Override
@@ -49,6 +49,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int updateUser(User user) {
 		return userStore.updateUser(user);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public User selectOneFindPwd(User user) {
+		return userStore.selectOneFindPwd(user);
 	}
 
 }

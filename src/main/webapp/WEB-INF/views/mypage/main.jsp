@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -70,7 +71,7 @@
     <main>
         <div class="mypage_top m-auto rounded">
             <div class="mypage_top_div ps-5 pb-3 mt-3" style="height:75px;">
-                <h1 class="d-inline">일용자님</h1>
+                <h1 class="d-inline">${userOne.userName }</h1>
                 <div class="d-inline">
                     <a href="/user/update.do">
                         <img src="../resources/assets/img/mypage/mypage_gear.png" class="h-100 pb-3">
@@ -88,10 +89,10 @@
                     <div class="col-9 ps-5 pt-5">
                         <div class="mb-5">
                             <div class="d-inline">
-                                <img src="../resources/assets/img/mypage/Test_img2.png" class="mypage_profile_img">
+                                <img src="${userOne.userProfilePath }" class="mypage_profile_img rounded-circle">
                             </div>
                             <div class="d-inline align-middle">
-                                <h1 class="d-inline">일용자 </h1>
+                                <h1 class="d-inline">${userOne.userName } </h1>
                                 <p class="fs-4 d-inline">님 환영합니다~!</p>
                             </div>
                         </div>

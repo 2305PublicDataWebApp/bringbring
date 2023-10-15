@@ -27,6 +27,6 @@ public class User {
 	private String userProfileName;
 	private String userProfileRename;
 	private String userProfilePath;
-	private int userProfileLength;
+	private long userProfileLength;
 	private char isUserDeleted;
 }

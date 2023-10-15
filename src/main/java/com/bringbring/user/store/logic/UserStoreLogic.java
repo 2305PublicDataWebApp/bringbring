@@ -34,8 +34,8 @@ public class UserStoreLogic implements UserStore{
 	}
 
 	@Override
-	public User selectOneByName(User user) {
-		return sqlSession.selectOne("UserMapper.selectOneByName", user);
+	public User selectOneFindEmail(User user) {
+		return sqlSession.selectOne("UserMapper.selectOneFindEmail", user);
 	}
 
 	@Override
@@ -44,6 +44,11 @@ public class UserStoreLogic implements UserStore{
 	@Override
 	public int updateUser(User user) {
 		return sqlSession.update("UserMapper.updateUser", user);
+	}
+
+	@Override
+	public User selectOneFindPwd(User user) {
+		return sqlSession.selectOne("UserMapper.selectOneFindPwd", user);
 	}
 
 	
