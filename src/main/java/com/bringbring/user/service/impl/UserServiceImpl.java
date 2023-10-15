@@ -17,20 +17,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class UserServiceImpl implements UserService {
-	
+
 	private final UserStore userStore;
 	private final AdminService adminService;
+
 	@Override
 	@Transactional(readOnly = true)
 	public User selectCheckLogin(User user) {
 		return userStore.selectCheckLogin(user);
 	}
-	
-	@Override
-	public int selectListCount() { return userStore.selectListCount(); }
 
 	@Override
-	public List<User> selectUserList(PageInfo pInfo) { return userStore.selectUserList(pInfo);}
+	public int selectListCount() {
+		return userStore.selectListCount();
+	}
+
+	@Override
+	public List<User> selectUserList(PageInfo pInfo) {
+		return userStore.selectUserList(pInfo);
+	}
 
 	@Override
 	public int insertUser(User user) {
@@ -60,7 +65,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public User selectOneById(String userId) { return userStore.selectOneById(userId); }
+	public User selectOneById(String userId) {
+		return userStore.selectOneById(userId);
+	}
 
 	@Override
 	public int updateUser(User user) {

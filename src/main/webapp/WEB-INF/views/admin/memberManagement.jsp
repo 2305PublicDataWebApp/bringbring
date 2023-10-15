@@ -49,40 +49,8 @@
 
   <body>
 
-    <!-- ======= Header ======= -->
-    <header id="header" class="fixed-top ">
-      <div class="container d-flex align-items-center">
-        <img src="../resources/assets/img/main/cargo-truck-green.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
-        <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.jsp">브링브링</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
-        <nav id="navbar" class="navbar">
-          <ul>
-            <li><a class="nav-link scrollto" href="#about">배출안내</a></li>
-            <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
-            <li><a class="nav-link   scrollto" href="#portfolio">공지사항</a></li>
-            <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
-            <li class="dropdown"><a href="#"><span>관리자 메뉴</span> <i class="bi bi-chevron-down"></i></a>
-              <ul>
-                <!-- 최고 관리자 기능 -->
-                <li><a href="/admin/memberM.do">회원 관리</a></li>
-                <li><a href="/admin/reportM.do">신고 관리</a></li>
-                <li><a href="/admin/contactM.do">문의 관리</a></li>
-                <li><a href="/admin/reservationM.do">배출 관리</a></li>
-
-              </ul>
-            </li>
-            <li>
-              <button class="getstarted scrollto">로그인</button>
-              <!-- <a  href="#login">로그인</a> -->
-            </li>
-          </ul>
-          <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav><!-- .navbar -->
-
-      </div>
-    </header><!-- End Header -->
+  <!-- 헤더 -->
+    <jsp:include page="/include/header.jsp"></jsp:include>
 
     <div style="width: 100%;height: 74px;"></div>
     <!-- ======= Hero Section ======= -->
@@ -115,7 +83,7 @@
           </div>
           <div class="col-md-3">
             <div class="counter-box colored">
-                <h4>탈퇴한 회원 : 100</h4>
+                <h4>탈퇴한 회원 : ${deletedUser}</h4>
             </div>
           </div>
           <div class="col-md-3">
@@ -130,23 +98,27 @@
           <div>
             <h2>회원 리스트</h2>
           </div>
+          <form action="/admin/searchUser.do" method="GET">
           <div class="input-group" style="width: 400px; height: 30px;">
-            <select class="form-select" aria-label=".form-select-lg example" style="width: 20%;">
-              <option selected>아이디</option>
-              <option value="1">회원번호</option>
-              <option value="2">전화번호</option>
-              <option value="3">회원상태</option>
-            </select>
-            <input type="search" class="form-control rounded" placeholder="검색" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
-            <button type="button" class="btn btn-outline-success" id="user-serch-btn">검색</button>
+              <select name="searchCondition" class="form-select" aria-label=".form-select-lg example" style="width: 20%;">
+                <option value="all">전체</option>
+                <option value="id">아이디</option>
+                <option value="number">회원번호</option>
+                <option value="phone">전화번호</option>
+                <option value="userDeleted">탈퇴여부</option>
+              </select>
+              <input type="text" class="form-control rounded" placeholder="검색어를 입력하세요" name="searchKeyword" style="width: 50%;" />
+              <input type="submit" class="btn btn-outline-success" id="user-serch-btn" value="검색"></input>
           </div>
+            </form>
+
         </div>
         <br/>
         <div class="table-responsive">
           <table class="table align-middle text-center">
               <thead class="table-light align-middle">
                   <tr>
-                      <th>번호</th>
+                      <th>회원 번호</th>
                       <th>회원 아이디</th>
                       <th>핸드폰 번호</th>
                       <th>가입일</th>
@@ -168,7 +140,7 @@
                       </td>
                       <td>
                         <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                data-bs-target="#adminModal">
+                                data-bs-target="#adminModal"  data-user-no="${user.userNo}">
                           관리자 임명
                         </button>
                         <c:if test="${user.isUserDeleted.toString() eq 'Y'}">
@@ -179,14 +151,6 @@
 
                       </td>
                     </tr>
-  <%--                  <td id="adminData${user.userNo}" style="display: none;">--%>
-  <%--                      <!-- 동적으로 추가될 관리자 정보 입력 폼 -->--%>
-  <%--                      <input type="hidden" id="regionNo${user.userNo}" name="userNo" value="${user.userNo}">--%>
-  <%--                      <input type="text" id="regionNo${user.userNo}" name="regionNo" placeholder="관할지역을 입력하세요">--%>
-  <%--                      <input type="text" id="adminOrg${user.userNo}" name="adminOrg" placeholder="관리기관명을 입력하세요">--%>
-
-                    </td>
-                    <!-- 회원정보 수정 모달 -->
                     <div class="modal fade" id="adminModal" tabindex="-1"
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog">
@@ -198,22 +162,17 @@
                           </div>
                           <div class="modal-body">
                             <form class="sign-form" action="/admin/insertAdmin.do" method="post">
-                              <input type="hidden" name="userNo" value="${user.userNo}">
+                              <input type="text" name="userNo" id="userNoInput">
                               <div class="mb-3 custom-input">
                                 <label class="form-label">관할지역</label>
                                 <div class="input-group">
-                                  <select name="cityNo" id="cityNo" onchange="citySelect();" style="width: 100px;margin-right: 15px;">
+                                  <select name="cityNo" id="cityNo" style="width:100px;margin-right: 15px;">
                                     <c:forEach var="city" items="${cList}" >
                                       <option value="${city.cityNo}">${city.cityName}</option>
                                     </c:forEach>
                                     </select>
                                     <select name="regionNo" id="regionNo" style="width: 150px;">
                                     </select>
-  <%--                                <select name="regionNo" id="regionNo" onchange="citySelect();" style="width: 100px;margin-right: 15px;">--%>
-  <%--                                  <c:forEach var="region" items="${regionList}" >--%>
-  <%--                                    <option value="${region.regionNo}">${region.regionName}</option>--%>
-  <%--                                  </c:forEach>--%>
-  <%--                                </select>--%>
                                 </div>
                               </div>
                               <div class="mb-3 custom-input">
@@ -325,22 +284,12 @@
         });
       });
 
-      function showAdminForm(userNo) {
-        var adminFormContainer = document.getElementById("adminData" + userNo);
-        adminFormContainer.style.display = adminFormContainer.style.display === "none" ? "table-row" : "none";
-      }
-
-      function showAdminForm(userNo) {
-        // 모달 창 표시
-        $('#adminModal').modal('show');
-
-        // 모달 내용을 채워넣는 로직을 추가할 수 있습니다.
-        // userNo를 사용하여 필요한 데이터를 가져와 모달 내부에 채워넣을 수 있습니다.
-      }
-
       $(document).ready(function () {
         // 모달이 열릴 때의 이벤트 리스너 등록
         $('#adminModal').on('show.bs.modal', function (e) {
+          var button = $(e.relatedTarget);
+          var userNo = button.data('user-no');
+          $('#userNoInput').val(userNo);
           updateRegionOptions();
         });
 
@@ -361,6 +310,7 @@
               data: { cityNo: cityNo },
               type: "POST",
               success: function (data) {
+                console.log(data);
                 // 서버에서 받은 데이터로 리전 셀렉트 박스 업데이트
                 regionSelect.innerHTML = "";
                 for (var i = 0; i < data.length; i++) {

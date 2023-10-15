@@ -2,10 +2,12 @@ package com.bringbring.admin.store;
 
 import com.bringbring.admin.domain.Admin;
 import com.bringbring.admin.domain.AdminDetails;
+import com.bringbring.admin.domain.Role;
 import com.bringbring.common.PageInfo;
 import com.bringbring.user.domain.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AdminStore {
 
@@ -42,4 +44,68 @@ public interface AdminStore {
      * @return
      */
     int updateRole(int userNo);
+
+    /**
+     * 유저 넘버로 권한 조회 store
+     * @param userNo
+     * @return Role
+     */
+    Role selectRoleByNo(int userNo);
+
+    /**
+     * 탈퇴한 유저 수 조회 store
+     * @return int
+     */
+    int selectDeletedUserCount();
+
+    /**
+     * 관리자 중복 체크 store
+     * @param userNo
+     * @return int
+     */
+    int countAlreadyAdmin(int userNo);
+
+    /**
+     * 조건에 따라 키워드 수 검색 store (유저)
+     * @param paramMap
+     * @return int
+     */
+    int getListCount(Map<String, String> paramMap);
+
+    /**
+     * 조건에 따라 키워드로 유저 검색 Store
+     * @param pageInfo
+     * @param paramMap
+     * @return List<User>
+     */
+    List<User> searchUserByKeyword(PageInfo pageInfo, Map<String, String> paramMap);
+
+    /**
+     * 조건에 따라 키워드 수 검색 store (관리자)
+     * @param paramMap
+     * @return
+     */
+    int getListAdminCount(Map<String, String> paramMap);
+
+    /**
+     * 조건에 따라 키워드로 관리자 검색 Store
+     * @param pInfo
+     * @param paramMap
+     * @return
+     */
+    List<AdminDetails> searchAdminByKeyword(PageInfo pInfo, Map<String, String> paramMap);
+
+    /**
+     * 관리자 해임 store
+     * @param admin
+     * @return int
+     */
+    int deleteAdmin(AdminDetails adminDetails);
+
+    /**
+     * 롤 관리자 권한 박탈 store
+     * @param userNo
+     * @return int
+     */
+    int updateRoleDownGrade(int userNo);
 }

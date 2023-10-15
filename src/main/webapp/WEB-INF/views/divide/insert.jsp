@@ -378,7 +378,7 @@
 			  data: { cityNo: 1 },
 			  type: "POST",
 			  success: function(data) {
-				  var districtNo = document.getElementById("districtNo");
+				  var districtNo = document.getElementById("districtNo");v
 
 				  for (var i = 0; i < data.length; i++) {
 					  var option = document.createElement("option");
