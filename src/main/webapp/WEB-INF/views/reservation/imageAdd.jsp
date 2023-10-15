@@ -106,28 +106,30 @@
   <p class="title">선택할 물품 사진 추가</p>
   <hr>
   <div>
+    <form name="uploadForm" id="uploadForm" action="/reservation/addImage.do" method="post" enctype="multipart/form-data">
     <table class="table">
       <tbody>
       <c:forEach items="${wasteDataList}" var="item" varStatus="i">
-        <tr>
-          <th scope="row">선택 ${i.index + 1}</th>
-          <td>${item.wasteType.wasteTypeName}</td>
-          <td>${item.wasteInfo.wasteInfoStandard}</td>
-          <td>${item.wasteInfo.wasteInfoFee}원</td>
-          <input type="hidden" class="wasteInfoNo" name="wasteInfoNo" value="${item.wasteInfo.wasteInfoNo}"></input>
-<%--          <td>1개</td>--%>
-<%--          <td>--%>
-<%--            <button class="selectBtn"><img src="../../../resources/assets/img/reservation/X.png"></button>--%>
-<%--          </td>--%>
-        </tr>
+          <tr>
+            <th scope="row">선택 ${i.index + 1}</th>
+            <td>${item.wasteType.wasteTypeName}</td>
+            <td>${item.wasteInfo.wasteInfoStandard}</td>
+            <td>${item.wasteInfo.wasteInfoFee}원</td>
+
+  <%--          <td>1개</td>--%>
+  <%--          <td>--%>
+  <%--            <button class="selectBtn"><img src="../../../resources/assets/img/reservation/X.png"></button>--%>
+  <%--          </td>--%>
+          </tr>
         <tr class="pic-tr">
           <td style="width: 12%">
             <div class="file-Add-Td">
-              <div class="file-Add-Div">
+              <div class="file-Add-Div list formList" data-list-id="${i.index}">
                 <div class="pic-Add-Btn">
                   <img src="../../../resources/assets/img/reservation/pic-add.png">
                 </div>
                 <input type="file" id="uploadImg" class="uploadImg" accept="image/*" required multiple style="display: none;">
+                <input type="hidden" class="wasteInfoNo" name="wasteInfoNo" value="${item.wasteInfo.wasteInfoNo}">
                 <div class="pic-Add-Btn">
                   <button class="btn btn-outline-success pic-Add-Btn" onclick="document.getElementById('uploadImg').click()">사진 추가</button>
                 </div>
@@ -142,9 +144,10 @@
       </c:forEach>
       </tbody>
     </table>
+<%--    </form>--%>
   </div>
   <div id="submit_btn_box">
-    <button class="btn btn-success" id="submitBtn" type="button">사진 추가하기</button>
+    <button class="btn btn-success" id="submitBtn" type="button" onclick="submitFormBtn();">사진 추가하기</button>
   </div>
 </main>
 </div><!-- End Hero -->
@@ -376,6 +379,49 @@
     return li;
 
   }
+
+  function submitFormBtn() {
+    console.log("아");
+
+    const formData = new FormData();
+
+    // 모든 .formList 요소를 선택
+    const formLists = document.querySelectorAll('.formList');
+
+    // 각 .formList 요소를 순회하며 FormData에 파일 필드와 데이터 추가
+    formLists.forEach(function (formList) {
+      const listId = formList.dataset.listId; // data-list-id 속성을 사용하여 리스트 ID 가져옴
+      const fileInput = formList.querySelector('input[type="file"]');
+
+      // 파일이 선택되었는지 확인
+      if (fileInput.files.length > 0) {
+        formData.append("listId", listId);
+        formData.append("file", fileInput.files[0]);
+      }
+    });
+
+    // FormData를 현재 폼에 설정
+    const form = document.getElementById('uploadForm'); // 폼의 ID를 사용하여 폼 요소 선택
+
+    // FormData를 폼에 설정
+    form.enctype = 'multipart/form-data'; // 폼의 enctype을 설정
+    form.method = 'POST'; // 폼의 전송 방식을 설정
+
+    // FormData의 값을 폼 필드로 설정
+    formData.forEach(function(value, key) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = value;
+      form.appendChild(input);
+    });
+    console.log(form);
+
+    // 폼 제출
+    form.submit();
+  }
+
+
 </script>
 
 

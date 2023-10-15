@@ -63,4 +63,6 @@ public class ReservationController {
         return "redirect:/reservation/addImage.do";
     }
 
+//    public insertImages
+
 }
