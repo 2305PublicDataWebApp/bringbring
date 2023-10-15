@@ -101,13 +101,13 @@
         <form action="/admin/searchAdmin.do" method="GET">
         <div class="input-group" style="width: 400px; height: 30px;">
           <select name="searchCondition" class="form-select" aria-label=".form-select-lg example" style="width: 20%;">
-            <option value="all" selected>전체</option>
-            <option value="id">아이디</option>
-            <option value="number">회원번호</option>
-            <option value="phone">전화번호</option>
-            <option value="region">관활지역</option>
+            <option value="all" <c:if test="${searchCondition =='all'}">selected</c:if>>전체</option>
+            <option value="id" <c:if test="${searchCondition =='id'}">selected</c:if>>아이디</option>
+            <option value="number" <c:if test="${searchCondition =='number'}">selected</c:if>>회원번호</option>
+            <option value="phone" <c:if test="${searchCondition =='phone'}">selected</c:if>>전화번호</option>
+            <option value="region" <c:if test="${searchCondition =='region'}">selected</c:if>>관활지역</option>
           </select>
-          <input type="text" class="form-control rounded" placeholder="검색" name="searchKeyword" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
+          <input type="text" class="form-control rounded" placeholder="검색" name="searchKeyword" value="${searchKeyword}" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
           <input type="submit" class="btn btn-outline-success" id="user-serch-btn" value="검색"></input>
         </div>
         </form>
@@ -126,7 +126,7 @@
                 </tr>
             </thead>
           <tbody>
-          <c:forEach var="admin" items="${adminList}" varStatus="a">
+          <c:forEach var="admin" items="${searchList}" varStatus="a">
             <tr>
               <td>${admin.adminNo}</td>
               <td>${admin.userId}</td>
@@ -135,7 +135,7 @@
               <td>${admin.regionName}</td>
               <c:if test="${admin.adminNo ne 1}">
               <td>
-                <button class="btn btn-success" onclick="confirmAdminRemoval(${admin.adminNo})">관리자 해임</button>
+                <button class="btn btn-success" data-toggle="modal" data-target="#myModal${user.userNo}">관리자 해임</button>
               </td>
               </c:if>
             </tr>
@@ -146,11 +146,13 @@
           <nav aria-label="Page navigation exampler">
             <ul class="pagination">
               <c:if test="${pInfo.startNavi ne '1' }">
-                <li class="page-item"><a class="page-link" href="/admin/adminList.do?page=${pInfo.startNavi-1 }" class="first"><i class="bi bi-chevron-left"></i></a></li>
+                <li class="page-item"><a class="page-link" href="/admin/searchAdmin.do?page=${pInfo.startNavi-1 }" class="first"><i class="bi bi-chevron-left"></i></a></li>
               </c:if>
               <c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }" var="p">
-                <c:url var="pageUrl" value="/admin/adminList.do">
+                <c:url var="pageUrl" value="/admin/searchAdmin.do">
                   <c:param name="page" value="${p }"></c:param>
+                  <c:param name="searchCondition" value="${searchCondition}"/>
+                  <c:param name="searchKeyword" value="${searchKeyword}"/>
                 </c:url>
                 <c:choose>
                   <c:when test="${p == pInfo.currentPage}">
@@ -162,7 +164,7 @@
                 </c:choose>
               </c:forEach>
               <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount }">
-                <li class="page-item"><a class="page-link" href="/admin/adminList.do?page=${pInfo.endNavi+1 }" class="last"><i class="bi bi-chevron-right"></i></a></li>
+                <li class="page-item"><a class="page-link" href="/admin/searchAdmin.do?page=${pInfo.endNavi+1 }" class="last"><i class="bi bi-chevron-right"></i></a></li>
               </c:if>
             </ul>
           </nav>
@@ -239,28 +241,6 @@
 
       // 모달을 닫음
       $('#myModal' + userNo).modal('hide');
-    }
-
-    function confirmAdminRemoval(adminNo) {
-      var confirmation = confirm("정말로 관리자를 해임하시겠습니까?");
-      if (confirmation) {
-        // 확인을 눌렀을 때 서버로 데이터를 전송하는 AJAX 호출을 여기에 추가합니다.
-        // 예를 들어 jQuery를 사용하여 AJAX 호출을 수행할 수 있습니다.
-        $.ajax({
-          url: '/admin/adminDelete.do',
-          type: 'POST',
-          data: { adminNo: adminNo },
-          success: function(response) {
-            // 성공적으로 관리자를 해임한 경우의 처리를 여기에 추가합니다.
-            alert("관리자가 성공적으로 해임되었습니다.");
-            // 관리자 목록을 새로고침하거나 화면에서 해당 행을 제거하는 등의 동작을 수행할 수 있습니다.
-          },
-          error: function(error) {
-            // 오류 발생 시 처리를 여기에 추가합니다.
-            alert("오류가 발생하였습니다. 다시 시도해주세요.");
-          }
-        });
-      }
     }
   </script>
 

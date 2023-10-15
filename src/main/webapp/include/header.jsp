@@ -27,7 +27,7 @@
 	        <ul>
 	          <li><a class="nav-link scrollto" href="#about">배출안내</a></li>
 	          <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
-	          <li><a class="nav-link   scrollto" href="#portfolio">공지사항</a></li>
+	          <li><a class="nav-link scrollto" href="#portfolio">공지사항</a></li>
 	          <li><a class="nav-link scrollto" href="#team">문의게시판</a></li>
 	          <li><a class="nav-link scrollto" href="/divide/list.do">나눔게시판</a></li>
 	          
@@ -37,6 +37,19 @@
 				</li>
 			</c:if>
 			<c:if test="${sessionScope.sessionId ne null}">
+				<c:if test="${sessionScope.sessionUserGrade >= 2}">
+					<li class="dropdown"><a href="#"><span>관리자 메뉴</span> <i class="bi bi-chevron-down"></i></a>
+						<ul>
+							<c:if test="${sessionScope.sessionUserGrade eq 3}">
+								<!-- 최고 관리자 기능 -->
+								<li><a href="/admin/memberList.do">회원 관리</a></li>
+								<li><a href="/admin/reportM.do">신고 관리</a></li>
+							</c:if>
+							<li><a href="/admin/contactM.do">문의 관리</a></li>
+							<li><a href="/admin/reservationM.do">배출 관리</a></li>
+						</ul>
+					</li>
+				</c:if>
 				<li><a class="nav-link scrollto" href="/mypage/main.do">${sessionScope.sessionName }님</a></li>
 			    <li>
 			    	<button onclick="logout();" class="getstarted scrollto">로그아웃</button>
@@ -47,6 +60,9 @@
 	      </nav><!-- .navbar -->
 	
 	    </div>
-	  </header><!-- End Header -->
+	  	</header><!-- End Header -->
+	  	<script>
+	  		<jsp:include page="/include/loginJs.jsp"></jsp:include>
+		</script>
 	</body>
 </html>

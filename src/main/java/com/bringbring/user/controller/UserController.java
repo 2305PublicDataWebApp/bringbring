@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.bringbring.admin.domain.Role;
+import com.bringbring.admin.service.AdminService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +28,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/user")
 public class UserController {
 	
-	
+	private final AdminService adminService;
 	private final UserService userService;
-	
+
 	// 로그인 
 	@GetMapping("/login.do")
 	public String showLoginform() {
@@ -43,8 +45,13 @@ public class UserController {
 			, HttpSession session) {
 		User userOne = userService.selectCheckLogin(user);
 		if(userOne != null) {
+
+			// 권한 체크
+			Role role = adminService.selectRoleByNo(userOne.getUserNo());
 			session.setAttribute("sessionId", userOne.getUserId());
 			session.setAttribute("sessionName", userOne.getUserName());
+			session.setAttribute("sessionUserGrade", role.getUserGrade());
+			session.setAttribute("sessionRoleNo", role.getRoleNo());
 			//성공하면 메인화면
 			return "redirect:/";
 		} else {
@@ -77,7 +84,6 @@ public class UserController {
 	public String insertUser(
 			@ModelAttribute User user
 			, Model model) {
-		
 		int result = userService.insertUser(user);
 		if(result>0) {
 			return "user/login";
@@ -89,7 +95,7 @@ public class UserController {
 			return "common/error";
 		}
 	}
-	
+
 	// 아이디(이메일) 중복 확인
 	@ResponseBody
 	@PostMapping("/Email_check.do")
@@ -97,7 +103,7 @@ public class UserController {
 			@RequestParam("userId") String userId) {
 		Map<String, String> response = new HashMap<>();
 		
-		User userOne = userService.selectOneByuserId(userId);
+		User userOne = userService.selectOneById(userId);
 		if(userOne != null) {
 			if(userId.equals(userOne.getUserId())) {
 				response.put("unavailable", "이미 사용중인 이메일입니다.");
@@ -146,4 +152,45 @@ public class UserController {
 		return "";
 	}
 
+	// 회원정보 수정
+	@GetMapping("/update.do")
+	public String showUpdateUserForm(
+			Model model
+			, HttpSession session) {
+		
+		String userId = (String)session.getAttribute("sessionId");
+		User userOne = userService.selectOneById(userId);
+		if(userOne != null) {
+			model.addAttribute("userOne", userOne);
+			return "user/update";
+		}else {
+			//실패하면 에러페이지로 이동
+			model.addAttribute("msg", "정보를 찾을 수 없습니다.");
+			model.addAttribute("error", "회원정보 가져오기 실패");
+			model.addAttribute("url", "/mypage/main.do");
+			return "common/error";
+		}
+		
+	}
+	
+	// 회원정보 수정
+	@PostMapping("/update.do")
+	public String updateUser(
+			@ModelAttribute User user
+			, Model model) {
+		
+		int result = userService.updateUser(user);
+		if(result>0) {
+			User userOne = userService.selectOneById(user.getUserId());
+			model.addAttribute("userOne", userOne);
+			return "redirect:/user/update.do";
+		}else {
+			//실패하면 에러페이지로 이동
+			model.addAttribute("msg", "정보 수정이 완료되지 않았습니다.");
+			model.addAttribute("error", "정보 수정 실패");
+			model.addAttribute("url", "/mypage/main.do");
+			return "common/error";
+		}
+	}
+	
 }
