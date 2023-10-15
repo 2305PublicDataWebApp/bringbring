@@ -9,4 +9,6 @@ public interface ReservationService {
     List<WasteData> selectWasteList(String selectItem);
 
     List<WasteCategory> selectWasteCategoryList();
+
+    WasteData selectInfoNoData(Integer wasteInfoNo);
 }

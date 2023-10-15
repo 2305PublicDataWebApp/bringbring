@@ -24,4 +24,9 @@ public class ReservationStoreLogic implements ReservationStore {
     public List<WasteCategory> selectWasteCategoryList() {
         return sqlSession.selectList("ReservationMapper.selectWasteCategoryList");
     }
+
+    @Override
+    public WasteData selectInfoNoData(Integer wasteInfoNo) {
+        return sqlSession.selectOne("ReservationMapper.sleectInfoNoData", wasteInfoNo);
+    }
 }

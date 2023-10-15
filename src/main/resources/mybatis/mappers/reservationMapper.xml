@@ -24,12 +24,20 @@
 
 
     <select id="selectWasteList" resultMap="wasteDataResultMap">
-        select * from WASTE_CATEGORY_TBL JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO) JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
+        select * from WASTE_CATEGORY_TBL
+            JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
+            JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
         where WASTE_CATEGORY_NAME=#{wasteCategoryName}
 
     </select>
     <select id="selectWasteCategoryList" resultType="WasteCategory">
         select * from WASTE_CATEGORY_TBL
+    </select>
+    <select id="sleectInfoNoData" resultMap="wasteDataResultMap">
+        select * from WASTE_CATEGORY_TBL
+            JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
+            JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
+        where WASTE_INFO_NO=#{value}
     </select>
 
 </mapper>

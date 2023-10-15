@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -88,7 +89,7 @@
       <h4 style="color: rgb(189, 245, 229);">폐기물 사진을 추가해주세요</h4>
     </div>
     <div style="display: flex;flex-direction: row;justify-content: flex-end;">
-      <img src="../../../resources/assets/img/reservation/picture.png" style="width: 250px;" alt="">
+      <img class="addImg" src="../../../resources/assets/img/reservation/picture.png" style="width: 250px;" alt="">
     </div>
   </div>
 
@@ -105,26 +106,30 @@
   <p class="title">선택할 물품 사진 추가</p>
   <hr>
   <div>
+    <form name="uploadForm" id="uploadForm" action="/reservation/addImage.do" method="post" enctype="multipart/form-data">
     <table class="table">
       <tbody>
-        <tr>
-          <th scope="row">선택 1</th>
-          <td>거울</td>
-          <td>높이 50cm 이상</td>
-          <td>3,000원</td>
-          <td>1개</td>
-          <td>
-            <button class="selectBtn"><img src="../../../resources/assets/img/reservation/X.png"></button>
-          </td>
-        </tr>
-        <tr>
+      <c:forEach items="${wasteDataList}" var="item" varStatus="i">
+          <tr>
+            <th scope="row">선택 ${i.index + 1}</th>
+            <td>${item.wasteType.wasteTypeName}</td>
+            <td>${item.wasteInfo.wasteInfoStandard}</td>
+            <td>${item.wasteInfo.wasteInfoFee}원</td>
+
+  <%--          <td>1개</td>--%>
+  <%--          <td>--%>
+  <%--            <button class="selectBtn"><img src="../../../resources/assets/img/reservation/X.png"></button>--%>
+  <%--          </td>--%>
+          </tr>
+        <tr class="pic-tr">
           <td style="width: 12%">
             <div class="file-Add-Td">
-              <div class="file-Add-Div">
+              <div class="file-Add-Div list formList" data-list-id="${i.index}">
                 <div class="pic-Add-Btn">
                   <img src="../../../resources/assets/img/reservation/pic-add.png">
                 </div>
                 <input type="file" id="uploadImg" class="uploadImg" accept="image/*" required multiple style="display: none;">
+                <input type="hidden" class="wasteInfoNo" name="wasteInfoNo" value="${item.wasteInfo.wasteInfoNo}">
                 <div class="pic-Add-Btn">
                   <button class="btn btn-outline-success pic-Add-Btn" onclick="document.getElementById('uploadImg').click()">사진 추가</button>
                 </div>
@@ -136,12 +141,13 @@
             </ul>
           </td>
         </tr>
-
+      </c:forEach>
       </tbody>
     </table>
+<%--    </form>--%>
   </div>
   <div id="submit_btn_box">
-    <button class="btn btn-success" id="submitBtn" type="button">사진 추가하기</button>
+    <button class="btn btn-success" id="submitBtn" type="button" onclick="submitFormBtn();">사진 추가하기</button>
   </div>
 </main>
 </div><!-- End Hero -->
@@ -243,100 +249,86 @@
     "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
   });
 
-  const imgCount = {};
+  const imgCount = new Map();
   const imgUploads = document.querySelectorAll('.uploadImg');
 
-
   function handlerInputChange(e) {
-
     const tr = e.target.closest('tr');
 
-    if (!imgCount[tr]) {
-      imgCount[tr] = 0;
+    imgCount.set(tr, 0);
+
+    if (!imgCount.has(tr)) {
+      imgCount.set(tr, 0);
     }
-    imgCount[tr]++;
 
-    console.log('뭔데?????' + imgCount[tr]);
+    imgCount.set(tr, imgCount.get(tr) + 1);
 
-    if (imgCount[tr] > 2) {
+    console.log('뭔데?????' + imgCount.get(tr));
+
+    if (imgCount.get(tr) > 2) {
       alert('이미지는 물품당 2개까지 첨부할 수 있습니다.');
       e.target.value = '';
-      imgCount[tr] = 2;
+      imgCount.set(tr, 2);
     }
-
-
-
-
   }
 
-
-
-
   imgUploads.forEach((input) => {
-    input.addEventListener('change', handlerInputChange)
-  // => {
-  //     // const tr = e.target.closest('tr');
-  //     const imgPreview = tr.querySelector('.img-preview');
-  //
-  //     //
-  //     // if (!imgCount[tr]) {
-  //     //   imgCount[tr] = 0;
-  //     // }
-  //     // imgCount[tr]++;
-  //     //
-  //     // if (imgCount[tr] > 2) {
-  //     //   alert('이미지는 물품당 2개까지 첨부할 수 있습니다.');
-  //     //   input.value = '';
-  //     //   imgCount[tr] = 2;
-  //     // }
+    input.addEventListener('change', function (e) {
+      handlerInputChange(e);
     });
+  });
 
-  function getImgs(e) {
+  // 파일 업로드 버튼과 관련된 "사진 추가" 버튼들을 선택합니다.
+  const uploadBtns = document.querySelectorAll('.pic-Add-Btn');
+  uploadBtns.forEach((upload) => {
+    const relatedUpload = upload.previousElementSibling;
+    console.log("relatedUpload: ", relatedUpload);
+
+    if (relatedUpload) {
+      upload.addEventListener('click', () => relatedUpload.click());
+    }
+  });
+
+  const rows = document.querySelectorAll('.pic-tr');
+
+  rows.forEach((row) => {
+    const uploadImg = row.querySelector('.uploadImg');
+    const uploadBtn = row.querySelector('.pic-Add-Btn');
+    const preview = row.querySelector('.img-preview');
+
+    uploadBtn.addEventListener('click', () => uploadImg.click());
+    uploadImg.addEventListener('change', (e) => getImgs(e, preview));
+  });
+
+  function getImgs(e, preview) {
     const uploadFiles = [];
     const files = e.currentTarget.files;
-    const imgPreview = document.querySelector('.img-preview');
+    const imgPreview = e.target.closest('tr').querySelector('.img-preview');
     const docFrag = new DocumentFragment();
+
     // 파일 갯수 검사
-    if([...files].length >= 2 ){
+    if (imgPreview.children.length + e.currentTarget.files.length > 2) {
       alert('이미지는 물품당 2개까지 첨부할 수 있습니다.');
+      e.target.value = '';
       return;
     }
 
-    // 파일 타입 검사
-    for (let i = 0; i < [...files].length; i++) {
-      if (!files[i].type.match("image/.*")) {
-        alert('이미지 파일만 업로드가 가능합니다.');
-        return;
-      }
-    // 파일 처리
-    uploadFiles.push(files[i]);
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const preview = createElement(e, files[i]);
-      imgPreview.appendChild(preview);
-    };
-    reader.readAsDataURL(files[i]);
-
+    // 이미지 파일만 처리
+    const imageFiles = Array.from(e.currentTarget.files).filter(file => file.type.match("image/.*"));
+    for (const imageFile of imageFiles) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const preview = createElement(e, imageFile);
+        imgPreview.appendChild(preview);
+      };
+      reader.readAsDataURL(imageFile);
     }
+
+    // 이미지를 추가한 후 현재 파일 목록을 업데이트
+    e.target.value = ''; // 파일 input 초기화
   }
 
-
-  // function getValue() {
-  //   var table = document.getElementById("myTable");
-  //   var cells = table.getElementsByTagName("td");
-  //   for (var i = 0; i < cells.length; i++) {
-  //     var cellValue = cells[i].innerHTML; // or cells[i].textContent.
-  //     console.log(cellValue);
-  //   }
-  // }
-
-
-
   function createElement(e, file) {
-    // const tr = e.target.closest('tr');
-
-    // const tr = findClosestTR(e.target);
-
     let tr = e.target;
 
     for (let i = 0; i < tr.length; i++) {
@@ -344,118 +336,90 @@
       console.log(cellValue);
     }
 
-
-    // while (tr && tr.tagName !== 'TR') {
-    //   tr = tr.parentElement;
-    // }
-    // if (tr) {
-    //   // tr 엘리먼트를 사용할 수 있음
-    //   // ...
-    //   console.log("제발 있어라")
-    // } else {
-    //   console.error("TR 엘리먼트를 찾을 수 없음");
-    // }
-
-    // ...
-
-
-
-
     const li = document.createElement('li');
     const img = document.createElement('img');
+    const outDiv = document.createElement('div');
     const div = document.createElement('div');
     const deleteBtn = document.createElement('button');
     // const deleteBtnImg = document.createElement('img');
     img.setAttribute('src', e.target.result);
     img.setAttribute('data-file', file.name);
+    img.setAttribute('class', 'imgFile');
     div.appendChild(img);
-    img.style.width='100%';
-    img.style.height='100%';
-    img.style.borderRadius='10px';
+    div.setAttribute('class', 'imgDiv');
 
-    div.style.border='1px solid #ccc';
-    div.style.width='120px';
-    div.style.height='120px';
-    div.style.borderRadius='10px';
-    div.style.marginRight='10px';
+    outDiv.setAttribute('class', 'outDiv');
 
-    deleteBtn.textContent= '삭제하기';
+    outDiv.appendChild(div);
+
+    deleteBtn.textContent = '삭제하기';
     deleteBtn.className = 'deleteBtn';
-    deleteBtn.style.width="100px";
-    deleteBtn.style.height="28px";
-    deleteBtn.style.borderRadius="5px";
-    deleteBtn.style.border = "1px solid #198754";
-    deleteBtn.style.background = "#fff";
-    deleteBtn.style.color = "#198754";
-// 호버 스타일을 JavaScript로 추가합니다.
-    deleteBtn.addEventListener('mouseenter', () => {
-      deleteBtn.style.backgroundColor = '#198754'; // 호버 상태일 때의 배경 색상을 설정합니다.
-      deleteBtn.style.color = "#fff";
-    });
 
-    deleteBtn.addEventListener('mouseleave', () => {
-      deleteBtn.style.backgroundColor = '#fff'; // 호버 상태가 해제될 때 원래 배경 색상으로 복원합니다.
-      deleteBtn.style.color = "#198754";
-    });
-
-    div.appendChild(deleteBtn);
-    li.appendChild(div);
+    outDiv.appendChild(deleteBtn);
+    li.appendChild(outDiv);
 
     console.log(imgCount);
 
-    deleteBtn.addEventListener('click', () => {
+    deleteBtn.addEventListener('click', (e) => {
       li.remove();
+      // 더 많은 처리 작업이 있을 경우 여기에 추가
+      // 이미지를 삭제하면 files 배열에서도 해당 파일을 제거
+      const tr = e.target.closest('tr');
+      if (tr) {
+        const input = tr.querySelector('.uploadImg');
+        const files = input.files;
+        const fileIndex = Array.from(files).findIndex(f => f.name === file.name);
 
-      let trClicked = e.target;
-
-      while (trClicked && trClicked.tagName !== 'TR') {
-        trClicked = trClicked.parentElement;
+        if (fileIndex !== -1) {
+          files.splice(fileIndex, 1);
+        }
       }
+    });
 
-      if (trClicked) {
-        imgCount[trClicked]--; // trClicked 엘리먼트가 존재하면 imgCount[trClicked]를 감소
-      }
-
-      console.log('이미지' + imgCount);
-
-      // li.remove();
-      //
-      // if(tr) {
-      //   imgCount[tr]--;
-      //   console.log(imgCount);
-      // }
-
-    })
-
-    li.style.display="flex";
-    li.style.flexDirection = "column";
-    li.style.justifyContent = "center";
-    li.style.alignItems = "center";
     return li;
 
   }
 
+  function submitFormBtn() {
+    console.log("아");
 
-  // // 가장 가까운 tr 엘리먼트를 찾는 함수
-  // function findClosestTR(element) {
-  //   while (element) {
-  //     if (element.tagName === "TR") {
-  //       return element;
-  //     }
-  //     element = element.parentElement;
-  //   }
-  //   return null;
-  // }
+    const formData = new FormData();
 
-  // 이미지 버튼 눌렀을 때 파일 첨부 누르는 효과
-  const uploadImg = document.querySelector('.uploadImg');
-  const upload = document.querySelector('.pic-Add-Btn');
+    // 모든 .formList 요소를 선택
+    const formLists = document.querySelectorAll('.formList');
 
+    // 각 .formList 요소를 순회하며 FormData에 파일 필드와 데이터 추가
+    formLists.forEach(function (formList) {
+      const listId = formList.dataset.listId; // data-list-id 속성을 사용하여 리스트 ID 가져옴
+      const fileInput = formList.querySelector('input[type="file"]');
 
+      // 파일이 선택되었는지 확인
+      if (fileInput.files.length > 0) {
+        formData.append("listId", listId);
+        formData.append("file", fileInput.files[0]);
+      }
+    });
 
-  upload.addEventListener('click', () => uploadImg.click());
-  uploadImg.addEventListener('change', getImgs);
+    // FormData를 현재 폼에 설정
+    const form = document.getElementById('uploadForm'); // 폼의 ID를 사용하여 폼 요소 선택
 
+    // FormData를 폼에 설정
+    form.enctype = 'multipart/form-data'; // 폼의 enctype을 설정
+    form.method = 'POST'; // 폼의 전송 방식을 설정
+
+    // FormData의 값을 폼 필드로 설정
+    formData.forEach(function(value, key) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = value;
+      form.appendChild(input);
+    });
+    console.log(form);
+
+    // 폼 제출
+    form.submit();
+  }
 
 
 </script>

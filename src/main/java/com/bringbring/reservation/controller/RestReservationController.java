@@ -31,5 +31,31 @@ public class RestReservationController {
             return ResponseEntity.notFound().build();
         }
     }
+//    @PostMapping("/select/insert.do")
+//    public ResponseEntity<List<Integer>> insertWasteSelect(@RequestBody List<Integer> wasteInfoNo, HttpSession session) {
+//        if (!wasteInfoNo.isEmpty()) {
+//            System.out.println("wasteList = " + wasteInfoNo.size());
+//            session.setAttribute("wasteList", wasteInfoNo);
+//            return ResponseEntity.ok(wasteInfoNo);
+//        } else {
+//            // 데이터가 없는 경우 404 Not Found 상태 코드 반환
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
+//    @PostMapping("/select/insert.do")
+//    public String insertSelectedItems(@RequestParam("wasteInfoNoList") List<Integer> wasteInfoNoList, HttpSession session) {
+//        // wasteInfoNoList에 클라이언트에서 전송한 wasteInfoNo 값들이 List 형식으로 들어옵니다.
+//        session.setAttribute("selectedItems", wasteInfoNoList);
+//
+//        // wasteInfoNoList를 순회하면서 필요한 로직을 수행
+//        for (Integer wasteInfoNo : wasteInfoNoList) {
+//            // 여기에서 필요한 로직을 수행
+//            System.out.println("wasteInfoNo = " + wasteInfoNo);
+//        }
+//
+//        return "redirect:/reservation/addImage.do";
+//    }
+
 
 }
