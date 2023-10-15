@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class Region {
 	private int regionNo;
-	private int ciryNo;
+	private int cityNo;
 	private int districtNo;
 	private String regionName;
 }

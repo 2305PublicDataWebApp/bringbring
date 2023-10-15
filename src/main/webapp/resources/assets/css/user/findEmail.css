@@ -11,7 +11,8 @@ main div .invalid-feedback {
 }
 
 /* 이메일 찾는 확인 버튼 */
-main .check_email_input {
+main .check_email_input
+, main .findEmail_login_btn {
     height: 52px;
     color: white; 
     padding: 5px 20px;
@@ -28,7 +29,8 @@ main .check_email_input {
     background-color: #00AD7C !important;
     }
 
-main .check_email_input:active {
+main .check_email_input:active 
+, main .findEmail_login_btn:active{
     top: 1px;
     border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
     box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;

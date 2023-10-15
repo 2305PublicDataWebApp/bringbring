@@ -1,8 +1,14 @@
 package com.bringbring.divide.store.logic;
 
 import java.util.List;
+import java.util.Map;
 
+import com.bringbring.common.PageInfo;
+import com.bringbring.divide.domain.DetailData;
+import com.bringbring.divide.domain.Heart;
+import com.bringbring.divide.domain.ResponseData;
 import com.bringbring.region.domain.District;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -33,5 +39,42 @@ public class DivideStoreLogic implements DivideStore{
 	public void insertImage(Image image) {
 		sqlSession.insert("DivideMapper.insertImage", image);
 	}
+
+	@Override
+	public int getListCount() { return sqlSession.selectOne("DivideMapper.getListCount"); }
+
+    @Override
+    public List<ResponseData> selectResPonseDataList(PageInfo pInfo) {
+		int limit = pInfo.getRecordCountPerPage();
+		int offset = (pInfo.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return sqlSession.selectList("DivideMapper.selectResPonseDataList", pInfo, rowBounds);
+	}
+
+	@Override
+	public Divide selectOneByNo(int divNo) { return sqlSession.selectOne("DivideMapper.selectOneByNo", divNo); }
+
+	@Override
+	public DetailData selectDetailDataByNo(int divNo) { return sqlSession.selectOne("DivideMapper.selectDetailDataByNo", divNo); }
+
+	@Override
+	public List<Image> selectImageListByNo(int divNo) { return sqlSession.selectList("DivideMapper.selectImageListByNo", divNo); }
+
+	@Override
+	public Heart selectHeartByMap(Map<String, Object> map) { return sqlSession.selectOne("DivideMapper.selectHeartByMap", map); }
+
+	@Override
+	public int insertHeart(Heart heart) { return sqlSession.insert("DivideMapper.insertHeart", heart); }
+
+	@Override
+	public int deleteHeart(Heart heart) { return sqlSession.delete("DivideMapper.deleteHeart", heart); }
+
+	@Override
+	public int getHeartCount(int divNo) {
+		return sqlSession.selectOne("DivideMapper.getHeartCount", divNo);
+	}
+
+	@Override
+	public int deleteDivide(int divNo) { return sqlSession.update("DivideMapper.deleteDivide", divNo); }
 
 }

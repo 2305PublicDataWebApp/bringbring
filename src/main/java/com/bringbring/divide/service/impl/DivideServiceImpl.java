@@ -9,6 +9,10 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bringbring.common.PageInfo;
+import com.bringbring.divide.domain.DetailData;
+import com.bringbring.divide.domain.Heart;
+import com.bringbring.divide.domain.ResponseData;
 import com.bringbring.region.domain.District;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +39,7 @@ public class DivideServiceImpl implements DivideService{
 			// 1. 여행정보 db에 먼저 저장
 			result = divideStore.insertDivide(divide);
 			// 2. 저장성공시 파일업로드
-			if(result > 0) {									 
+			if(result > 0) {
 				int imageGroupNo = divideStore.selectMaxNo();
 				for(MultipartFile uploadFile : uploadFiles) {
 					if(uploadFile != null && !uploadFile.isEmpty()) {
@@ -45,19 +49,50 @@ public class DivideServiceImpl implements DivideService{
 						String imageRename = (String)imageMap.get("imageRename");
 						String imagePath = (String)imageMap.get("imagePath");
 						Image image = new Image("divide" ,imageGroupNo, imageName, imageRename, imagePath);
-						divideStore.insertImage(image);	
+						divideStore.insertImage(image);
 					}
 				}
 			}
 			return result;
 	}
 
-    private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
+	@Override
+	public int getListCount() { return divideStore.getListCount(); }
+
+	@Override
+	public List<ResponseData> selectResPonseDataList(PageInfo pInfo) { return divideStore.selectResPonseDataList(pInfo); }
+
+	@Override
+	public int selectMaxNo() { return divideStore.selectMaxNo(); }
+
+	@Override
+	public DetailData selectDetailDataByNo(int divNo) { return divideStore.selectDetailDataByNo(divNo); }
+
+	@Override
+	public List<Image> selectImageListByNo(int divNo) { return divideStore.selectImageListByNo(divNo); }
+
+	@Override
+	public Heart selectHeartByMap(Map<String, Object> map) { return divideStore.selectHeartByMap(map); }
+
+	@Override
+	public int insertHeart(Heart heart) { return divideStore.insertHeart(heart); }
+
+	@Override
+	public int deleteHeart(Heart heart) { return divideStore.deleteHeart(heart); }
+
+	@Override
+	public int getHeartCount(int divNo) { return divideStore.getHeartCount(divNo); }
+
+	@Override
+	public int deleteDivide(int divNo) { return divideStore.deleteDivide(divNo); }
+
+
+	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
 		Map<String, Object> fileInfoMap = new HashMap<String, Object>();
 		try {
 			//업로드 저장 경로생성
 			String root = request.getSession().getServletContext().getRealPath("resources");
-			String saveFolder = root + "\\dUploadFiles";
+			String saveFolder = root + "\\assets\\img\\dUploadFiles";
 			File folder = new File(saveFolder);
 			if(!folder.exists()) folder.mkdir();
 			
@@ -70,11 +105,11 @@ public class DivideServiceImpl implements DivideService{
 			//파일 객체 생성 후 실제파일저장
 			File file = new File(savePath);
 			uploadFile.transferTo(file);
-				
+			String dbPath = "../resources/assets/img/dUploadFiles/" + imageRename;
 			//Map 저장
 			fileInfoMap.put("imageName", imageName);
-			fileInfoMap.put("imageName", imageName);
-			fileInfoMap.put("imagePath", savePath);
+			fileInfoMap.put("imageRename", imageRename);
+			fileInfoMap.put("imagePath", dbPath);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

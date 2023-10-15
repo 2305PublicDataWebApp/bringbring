@@ -35,9 +35,38 @@ public interface UserStore {
 	public int insertUser(User user);
 
 	/**
-	 * 아이디(이메일) 찾기 store
+	 * 이름,전화번호로 회원정보 가져오기 store
+	 * @param user
+	 * @return User
+	 */
+	public User selectOneFindEmail(User user);
+
+  /**
+	 * 아이디로 회원정보 불러오기 store
+	 * @param userId
+	 * @return User
+	 */
+	public User selectOneById(String userId);
+
+	/**
+	 * 맥스 시퀀스 조회 store
 	 * @param user
 	 * @return
 	 */
-	public User selectOneByName(User user);
+	int selectOneByNo(User user);
+
+  /**
+	 * 회원정보 수정 store
+	 * @param user 
+	 * @return int
+	 */
+	public int updateUser(User user);
+
+	/**
+	 * 이름,전화번호, 아이디로 회원정보 가져오기 store
+	 * @param user
+	 * @return User
+	 */
+	public User selectOneFindPwd(User user);
+
 }

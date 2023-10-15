@@ -121,8 +121,10 @@
       <div id="listDiv">
         <table class="table" id="listTable">
           <tbody>
+
 <%--          Ajax 요청을 통해 리스트가 출력됨--%>
           <p id="listDiv-p">물품을 선택해주세요</p>
+
           </tbody>
         </table>
       </div>
@@ -318,9 +320,11 @@
           var label = document.createElement('label');
           label.setAttribute('class', 'align-items-center');
           label.setAttribute('for', item.wasteCategoryName);
+
           label.textContent = item.wasteCategoryName;
           firstCell.appendChild(checkbox);
           firstCell.appendChild(label);
+
           firstCell.className = "firstTd";
 
           // 두번째 열 (선택 상품)
@@ -343,9 +347,12 @@
           var pTag = document.createElement('p');
           var initialMatchingFee = item.wasteInfoFees[0];
           pTag.innerText = initialMatchingFee;
+
           pTag.setAttribute('class', 'listTableP');
+
           thirdCell.appendChild(pTag);
           thirdCell.className = "thirdTd";
+
 
           // 정보를 보내기 위한 태그 추가
           var noInfoCell = document.createElement('td');
@@ -401,6 +408,7 @@
             count("plus", this, { wasteCategoryName, wasteInfoStandard, wasteInfoFee, wasteInfoNo});
           });
 
+
           // 이미지 엘리먼트 생성
           var plusImage = document.createElement('img');
           plusImage.setAttribute('src', '../../../resources/assets/img/reservation/plus.png');
@@ -410,6 +418,7 @@
           numberInput.setAttribute('type', 'number');
           numberInput.setAttribute('min', '0');
           numberInput.setAttribute('max', '10');
+
           numberInput.setAttribute('value', '0');
 
           // 버튼과 이미지 엘리먼트를 버튼 엘리먼트에 추가
@@ -420,6 +429,7 @@
           fourthCell.appendChild(minusButton);
           fourthCell.appendChild(numberInput);
           fourthCell.appendChild(plusButton);
+
           fourthCell.className = 'fourthTd';
 
 
@@ -451,6 +461,7 @@
           });
 
           // 이벤트 리스너 연결
+
           selectElement.addEventListener('change', createChangeListener(pTag, item, selectElement));
 
           trTag.appendChild(firstCell);
@@ -627,6 +638,7 @@
   document.getElementById('submitBtn').addEventListener('click', function() {
     sendSelectedItems();
   });
+
 
 
 </script>

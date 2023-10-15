@@ -2,6 +2,7 @@ package com.bringbring.region.store.logic;
 
 import java.util.List;
 
+import com.bringbring.region.domain.Region;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -22,4 +23,7 @@ public class RegionStoreLogic implements RegionStore {
 
 	@Override
 	public List<District> selectDistrictList(int cityNo) { return sqlSession.selectList("RegionMapper.selectDistrictList", cityNo); }
+
+	@Override
+	public List<Region> selectRegionList(int cityNo) { return sqlSession.selectList("RegionMapper.selectRegionList", cityNo); }
 }

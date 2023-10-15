@@ -3,11 +3,11 @@
 <mapper namespace="UserMapper">
 
   	<select id="selectCheckLogin" resultType="User">
-  		SELECT * FROM USER_TBL WHERE USER_ID = #{userId } AND USER_PWD = #{userPwd }
+  		SELECT * FROM USER_TBL WHERE USER_ID = #{userId } AND USER_PWD = #{userPwd } AND IS_USER_DELETED = 'N'
   	</select>
   	
   	<select id="selectUserList" resultType="User">
-	    SELECT * FROM USER_TBL ORDER BY USER_NO DESC
+	    SELECT * FROM USER_TBL ORDER BY USER_NO
 	</select>
 	
 	<select id="selectListCount" resultType="_int">
@@ -16,10 +16,25 @@
 	
 	<insert id="insertUser">
 		INSERT INTO USER_TBL VALUES (SEQ_USER_NO.NEXTVAL, #{userId }, #{userPwd }, #{userName }, #{userPhone }, #{userPostCode }, #{userAddress }, #{userAddressDetail }
-									, DEFAULT, NULL, NULL,NULL,NULL,DEFAULT)
+									, DEFAULT, #{userProfileName }, #{userProfileRename }, #{userProfilePath }, #{userProfileLength }, DEFAULT)
 	</insert>
 	
-	<select id="selectOneByName" resultType="User">
-		SELECT * FROM USER_TBL WHERE USER_NAME = #{userName } AND USER_PHONE = #{userPhone }
+	<select id="selectOneFindEmail" resultType="User">
+		SELECT * FROM USER_TBL WHERE USER_NAME = #{userName } AND USER_PHONE = #{userPhone } AND IS_USER_DELETED = 'N'
 	</select>
+
+	<select id="selectOneById" resultType="User">
+		SELECT * FROM USER_TBL WHERE USER_ID = #{userId} AND IS_USER_DELETED = 'N'
+	</select>
+	
+	<update id="updateUser">
+		UPDATE USER_TBL SET USER_NAME = #{userName }, USER_PHONE = #{userPhone }, USER_POST_CODE = #{userPostCode }, USER_ADDRESS = #{userAddress }, USER_ADDRESS_DETAIL = #{userAddressDetail }
+							, USER_PROFILE_NAME = #{userProfileName }, USER_PROFILE_RENAME = #{userProfileRename }, USER_PROFILE_PATH = #{userProfilePath }, USER_PROFILE_LENGTH = #{userProfileLength }
+							WHERE USER_ID = #{userId }
+	</update>
+	
+	<select id="selectOneFindPwd" resultType="User">
+		SELECT * FROM USER_TBL WHERE USER_NAME = #{userName } AND USER_PHONE = #{userPhone } AND USER_ID = #{userId } AND IS_USER_DELETED = 'N'
+	</select>
+
 </mapper>

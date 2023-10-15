@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bringbring.region.domain.City;
 import com.bringbring.region.domain.District;
+import com.bringbring.region.domain.Region;
 
 public interface RegionStore {
 
@@ -11,4 +12,9 @@ public interface RegionStore {
 
 	List<District> selectDistrictList(int cityNo);
 
+	/**
+	 * 지역 조회 store
+	 * @return
+	 */
+    List<Region> selectRegionList(int cityNo);
 }
