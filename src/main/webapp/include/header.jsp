@@ -11,14 +11,15 @@
 		<link
 		  href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
 		  rel="stylesheet">
-		  
+
+		<link href="../resources/assets/css/common.css" rel="stylesheet">
 	</head>
 	<body>
 	  <!-- ======= Header ======= -->
 	  <header id="header" class="fixed-top ">
 	    <div class="container d-flex align-items-center">
-	      <img src="../resources/assets/img/main/icon-title.png" style="width: 26px;border-radius: 3px;margin: 0px 5px 3px 0px;" alt="">
-	      <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.html">브링브링</a></h1>
+	      <img src="../resources/assets/img/main/icon-title.png" style="width: 27px;margin: 1px 5px 5px 0px;" alt="">
+	      <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="/">브링브링</a></h1>
 	      <!-- Uncomment below if you prefer to use an image logo -->
 	      <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 	

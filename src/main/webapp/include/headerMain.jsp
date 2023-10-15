@@ -18,7 +18,7 @@
 	  <header id="header" class="fixed-top ">
 	    <div class="container d-flex align-items-center">
 	      <img src="../resources/assets/img/main/cargo-truck.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
-	      <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.html">브링브링</a></h1>
+	      <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="/">브링브링</a></h1>
 	
 	      <nav id="navbar" class="navbar">
 	        <ul>
