@@ -1,12 +1,15 @@
 package com.bringbring.divide.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.DetailData;
+import com.bringbring.divide.domain.Heart;
 import com.bringbring.divide.domain.ResponseData;
 import com.bringbring.image.domain.Image;
 import com.bringbring.region.domain.District;
@@ -62,7 +65,7 @@ public class DivideController {
 		int result = divideService.insertDivide(divide, uploadFiles, request);
 		if(result > 0) {
 			int max = divideService.selectMaxNo();
-			mv.setViewName("divide/detail?divNo="+max);
+			mv.setViewName("redirect:/divide/detail.do?divNo="+max);
 			return mv;
 		}else {
 			mv.setViewName("/");
@@ -72,10 +75,19 @@ public class DivideController {
 	
 	@GetMapping("/detail.do")
 	public ModelAndView showDivideDetail(ModelAndView mv
-			, int divNo) {
+			, int divNo
+			, HttpSession httpSession) {
 
 		List<Image> imageList = divideService.selectImageListByNo(divNo);
 		DetailData detailData = divideService.selectDetailDataByNo(divNo);
+		Map<String, Object> map = new HashMap<String, Object>();
+		String userId = (String)httpSession.getAttribute("sessionId");
+		if (userId != null && !userId.isEmpty()) {
+			map.put("sessionId", userId);
+			map.put("divNo", divNo);
+			Heart heart = divideService.selectHeartByMap(map);
+			mv.addObject("heart", heart);
+		}
 //		date.format(DateTimeFormatter.ISO_DATE);
 		mv.setViewName("divide/detail");
 		mv.addObject("iList", imageList).addObject("dData", detailData);

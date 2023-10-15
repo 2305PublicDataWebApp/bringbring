@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.DetailData;
+import com.bringbring.divide.domain.Heart;
 import com.bringbring.divide.domain.ResponseData;
 import com.bringbring.region.domain.District;
 import org.springframework.stereotype.Service;
@@ -69,6 +70,15 @@ public class DivideServiceImpl implements DivideService{
 
 	@Override
 	public List<Image> selectImageListByNo(int divNo) { return divideStore.selectImageListByNo(divNo); }
+
+	@Override
+	public Heart selectHeartByMap(Map<String, Object> map) { return divideStore.selectHeartByMap(map); }
+
+	@Override
+	public int insertHeart(Heart heart) { return divideStore.insertHeart(heart); }
+
+	@Override
+	public int deleteHeart(int heartNo) { return divideStore.deleteHeart(heartNo); }
 
 
 	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {

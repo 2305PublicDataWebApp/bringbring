@@ -66,6 +66,7 @@
 		<id property="heartNo" column="HEART_NO" />
 		<result property="userNo" column="USER_NO" />
 		<result property="divNo" column="DIV_NO" />
+		<result property="heartCount" column="heartCount" />
 	</resultMap>
 
 	<resultMap id="user" type="com.bringbring.user.domain.User">
@@ -128,6 +129,11 @@
 	<select id="selectOneByNo" resultType="Divide">
 		SELECT * FROM DIVIDE_TBL WHERE DIV_NO = #{value}
 	</select>
+	<select id="selectHeartByMap" resultType="Heart">
+		SELECT A.*, B.USER_ID AS userId FROM HEART_TBL A
+		JOIN USER_TBL B ON A.USER_NO = B.USER_NO
+		WHERE DIV_NO = #{divNo} AND B.USER_ID= #{sessionId}
+	</select>
   	<insert id="insertDivide">
   		INSERT INTO DIVIDE_TBL VALUES (
       SEQ_DIV_NO.NEXTVAL , #{userNo}, #{wasteCategoryNo}, #{divTitle}, #{divContent},
@@ -140,4 +146,10 @@
       SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath}
     	)
   	</insert>
+	<insert id="insertHeart">
+		INSERT INTO HEART_TBL VALUES(SEQ_HEART_NO.NEXTVAL, #{userNo}, #{divNo})
+	</insert>
+	<delete id="deleteHeart">
+		DELETE FROM HEART_TBL WHERE HEART_NO = #{value}
+	</delete>
 </mapper>

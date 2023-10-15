@@ -343,6 +343,7 @@
 
 				// 마커를 클릭한 위치에 표시합니다
 				marker.setPosition(mouseEvent.latLng);
+				console.log(mouseEvent.latLng);
 				document.getElementById("coordinateX").value = mouseEvent.latLng.La;
 				console.log(mouseEvent.latLng.La);
 				document.getElementById("coordinateY").value = mouseEvent.latLng.Ma;
