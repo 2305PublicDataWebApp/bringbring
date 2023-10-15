@@ -80,10 +80,10 @@
 
             <div class="sns_buttons_div">
                 <button type="button" class="kakao_login_btn rounded">
-                    <img src="../resources/assets/img/member/kakao_login_btn.png" alt="카카오 로그인" onclick="">
+                    <img src="../resources/assets/img/user/kakao_login_btn.png" alt="카카오 로그인" onclick="">
                 </button><br>
                 <button type="button" class="naver_login_btn rounded">
-                    <img src="../resources/assets/img/member/naver_login_btn.png" alt="네이버 로그인" onclick="">
+                    <img src="../resources/assets/img/user/naver_login_btn.png" alt="네이버 로그인" onclick="">
                 </button>
             </div>
         </div>

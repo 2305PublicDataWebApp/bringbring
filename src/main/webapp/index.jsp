@@ -276,6 +276,7 @@
           <button class="carousel-control-next" type="button" data-bs-target="#weatherCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">다음</span>
+          </button>
       </div>
   </div>    
   </section>
@@ -416,6 +417,7 @@
             <!-- <div class="swiper-pagination"></div> -->
           </div>
         </div>
+      </div>
     </section><!-- End Clients Section -->
     <!-- ======= 서비스 ======= -->
     <section id="services" class="services section-bg">
@@ -559,7 +561,7 @@
           </div>
 
           <div class="col-lg-5 align-items-stretch order-1 order-lg-2 img"
-            style='background-image: url("../resources/assets/img/main/13e4612f2a80c.png")' data-aos="zoom-in" data-aos-delay="150">&nbsp;</div>
+            style='background-image: url("/resources/assets/img/main/13e4612f2a80c.png")' data-aos="zoom-in" data-aos-delay="150">&nbsp;</div>
         </div>
 
       </div>

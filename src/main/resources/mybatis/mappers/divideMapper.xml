@@ -3,12 +3,148 @@
 
 <mapper namespace="DivideMapper">
 
+	<resultMap id="responseData" type="com.bringbring.divide.domain.ResponseData">
+		<association property="divide" resultMap="divide"/>
+		<association property="image" resultMap="image"/>
+		<association property="city" resultMap="city"/>
+		<association property="district" resultMap="district"/>
+		<association property="wasteCategory" resultMap="wasteCategory"/>
+		<association property="user" resultMap="user"/>
+		<association property="heart" resultMap="heart"/>
+	</resultMap>
+
+	<resultMap id="detailData" type="com.bringbring.divide.domain.DetailData">
+		<association property="divide" resultMap="divide"/>
+		<association property="user" resultMap="user"/>
+		<association property="heart" resultMap="heart"/>
+		<association property="city" resultMap="city"/>
+		<association property="district" resultMap="district"/>
+		<association property="wasteCategory" resultMap="wasteCategory"/>
+	</resultMap>
+
+	<resultMap id="divide" type="com.bringbring.divide.domain.Divide">
+		<id property="divNo" column="DIV_NO" />
+		<result property="userNo" column="USER_NO" />
+		<result property="divTitle" column="DIV_TITLE" />
+		<result property="divContent" column="DIV_CONTENT" />
+		<result property="wasteCategoryNo" column="WASTE_CATEGORY_NO" />
+		<result property="divCreateDate" column="DIV_CREATE_DATE" />
+		<result property="divUpdateDate" column="DIV_UPDATE_DATE" />
+		<result property="divYn" column="DIV_YN" />
+		<result property="viewCount" column="VIEW_COUNT" />
+		<result property="isDivDeleted" column="IS_DIV_DELETED" />
+		<result property="cityNo" column="CITY_NO" />
+		<result property="districtNo" column="DISTRICT_NO" />
+		<result property="divXCoordinate" column="DIV_X_COORDINATE" />
+		<result property="divYCoordinate" column="DIV_Y_COORDINATE" />
+		<result property="heartCount" column="heartCount" />
+	</resultMap>
+
+	<resultMap id="image" type="com.bringbring.image.domain.Image">
+		<id property="imageNo" column="IMAGE_NO" />
+		<result property="tableName" column="TABLE_NAME" />
+		<result property="imageGroupNo" column="IMAGE_GROUP_NO" />
+		<result property="imageName" column="IMAGE_NAME" />
+		<result property="imageRename" column="IMAGE_RENAME" />
+		<result property="imagePath" column="IMAGE_PATH" />
+	</resultMap>
+
+	<resultMap id="city" type="com.bringbring.region.domain.City">
+		<id property="cityNo" column="CITY_NO" />
+		<result property="cityName" column="CITY_NAME" />
+	</resultMap>
+
+	<resultMap id="district" type="com.bringbring.region.domain.District">
+		<id property="districtNo" column="DISTRICT_NO" />
+		<result property="districtName" column="DISTRICT_NAME" />
+		<result property="cityNo" column="CITY_NO" />
+	</resultMap>
+
+	<resultMap id="wasteCategory" type="com.bringbring.reservation.domain.WasteCategory">
+		<id property="wasteCategoryNo" column="WASTE_CATEGORY_NO" />
+		<result property="wasteCategoryName" column="WASTE_CATEGORY_NAME" />
+	</resultMap>
+
+	<resultMap id="heart" type="com.bringbring.divide.domain.Heart">
+		<id property="heartNo" column="HEART_NO" />
+		<result property="userNo" column="USER_NO" />
+		<result property="divNo" column="DIV_NO" />
+		<result property="heartUserNo" column="heartUserNo" />
+	</resultMap>
+
+	<resultMap id="user" type="com.bringbring.user.domain.User">
+		<id property="userNo" column="USER_NO" />
+		<result property="userId" column="USER_ID" />
+		<result property="userPwd" column="USER_PWD" />
+		<result property="userName" column="USER_NAME" />
+		<result property="userPhone" column="USER_PHONE" />
+		<result property="userPostCode" column="USER_POSTCODE" />
+		<result property="userAddress" column="USER_ADDRESS" />
+		<result property="userAddressDetail" column="USER_ADDRESS_DETAIL" />
+		<result property="userCreateDate" column="USER_CREATE_DATE" />
+		<result property="userProfileName" column="USER_PROFILE_NAME" />
+		<result property="userProfileRename" column="USER_PROFILE_RENAME" />
+		<result property="userProfilePath" column="USER_PROFILE_PATH" />
+		<result property="userProfileLength" column="USER_PROFILE_LENGTH" />
+		<result property="isUserDeleted" column="IS_USER_DELETED" />
+	</resultMap>
+
+	<select id="selectDetailDataByNo" resultMap="detailData">
+		SELECT A.*, E.HEART_NO, C.CITY_NAME , D.DISTRICT_NAME, F.WASTE_CATEGORY_NAME, G.*
+			 , (SELECT COUNT(*) FROM HEART_TBL WHERE DIV_NO = #{value}) AS heartCount
+		FROM DIVIDE_TBL A
+			 JOIN CITY_TBL C ON A.CITY_NO = C.CITY_NO
+			 JOIN DISTRICT_TBL D ON A.DISTRICT_NO = D.DISTRICT_NO
+			 LEFT OUTER JOIN HEART_TBL E ON A.DIV_NO = E.DIV_NO
+			 JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
+			 LEFT JOIN USER_TBL G ON A.USER_NO = G.USER_NO
+		WHERE A.DIV_NO = #{value}
+	</select>
+	<select id="selectResPonseDataList" resultMap="responseData">
+		SELECT A.*, B.*, C.*, D.*, E.*, F.*, G.USER_NO AS heartUserNo, (SELECT COUNT(*) FROM HEART_TBL H WHERE H.DIV_NO = A.DIV_NO) AS heartCount
+		FROM DIVIDE_TBL A
+			 JOIN DISTRICT_TBL B ON A.DISTRICT_NO = B.DISTRICT_NO
+			 JOIN CITY_TBL C ON A.CITY_NO = C.CITY_NO
+			 JOIN IMAGE_TBL D ON A.DIV_NO = D.IMAGE_GROUP_NO
+			 JOIN USER_TBL E ON A.USER_NO = E.USER_NO
+			 JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
+			 LEFT JOIN HEART_TBL G ON A.DIV_NO = G.DIV_NO
+		WHERE A.IS_DIV_DELETED = 'N'
+		AND D.IMAGE_NO = (SELECT MIN(IMAGE_NO) FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = A.DIV_NO)
+		ORDER BY A.DIV_CREATE_DATE DESC
+	</select>
   	<select id="selectMaxNo" resultType="_int">
-  		SELECT MAX(IMAGE_GROUP_NO) FROM DIVIDE_TBL;
+  		SELECT MAX(DIV_NO) FROM DIVIDE_TBL
   	</select>
+	<select id="getListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM DIVIDE_TBL A
+				 JOIN DISTRICT_TBL D ON A.DISTRICT_NO = D.DISTRICT_NO
+				 JOIN CITY_TBL C ON A.CITY_NO = C.CITY_NO
+				 JOIN IMAGE_TBL B ON A.DIV_NO = B.IMAGE_GROUP_NO
+				 JOIN WASTE_CATEGORY_TBL E ON A.WASTE_CATEGORY_NO = E.WASTE_CATEGORY_NO
+		WHERE A.IS_DIV_DELETED = 'N' AND B.IMAGE_NO = (SELECT MIN(IMAGE_NO) FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = A.DIV_NO)
+	</select>
+	<select id="getHeartCount" resultType="_int">
+		SELECT COUNT(*) FROM HEART_TBL WHERE DIV_NO = #{value}
+	</select>
+	<select id="selectDivideList" resultType="Divide">
+		SELECT * FROM DIVIDE_TBL
+	</select>
+	<select id="selectImageListByNo" resultType="Image">
+		SELECT * FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = #{value}
+	</select>
+	<select id="selectOneByNo" resultType="Divide">
+		SELECT * FROM DIVIDE_TBL WHERE DIV_NO = #{value}
+	</select>
+	<select id="selectHeartByMap" resultType="Heart">
+		SELECT A.*, B.USER_ID AS userId FROM HEART_TBL A
+		JOIN USER_TBL B ON A.USER_NO = B.USER_NO
+		WHERE DIV_NO = #{divNo} AND B.USER_ID= #{sessionId}
+	</select>
   	<insert id="insertDivide">
   		INSERT INTO DIVIDE_TBL VALUES (
-      SEQ_DIV_NO.NEXTVAL , #{userNo}, #{divTitle}, #{divContent}, #{wasteCategoryNo},
+      SEQ_DIV_NO.NEXTVAL , #{userNo}, #{wasteCategoryNo}, #{divTitle}, #{divContent},
       DEFAULT, DEFAULT, DEFAULT, 0, DEFAULT,
       #{cityNo}, #{districtNo}, #{divXCoordinate}, #{divYCoordinate}
     	)
@@ -18,4 +154,13 @@
       SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath}
     	)
   	</insert>
+	<insert id="insertHeart">
+		INSERT INTO HEART_TBL VALUES(SEQ_HEART_NO.NEXTVAL, #{userNo}, #{divNo})
+	</insert>
+	<delete id="deleteHeart">
+		DELETE FROM HEART_TBL WHERE DIV_NO = #{divNo} AND USER_NO = #{userNo}
+	</delete>
+	<update id="deleteDivide">
+		UPDATE DIVIDE_TBL SET IS_DIV_DELETED = 'Y' WHERE DIV_NO = #{value}
+	</update>
 </mapper>

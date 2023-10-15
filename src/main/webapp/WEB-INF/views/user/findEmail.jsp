@@ -78,13 +78,10 @@
                         번호를 입력해주세요.
                     </div>
                 </div>
-                <input type="submit" id="findEmail_btn" class="check_email_input w-100 text-center fw-bold fs-4 rounded" value="확인"
-                        data-bs-toggle="modal" data-bs-target="#static_findEmail_modal" >
+                <input type="submit" id="findEmail_btn" class="check_email_input w-100 text-center fw-bold fs-4 rounded" value="확인">
         
             </form>
             <!-- Modal -->
-            <!-- <div class="modal fade" id="static_findEmail_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="static_findEmail_modal_Label" aria-hidden="true"> -->
             <div class="modal fade" id="static_findEmail_modal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" tabindex="-1"
                 aria-labelledby="static_findEmail_modal_Label" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -97,8 +94,8 @@
 							<p id="modal_body_result"></p>
 						</div>
 						<div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                            <button type="button" class="btn btn-primary">로그인</button>
+<!--                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> -->
+                            <button type="button" onclick="showLoginForm();" class="btn btn-primary findEmail_login_btn">로그인</button>
                         </div>
                     </div>
                 </div>
@@ -133,41 +130,42 @@
             $('#form_findEmail').on("submit", function (event) {
                 event.preventDefault(); // 폼 제출 방지
 
-                if (!this.checkValidity()) {
-                    // 폼 유효성 검사가 실패하면
-                    return;
-                }
-
-                // 폼 데이터 가져오기
-				var userName = $('#floatingName').val();
-    			var userPhone = $('#floatingPhone').val();
-    			
-                // Ajax 요청 보내기
-                $.ajax({
-                    url: '/user/findEmail.do', // 서버 엔드포인트 URL 설정
-                    type: 'POST', // HTTP 요청 메서드 설정 (POST)
-                    data: { "userName" : userName, "userPhone" : userPhone },
-                    success: function (response) {
-                        // Ajax 요청 성공 시 실행할 코드
-                        console.log(response);
-
-                        // 서버에서 받은 데이터를 모달로 표시
-                        if(response.userId != null) {
-	                        $('#modal_body_result').html("아이디 : " + response.userId);                    	
-                        }else if(response.error != null) {
-                        	$('#modal_body_result').html(response.error); 
-                        }
-
-                        // 모달 열기
-                        $('#static_findEmail_modal').modal('show');
-                    },
-                    error: function () {
-                        // Ajax 요청 실패 시 실행할 코드
-                        alert('Ajax 오류! 관리자에게 문의하세요.');
-                    }
-                });
-                
-                // 부트스트랩 유효성 클래스 추가
+//                 if (!this.checkValidity()) {
+//                     // 폼 유효성 검사가 실패하면
+//                     return;
+//                 }
+                if(this.checkValidity()){                	
+                	// 폼 데이터 가져오기
+					var userName = $('#floatingName').val();
+	    			var userPhone = $('#floatingPhone').val();
+	    			
+	                // Ajax 요청 보내기
+	                $.ajax({
+	                    url: '/user/findEmail.do', // 서버 엔드포인트 URL 설정
+	                    type: 'POST', // HTTP 요청 메서드 설정 (POST)
+	                    data: { "userName" : userName, "userPhone" : userPhone },
+	                    success: function (response) {
+	                        // Ajax 요청 성공 시 실행할 코드
+	                        console.log(response);
+	
+	                        // 서버에서 받은 데이터를 모달로 표시
+	                        if(response.userId != null) {
+		                        $('#modal_body_result').html("아이디 : " + response.userId);                    	
+	                        }else if(response.error != null) {
+	                        	$('#modal_body_result').html(response.error); 
+	                        }
+	
+	                        // 모달 열기
+	                        $('#static_findEmail_modal').modal('show');
+	                    },
+	                    error: function () {
+	                        // Ajax 요청 실패 시 실행할 코드
+	                        alert('Ajax 오류! 관리자에게 문의하세요.');
+	                    }
+	                });
+	                
+	                // 부트스트랩 유효성 클래스 추가
+	        	}
                 $(this).addClass('was-validated');
             });
         });
