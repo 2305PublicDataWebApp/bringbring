@@ -34,5 +34,9 @@ public interface DivideStore {
 
 	int insertHeart(Heart heart);
 
-	int deleteHeart(int heartNo);
+	int deleteHeart(Heart heart);
+
+	int getHeartCount(int divNo);
+
+	int deleteDivide(int divNo);
 }

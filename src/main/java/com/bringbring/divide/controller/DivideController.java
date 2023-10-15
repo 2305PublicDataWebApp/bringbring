@@ -56,9 +56,9 @@ public class DivideController {
 			, Divide divide
 			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
 			, HttpServletRequest request
-			, HttpSession session) {
+			, HttpSession httpSession) {
 
-		String userId = (String)session.getAttribute("sessionId");
+		String userId = (String)httpSession.getAttribute("sessionId");
 		User user = userService.selectOneById(userId);
 		divide.setUserNo(user.getUserNo());
 		System.out.println(divide);
@@ -94,9 +94,25 @@ public class DivideController {
 		return mv;
 	}
 
+	@GetMapping("/delete.do")
+	public ModelAndView deleteDivide(ModelAndView mv
+			, int divNo) {
+
+		int result = divideService.deleteDivide(divNo);
+		mv.setViewName("redirect:/divide/list.do");
+		return mv;
+	}
+
 	@GetMapping("/list.do")
 	public ModelAndView showDivideList(ModelAndView mv
-			, @RequestParam(value= "page", required = false, defaultValue="1") Integer currentPage) {
+			, @RequestParam(value= "page", required = false, defaultValue="1") Integer currentPage
+			, HttpSession httpSession) {
+
+		String userId = (String) httpSession.getAttribute("sessionId");
+		if (userId != null && !userId.isEmpty()) {
+			User user = userService.selectOneByuserId(userId);
+			mv.addObject("cUserNo", user.getUserNo());
+		}
 		int totalCount = divideService.getListCount();
 		PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
 		List<ResponseData> rData = divideService.selectResPonseDataList(pInfo);
@@ -127,5 +143,6 @@ public class DivideController {
 		 startNavi, endNavi);
 		return pi;
 	}
+
 }
 

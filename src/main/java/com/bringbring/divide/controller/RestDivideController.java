@@ -37,7 +37,7 @@ public class RestDivideController {
     }
 
     @PostMapping("/insertHeart.do")
-    public String insertHeart(Heart heart) {
+    public int insertHeart(Heart heart) {
 
         User user = userService.selectOneById(heart.getUserId());
         heart.setUserNo(user.getUserNo());
@@ -45,22 +45,26 @@ public class RestDivideController {
 
         if(result > 0){
             System.out.println("insert성공");
-            return "success";
+            System.out.println("총 갯수 출력 완료");
+            return divideService.getHeartCount(heart.getDivNo());
         } else {
             // 데이터가 없는 경우 404 Not Found 상태 코드 반환
-            return "false";
+            return -1;
         }
     }
 
     @PostMapping("/deleteHeart.do")
-    public String deleteHeart(int heartNo) {
-        int result = divideService.deleteHeart(heartNo);
+    public int deleteHeart(Heart heart) {
+
+        User user = userService.selectOneById(heart.getUserId());
+        heart.setUserNo(user.getUserNo());
+        int result = divideService.deleteHeart(heart);
         if(result > 0){
             System.out.println("delete성공");
-            return "success";
+            return divideService.getHeartCount(heart.getDivNo());
         } else {
             // 데이터가 없는 경우 404 Not Found 상태 코드 반환
-            return "false";
+            return -1;
         }
     }
 }

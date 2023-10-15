@@ -4,6 +4,7 @@ import com.bringbring.image.domain.Image;
 import com.bringbring.region.domain.City;
 import com.bringbring.region.domain.District;
 import com.bringbring.reservation.domain.WasteCategory;
+import com.bringbring.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,7 @@ public class ResponseData {
     private City city;
     private District district;
     private WasteCategory wasteCategory;
+    private User user;
+    private Heart heart;
 
 }

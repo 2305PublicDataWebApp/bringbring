@@ -78,7 +78,13 @@ public class DivideServiceImpl implements DivideService{
 	public int insertHeart(Heart heart) { return divideStore.insertHeart(heart); }
 
 	@Override
-	public int deleteHeart(int heartNo) { return divideStore.deleteHeart(heartNo); }
+	public int deleteHeart(Heart heart) { return divideStore.deleteHeart(heart); }
+
+	@Override
+	public int getHeartCount(int divNo) { return divideStore.getHeartCount(divNo); }
+
+	@Override
+	public int deleteDivide(int divNo) { return divideStore.deleteDivide(divNo); }
 
 
 	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {

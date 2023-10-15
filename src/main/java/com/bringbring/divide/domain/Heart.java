@@ -15,5 +15,6 @@ public class Heart {
     private int userNo;
     private int divNo;
     private String userId;
-    private int heartCount;
+    private int heartUserNo;
+
 }

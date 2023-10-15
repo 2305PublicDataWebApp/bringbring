@@ -97,6 +97,9 @@
       margin-bottom: 5px;
       background-color: inherit;
     }
+    main .detailBtn{
+      margin-right: 10px;
+    }
   </style>
 </head>
 
@@ -144,9 +147,12 @@
           <p>${dData.city.cityName} ${dData.district.districtName}</p>
         </div>
         <div style="display: flex;float: right;height: 100%;flex-direction: column;justify-content: space-evenly;">
-          <c:if test="${sessionId eq dData.user.userId}">
-            <button type="button" class="btn btn-success">글 수정</button>
-            <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" class="btn btn-success">글 삭제</button>
+          <c:if test="${sessionId ne null && sessionId ne dData.user.userId}">
+            <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" class="btn btn-success datailBtn">게시글 신고하기</button>
+          </c:if>
+          <c:if test="${sessionId ne null && sessionId eq dData.user.userId}">
+            <button type="button" class="btn btn-success detailBtn">수정하기</button>
+            <button onclick="deleteDivide();" type="button" class="btn btn-success detailBtn">삭제하기</button>
           </c:if>
         </div>
       </div>
@@ -159,7 +165,7 @@
             ${dData.divide.divCreateDate}
           </p>
         </div>
-        <div style="width: 8%;text-align: center;" class="align-self-center">
+        <div id="heartDiv" style="width: 8%;text-align: center;" class="align-self-center">
           <c:if test="${sessionId eq null || sessionId ne heart.userId}">
             <button class="heartButton" onclick="insertHeart();">
               <i style="font-size: 30px;" class="bi bi-heart"></i>
@@ -167,7 +173,7 @@
           </c:if>
           <c:if test="${heart.userId ne null && sessionId eq heart.userId}">
             <button class="heartButton" onclick="deleteHeart();">
-              <i style="font-size: 30px;" class="bi bi-heart-fill"></i>
+              <i style="font-size: 30px;color: #FF8080;" class="bi bi-heart-fill"></i>
             </button>
           </c:if>
         </div>
@@ -182,7 +188,7 @@
 <%--          <i class="bi bi-chat"></i>--%>
           채팅 2&nbsp;&nbsp;•&nbsp;
 <%--          <i class="bi bi-heart"></i>--%>
-          찜 ${dData.heart.heartCount}&nbsp;&nbsp;•&nbsp;
+          찜 <span id="heartCount">${dData.divide.heartCount}</span> &nbsp;&nbsp;•&nbsp;
           조회 ${dData.divide.viewCount}
         </div>
       </div>      
@@ -377,6 +383,8 @@
         }
     });
 
+    var heartDiv = document.getElementById("heartDiv");
+    var spanElement = document.getElementById("heartCount");
 
     function insertHeart() {
       $.ajax({
@@ -384,9 +392,25 @@
         data: { divNo: ${dData.divide.divNo}, userId: "${sessionId}"},
         type: "POST",
         success: function(data) {
-          if(data === "success"){
-            // alert("찜 하기를 성공하였습니다.");
-            location.reload();
+          if(data > -1){
+            heartDiv.innerHTML = '';
+
+            // 새로운 버튼과 아이콘 코드를 추가
+            var buttonElement = document.createElement("button");
+            buttonElement.className = "heartButton";
+            buttonElement.onclick = deleteHeart;
+
+            var iconElement = document.createElement("i");
+            iconElement.style.fontSize = "30px";
+            iconElement.style.color = "#FF8080";
+            iconElement.className = "bi bi-heart-fill";
+
+            buttonElement.appendChild(iconElement);
+            heartDiv.appendChild(buttonElement);
+
+            spanElement.textContent = ""; // 기존 내용을 지우기
+            spanElement.textContent = data; // 새로운 정수 값을 설정
+            // location.reload();
           }else{
             alert("실패!");
           }
@@ -400,12 +424,26 @@
     function deleteHeart() {
       $.ajax({
         url: "/divide/deleteHeart.do",
-        data: { heartNo: "${heart.heartNo}"},
+        data: { userId: "${sessionId}", divNo: "${dData.divide.divNo}"},
         type: "POST",
         success: function(data) {
-          if(data === "success"){
-            // alert("찜 취소를 성공하였습니다.");
-            location.reload();
+          if(data > -1){
+            heartDiv.innerHTML = '';
+
+            var buttonElement2 = document.createElement("button");
+            buttonElement2.className = "heartButton";
+            buttonElement2.onclick = insertHeart;
+
+            var iconElement2 = document.createElement("i");
+            iconElement2.style.fontSize = "30px";
+            iconElement2.className = "bi bi-heart";
+
+            buttonElement2.appendChild(iconElement2);
+            heartDiv.appendChild(buttonElement2);
+
+            spanElement.textContent = ""; // 기존 내용을 지우기
+            spanElement.textContent = data; // 새로운 정수 값을 설정
+            // location.reload();
           }else{
             alert("실패!");
           }
@@ -414,6 +452,12 @@
           alert("Ajax 오류! 관리자에게 문의하세요");
         }
       });
+    }
+
+    function deleteDivide() {
+      if(confirm("게시글을 삭제하시겠습니까?")){
+        location.href = "/divide/delete.do?divNo=${dData.divide.divNo}";
+      }
     }
     <!-- 로그인, 로그아웃 -->
     <jsp:include page="/include/loginJs.jsp"></jsp:include>

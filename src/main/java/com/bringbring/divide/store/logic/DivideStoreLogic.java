@@ -67,6 +67,14 @@ public class DivideStoreLogic implements DivideStore{
 	public int insertHeart(Heart heart) { return sqlSession.insert("DivideMapper.insertHeart", heart); }
 
 	@Override
-	public int deleteHeart(int heartNo) { return sqlSession.delete("DivideMapper.deleteHeart", heartNo); }
+	public int deleteHeart(Heart heart) { return sqlSession.delete("DivideMapper.deleteHeart", heart); }
+
+	@Override
+	public int getHeartCount(int divNo) {
+		return sqlSession.selectOne("DivideMapper.getHeartCount", divNo);
+	}
+
+	@Override
+	public int deleteDivide(int divNo) { return sqlSession.update("DivideMapper.deleteDivide", divNo); }
 
 }

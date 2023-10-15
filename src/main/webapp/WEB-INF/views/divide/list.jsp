@@ -124,8 +124,13 @@
                         <div style="position: absolute;bottom: 10px;">
                             <i class="bi bi-chat"></i>
                             2 &nbsp;
-                            <i class="bi bi-heart"></i>
-                            2
+                            <c:if test="${sessionId eq null || data.heart.heartUserNo eq 0}">
+                                <i class="bi bi-heart"></i>
+                            </c:if>
+                            <c:if test="${cUserNo eq data.heart.userNo && data.heart.heartUserNo ne 0 && sessionId ne null}">
+                                <i class="bi bi-heart-fill"></i>
+                            </c:if>
+                            ${data.divide.heartCount}
                         </div>
                     </td>
                 </tr>
