@@ -110,7 +110,7 @@ public class DivideController {
 
 		String userId = (String) httpSession.getAttribute("sessionId");
 		if (userId != null && !userId.isEmpty()) {
-			User user = userService.selectOneByuserId(userId);
+			User user = userService.selectOneById(userId);
 			mv.addObject("cUserNo", user.getUserNo());
 		}
 		int totalCount = divideService.getListCount();
