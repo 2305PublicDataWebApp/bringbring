@@ -35,11 +35,11 @@ public interface UserStore {
 	public int insertUser(User user);
 
 	/**
-	 * 아이디(이메일) 찾기 store
+	 * 이름,전화번호로 회원정보 가져오기 store
 	 * @param user
 	 * @return User
 	 */
-	public User selectOneByName(User user);
+	public User selectOneFindEmail(User user);
 
   /**
 	 * 아이디로 회원정보 불러오기 store
@@ -61,5 +61,12 @@ public interface UserStore {
 	 * @return int
 	 */
 	public int updateUser(User user);
+
+	/**
+	 * 이름,전화번호, 아이디로 회원정보 가져오기 store
+	 * @param user
+	 * @return User
+	 */
+	public User selectOneFindPwd(User user);
 
 }

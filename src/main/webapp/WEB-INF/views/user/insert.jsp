@@ -185,11 +185,12 @@
         });
         
      	// 입력란에서 입력이 발생할 때 전화번호 유효성 검사
-        document.getElementById('floatingPhone').addEventListener("input", function () {
+        document.getElementById('floatingPhone').addEventListener("input", function (event) {
 	        const phoneValue = document.getElementById('floatingPhone').value;
 			
             // 전화번호 유효성 검사 (예: 숫자로만 이루어져야 함)
             if (!/^\d+$/.test(phoneValue)) {
+            	event.preventDefault();
 		        phoneError.classList.remove('invalid-feedback');
 		        phoneError.classList.add('mt-1')
 		        phoneError.style.fontSize = "14px";

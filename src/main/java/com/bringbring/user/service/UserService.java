@@ -35,11 +35,11 @@ public interface UserService {
 	int insertUser(User user);
 
 	/**
-	 * 이름,전화번호로 아이디 찾기 service
+	 * 이름,전화번호로 회원정보 가져오기 service
 	 * @param user
 	 * @return User
 	 */
-	User selectOneByName(User user);
+	User selectOneFindEmail(User user);
 
 	/**
 	 * 아이디로 회원정보 가져오기 service
@@ -54,5 +54,12 @@ public interface UserService {
      * @return int
      */
     int updateUser(User user);
+
+    /**
+     * 이름, 전화번호, 아이디로 회원정보 가져오기 service
+     * @param user
+     * @return User
+     */
+	User selectOneFindPwd(User user);
 
 }

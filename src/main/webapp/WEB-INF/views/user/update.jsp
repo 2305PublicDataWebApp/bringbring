@@ -61,13 +61,17 @@
         <div class="form_update_div w-100 m-auto rounded">
             <h1 class="h3 mb-3 fw-normal text-center">정보 수정</h1>
 
-            <form id="update_form" action="/user/update.do" method="post" novalidate>
+            <form id="update_form" action="/user/update.do" method="post" enctype="multipart/form-data" novalidate>
+	            <input type="hidden" name="userProfileName" value="${userOne.userProfileName }">
+				<input type="hidden" name="userProfileRename" value="${userOne.userProfileRename }">
+				<input type="hidden" name="userProfilePath" value="${userOne.userProfilePath }">
+				<input type="hidden" name="userProfileLength" value="${userOne.userProfileLength }">
             	<div id="prorile_img_div" class="text-center mb-3">
-                    <label for="profile-img"></label>
-                    <div class="profile-image-container">
-                        <img src="../resources/assets/img/mypage/Test_img2.png" id="profile-image-preview" alt="프로필 이미지">
-                        <input type="file" id="profile-img" name="uploadFile" >
-                        <label for="profile-img" class="upload-icon"><img src="../resources/assets/img/mypage/mypage_gear.png" id="camera" class="upload-icon" alt=""></label>
+                    <label for="profile_img"></label>
+                    <div class="profile_image_container">
+                        <img src="${userOne.userProfilePath }" id="profile_image_preview" alt="프로필 이미지">
+                        <input type="file" id="profile_img" name="uploadFile" >
+                        <label for="profile_img" class="upload_icon"><img src="../resources/assets/img/mypage/mypage_gear.png" id="gear_img" class="upload_icon" alt=""></label>
                     </div>
                 </div>
             
@@ -168,8 +172,8 @@
 	    });
     
     	//프로필 업로드 및 미리보기
-        const profileImageInput = document.getElementById('profile-img');
-        const profileImagePreview = document.getElementById('profile-image-preview');
+        const profileImageInput = document.getElementById('profile_img');
+        const profileImagePreview = document.getElementById('profile_image_preview');
         const defaultProfileImage = 'Test_img2.png';
 
         profileImageInput.addEventListener('change', (e) => {

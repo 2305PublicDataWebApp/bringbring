@@ -12,7 +12,7 @@
     <meta content="" name="keywords">
 
     <!-- JQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Favicons -->
     <link href="../../assets/img/main/title-icon.png" rel="icon">
@@ -35,7 +35,7 @@
     <!-- Template Main CSS File -->
     <link href="../resources/assets/css/style.css" rel="stylesheet">
     <link href="../resources/assets/css/common.css" rel="stylesheet">
-    <link href="../resources/assets/css/user/findPw.css" rel="stylesheet">
+    <link href="../resources/assets/css/user/findPwd.css" rel="stylesheet">
 
     <!-- =======================================================
   * Template Name: Arsha
@@ -60,10 +60,10 @@
         <div class="form_main w-100 m-auto rounded">
             <h1 class="h3 mb-4 fw-normal text-center">비밀번호 찾기
             </h1>
-            <form id="form_findPw" action="#" method="post" novalidate>
+            <form id="form_findPwd" action="/user/findPwd.do" method="post" novalidate>
         
                 <div class="form-floating mb-4">
-                    <input type="text" id="floatingName" class="form-control" placeholder="name" required>
+                    <input type="text" id="floatingName" name="userName" class="form-control" placeholder="name" required>
                     <label for="floatingName">이름</label>
                     <div class="invalid-feedback">
                         이름을 입력해주세요.
@@ -71,18 +71,16 @@
                 </div>
 
                 <div class="form-floating mb-4">
-                    <input type="text" id="floatingPhone" class="form-control" placeholder="Phone" required>
+                    <input type="text" id="floatingPhone" name="userPhone" class="form-control" placeholder="Phone" required>
                     <label for="floatingPhone">휴대전화번호</label>
-                    <div class="invalid-feedback">
-                        번호를 입력해주세요.
-                    </div>
+                    <div id="user_phone_check_error" class="invalid-feedback"></div>
                 </div>
 
                 <div class="container">
                     <div class="row mb-4">
                         <div class="form-floating col-10 p-0">
-                            <input type="number" id="floatingPhone" class="form-control" placeholder="Phone" required>
-                            <label for="floatingPhone">이메일 주소</label>
+                            <input type="email" id="floatingEmail" name="userId" class="form-control" placeholder="Email" required>
+                            <label for="floatingEmail">이메일 주소</label>
                             <div class="invalid-feedback">
                                 이메일 주소를 입력해주세요.
                             </div>
@@ -94,36 +92,33 @@
                 </div>
 
                 <div class="form-floating mb-4">
-                    <input type="text" id="floatingPhone" class="form-control" placeholder="certification_number" required>
-                    <label for="floatingPhone">인증 번호</label>
-                    <div class="invalid-feedback">
-                        인증 번호를 입력해주세요.
-                    </div>
+                    <input type="text" id="floatingEmailCode" name="mailChkCode" class="form-control" placeholder="certification_number" required>
+                    <label for="floatingEmailCode">인증 번호</label>
+                    <div id="email_code_check" class="invalid-feedback"></div>
                 </div>
 
-                <input type="submit" id="findEmail_btn" class="check_pw_input w-100 text-center fw-bold fs-4 rounded" value="확인">
-                        <!-- data-bs-toggle="modal" data-bs-target="#static_findEmail_modal" > -->
+                <input type="submit" id="findPwd_btn" class="check_pw_input w-100 text-center fw-bold fs-4 rounded" value="확인">
         
             </form>
             <!-- Modal -->
-            <!-- <div class="modal fade" id="static_findEmail_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="static_findEmail_modal_Label" aria-hidden="true">
+            <div class="modal fade" id="static_findPwd_modal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" tabindex="-1"
+                aria-labelledby="static_findPwd_modal_Label" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="static_findEmail_modal_Label">이메일 계정</h5>
+                            <h5 class="modal-title" id="static_findPwd_modal_Label">비밀번호</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>이메일 : </p>
+                            <p id="modal_body_result"></p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                            <button type="button" class="btn btn-primary">로그인</button>
+<!--                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> -->
+                            <button type="button" class="btn btn-primary findPwd_login_btn">로그인</button>
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
 
         </div>
     </main>
@@ -147,67 +142,129 @@
 
     <!-- Template Main JS File -->
     <script src="../resources/assets/js/main.js"></script>
-    <!-- 폼 유효성 -->
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('form_findPw');
-    
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    // 폼 유효성 검사가 실패하면
-                    event.preventDefault(); // 폼 제출 방지
-                    event.stopPropagation(); // 이벤트 버블링 중지
-                }
-                form.classList.add('was-validated'); // 부트스트랩 유효성 클래스 추가
-            
+    <script>
+		var emailChkData;
+	    $(document).ready(function () {
+            $('#form_findPwd').on("submit", function (event) {
+                event.preventDefault(); // 폼 제출 방지
+                event.stopPropagation(); // 이벤트 버블링 중지
+
+                if($('#form_findPwd')[0].checkValidity()){                	
+                	// 폼 데이터 가져오기
+					var userName = $('#floatingName').val();
+	    			var userPhone = $('#floatingPhone').val();
+		   			var userId = $('#floatingEmail').val();
+	    			
+	                // 이름, 전화번호 확인
+	                $.ajax({
+	                    url: '/user/findPwd.do', // 서버 엔드포인트 URL 설정
+	                    type: 'POST', // HTTP 요청 메서드 설정 (POST)
+	                    data: { 
+	                    	"userName" : userName,
+	                    	"userPhone" : userPhone,
+	                    	"userId" : userId
+	                    },
+	                    success: function (response) {
+	                        // Ajax 요청 성공 시 실행할 코드
+	                        console.log(response);
+	                        console.log(emailChkData);
+	                        // 서버에서 받은 데이터를 모달로 표시
+	                        if(emailChkData == $('#floatingEmailCode').val()){
+		                        $('#modal_body_result').html("비밀번호 : " + response.userPwd);                    	
+	                        }else {
+	                        	$('#modal_body_result').html(response.error); 
+	                        }
+	
+	                        // 모달 열기
+	                        $('#static_findPwd_modal').modal('show');
+	                    },
+	                    error: function () {
+	                        // Ajax 요청 실패 시 실행할 코드
+	                        alert('Ajax 오류! 관리자에게 문의하세요.');
+	                    }
+	                });
+	                
+	                // 부트스트랩 유효성 클래스 추가
+	        	}
+                $('#user_phone_check_error').text("전화번호를 입력해주세요.");
+                $('#email_code_check').text("인증 번호를 입력해주세요.");
+                $('#form_findPwd').addClass('was-validated');
             });
-        });
-    </script>
-    <!-- 비밀번호 찾기 유효성 & Ajax 모달 -->
-    <!-- <script>
-        $(document).ready(function () {
-            $('#form_findEmail').submit(function (event) {
-                if (!this.checkValidity()) {
-                    // 폼 유효성 검사가 실패하면
-                    event.preventDefault(); // 폼 제출 방지
-                    event.stopPropagation(); // 이벤트 버블링 중지
+            $('#certification_number_btn').click(function () {
+                certification_code_btn();
+            });
+            // 입력란에서 입력이 발생할 때 전화번호 유효성 검사
+            $('#floatingPhone').on('keyup', function(event) {
+                const phoneValue = $('#floatingPhone').val();
+                const phoneError = $('#user_phone_check_error');
 
-                }else {
-                    // 폼 유효성 검사가 성공한 경우
-                    event.preventDefault(); // 폼 제출 방지
-
-                    // 폼 데이터 가져오기
-                    var formData = new FormData(this);
-
-                    // Ajax 요청 보내기
-                    $.ajax({
-                        url: 'findEmail_ajax.do', // 서버 엔드포인트 URL 설정
-                        type: 'POST', // HTTP 요청 메서드 설정 (POST)
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function (response) {
-                            // Ajax 요청 성공 시 실행할 코드
-                            console.log(response);
-
-                            // 서버에서 받은 데이터를 모달로 표시
-                            $('#static_findEmail_modal .modal-body').html(response);
-
-                            // 모달 열기
-                            $('#static_findEmail_modal').modal('show');
-                        },
-                        error: function () {
-                            // Ajax 요청 실패 시 실행할 코드
-                            alert('Ajax 오류! 관리자에게 문의하세요.');
-                        }
+                // 전화번호 유효성 검사 (예: 숫자로만 이루어져야 함)
+                if (!/^\d+$/.test(phoneValue)) {
+                    event.preventDefault();
+                    phoneError.removeClass('invalid-feedback');
+                    phoneError.addClass('mt-1');
+                    phoneError.css({
+                        'font-size': '14px',
+                        'height': '10px',
+                        'color': 'red'
                     });
+                    phoneError.text("숫자만 입력 가능합니다.");
+                } else {
+                    phoneError.text("전화번호를 입력해주세요.");
+                    phoneError.removeClass('mt-1');
+                    phoneError.addClass('invalid-feedback');
                 }
-
-                // 부트스트랩 유효성 클래스 추가
-                $(this).addClass('was-validated');
             });
         });
-    </script> -->
+		// 이메일 인증번호
+    	function certification_code_btn() {
+			var userId = $('#floatingEmail').val();
+    	   $.ajax({
+    	      type : "POST",
+    	      url : "/user/mailConfirm",
+    	      data : {
+    	         "email" : userId
+    	      },
+    	      success : function(data){
+    	    	  emailChkData = data;
+    	         alert("해당 이메일로 인증번호 발송이 완료되었습니다. \n 확인부탁드립니다.")
+    	         console.log("data : "+data);
+    	         chkEmailConfirm(data);
+    	      },
+    	      error: function () {
+                  // Ajax 요청 실패 시 실행할 코드
+                  alert('Ajax 오류! 관리자에게 문의하세요.');
+              }
+    	   })
+    	};
+   		// 이메일 인증번호 체크 함수
+		function chkEmailConfirm(data){
+			$('#email_code_check').on("keyup", function(){
+				$('#email_code_check').removeClass('invalid-feedback').addClass('mt-1')
+				.css({
+				    'font-size': '14px',
+				    'height': '10px'
+				})
+				if (data !== $('#floatingEmailCode').val()) { 
+					$('#email_code_check').text("인증번호가 일치하지 않습니다.");
+					$("#email_code_check").css({
+						"color" : "red"
+					})
+					return false;
+				} else { 
+					$('#email_code_check').text("인증번호가 일치합니다.")
+					$("#email_code_check").css({
+						"color" : "green"
+					})
+					return true;
+				}
+				if ($('#floatingEmailCode') === "") {
+					$('#email_code_check').text("인증 번호를 입력해주세요.");
+		        	$('#email_code_check').removeClass('mt-1').addClass('invalid-feedback')
+		        }
+			})
+		}
+    </script>
     <!-- 채널톡 api -->
     <script>
         (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
