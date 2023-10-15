@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.bringbring.admin.domain.Role;
+import com.bringbring.admin.service.AdminService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,9 +33,10 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/user")
 public class UserController {
 	
+  private final AdminService adminService;
 	private final UserService userService;
 	private final EmailService emailService;
-	
+
 	// 로그인 
 	@GetMapping("/login.do")
 	public String showLoginform() {
@@ -48,8 +51,13 @@ public class UserController {
 			, HttpSession session) {
 		User userOne = userService.selectCheckLogin(user);
 		if(userOne != null) {
+
+			// 권한 체크
+			Role role = adminService.selectRoleByNo(userOne.getUserNo());
 			session.setAttribute("sessionId", userOne.getUserId());
 			session.setAttribute("sessionName", userOne.getUserName());
+			session.setAttribute("sessionUserGrade", role.getUserGrade());
+			session.setAttribute("sessionRoleNo", role.getRoleNo());
 			//성공하면 메인화면
 			return "redirect:/";
 		} else {
@@ -88,6 +96,7 @@ public class UserController {
 		user.setUserProfileRename("Test_img2.png");
 		user.setUserProfilePath("../resources/assets/img/mypage/Test_img2.png");
 		user.setUserProfileLength(0L);
+
 		int result = userService.insertUser(user);
 		if(result>0) {
 			String response = "<script>alert('회원가입에 성공하였습니다.');"
@@ -101,7 +110,7 @@ public class UserController {
 			return "common/error";
 		}
 	}
-	
+
 	// 아이디(이메일) 중복 확인
 	@ResponseBody
 	@PostMapping("/Email_check.do")

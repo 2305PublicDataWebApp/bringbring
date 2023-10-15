@@ -12,13 +12,13 @@
 			const msg = "${msg }";
 			const url = "${url}";
 			const backUrl = "${back}";
-			
-			if(msg != "") alert(msg);
-			
+
+			if(	msg != "") alert(msg);
+
 			if (url) {
 				location.href = url;
 			}
-			
+
 		    if (backUrl === 'true') {
 		        window.history.back();
 		    }

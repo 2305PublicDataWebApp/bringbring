@@ -1,38 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+         pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>브링브링</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+    <title>브링브링</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
 
+    <!-- Favicons -->
+    <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+    <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 
-  <!-- Favicons -->
-  <link href="../assets/img/main/title-icon.png" rel="icon">
-  <link href="../assets/img/main/title-icon.png" rel="apple-touch-icon">
+    <!-- Vendor CSS Files -->
+    <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
 
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <!-- <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet"> -->
-  <!-- <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet"> -->
-  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="../assets/css/style.css" rel="stylesheet">
-  <link href="../assets/css/common.css" rel="stylesheet">
+    <!-- Template Main CSS File -->
+    <link href="../resources/assets/css/style.css" rel="stylesheet">
+<%--    <link href="../resources/assets/css/common.css" rel="stylesheet">--%>
 
 
   <!-- =======================================================
@@ -42,6 +35,23 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+    <style>
+        main .imgArea{
+            width: 200px;
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+        main .imgArea img{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        main tr{
+            border-bottom: 1px solid #d4d0d0;
+        }
+    </style>
 </head>
 
 <body>
@@ -59,7 +69,7 @@
           <h4 style="color: rgb(189, 245, 229);">당신의 낡고 병든 추억이 누군가에겐 도움이 될 수 있습니다.</h4>
         </div>
         <div style="display: flex;flex-direction: row;justify-content: flex-end;">
-          <img src="../assets/img/divide/free-icon-gift-3835774.png" style="width: 250px;" alt="">
+          <img src="../resources/assets/img/divide/free-icon-gift-3835774.png" style="width: 250px;" alt="">
         </div>
       </div>
     </section>
@@ -77,10 +87,10 @@
               <button class="btn btn-outline-success" style="border-bottom-right-radius: 5px;border-top-right-radius: 5px;z-index: 1;width: 80px;" type="submit" >Search</button>
           </div>
           <div style="float: right;">
-            <button type="button" class="btn btn-success">글 등록</button>
+            <button onclick="showDivdeInsert();" type="button" class="btn btn-success">글 등록</button>
           </div>
           <div style="width: 100%;float: left;border-top: 1px solid #ccc;margin-top: 15px;padding: 10px 0px">
-              <p style="float:left;font-size: 18px;margin: 0;padding: 5px;font-weight: 600;font-family: 'SUITE-Regular';letter-spacing: 2px;padding-left: 15px;"># 20건</p>
+              <p style="float:left;font-size: 18px;margin: 0;padding: 5px;font-weight: 600;font-family: 'SUITE-Regular';letter-spacing: 2px;padding-left: 15px;"># ${pInfo.totalCount}건</p>
               <p style="margin: 0;padding: 7px 13px 0px 8px;margin-left: 3px;float: right;">
               <a href="/community/certify.tp" style="text-decoration:underline;">최신순 </a>|
               <a href="/community/certify.tp?sortType=likeDESC">추천순</a>
@@ -91,237 +101,41 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-              <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                  <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                  <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                  </div>
-              </td >
-              <td style="text-align: left;font-size: 17px;">
-                  <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                      <a href="#">제목</a>
-                  </h4> 
-                  <br>
-                  나눔 지역 : <br>
-                  카테고리 : 
-              </td>
-              <td style="width: 100px;">
-                  <div style="margin-top: 110px;">
-                    <i class="bi bi-chat"></i>
-                    2 &nbsp;
-                    <i class="bi bi-heart"></i>
-                    2
-                  </div>
-              </td>
-              </tr>
+            <c:forEach var="data" items="${rData}" varStatus="i">
+                <tr>
+                    <c:url var="detailUrl" value="/divide/detail.do">
+                        <c:param name="divNo" value="${data.divide.divNo }"></c:param>
+                    </c:url>
+                    <td style="width: 220px;padding-top: 10px;padding-bottom: 10px;">
+                        <div class="card imgArea">
+                            <img src="${data.image.imagePath}">
+<%--                            <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${data.image.imagePath}); background-position: center center;"></div>--%>
+                        </div>
+                    </td >
+                    <td style="text-align: left;font-size: 17px;">
+                        <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
+                            <a href="${detailUrl}">${data.divide.divTitle}</a>
+                        </h4>
+                        <br>
+                        나눔 지역 : ${data.city.cityName} ${data.district.districtName}<br>
+                        카테고리 : ${data.wasteCategory.wasteCategoryName}
+                    </td>
+                    <td style="width: 100px;position: relative;">
+                        <div style="position: absolute;bottom: 10px;">
+                            <i class="bi bi-chat"></i>
+                            2 &nbsp;
+                            <c:if test="${sessionId eq null || data.heart.heartUserNo eq 0}">
+                                <i class="bi bi-heart"></i>
+                            </c:if>
+                            <c:if test="${cUserNo eq data.heart.userNo && data.heart.heartUserNo ne 0 && sessionId ne null}">
+                                <i class="bi bi-heart-fill"></i>
+                            </c:if>
+                            ${data.divide.heartCount}
+                        </div>
+                    </td>
+                </tr>
+            </c:forEach>
               <!-- 아 -->
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width: 220px;padding-top: 20px;padding-bottom: 20px;">
-                    <div class="card" style="width: 200px;height: 120px;overflow: hidden">
-                    <div class="card-img-top" style="width: 100%; height: 100%; background-image: url(${community.boardFilePath}); background-position: center center;"></div>
-                    </div>
-                </td >
-                <td style="text-align: left;font-size: 17px;">
-                    <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
-                        <a href="#">제목</a>
-                    </h4> 
-                    <br>
-                    나눔 지역 : <br>
-                    카테고리 : 
-                </td>
-                <td style="width: 100px;">
-                    <div style="margin-top: 110px;">
-                      <i class="bi bi-chat"></i>
-                      2 &nbsp;
-                      <i class="bi bi-heart"></i>
-                      2
-                    </div>
-                </td>
-              </tr>
             </tbody>
           </table>
       </div>
@@ -329,13 +143,37 @@
     <div style="width: 1000px;margin: 0 auto;margin-top: 60px;">
       <nav aria-label="Page navigation example" style="display: flex;">
         <ul class="pagination" style="margin: 0 auto;">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">4</a></li>
-          <li class="page-item"><a class="page-link" href="#">5</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            <c:if test="${pInfo.startNavi ne 1}">
+                <c:url var="bPageUrl" value="/divide/list.do">
+                    <c:param name="page" value="${pInfo.startNavi-1}"></c:param>
+                </c:url>
+                <li class="page-item">
+                    <a style="color: black;" class="page-link" href="${bPageUrl}">Previous</a>
+                </li>
+            </c:if>
+            <c:forEach begin="${pInfo.startNavi}" end="${pInfo.endNavi}" var="p">
+                <c:url var="pageUrl" value="/divide/list.do">
+                    <c:param name="page" value="${p}"></c:param>
+                </c:url>
+                <li class="page-item">
+                    <a style="color: black;" class="page-link" href="${pageUrl}">${p}</a>
+                </li>
+            </c:forEach>
+            <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount}">
+                <c:url var="nPageUrl" value="/divide/list.do">
+                    <c:param name="page" value="${pInfo.endNavi+1}"></c:param>
+                </c:url>
+                <li class="page-item">
+                    <a style="color: black;" class="page-link" href="${nPageUrl}">Next</a>
+                </li>
+            </c:if>
+<%--          <li class="page-item"><a class="page-link" href="#">Previous</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">1</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">2</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">3</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">4</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">5</a></li>--%>
+<%--          <li class="page-item"><a class="page-link" href="#">Next</a></li>--%>
         </ul>
       </nav>
     </div>
@@ -351,16 +189,16 @@
       class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../assets/vendor/aos/aos.js"></script>
-  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../resources/assets/vendor/aos/aos.js"></script>
+  <script src="../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="../resources/assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="../assets/js/main.js"></script>
+  <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
   <script>
@@ -372,6 +210,10 @@
 
     <!-- 로그인, 로그아웃 -->
     <jsp:include page="/include/loginJs.jsp"></jsp:include>
+
+    function showDivdeInsert() {
+        location.href = "/divide/insert.do";
+    }
   </script>
   
   

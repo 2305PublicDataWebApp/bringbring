@@ -7,7 +7,7 @@
   	</select>
   	
   	<select id="selectUserList" resultType="User">
-	    SELECT * FROM USER_TBL ORDER BY USER_NO DESC
+	    SELECT * FROM USER_TBL ORDER BY USER_NO
 	</select>
 	
 	<select id="selectListCount" resultType="_int">
@@ -36,4 +36,5 @@
 	<select id="selectOneFindPwd" resultType="User">
 		SELECT * FROM USER_TBL WHERE USER_NAME = #{userName } AND USER_PHONE = #{userPhone } AND USER_ID = #{userId } AND IS_USER_DELETED = 'N'
 	</select>
+
 </mapper>
