@@ -48,40 +48,8 @@
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top ">
-    <div class="container d-flex align-items-center">
-      <img src="../resources/assets/img/main/cargo-truck-green.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
-      <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.jsp">브링브링</a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link scrollto" href="#about">배출안내</a></li>
-          <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
-          <li><a class="nav-link   scrollto" href="#portfolio">공지사항</a></li>
-          <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
-          <li class="dropdown"><a href="#"><span>관리자 메뉴</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <!-- 최고 관리자 기능 -->
-              <li><a href="/admin/memberM.do">회원 관리</a></li> 
-              <li><a href="/admin/reportM.do">신고 관리</a></li>
-              <li><a href="/admin/contactM.do">문의 관리</a></li>
-              <li><a href="/admin/reservationM.do">배출 관리</a></li>
-              
-            </ul>
-          </li>
-          <li>
-            <button class="getstarted scrollto">로그인</button>
-            <!-- <a  href="#login">로그인</a> -->
-          </li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-    </div>
-  </header><!-- End Header -->
+  <!-- 헤더 -->
+  <jsp:include page="/include/header.jsp"></jsp:include>
 
   <div style="width: 100%;height: 74px;"></div>
   <!-- ======= Hero Section ======= -->

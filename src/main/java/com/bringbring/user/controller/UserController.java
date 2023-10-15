@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.bringbring.admin.domain.Role;
 import com.bringbring.admin.service.AdminService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,8 +45,13 @@ public class UserController {
 			, HttpSession session) {
 		User userOne = userService.selectCheckLogin(user);
 		if(userOne != null) {
+
+			// 권한 체크
+			Role role = adminService.selectRoleByNo(userOne.getUserNo());
 			session.setAttribute("sessionId", userOne.getUserId());
 			session.setAttribute("sessionName", userOne.getUserName());
+			session.setAttribute("sessionUserGrade", role.getUserGrade());
+			session.setAttribute("sessionRoleNo", role.getRoleNo());
 			//성공하면 메인화면
 			return "redirect:/";
 		} else {

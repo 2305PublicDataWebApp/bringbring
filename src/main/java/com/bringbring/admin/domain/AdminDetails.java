@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class AdminDetails {
     private int adminNo;
     private String userId;
+    private int userNo;
     private String userPhone;
     private LocalDate adminCreateDate;
     private String regionName;
