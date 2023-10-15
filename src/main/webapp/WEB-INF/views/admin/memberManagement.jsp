@@ -162,7 +162,7 @@
                           </div>
                           <div class="modal-body">
                             <form class="sign-form" action="/admin/insertAdmin.do" method="post">
-                              <input type="text" name="userNo" id="userNoInput">
+                              <input type="hidden" name="userNo" id="userNoInput">
                               <div class="mb-3 custom-input">
                                 <label class="form-label">관할지역</label>
                                 <div class="input-group">

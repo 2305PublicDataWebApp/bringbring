@@ -107,7 +107,7 @@
                 <option value="phone" <c:if test="${searchCondition =='phone'}">selected</c:if>>전화번호</option>
                 <option value="userDeleted" <c:if test="${searchCondition =='userDeleted'}">selected</c:if>>탈퇴여부</option>
               </select>
-              <input type="text" class="form-control rounded" placeholder="검색어를 입력하세요" name="searchKeyword" value="${searchKeyword}" style="width: 50%;" />
+              <input type="text" class="form-control rounded" placeholder="검색어를 입력하세요" name="searchKeyword" value="${searchKeyword}" style="width: 5  0%;" />
               <button type="submit" class="btn btn-outline-success" id="user-serch-btn" >검색</button>
           </div>
           </form>
