@@ -85,6 +85,7 @@ input[type=number] {
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
 .thirdTd > .listTableP {
     height: 50%;
@@ -105,3 +106,4 @@ input[type=number] {
 #selectTable {
     height: 100%;
 }
+
