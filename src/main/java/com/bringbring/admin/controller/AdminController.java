@@ -157,6 +157,19 @@ public class AdminController {
 		return mv;
 	}
 
+	//회원 탈퇴
+	@PostMapping("/userDelete.do")
+	@ResponseBody
+	public String userDelete(Model model
+			, @ModelAttribute User user) {
+		int result = adminService.deleteUser(user);
+		if(result>0) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+
 	//관리자 리스트
 	@GetMapping("/adminList.do")
 	public ModelAndView adminListManagement(ModelAndView mv
@@ -233,7 +246,6 @@ public class AdminController {
 		} else {
 			return "fail";
 		}
-
 	}
 
 //	신고 관리

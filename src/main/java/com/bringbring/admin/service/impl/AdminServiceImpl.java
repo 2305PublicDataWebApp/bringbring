@@ -92,4 +92,22 @@ public class AdminServiceImpl implements AdminService  {
     @Override
     public int updateRoleDownGrade(int userNo) { return adminStore.updateRoleDownGrade(userNo);}
 
+    @Override
+    public int deleteUser(User user) {
+        int result = adminStore.deleteUser(user);
+        if(result>0){
+            int deleteRole = deleteRole(user.getUserNo());
+            if(deleteRole > 0){
+                return result;
+            } else {
+                throw new RuntimeException("롤 정보 삭제에 실패하였습니다.");
+            }
+        } else {
+            throw new RuntimeException("회원 삭제에 실패 하였습니다.");
+        }
+    }
+
+    @Override
+    public int deleteRole(int userNo) { return adminStore.deleteRole(userNo);}
+
 }

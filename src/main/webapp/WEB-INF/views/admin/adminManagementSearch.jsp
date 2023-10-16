@@ -235,16 +235,13 @@
 
     //관리자 해임
     function confirmAdminRemoval(userNo) {
-      var confirmation = confirm("정말로 관리자를 해임하시겠습니까?" + userNo);
+      var confirmation = confirm("정말로 관리자를 해임하시겠습니까?");
       if (confirmation) {
-        // 확인을 눌렀을 때 서버로 데이터를 전송하는 AJAX 호출을 여기에 추가합니다.
-        // 예를 들어 jQuery를 사용하여 AJAX 호출을 수행할 수 있습니다.
         $.ajax({
           url: '/admin/adminDelete.do',
           type: 'POST',
           data: { userNo: userNo },
           success: function(response) {
-            // 성공적으로 관리자를 해임한 경우의 처리를 여기에 추가합니다.
             console.log(response);
             if (response ==="success") {
               alert("관리자가 성공적으로 해임되었습니다.");
@@ -252,10 +249,8 @@
             } else {
               alert("관리자 해임에 실패하였습니다. 다시 시도해주세요.");
             }
-            // 관리자 목록을 새로고침하거나 화면에서 해당 행을 제거하는 등의 동작을 수행할 수 있습니다.
           },
           error: function(error) {
-            // 오류 발생 시 처리를 여기에 추가합니다.
             alert("오류가 발생하였습니다. 다시 시도해주세요.");
           }
         });

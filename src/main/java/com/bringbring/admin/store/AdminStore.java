@@ -97,7 +97,7 @@ public interface AdminStore {
 
     /**
      * 관리자 해임 store
-     * @param admin
+     * @param adminDetails
      * @return int
      */
     int deleteAdmin(AdminDetails adminDetails);
@@ -108,4 +108,18 @@ public interface AdminStore {
      * @return int
      */
     int updateRoleDownGrade(int userNo);
+
+    /**
+     * 유저 회원 탈퇴 store
+     * @param user
+     * @return int
+     */
+    int deleteUser(User user);
+
+    /**
+     * 유저 권한 삭제 store
+     * @param userNo
+     * @return
+     */
+    int deleteRole(int userNo);
 }
