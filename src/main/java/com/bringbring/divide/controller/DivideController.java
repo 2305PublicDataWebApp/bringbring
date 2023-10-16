@@ -15,12 +15,12 @@ import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.bringbring.divide.service.DivideService;
 import com.bringbring.region.domain.City;
@@ -40,16 +40,15 @@ public class DivideController {
 	private final UserService userService;
 
 	@GetMapping("/insert.do")
-	public ModelAndView showDivideInsert(ModelAndView mv) {
+	public String showDivideInsert(Model model) {
 		List<WasteCategory> wasteCategories = reservationService.selectWasteCategoryList();
 		List<City> cityList = regionService.selectCityList();
-		mv.addObject("wList", wasteCategories).addObject("cList", cityList);
-		mv.setViewName("divide/insert");
-		return mv;
+		model.addAttribute("wList", wasteCategories).addAttribute("cList", cityList);
+		return "divide/insert";
 	}
 	
 	@PostMapping("/insert.do")
-    public ModelAndView insertDivide(ModelAndView mv
+    public String insertDivide(Model model
 			, Divide divide
 			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
 			, HttpServletRequest request
@@ -62,16 +61,15 @@ public class DivideController {
 		int result = divideService.insertDivide(divide, uploadFiles, request);
 		if(result > 0) {
 			int max = divideService.selectMaxNo();
-			mv.setViewName("redirect:/divide/detail.do?divNo="+max);
-			return mv;
+			model.addAttribute("redirect:/divide/detail.do?divNo="+max);
+			return "redirect:/divide/detail.do?divNo=" + max;
 		}else {
-			mv.setViewName("/");
-			return mv;
+			return "/";
 		}
 	}
 	
 	@GetMapping("/detail.do")
-	public ModelAndView showDivideDetail(ModelAndView mv
+	public String showDivideDetail(Model model
 			, int divNo
 			, HttpSession httpSession) {
 
@@ -83,53 +81,50 @@ public class DivideController {
 			map.put("sessionId", userId);
 			map.put("divNo", divNo);
 			Heart heart = divideService.selectHeartByMap(map);
-			mv.addObject("heart", heart);
+			model.addAttribute("heart", heart);
 		}
 //		date.format(DateTimeFormatter.ISO_DATE);
-		mv.setViewName("divide/detail");
-		mv.addObject("iList", imageList).addObject("dData", detailData);
-		return mv;
+		model.addAttribute("iList", imageList).addAttribute("dData", detailData);
+		return "divide/datail";
 	}
 
 	@GetMapping("/update.do")
-	public ModelAndView updateDivide(ModelAndView mv
+	public String updateDivide(Model model
 			, int divNo) {
 
 		List<WasteCategory> wasteCategories = reservationService.selectWasteCategoryList();
 		List<City> cityList = regionService.selectCityList();
 		UpdateData updateData = divideService.selectUpdateDataByNo(divNo);
 
-		mv.addObject("wList", wasteCategories).addObject("cList", cityList);
+		model.addAttribute("wList", wasteCategories).addAttribute("cList", cityList);
 //		System.out.println(updateData);
-		mv.addObject("uData", updateData);
-		return mv;
+		model.addAttribute("uData", updateData);
+		return "divide/update";
 	}
 
 	@GetMapping("/delete.do")
-	public ModelAndView deleteDivide(ModelAndView mv
-			, int divNo) {
+	public String deleteDivide(int divNo) {
 
 		int result = divideService.deleteDivide(divNo);
-		mv.setViewName("redirect:/divide/list.do");
-		return mv;
+		return "redirect:/divide/list.do";
 	}
 
 	@GetMapping("/list.do")
-	public ModelAndView showDivideList(ModelAndView mv
+	public String showDivideList(Model model
 			, @RequestParam(value= "page", required = false, defaultValue="1") Integer currentPage
 			, HttpSession httpSession) {
 
 		String userId = (String) httpSession.getAttribute("sessionId");
 		if (userId != null && !userId.isEmpty()) {
 			User user = userService.selectOneById(userId);
-			mv.addObject("cUserNo", user.getUserNo());
+			model.addAttribute("cUserNo", user.getUserNo());
 		}
 		int totalCount = divideService.getListCount();
 		PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
 		List<ResponseData> rData = divideService.selectResPonseDataList(pInfo);
-		mv.addObject("rData", rData).addObject("pInfo", pInfo);
-		mv.setViewName("divide/list");
-		return mv;
+		model.addAttribute("rData", rData).addAttribute("pInfo", pInfo);
+
+		return "divide/list";
 	}
 
 	public PageInfo getPageInfo(int currentPage, int totalCount) {
