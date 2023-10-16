@@ -97,6 +97,7 @@
 		background-size: cover;
 		border: 1px solid rgb(25, 135, 84);
 		margin: 5px 15px 0px 15px;
+		border-bottom: 0px;
 	}
 	.deleteBtn{
 		border: 1px solid rgb(25, 135, 84);
@@ -382,12 +383,16 @@
 		// 선택된 파일 가져오기
 		const selectedFile = fileInput.files[0];
 
+		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+
 		// 유효성 검사
 		if (divTitle.trim() === "") {
 			alert("제목을 입력해주세요.");
 		} else if (!selectedFile) {
 			alert("사진은 한 개 이상 둥록해주세요.");
-		} else if (cityNo === "0") {
+		} else if (inputElements.length > 11) {
+			alert("10개까지의 파일만 업로드할 수 있습니다.");
+		}else if (cityNo === "0") {
 			alert("지역을 선택해주세요.");
 		} else if (wasteCategoryNo === "0") {
 			alert("종류를 선택해주세요.");
