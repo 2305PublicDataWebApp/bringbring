@@ -52,32 +52,8 @@
 
 <body>
 
-<!-- ======= Header ======= -->
-<header id="header" class="fixed-top ">
-  <div class="container d-flex align-items-center">
-    <img src="./assets/img/main/cargo-truck-green.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
-    <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.html">브링브링</a></h1>
-    <!-- Uncomment below if you prefer to use an image logo -->
-    <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
-    <nav id="navbar" class="navbar">
-      <ul>
-        <li><a class="nav-link scrollto" href="#about">배출안내</a></li>
-        <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
-        <li><a class="nav-link   scrollto" href="#portfolio">공지사항</a></li>
-        <li><a class="nav-link scrollto" href="#team">문의게시판</a></li>
-        <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
-
-        </li>
-        <li><button class="getstarted scrollto">로그인</button>
-          <!-- <a  href="#login">로그인</a> -->
-        </li>
-      </ul>
-      <i class="bi bi-list mobile-nav-toggle"></i>
-    </nav><!-- .navbar -->
-
-  </div>
-</header><!-- End Header -->
+<!-- 헤더 -->
+<jsp:include page="/include/header.jsp"></jsp:include>
 
 <div style="width: 100%;height: 74px;"></div>
 <!-- ======= Hero Section ======= -->
@@ -115,11 +91,6 @@
             <td>${item.wasteType.wasteTypeName}</td>
             <td>${item.wasteInfo.wasteInfoStandard}</td>
             <td>${item.wasteInfo.wasteInfoFee}원</td>
-
-  <%--          <td>1개</td>--%>
-  <%--          <td>--%>
-  <%--            <button class="selectBtn"><img src="../../../resources/assets/img/reservation/X.png"></button>--%>
-  <%--          </td>--%>
           </tr>
         <tr class="pic-tr">
           <td style="width: 12%">
@@ -128,7 +99,7 @@
                 <div class="pic-Add-Btn">
                   <img src="../../../resources/assets/img/reservation/pic-add.png">
                 </div>
-                <input type="file" id="uploadImg" class="uploadImg" accept="image/*" required multiple style="display: none;">
+                <input type="file" name="uploadFiles" class="uploadImg" accept="image/*" required multiple="multiple" style="display: none;">
                 <input type="hidden" class="wasteInfoNo" name="wasteInfoNo" value="${item.wasteInfo.wasteInfoNo}">
                 <div class="pic-Add-Btn">
                   <button class="btn btn-outline-success pic-Add-Btn" onclick="document.getElementById('uploadImg').click()">사진 추가</button>
@@ -144,10 +115,11 @@
       </c:forEach>
       </tbody>
     </table>
-<%--    </form>--%>
+    </form>
   </div>
   <div id="submit_btn_box">
     <button class="btn btn-success" id="submitBtn" type="button" onclick="submitFormBtn();">사진 추가하기</button>
+<%--    <button class="btn btn-success" id="submitButton" type="button">사진 추가하기</button>--%>
   </div>
 </main>
 </div><!-- End Hero -->
@@ -155,75 +127,8 @@
 <!-- 메인 -->
 <!-- End #main -->
 
-
-<!-- ======= Footer ======= -->
-<footer id="footer">
-  <div class="footer-top">
-    <div class="container">
-      <div class="row">
-
-        <div class="col-lg-3 col-md-6 footer-contact">
-          <h3>브링브링</h3>
-          <p>
-            A108 Adam Street <br>
-            New York, NY 535022<br>
-            United States <br><br>
-            <strong>Phone:</strong> +1 5589 55488 55<br>
-            <strong>Email:</strong> info@example.com<br>
-          </p>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><i class="bx bx-chevron-right"></i> <a href="#"></a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Our Services</h4>
-          <ul>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Our Social Networks</h4>
-          <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
-          <div class="social-links mt-3">
-            <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-            <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-            <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="container footer-bottom clearfix">
-    <div class="copyright">
-      &copy; Copyright <strong><span>Arsha</span></strong>. All Rights Reserved
-    </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-  </div>
-</footer><!-- End Footer -->
+<!-- 푸터 -->
+<jsp:include page="/include/footer.jsp"></jsp:include>
 
 <div id="preloader"></div>
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
@@ -380,46 +285,95 @@
 
   }
 
+  // // 파일 업로드 필드와 업로드 버튼 요소 가져오기
+  // const fileInputs = document.querySelectorAll('.uploadFiles');
+  // const uploadButton = document.getElementById('submitButton');
+  // const form = document.getElementById('uploadForm');
+  //
+  // console.log(uploadButton);
+  //
+  // // 업로드 버튼 클릭 이벤트 리스너 추가
+  // uploadButton.addEventListener('click', async () => {
+  //   const formData = new FormData();
+  //
+  //   // 모든 파일 업로드 필드에서 선택한 파일을 FormData에 추가
+  //   fileInputs.forEach(input => {
+  //     const files = input.files;
+  //     for (let i = 0; i < files.length; i++) {
+  //       formData.append('uploadedFiles', files[i]);
+  //       console.log(formData.get('uploadedFiles'));
+  //     }
+  //   });
+  //
+  //   formData.forEach((value, key) => {
+  //     console.log(key, value);
+  //   });
+  //
+  //   // 서버로 데이터를 보내는 부분 (서버 URL을 자신의 환경에 맞게 수정)
+  //   try {
+  //     const response = await fetch('/reservation/addImage.do', {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
+  //
+  //     if (response.ok) {
+  //       // 성공적으로 업로드되었을 때 수행할 작업
+  //       console.log('파일 업로드 성공');
+  //     } else {
+  //       console.error('파일 업로드 실패');
+  //     }
+  //   } catch (error) {
+  //     console.error('파일 업로드 중 오류 발생', error);
+  //   }
+  // });
+  //
+  //
+
+
   function submitFormBtn() {
     console.log("아");
-
-    const formData = new FormData();
 
     // 모든 .formList 요소를 선택
     const formLists = document.querySelectorAll('.formList');
 
-    // 각 .formList 요소를 순회하며 FormData에 파일 필드와 데이터 추가
-    formLists.forEach(function (formList) {
-      const listId = formList.dataset.listId; // data-list-id 속성을 사용하여 리스트 ID 가져옴
-      const fileInput = formList.querySelector('input[type="file"]');
-
-      // 파일이 선택되었는지 확인
-      if (fileInput.files.length > 0) {
-        formData.append("listId", listId);
-        formData.append("file", fileInput.files[0]);
-      }
-    });
-
     // FormData를 현재 폼에 설정
     const form = document.getElementById('uploadForm'); // 폼의 ID를 사용하여 폼 요소 선택
-
-    // FormData를 폼에 설정
     form.enctype = 'multipart/form-data'; // 폼의 enctype을 설정
     form.method = 'POST'; // 폼의 전송 방식을 설정
 
-    // FormData의 값을 폼 필드로 설정
-    formData.forEach(function(value, key) {
+    // FormData를 폼에 설정
+    const formData = new FormData();
+
+    // 각 .formList 요소를 순회하며 FormData에 파일 필드와 데이터 추가
+    formLists.forEach(function (formList) {
+      const listId = formList.dataset.listId; // data-list-id 속성을 사용하여 리스트 ID 가져옴
+      // const fileInput = formList.querySelector('input[type="file"]');
+      const fileInput = formList.querySelector('.uploadImg');
+
+      console.log("fileInput"+fileInput);
+
+      if (fileInput && fileInput.files.length > 0) {
+        formData.append("listId", listId);
+        formData.append("uploadFiles", fileInput.files[0]);
+        console.log("파일이 선택됨");
+      } else {
+        console.log("파일이 선택되지 않았음");
+      }
+    });
+
+    formData.forEach(function (value, key) {
       const input = document.createElement('input');
       input.type = 'hidden';
       input.name = key;
       input.value = value;
       form.appendChild(input);
     });
+
     console.log(form);
 
-    // 폼 제출
-    form.submit();
-  }
+    console.log("uploadFiles: " + formData.get('uploadFiles'));
+    // form.submit();
+  };
 
 
 </script>

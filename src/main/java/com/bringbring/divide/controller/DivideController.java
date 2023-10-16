@@ -1,21 +1,19 @@
 package com.bringbring.divide.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.DetailData;
+import com.bringbring.divide.domain.Divide;
 import com.bringbring.divide.domain.Heart;
 import com.bringbring.divide.domain.ResponseData;
+import com.bringbring.divide.service.DivideService;
 import com.bringbring.image.domain.Image;
-import com.bringbring.region.domain.District;
+import com.bringbring.region.domain.City;
+import com.bringbring.region.service.RegionService;
+import com.bringbring.reservation.domain.WasteCategory;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,13 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.bringbring.divide.domain.Divide;
-import com.bringbring.divide.service.DivideService;
-import com.bringbring.region.domain.City;
-import com.bringbring.region.service.RegionService;
-import com.bringbring.reservation.domain.WasteCategory;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/divide")
@@ -110,7 +106,7 @@ public class DivideController {
 
 		String userId = (String) httpSession.getAttribute("sessionId");
 		if (userId != null && !userId.isEmpty()) {
-			User user = userService.selectOneByuserId(userId);
+			User user = userService.selectOneById(userId);
 			mv.addObject("cUserNo", user.getUserNo());
 		}
 		int totalCount = divideService.getListCount();

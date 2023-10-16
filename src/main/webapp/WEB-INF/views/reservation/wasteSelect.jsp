@@ -52,32 +52,8 @@
 
 <body>
 
-<!-- ======= Header ======= -->
-<header id="header" class="fixed-top ">
-  <div class="container d-flex align-items-center">
-    <img src="./assets/img/main/cargo-truck-green.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
-    <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.html">브링브링</a></h1>
-    <!-- Uncomment below if you prefer to use an image logo -->
-    <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
-    <nav id="navbar" class="navbar">
-      <ul>
-        <li><a class="nav-link scrollto" href="#about">배출안내</a></li>
-        <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
-        <li><a class="nav-link   scrollto" href="#portfolio">공지사항</a></li>
-        <li><a class="nav-link scrollto" href="#team">문의게시판</a></li>
-        <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
-
-        </li>
-        <li><button class="getstarted scrollto">로그인</button>
-          <!-- <a  href="#login">로그인</a> -->
-        </li>
-      </ul>
-      <i class="bi bi-list mobile-nav-toggle"></i>
-    </nav><!-- .navbar -->
-
-  </div>
-</header><!-- End Header -->
+<!-- 헤더 -->
+<jsp:include page="/include/header.jsp"></jsp:include>
 
 <div style="width: 100%;height: 74px;"></div>
 <!-- ======= Hero Section ======= -->
@@ -147,75 +123,8 @@
 <!-- 메인 -->
 <!-- End #main -->
 
-
-<!-- ======= Footer ======= -->
-<footer id="footer">
-  <div class="footer-top">
-    <div class="container">
-      <div class="row">
-
-        <div class="col-lg-3 col-md-6 footer-contact">
-          <h3>브링브링</h3>
-          <p>
-            A108 Adam Street <br>
-            New York, NY 535022<br>
-            United States <br><br>
-            <strong>Phone:</strong> +1 5589 55488 55<br>
-            <strong>Email:</strong> info@example.com<br>
-          </p>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><i class="bx bx-chevron-right"></i> <a href="#"></a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Our Services</h4>
-          <ul>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Our Social Networks</h4>
-          <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
-          <div class="social-links mt-3">
-            <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-            <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-            <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="container footer-bottom clearfix">
-    <div class="copyright">
-      &copy; Copyright <strong><span>Arsha</span></strong>. All Rights Reserved
-    </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-  </div>
-</footer><!-- End Footer -->
+<!-- 푸터 -->
+<jsp:include page="/include/footer.jsp"></jsp:include>
 
 <div id="preloader"></div>
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
