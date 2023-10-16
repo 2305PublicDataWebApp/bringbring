@@ -4,15 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.bringbring.common.PageInfo;
-import com.bringbring.divide.domain.DetailData;
-import com.bringbring.divide.domain.Heart;
-import com.bringbring.divide.domain.ResponseData;
+import com.bringbring.divide.domain.*;
 import com.bringbring.region.domain.District;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.bringbring.divide.domain.Divide;
 import com.bringbring.divide.store.DivideStore;
 import com.bringbring.image.domain.Image;
 import com.bringbring.reservation.domain.WasteCategory;
@@ -76,5 +73,8 @@ public class DivideStoreLogic implements DivideStore{
 
 	@Override
 	public int deleteDivide(int divNo) { return sqlSession.update("DivideMapper.deleteDivide", divNo); }
+
+	@Override
+	public UpdateData selectUpdateDataByNo(int divNo) { return sqlSession.selectOne("DivideMapper.selectUpdateDataByNo", divNo); }
 
 }

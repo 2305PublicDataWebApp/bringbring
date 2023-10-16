@@ -151,7 +151,7 @@
             <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" class="btn btn-success datailBtn">게시글 신고하기</button>
           </c:if>
           <c:if test="${sessionId ne null && sessionId eq dData.user.userId}">
-            <button type="button" class="btn btn-success detailBtn">수정하기</button>
+            <button onclick="updateDivide();" type="button" class="btn btn-success detailBtn">수정하기</button>
             <button onclick="deleteDivide();" type="button" class="btn btn-success detailBtn">삭제하기</button>
           </c:if>
         </div>
@@ -495,6 +495,11 @@
         });
       }
     }
+
+    function updateDivide() {
+      location.href = "/divide/update.do?divNo=${dData.divide.divNo}";
+    }
+
     <!-- 로그인, 로그아웃 -->
     <jsp:include page="/include/loginJs.jsp"></jsp:include>
   </script>
