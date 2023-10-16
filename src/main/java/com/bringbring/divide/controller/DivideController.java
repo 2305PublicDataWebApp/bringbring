@@ -1,19 +1,19 @@
 package com.bringbring.divide.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.bringbring.common.PageInfo;
-import com.bringbring.divide.domain.DetailData;
-import com.bringbring.divide.domain.Divide;
-import com.bringbring.divide.domain.Heart;
-import com.bringbring.divide.domain.ResponseData;
-import com.bringbring.divide.service.DivideService;
+import com.bringbring.divide.domain.*;
 import com.bringbring.image.domain.Image;
-import com.bringbring.region.domain.City;
-import com.bringbring.region.service.RegionService;
-import com.bringbring.reservation.domain.WasteCategory;
+import com.bringbring.region.domain.District;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.bringbring.divide.service.DivideService;
+import com.bringbring.region.domain.City;
+import com.bringbring.region.service.RegionService;
+import com.bringbring.reservation.domain.WasteCategory;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("/divide")
@@ -87,6 +88,20 @@ public class DivideController {
 //		date.format(DateTimeFormatter.ISO_DATE);
 		mv.setViewName("divide/detail");
 		mv.addObject("iList", imageList).addObject("dData", detailData);
+		return mv;
+	}
+
+	@GetMapping("/update.do")
+	public ModelAndView updateDivide(ModelAndView mv
+			, int divNo) {
+
+		List<WasteCategory> wasteCategories = reservationService.selectWasteCategoryList();
+		List<City> cityList = regionService.selectCityList();
+		UpdateData updateData = divideService.selectUpdateDataByNo(divNo);
+
+		mv.addObject("wList", wasteCategories).addObject("cList", cityList);
+//		System.out.println(updateData);
+		mv.addObject("uData", updateData);
 		return mv;
 	}
 

@@ -13,10 +13,16 @@
 		<association property="heart" resultMap="heart"/>
 	</resultMap>
 
+	<resultMap id="updateData" type="com.bringbring.divide.domain.UpdateData">
+		<association property="divide" resultMap="divide"/>
+		<association property="city" resultMap="city"/>
+		<association property="district" resultMap="district"/>
+		<association property="wasteCategory" resultMap="wasteCategory"/>
+	</resultMap>
+
 	<resultMap id="detailData" type="com.bringbring.divide.domain.DetailData">
 		<association property="divide" resultMap="divide"/>
 		<association property="user" resultMap="user"/>
-		<association property="heart" resultMap="heart"/>
 		<association property="city" resultMap="city"/>
 		<association property="district" resultMap="district"/>
 		<association property="wasteCategory" resultMap="wasteCategory"/>
@@ -90,12 +96,11 @@
 	</resultMap>
 
 	<select id="selectDetailDataByNo" resultMap="detailData">
-		SELECT A.*, E.HEART_NO, C.CITY_NAME , D.DISTRICT_NAME, F.WASTE_CATEGORY_NAME, G.*
+		SELECT A.*, C.CITY_NAME , D.DISTRICT_NAME, F.WASTE_CATEGORY_NAME, G.*
 			 , (SELECT COUNT(*) FROM HEART_TBL WHERE DIV_NO = #{value}) AS heartCount
 		FROM DIVIDE_TBL A
 			 JOIN CITY_TBL C ON A.CITY_NO = C.CITY_NO
 			 JOIN DISTRICT_TBL D ON A.DISTRICT_NO = D.DISTRICT_NO
-			 LEFT OUTER JOIN HEART_TBL E ON A.DIV_NO = E.DIV_NO
 			 JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
 			 LEFT JOIN USER_TBL G ON A.USER_NO = G.USER_NO
 		WHERE A.DIV_NO = #{value}
@@ -141,6 +146,13 @@
 		SELECT A.*, B.USER_ID AS userId FROM HEART_TBL A
 		JOIN USER_TBL B ON A.USER_NO = B.USER_NO
 		WHERE DIV_NO = #{divNo} AND B.USER_ID= #{sessionId}
+	</select>
+	<select id="selectUpdateDataByNo" resultMap="updateData">
+		SELECT * FROM DIVIDE_TBL A
+		  JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+		  JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
+		  JOIN WASTE_CATEGORY_TBL D ON A.WASTE_CATEGORY_NO = D.WASTE_CATEGORY_NO
+		WHERE DIV_NO = #{value}
 	</select>
   	<insert id="insertDivide">
   		INSERT INTO DIVIDE_TBL VALUES (

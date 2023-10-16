@@ -97,6 +97,7 @@
 		background-size: cover;
 		border: 1px solid rgb(25, 135, 84);
 		margin: 5px 15px 0px 15px;
+		border-bottom: 0px;
 	}
 	.deleteBtn{
 		border: 1px solid rgb(25, 135, 84);
@@ -138,6 +139,16 @@
 						<label>파일</label>
 						<%--					<i style="font-size: 20px;width: 30px;" class="bi bi-plus-circle-fill" id="addFileInput"></i>--%>
 						<input style="width: 600px;" accept="image/*" name="uploadFiles" id="inputFile1" class="form-control fileLayOut" type="file">
+					</li>
+					<li>
+						<div style="font-size: 14px;color: #a6a5a5;margin-left: 150px;display:flex;width: 100%;">
+							<div style="width: 30%;">
+								이미지 개수 <span id="imageCount">0</span> / 10
+							</div>
+							<div style="float:right;width: 70%;text-align: right;padding-right: 18px;">
+								#이미지 파일은 1~10개까지 첨부 가능합니다.
+							</div>
+						</div>
 					</li>
 					<li style="padding: 0px 15px 0px 15px;">
 						<div class="image-list" style="width: 900px;padding-left: 135px;">
@@ -308,9 +319,7 @@
 						// 해당 주소에 대한 좌표를 받아서
 						var coords = new daum.maps.LatLng(result.y, result.x);
 						document.getElementById("coordinateX").value = result.x;
-						console.log(result.x);
 						document.getElementById("coordinateY").value = result.y;
-						console.log(result.y);
 						map.relayout();
 						// 지도 중심을 변경한다.
 						map.setCenter(coords);
@@ -343,11 +352,8 @@
 
 				// 마커를 클릭한 위치에 표시합니다
 				marker.setPosition(mouseEvent.latLng);
-				console.log(mouseEvent.latLng);
 				document.getElementById("coordinateX").value = mouseEvent.latLng.La;
-				console.log(mouseEvent.latLng.La);
 				document.getElementById("coordinateY").value = mouseEvent.latLng.Ma;
-				console.log(mouseEvent.latLng.Ma);
 
 				marker.setMap(map);
 
@@ -382,12 +388,16 @@
 		// 선택된 파일 가져오기
 		const selectedFile = fileInput.files[0];
 
+		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+
 		// 유효성 검사
 		if (divTitle.trim() === "") {
 			alert("제목을 입력해주세요.");
 		} else if (!selectedFile) {
 			alert("사진은 한 개 이상 둥록해주세요.");
-		} else if (cityNo === "0") {
+		} else if (inputElements.length > 11) {
+			alert("10개까지의 파일만 업로드할 수 있습니다.");
+		}else if (cityNo === "0") {
 			alert("지역을 선택해주세요.");
 		} else if (wasteCategoryNo === "0") {
 			alert("종류를 선택해주세요.");
@@ -460,6 +470,13 @@
 
 	function handlerInputChange(e) {
 
+		var imageCountElement = document.querySelector("#imageCount");
+		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+		if (parseInt(imageCountElement.innerHTML) > 9) {
+			alert("10장 이상 사진을 추가할 수 없습니다.");
+			imageCountElement.innerHTML = (inputElements.length - 1).toString();
+			return;
+		}
 		const tr = e.target.closest('tr');
 		if (!imgCount[tr]) {
 			imgCount[tr] = 0;
@@ -498,6 +515,14 @@
 
 	});
 	function getImgs(e) {
+
+		var imageCountElement = document.querySelector("#imageCount");
+		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+		if (parseInt(imageCountElement.innerHTML) > 9) {
+			imageCountElement.innerHTML = (inputElements.length - 1).toString();
+			return;
+		}
+
 		const uploadFiles = [];
 		const files = e.currentTarget.files;
 		var imgPreview = document.querySelector('.image-list');
@@ -563,6 +588,12 @@
 			}
 		}
 
+		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+		var imageCountElement = document.querySelector("#imageCount");
+		imageCountElement.innerHTML = '';
+		imageCountElement.innerHTML = (inputElements.length - 1).toString();
+		// console.log(inputElements.length - 1);
+
 		deleteBtn.addEventListener('click', function(event) {
 			// 클릭한 deleteBtn에 접근하기 위해 event.target을 사용합니다.
 			const btnNumber = event.target.getAttribute('data-number');
@@ -583,6 +614,11 @@
 
 			console.log('이미지' + imgCount);
 			console.log(imgCount[trClicked]);
+
+			var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+			var imageCountElement = document.querySelector("#imageCount");
+			imageCountElement.innerHTML = '';
+			imageCountElement.innerHTML = (inputElements.length - 1).toString();
 		});
 
 		return div;

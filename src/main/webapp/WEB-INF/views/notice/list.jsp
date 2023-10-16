@@ -74,190 +74,174 @@
   <!-- End Hero -->
 
   <!-- 메인 -->
-  <main id="main" class="main">
-    <!-- 카테고리 메뉴 -->
-    <div class="head">
-      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all"
-            type="button" role="tab" aria-controls="pills-all" aria-selected="true" value="all">전체</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-service-tab" data-bs-toggle="pill" data-bs-target="#pills-service"
-            type="button" role="tab" aria-controls="pills-service" aria-selected="false" value="service">서비스</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-update-tab" data-bs-toggle="pill" data-bs-target="#pills-update"
-            type="button" role="tab" aria-controls="pills-update" aria-selected="false" value="update">업데이트</button>
-        </li>
-      </ul>
+	<main id="main" class="main">
+		<!-- 카테고리 메뉴 -->
+		<div class="head">
+			<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="pills-all-tab"
+						data-bs-toggle="pill" data-bs-target="#pills-all" type="button"
+						role="tab" aria-controls="pills-all" aria-selected="true"
+						value="all">전체</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="pills-service-tab"
+						data-bs-toggle="pill" data-bs-target="#pills-service"
+						type="button" role="tab" aria-controls="pills-service"
+						aria-selected="false" value="service">서비스</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="pills-update-tab"
+						data-bs-toggle="pill" data-bs-target="#pills-update" type="button"
+						role="tab" aria-controls="pills-update" aria-selected="false"
+						value="update">업데이트</button>
+				</li>
+			</ul>
 
-      <form class="d-flex" action="./search.jsp" method="get">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchKeyword">
-        <button class="btn btn-outline-success" type="submit">검색</button>
-      </form>
-    </div>
+			<form class="d-flex" action="./search.jsp" method="get">
+				<input class="form-control me-2" type="search" placeholder="Search"
+					aria-label="Search" name="searchKeyword">
+				<button class="btn btn-outline-success" type="submit">검색</button>
+			</form>
+		</div>
 
-    <!-- 테이블 -->
-    <div class="tab-content" id="noticeContent">
-      <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="all-tab">
-        <div class="col-lg-12">
-          <table class="table table-hover text-center">
-            <thead class="table-light">
-              <tr>
-                <th scope="row">No</th>
-                <th scope="row">카테고리</th>
-                <th scope="row">지역</th>
-                <th scope="row">제목</th>
-                <th scope="row">조회수</th>
-                <th scope="row">작성일</th>
-              </tr>
-            </thead>
-            <tbody>
-            <c:forEach begin="0" end="10" var="notice" items="${nList }" varStatus="i">
-              <tr>
-                <th scope="row">${i.count }</th>
-                <td>${notice.noticeType }</td>
-                <td>카테고리</td>
-                <td style="width: 641.15px;">
-                	<a href="${detailUrl }">${notice.noticeTitle }</a>
-                	<!-- 글 작성일기준 일주일동안 new이미지 띄우기 -->
-                	<c:set var="oneWeekAgo" value="${now - 7 * 24 * 60 * 60 * 1000}" />
-      				<c:choose>
-        				<c:when test="${notice.noticeCreateDate.time >= oneWeekAgo}">
-          					<img src="../resources/assets/img/notice/new_icon.png" />
-        				</c:when>
-      				</c:choose>
-                </td>
-                <td>조회수</td>
-                <td>
-                	<fmt:formatDate pattern="yyyy-MM-dd" value="${notice.noticeCreateDate }" />
-                </td>
-              </tr>
-              </c:forEach>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="tab-pane fade" id="pills-service" role="tabpanel" aria-labelledby="service-tab">
-        <div class="col-lg-12">
-          <table class="table table-hover text-center">
-            <thead  class="table-light">
-              <tr>
-                <th scope="row">No</th>
-                <th scope="row">카테고리</th>
-                <th scope="row">지역</th>
-                <th scope="row">제목</th>
-                <th scope="row">조회수</th>
-                <th scope="row">작성일</th>
-              </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="notice" items="${nList }" varStatus="i">
-              <tr>
-                <th scope="row">${i.count }</th>
-                <td>서비스</td>
-                <td>지역</td>
-                <td style="width: 641.15px;">
-                	<a href="${detailUrl }">${notice.noticeTitle }</a>
-                	<!-- 글 작성일기준 일주일동안 new이미지 띄우기 -->
-                	<c:set var="oneWeekAgo" value="${now - 7 * 24 * 60 * 60 * 1000}" />
-      				<c:choose>
-        				<c:when test="${notice.noticeCreateDate.time >= oneWeekAgo}">
-          					<img src="../resources/assets/img/notice/new_icon.png" />
-        				</c:when>
-      				</c:choose>
-                </td>
-                <td>조회수</td>
-                <td>
-                	<fmt:formatDate pattern="yyyy-MM-dd" value="${notice.noticeCreateDate }" />
-                </td>
-              </tr>
-              </c:forEach>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="tab-pane fade" id="pills-update" role="tabpanel" aria-labelledby="update-tab">
-        <div class="col-lg-12">
-          <table class="table table-hover text-center">
-            <thead  class="table-light">
-              <tr>
-                <th scope="row">No</th>
-                <th scope="row">카테고리</th>
-                <th scope="row">지역</th>
-                <th scope="row">제목</th>
-                <th scope="row">조회수</th>
-                <th scope="row">작성일</th>
-              </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="notice" items="${noticeList }" varStatus="i">
-              <tr>
-                <th scope="row">${i.count }</th>
-                <td>업데이트</td>
-                <td>지역</td>
-                <td style="width: 641.15px;">
-                	<a href="${detailUrl }">${notice.noticeTitle }</a>
-                	<!-- 글 작성일기준 일주일동안 new이미지 띄우기 -->
-                	<c:set var="oneWeekAgo" value="${now - 7 * 24 * 60 * 60 * 1000}" />
-      				<c:choose>
-        				<c:when test="${notice.noticeCreateDate.time >= oneWeekAgo}">
-          					<img src="../resources/assets/img/notice/new_icon.png" />
-        				</c:when>
-      				</c:choose>
-                </td>
-                <td>조회수</td>
-                <td>
-                	<fmt:formatDate pattern="yyyy-MM-dd" value="${notice.noticeCreateDate }" />
-                </td>
-              </tr>
-              </c:forEach>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- 글쓰기버튼 관리자만 보임 -->
-    <c:if test="${adminNo ne null }">
-    <button type="button" class="btn btn-success" onclick="showInsertForm()">글쓰기</button>
-    </c:if>
+		<!-- 테이블 -->
+		<div class="tab-content" id="noticeContent">
+			<div class="tab-pane fade show active" id="pills-all" role="tabpanel"
+				aria-labelledby="all-tab">
+				<div class="col-lg-12">
+					<table class="table table-hover text-center">
+						<thead class="table-light">
+							<tr>
+								<th scope="row">No</th>
+								<th scope="row">카테고리</th>
+								<th scope="row">지역</th>
+								<th scope="row">제목</th>
+								<th scope="row">조회수</th>
+								<th scope="row">작성일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="notice" items="${noticeList }" varStatus="i">
+								<tr>
+									<th scope="row">${i.count }</th>
+									<td>${notice.noticeType}</td>
+									<td>지역</td>
+									<c:url var="detailUrl" value="/notice/detail.do">
+										<c:param name="noticeNo" value="${notice.noticeNo }" />
+									</c:url>
+									<td style="width: 641.15px;"><a href="${detailUrl }">${notice.noticeTitle }</a>
+									</td>
+									<td><fmt:formatNumber pattern="###,###" value="123000" />
+									</td>
+									<td>${notice.noticeCreateDate}</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="pills-service" role="tabpanel"
+				aria-labelledby="service-tab">
+				<div class="col-lg-12">
+					<table class="table table-hover text-center">
+						<thead class="table-light">
+							<tr>
+								<th scope="row">No</th>
+								<th scope="row">카테고리</th>
+								<th scope="row">지역</th>
+								<th scope="row">제목</th>
+								<th scope="row">조회수</th>
+								<th scope="row">작성일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="notice" items="${noticeList }" varStatus="i">
+								<c:if test="${notice.noticeType eq 'service' }">
+									<tr>
+										<th scope="row">${i.count }</th>
+										<td>${notice.noticeType}</td>
+										<td>지역</td>
+										<td style="width: 641.15px;"><a href="${detailUrl }">${notice.noticeTitle }</a>
+										</td>
+										<td>조회수</td>
+										<td>${notice.noticeCreateDate}</td>
+									</tr>
+								</c:if>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="pills-update" role="tabpanel"
+				aria-labelledby="update-tab">
+				<div class="col-lg-12">
+					<table class="table table-hover text-center">
+						<thead class="table-light">
+							<tr>
+								<th scope="row">No</th>
+								<th scope="row">카테고리</th>
+								<th scope="row">지역</th>
+								<th scope="row">제목</th>
+								<th scope="row">조회수</th>
+								<th scope="row">작성일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="notice" items="${noticeList }" varStatus="i">
+								<c:if test="${notice.noticeType eq 'update' }">
+									<tr>
+										<th scope="row">${i.count }</th>
+										<td>${notice.noticeType}</td>
+										<td>지역</td>
+										<td style="width: 641.15px;"><a href="${detailUrl }">${notice.noticeTitle }</a>
+										</td>
+										<td>조회수</td>
+										<td>${notice.noticeCreateDate}</td>
+									</tr>
+								</c:if>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!-- 글쓰기버튼 관리자만 보임 -->
 
-    <!-- 페이징 -->
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">      
-        <li class="page-item">
-        	<c:if test="${noticeInfo.StartNavi != 1}">
-        	  <c:url var="preUrl" value="/notice/list.do">
-        	  	<c:param name="page" value="${noticeInfo.StartNavi-1 }" />
-        	  </c:url>
-          <a class="page-link" href="${preUrl }" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-          </c:if>
-        </li>   
-        <li class="page-item">
-        <c:forEach begin="${noticeInfo.StartNavi }" end="${noticeInfo.StartNavi }" var="n">
-    	<c:url var="pageUrl" value="/notice/list.do">
-    		<c:param name="page" value="${n}"></c:param>
-    	</c:url>        
-        <a class="page-link" href="${preUrl }">${n }</a>
-        </c:forEach>
-        </li> 
-        <li class="page-item">
-        <c:if test="${noticeInfo.EndNavi != noticeInfo.NaviTotalCount}">
-            	<c:url var="nextUrl" value="/notice/list.do">
-    		<c:param name="page" value="${noticeInfo.StartEndNavi+1  }" />
-    	</c:url>
-          <a class="page-link" href="${nextUrl }" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-          </c:if>
-        </li>
-      </ul>
-    </nav>
-  </main>
-  <!-- End #main -->
+		<button type="button" class="btn btn-success"
+			onclick="showNoticeInsert()">글쓰기</button>
+
+		<!-- 페이징 -->
+		<nav aria-label="Page navigation example">
+			<ul class="pagination">
+				<li class="page-item"><c:if test="${noticeInfo.StartNavi != 1}">
+						<c:url var="preUrl" value="/notice/list.do">
+							<c:param name="page" value="${noticeInfo.StartNavi-1 }" />
+						</c:url>
+						<a class="page-link" href="${preUrl }" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</c:if></li>
+				<c:forEach begin="${noticeInfo.StartNavi }"
+					end="${noticeInfo.EndNavi }" var="n">
+					<li class="page-item"><c:url var="pageUrl"
+							value="/notice/list.do">
+							<c:param name="page" value="${n}"></c:param>
+						</c:url> <a class="page-link" href="${pageUrl }">${n }</a></li>
+				</c:forEach>
+				<li class="page-item"><c:if
+						test="${noticpInfoeInfo.EndNavi != noticeInfo.NaviTotalCount}">
+						<c:url var="nextUrl" value="/notice/list.do">
+							<c:param name="page" value="${pInfo.EndNavi+1  }" />
+						</c:url>
+						<a class="page-link" href="${nextUrl }" aria-label="Next"> <span
+							aria-hidden="true">&raquo;</span>
+						</a>
+					</c:if></li>
+			</ul>
+		</nav>
+	</main>
+	<!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <jsp:include page="/include/footer.jsp"></jsp:include>
@@ -288,13 +272,17 @@
     });
 
   </script>
-  
-  <!-- 버튼 script -->
-  <script>
-    function showInsertForm() {
-      window.location.href = "./insert.jsp"
-    }
-  </script>
+	<!-- 기능 script -->
+	<script>
+		function showNoticeInsert() {
+			location.href = "/notice/insert.do"
+		}
+
+		function searchByCategory(category) {
+			document.querySelector('input[name="noticeCategory"]').value = category;
+			document.querySelector('form').submit();
+		}
+	</script>
 
 
 </body>

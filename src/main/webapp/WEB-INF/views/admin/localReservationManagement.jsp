@@ -102,7 +102,7 @@
             <option value="1">신청일</option>
             <option value="2">주소</option>
           </select>
-          <input type="search" class="form-control rounded" placeholder="검색" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
+          <input type="search" class="form-control" placeholder="검색" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
           <button type="button" class="btn btn-outline-success" id="user-serch-btn">검색</button>
         </div>
       </div>

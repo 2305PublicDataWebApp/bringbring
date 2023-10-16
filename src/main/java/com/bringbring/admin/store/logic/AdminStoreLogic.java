@@ -77,4 +77,11 @@ public class AdminStoreLogic implements AdminStore {
 
     @Override
     public int updateRoleDownGrade(int userNo) { return sqlSession.update("AdminMapper.updateRoleDownGrade", userNo);}
+
+    @Override
+    public int deleteUser(User user) { return sqlSession.delete("AdminMapper.deleteUser", user);}
+
+    @Override
+    public int deleteRole(int userNo) { return sqlSession.delete("AdminMapper.deleteRole", userNo);
+    }
 }

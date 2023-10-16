@@ -16,12 +16,14 @@ import lombok.ToString;
 public class Notice {
 
 	private int noticeNo;
-	private int adminNo;
 	private String noticeType;
-	private String noticeTilte;
+	private String noticeTitle;
 	private String noticeContent;
 	private LocalDate noticeCreateDate;
 	private int noticeViewCount;
-	private int isNoticeDeleted;
+	private char isNoticeDeleted;
+	private int preNoticeNo;
+	private int nextNoticeNo;
+	private int adminNo;
 	
 }

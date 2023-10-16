@@ -32,7 +32,6 @@
     <link href="../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Template Main CSS File -->
     <link href="../resources/assets/css/style.css" rel="stylesheet">
     <link href="../resources/assets/css/common.css" rel="stylesheet">
@@ -50,7 +49,7 @@
   <body>
 
   <!-- 헤더 -->
-    <jsp:include page="/include/header.jsp"></jsp:include>
+  <jsp:include page="/include/header.jsp"></jsp:include>
 
     <div style="width: 100%;height: 74px;"></div>
     <!-- ======= Hero Section ======= -->
@@ -99,7 +98,7 @@
             <h2>회원 리스트</h2>
           </div>
           <form action="/admin/searchUser.do" method="GET">
-          <div class="input-group" style="width: 400px; height: 30px;">
+          <div class="input-group" style="width: 400px; height: 30px;>
               <select name="searchCondition" class="form-select" aria-label=".form-select-lg example" style="width: 20%;">
                 <option value="all">전체</option>
                 <option value="id">아이디</option>
@@ -107,7 +106,7 @@
                 <option value="phone">전화번호</option>
                 <option value="userDeleted">탈퇴여부</option>
               </select>
-              <input type="text" class="form-control rounded" placeholder="검색어를 입력하세요" name="searchKeyword" style="width: 50%;" />
+              <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="searchKeyword" style="width: 50%;" />
               <input type="submit" class="btn btn-outline-success" id="user-serch-btn" value="검색"></input>
           </div>
             </form>
@@ -123,7 +122,7 @@
                       <th>핸드폰 번호</th>
                       <th>가입일</th>
                       <th>탈퇴 여부</th>
-                      <th>관리자 여부</th>
+                      <th>관리</th>
                   </tr>
               </thead>
               <tbody>
@@ -144,7 +143,7 @@
                           관리자 임명
                         </button>
                         <c:if test="${user.isUserDeleted.toString() eq 'Y'}">
-                          <button type="button" class="btn btn-success">
+                          <button type="button" class="btn btn-success" onclick="confirmUserRemoval(${user.userNo})">
                             탈퇴 승인
                           </button>
                         </c:if>
@@ -162,7 +161,7 @@
                           </div>
                           <div class="modal-body">
                             <form class="sign-form" action="/admin/insertAdmin.do" method="post">
-                              <input type="text" name="userNo" id="userNoInput">
+                              <input type="hidden" name="userNo" id="userNoInput">
                               <div class="mb-3 custom-input">
                                 <label class="form-label">관할지역</label>
                                 <div class="input-group">
@@ -331,7 +330,30 @@
         }
       });
 
-
+      //회원 탈퇴 승인
+      function confirmUserRemoval(userNo) {
+        var confirmation = confirm("회원탈퇴를 승인 하시겠습니까?" + userNo);
+        if (confirmation) {
+          $.ajax({
+            url: '/admin/userDelete.do',
+            type: 'POST',
+            data: { userNo: userNo },
+            success: function(response) {
+              console.log(response);
+              if (response ==="success") {
+                alert("회원 탈퇴 승인 완료.");
+                location.reload();
+              } else {
+                alert("회원 탈퇴 승인 실패. 다시 시도해주세요.");
+              }
+            },
+            error: function(error) {
+              // 오류 발생 시 처리를 여기에 추가합니다.
+              alert("오류가 발생하였습니다. 다시 시도해주세요.");
+            }
+          });
+        }
+      }
     </script>
 
 

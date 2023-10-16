@@ -4,10 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bringbring.common.PageInfo;
-import com.bringbring.divide.domain.DetailData;
-import com.bringbring.divide.domain.Divide;
-import com.bringbring.divide.domain.Heart;
-import com.bringbring.divide.domain.ResponseData;
+import com.bringbring.divide.domain.*;
 import com.bringbring.image.domain.Image;
 import com.bringbring.region.domain.District;
 import com.bringbring.reservation.domain.WasteCategory;
@@ -39,4 +36,6 @@ public interface DivideStore {
 	int getHeartCount(int divNo);
 
 	int deleteDivide(int divNo);
+
+    UpdateData selectUpdateDataByNo(int divNo);
 }

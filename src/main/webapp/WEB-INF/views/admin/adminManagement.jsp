@@ -107,7 +107,7 @@
             <option value="phone">전화번호</option>
             <option value="region">관활지역</option>
           </select>
-          <input type="text" class="form-control rounded" placeholder="검색" name="searchKeyword" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
+          <input type="text" class="form-control" placeholder="검색" name="searchKeyword" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
           <input type="submit" class="btn btn-outline-success" id="user-serch-btn" value="검색"></input>
         </div>
         </form>
@@ -135,7 +135,7 @@
               <td>${admin.regionName}</td>
               <c:if test="${admin.adminNo ne 1}">
               <td>
-                <button class="btn btn-success" onclick="confirmAdminRemoval(${admin.adminNo})">관리자 해임</button>
+                <button class="btn btn-success" onclick="confirmAdminRemoval(${admin.userNo})">관리자 해임</button>
               </td>
               </c:if>
             </tr>
@@ -230,33 +230,25 @@
             $('#wrapper').toggleClass('toggled');
       });  
     });
-    function submitAdminForm(userNo) {
-      var regionNo = document.getElementById("regionNo" + userNo).value;
-      var adminOrg = document.getElementById("adminOrg" + userNo).value;
 
-      // 서버로 데이터를 보내고 관리자 정보를 인서트하는 API 호출
-      // 여기에 AJAX 호출 코드를 추가해야 합니다.
-
-      // 모달을 닫음
-      $('#myModal' + userNo).modal('hide');
-    }
-
-    function confirmAdminRemoval(adminNo) {
+    //관리자 해임
+    function confirmAdminRemoval(userNo) {
       var confirmation = confirm("정말로 관리자를 해임하시겠습니까?");
       if (confirmation) {
-        // 확인을 눌렀을 때 서버로 데이터를 전송하는 AJAX 호출을 여기에 추가합니다.
-        // 예를 들어 jQuery를 사용하여 AJAX 호출을 수행할 수 있습니다.
         $.ajax({
           url: '/admin/adminDelete.do',
           type: 'POST',
-          data: { adminNo: adminNo },
+          data: { userNo: userNo },
           success: function(response) {
-            // 성공적으로 관리자를 해임한 경우의 처리를 여기에 추가합니다.
-            alert("관리자가 성공적으로 해임되었습니다.");
-            // 관리자 목록을 새로고침하거나 화면에서 해당 행을 제거하는 등의 동작을 수행할 수 있습니다.
+            console.log(response);
+            if (response ==="success") {
+              alert("관리자가 성공적으로 해임되었습니다.");
+              location.reload();
+            } else {
+              alert("관리자 해임에 실패하였습니다. 다시 시도해주세요.");
+            }
           },
           error: function(error) {
-            // 오류 발생 시 처리를 여기에 추가합니다.
             alert("오류가 발생하였습니다. 다시 시도해주세요.");
           }
         });
