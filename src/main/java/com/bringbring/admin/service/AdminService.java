@@ -108,4 +108,18 @@ public interface AdminService {
      * @return int
      */
     int updateRoleDownGrade(int userNo);
+
+    /**
+     * 유저 회원탈퇴 service
+     * @param user
+     * @return int
+     */
+    int deleteUser(User user);
+
+    /**
+     * 유저 권한 삭제 service
+     * @param userNo
+     * @return int
+     */
+    int deleteRole(int userNo);
 }

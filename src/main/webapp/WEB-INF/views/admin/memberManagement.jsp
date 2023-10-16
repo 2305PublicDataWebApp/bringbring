@@ -123,7 +123,7 @@
                       <th>핸드폰 번호</th>
                       <th>가입일</th>
                       <th>탈퇴 여부</th>
-                      <th>관리자 여부</th>
+                      <th>관리</th>
                   </tr>
               </thead>
               <tbody>
@@ -144,7 +144,7 @@
                           관리자 임명
                         </button>
                         <c:if test="${user.isUserDeleted.toString() eq 'Y'}">
-                          <button type="button" class="btn btn-success">
+                          <button type="button" class="btn btn-success" onclick="confirmUserRemoval(${user.userNo})">
                             탈퇴 승인
                           </button>
                         </c:if>
@@ -162,7 +162,7 @@
                           </div>
                           <div class="modal-body">
                             <form class="sign-form" action="/admin/insertAdmin.do" method="post">
-                              <input type="text" name="userNo" id="userNoInput">
+                              <input type="hidden" name="userNo" id="userNoInput">
                               <div class="mb-3 custom-input">
                                 <label class="form-label">관할지역</label>
                                 <div class="input-group">
@@ -331,7 +331,30 @@
         }
       });
 
-
+      //회원 탈퇴 승인
+      function confirmUserRemoval(userNo) {
+        var confirmation = confirm("회원탈퇴를 승인 하시겠습니까?" + userNo);
+        if (confirmation) {
+          $.ajax({
+            url: '/admin/userDelete.do',
+            type: 'POST',
+            data: { userNo: userNo },
+            success: function(response) {
+              console.log(response);
+              if (response ==="success") {
+                alert("회원 탈퇴 승인 완료.");
+                location.reload();
+              } else {
+                alert("회원 탈퇴 승인 실패. 다시 시도해주세요.");
+              }
+            },
+            error: function(error) {
+              // 오류 발생 시 처리를 여기에 추가합니다.
+              alert("오류가 발생하였습니다. 다시 시도해주세요.");
+            }
+          });
+        }
+      }
     </script>
 
 

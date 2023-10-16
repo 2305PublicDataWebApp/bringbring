@@ -157,6 +157,19 @@ public class AdminController {
 		return mv;
 	}
 
+	//회원 탈퇴
+	@PostMapping("/userDelete.do")
+	@ResponseBody
+	public String userDelete(Model model
+			, @ModelAttribute User user) {
+		int result = adminService.deleteUser(user);
+		if(result>0) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+
 	//관리자 리스트
 	@GetMapping("/adminList.do")
 	public ModelAndView adminListManagement(ModelAndView mv
@@ -222,21 +235,17 @@ public class AdminController {
 	}
 
 	//관리자 해임
-	@GetMapping("/adminDelete.do")
-	public ModelAndView adminDelete(ModelAndView mv
+	@PostMapping("/adminDelete.do")
+	@ResponseBody
+	public String adminDelete(Model model
 			, @ModelAttribute AdminDetails adminDetails) {
 		int result = adminService.deleteAdmin(adminDetails);
+		System.out.println(adminDetails.getUserNo());
 		if(result>0) {
-			mv.addObject("msg", "관리자 해임 완료")
-					.addObject("url", "/admin/adminList.do")
-					.setViewName("common/error");
+			return "success";
 		} else {
-			mv.addObject("msg", "관리자 해임 실패")
-					.addObject("url", "/admin/adminList.do")
-					.setViewName("common/error");
+			return "fail";
 		}
-		return mv;
-
 	}
 
 //	신고 관리

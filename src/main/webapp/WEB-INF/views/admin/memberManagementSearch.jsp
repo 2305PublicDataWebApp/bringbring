@@ -107,7 +107,7 @@
                 <option value="phone" <c:if test="${searchCondition =='phone'}">selected</c:if>>전화번호</option>
                 <option value="userDeleted" <c:if test="${searchCondition =='userDeleted'}">selected</c:if>>탈퇴여부</option>
               </select>
-              <input type="text" class="form-control rounded" placeholder="검색어를 입력하세요" name="searchKeyword" value="${searchKeyword}" style="width: 50%;" />
+              <input type="text" class="form-control rounded" placeholder="검색어를 입력하세요" name="searchKeyword" value="${searchKeyword}" style="width: 5  0%;" />
               <button type="submit" class="btn btn-outline-success" id="user-serch-btn" >검색</button>
           </div>
           </form>
@@ -123,7 +123,7 @@
                       <th>핸드폰 번호</th>
                       <th>가입일</th>
                       <th>탈퇴 여부</th>
-                      <th>관리자 여부</th>
+                      <th>관리</th>
                   </tr>
               </thead>
               <tbody>
@@ -140,11 +140,11 @@
                       </td>
                       <td>
                         <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                data-bs-target="#adminModal">
+                                data-bs-target="#adminModal" data-user-no="${user.userNo}">
                           관리자 임명
                         </button>
                         <c:if test="${user.isUserDeleted.toString() eq 'Y'}">
-                          <button type="button" class="btn btn-success">
+                          <button type="button" class="btn btn-success" onclick="confirmUserRemoval(${user.userNo})">
                             탈퇴 승인
                           </button>
                         </c:if>
@@ -333,7 +333,30 @@
         }
       });
 
-
+      //회원 탈퇴 승인
+      function confirmUserRemoval(userNo) {
+        var confirmation = confirm("회원탈퇴를 승인 하시겠습니까?" + userNo);
+        if (confirmation) {
+          $.ajax({
+            url: '/admin/userDelete.do',
+            type: 'POST',
+            data: { userNo: userNo },
+            success: function(response) {
+              console.log(response);
+              if (response ==="success") {
+                alert("회원 탈퇴 승인 완료.");
+                location.reload();
+              } else {
+                alert("회원 탈퇴 승인 실패. 다시 시도해주세요.");
+              }
+            },
+            error: function(error) {
+              // 오류 발생 시 처리를 여기에 추가합니다.
+              alert("오류가 발생하였습니다. 다시 시도해주세요.");
+            }
+          });
+        }
+      }
     </script>
 
 
