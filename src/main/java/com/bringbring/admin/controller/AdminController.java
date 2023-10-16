@@ -269,6 +269,13 @@ public class AdminController {
 		return mv;
 	}
 
+	//	테스트
+	@GetMapping("/test.do")
+	public ModelAndView showTest(ModelAndView mv) {
+		mv.setViewName("admin/test");
+		return mv;
+	}
+
 	public PageInfo getPageInfo(Integer currentPage, Integer totalCount) {
 		int recordCountPerPage = 10;
 		int naviCountPerPage =10;

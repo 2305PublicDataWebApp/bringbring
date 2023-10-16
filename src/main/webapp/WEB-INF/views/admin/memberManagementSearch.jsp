@@ -32,7 +32,6 @@
     <link href="../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Template Main CSS File -->
     <link href="../resources/assets/css/style.css" rel="stylesheet">
     <link href="../resources/assets/css/common.css" rel="stylesheet">
@@ -107,7 +106,7 @@
                 <option value="phone" <c:if test="${searchCondition =='phone'}">selected</c:if>>전화번호</option>
                 <option value="userDeleted" <c:if test="${searchCondition =='userDeleted'}">selected</c:if>>탈퇴여부</option>
               </select>
-              <input type="text" class="form-control rounded" placeholder="검색어를 입력하세요" name="searchKeyword" value="${searchKeyword}" style="width: 5  0%;" />
+              <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="searchKeyword" value="${searchKeyword}" style="width: 5  0%;" />
               <button type="submit" class="btn btn-outline-success" id="user-serch-btn" >검색</button>
           </div>
           </form>

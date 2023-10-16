@@ -32,7 +32,6 @@
     <link href="../resources/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Template Main CSS File -->
     <link href="../resources/assets/css/style.css" rel="stylesheet">
     <link href="../resources/assets/css/common.css" rel="stylesheet">
@@ -50,7 +49,7 @@
   <body>
 
   <!-- 헤더 -->
-    <jsp:include page="/include/header.jsp"></jsp:include>
+  <jsp:include page="/include/header.jsp"></jsp:include>
 
     <div style="width: 100%;height: 74px;"></div>
     <!-- ======= Hero Section ======= -->
@@ -99,7 +98,7 @@
             <h2>회원 리스트</h2>
           </div>
           <form action="/admin/searchUser.do" method="GET">
-          <div class="input-group" style="width: 400px; height: 30px;">
+          <div class="input-group" style="width: 400px; height: 30px;>
               <select name="searchCondition" class="form-select" aria-label=".form-select-lg example" style="width: 20%;">
                 <option value="all">전체</option>
                 <option value="id">아이디</option>
@@ -107,7 +106,7 @@
                 <option value="phone">전화번호</option>
                 <option value="userDeleted">탈퇴여부</option>
               </select>
-              <input type="text" class="form-control rounded" placeholder="검색어를 입력하세요" name="searchKeyword" style="width: 50%;" />
+              <input type="text" class="form-control" placeholder="검색어를 입력하세요" name="searchKeyword" style="width: 50%;" />
               <input type="submit" class="btn btn-outline-success" id="user-serch-btn" value="검색"></input>
           </div>
             </form>
