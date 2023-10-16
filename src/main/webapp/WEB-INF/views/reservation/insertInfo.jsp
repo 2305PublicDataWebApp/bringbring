@@ -45,16 +45,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker3.min.css">
   <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
 
-
-
-
-
-
-
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=043e510b873d1287a23e00d8444a6b47&libraries=services"></script>
-
-
-
 
 <!--  달력-->
 <!--  <link rel="stylesheet" href="../../../resources/assets/css/reservation/bootstrap-material-datetimepicker.css" />-->
@@ -95,32 +86,8 @@
 
 <body>
 
-<!-- ======= Header ======= -->
-<header id="header" class="fixed-top ">
-  <div class="container d-flex align-items-center">
-    <img src="../../../resources/assets/img/main/cargo-truck-green.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
-    <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.html">브링브링</a></h1>
-    <!-- Uncomment below if you prefer to use an image logo -->
-    <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
-    <nav id="navbar" class="navbar">
-      <ul>
-        <li><a class="nav-link scrollto" href="#about">배출안내</a></li>
-        <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
-        <li><a class="nav-link   scrollto" href="#portfolio">공지사항</a></li>
-        <li><a class="nav-link scrollto" href="#team">문의게시판</a></li>
-        <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
-
-        </li>
-        <li><button class="getstarted scrollto">로그인</button>
-          <!-- <a  href="#login">로그인</a> -->
-        </li>
-      </ul>
-      <i class="bi bi-list mobile-nav-toggle"></i>
-    </nav><!-- .navbar -->
-
-  </div>
-</header><!-- End Header -->
+<!-- 헤더 -->
+<jsp:include page="/include/header.jsp"></jsp:include>
 
 <div style="width: 100%;height: 74px;"></div>
 <!-- ======= Hero Section ======= -->
@@ -149,52 +116,55 @@
   <div id="title-flex">
     <p class="title">신청자 정보</p>
     <div>
-      <input type="radio" name="infoCheck"> 신청자 정보와 동일
-      <input type="radio" name="infoCheck"> 직접 입력
+      <input type="radio" name="infoCheck" onclick="printUserInfo()"> 신청자 정보와 동일
+      <input type="radio" name="infoCheck" onclick="printInsertInfo()" checked> 직접 입력
     </div>
   </div>
   <hr>
   <div id="container-out">
-    <div id="infoContainer">
-      <div class="container-in">
-        <label>배출 주소</label>
-        <div id="address" class="input-div">
-          <input type="text" id="sample6_postcode" placeholder="우편번호">
-          <input type="button" onclick="sample5_execDaumPostcode();" value="우편번호 찾기"><br>
-          <input type="text" id="sample6_address" placeholder="주소" style="width: 400px"><br>
-          <input type="text" id="sample6_detailAddress" placeholder="상세주소">
-          <input type="text" id="sample6_extraAddress" placeholder="참고항목">
+    <form name="insertInfoForm" action="/reservation/insertInfo.do" method="post">
+      <input type="hidden" id="sessionId" value="${sessionScope.sessionId}">
+      <div id="infoContainer">
+        <div class="container-in">
+          <label>배출 주소</label>
+          <div id="address" class="input-div">
+            <input type="text" id="sample6_postcode" placeholder="우편번호">
+            <input type="button" onclick="sample5_execDaumPostcode();" value="우편번호 찾기"><br>
+            <input type="text" id="sample6_address" placeholder="주소" style="width: 400px"><br>
+            <input type="text" id="sample6_detailAddress" placeholder="상세주소" style="width: 400px">
+<%--            <input type="text" id="sample6_extraAddress" placeholder="참고항목">--%>
+          </div>
+        </div>
+        <div class="container-in">
+          <label>물품 배출 위치</label>
+          <div class="input-div">
+          <div id="map"></div>
+            <input type="text" name="rvAddrDetail" placeholder="배출할 장소의 상세 정보를 입력해주세요" style="width: 400px">
+          </div>
+        </div>
+        <div class="container-in">
+          <label>배출일</label>
+          <div class="input-group date input-div" style="width: 520px">
+            <input type="text" name="rvRvDate" class="form-control" id="calenderControll"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            <label type="button" id="calenderClick" for="calenderControll">
+              <img src="../../../resources/assets/img/reservation/calendar.png" id="calender">
+            </label>
+          </div>
+        </div>
+        <div class="container-in">
+          <label>신청자명</label>
+          <div class="input-div">
+            <input type="text" id="userName" name="userName" style="width: 400px">
+          </div>
+        </div>
+        <div class="container-in">
+          <label>휴대폰</label>
+          <div class="input-div">
+            <input type="number" id="rvPhone" name="rvPhone" style="width: 400px">
+          </div>
         </div>
       </div>
-      <div class="container-in">
-        <label>물품 배출 위치</label>
-        <div class="input-div">
-        <div id="map"></div>
-          <input type="text" placeholder="배출할 장소의 상세 정보를 입력해주세요" style="width: 400px">
-        </div>
-      </div>
-      <div class="container-in">
-        <label>배출일</label>
-        <div class="input-group date input-div" style="width: 520px">
-          <input type="text" class="form-control" id="calenderControll"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-          <label type="button" id="calenderClick" for="calenderControll">
-            <img src="../../../resources/assets/img/reservation/calendar.png" id="calender">
-          </label>
-        </div>
-      </div>
-      <div class="container-in">
-        <label>신청자명</label>
-        <div class="input-div">
-          <input type="text" style="width: 400px">
-        </div>
-      </div>
-      <div class="container-in">
-        <label>휴대폰</label>
-        <div class="input-div">
-          <input type="number" style="width: 400px">
-        </div>
-      </div>
-    </div>
+    </form>
   </div>
     <div>
     <p class="title">유의사항</p>
@@ -215,75 +185,8 @@
 <!-- 메인 -->
 <!-- End #main -->
 
-
-<!-- ======= Footer ======= -->
-<footer id="footer">
-  <div class="footer-top">
-    <div class="container">
-      <div class="row">
-
-        <div class="col-lg-3 col-md-6 footer-contact">
-          <h3>브링브링</h3>
-          <p>
-            A108 Adam Street <br>
-            New York, NY 535022<br>
-            United States <br><br>
-            <strong>Phone:</strong> +1 5589 55488 55<br>
-            <strong>Email:</strong> info@example.com<br>
-          </p>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><i class="bx bx-chevron-right"></i> <a href="#"></a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Our Services</h4>
-          <ul>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Our Social Networks</h4>
-          <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
-          <div class="social-links mt-3">
-            <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-            <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-            <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="container footer-bottom clearfix">
-    <div class="copyright">
-      &copy; Copyright <strong><span>Arsha</span></strong>. All Rights Reserved
-    </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-  </div>
-</footer><!-- End Footer -->
+<!-- 푸터 -->
+<jsp:include page="/include/footer.jsp"></jsp:include>
 
 <div id="preloader"></div>
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
@@ -310,61 +213,6 @@
   ChannelIO('boot', {
     "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
   });
-
-
-  // document.getElementById('minus').addEventListener("click" , (e)=> {
-  //   let inputNumber = document.querySelector("#numberInput");
-  //   inputNumber.val-1;
-  // });
-  // function sample6_execDaumPostcode() {
-  //   new daum.Postcode({
-  //     oncomplete: function(data) {
-  //       // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-  //
-  //       // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-  //       // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-  //       var addr = ''; // 주소 변수
-  //       var extraAddr = ''; // 참고항목 변수
-  //
-  //       //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-  //       if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-  //         addr = data.roadAddress;
-  //       } else { // 사용자가 지번 주소를 선택했을 경우(J)
-  //         addr = data.jibunAddress;
-  //       }
-  //
-  //       // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-  //       if(data.userSelectedType === 'R'){
-  //         // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-  //         // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-  //         if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-  //           extraAddr += data.bname;
-  //         }
-  //         // 건물명이 있고, 공동주택일 경우 추가한다.
-  //         if(data.buildingName !== '' && data.apartment === 'Y'){
-  //           extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-  //         }
-  //         // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-  //         if(extraAddr !== ''){
-  //           extraAddr = ' (' + extraAddr + ')';
-  //         }
-  //         // 조합된 참고항목을 해당 필드에 넣는다.
-  //         document.getElementById("sample6_extraAddress").value = extraAddr;
-  //
-  //       } else {
-  //         document.getElementById("sample6_extraAddress").value = '';
-  //       }
-  //
-  //       // 우편번호와 주소 정보를 해당 필드에 넣는다.
-  //       document.getElementById('sample6_postcode').value = data.zonecode;
-  //       document.getElementById("sample6_address").value = addr;
-  //       // 커서를 상세주소 필드로 이동한다.
-  //       document.getElementById("sample6_detailAddress").focus();
-  //     }
-  //   }).open();
-  // }
-
-
 
   // 지도에 장소 표시할 거~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!
   var mapContainer = document.getElementById('map'), // 지도를 표시할 div
@@ -426,8 +274,6 @@
 
 <script type="text/javascript">
 
-
-
   // 달력 설정
   $(function(){
     $('.input-group.date').datepicker({
@@ -443,107 +289,71 @@
     });
   });
 
-  //
-  // // 지도에 장소 표시할 거~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!
-  // var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-  //         mapOption = {
-  //           center: new kakao.maps.LatLng(37.566535, 126.9779692), // 지도의 중심좌표
-  //           level: 3 // 지도의 확대 레벨
-  //         };
-  //
-  // console.log("지도 생성");
-  // // 지도를 생성합니다
-  // var map = new kakao.maps.Map(mapContainer, mapOption);
-  //
-  // // 주소-좌표 변환 객체를 생성합니다
-  // var geocoder = new kakao.maps.services.Geocoder();
-  //
-  // //마커를 미리 생성
-  // var marker = new daum.maps.Marker({
-  //   position: new daum.maps.LatLng(37.537187, 127.005476),
-  //   map: map
-  // });
-  //
-  //
-  // function sample5_execDaumPostcode() {
-  //   new daum.Postcode({
-  //     oncomplete: function (data) {
-  //       var addr = data.address; // 최종 주소 변수
-  //       var postCode = data.zonecode;
-  //       // 주소 정보를 해당 필드에 넣는다.
-  //       console.log("함수 준비완")
-  //       document.getElementById("sample6_address").value = addr;
-  //       document.getElementById("sample6_postcode").value = postCode;
-  //       // 주소로 상세 정보를 검색
-  //       geocoder.addressSearch(data.address, function (results, status) {
-  //         // 정상적으로 검색이 완료됐으면
-  //         if (status === daum.maps.services.Status.OK) {
-  //
-  //           var result = results[0]; //첫번째 결과의 값을 활용
-  //
-  //           // 해당 주소에 대한 좌표를 받아서
-  //           var coords = new daum.maps.LatLng(result.y, result.x);
-  //           // 지도를 보여준다.
-  //           mapContainer.style.display = "block";
-  //           map.relayout();
-  //           // 지도 중심을 변경한다.
-  //           map.setCenter(coords);
-  //           // 마커를 결과값으로 받은 위치로 옮긴다.
-  //           marker.setPosition(coords)
-  //         }
-  //       });
-  //     }
-  //   }).open();
-  // }
+</script>
 
+<script>
 
-  //
-  // let address = document.querySelector('#sample6_address').value;
-  // const addressInput = document.querySelector('#sample6_address');
-  //
-  // console.log("뭐가 문제야");
-  // console.log("이거는???" + address);
-  // console.log(addressInput.value);
-  // // 입력 값이 변경될 때 발생하는 이벤트 리스너를 추가합니다.
-  // addressInput.addEventListener('input', function() {
-  //   // 입력 값이 변경되었을 때 실행할 코드를 여기에 작성합니다.
-  //   let addressValue = addressInput.value;
-  //   console.log('입력 값이 변경되었습니다:', addressValue);
-  //   // 이벤트가 동작했을 때 원하는 작업을 수행하세요.
-  // });
-  //
-  //
-  //
-  // console.log("좌표 검색");
-  // // 주소로 좌표를 검색합니다
-  // geocoder.addressSearch(address, function(result, status) {
-  //
-  //   // 정상적으로 검색이 완료됐으면
-  //   if (status === kakao.maps.services.Status.OK) {
-  //
-  //     var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-  //
-  //     // // 결과값으로 받은 위치를 마커로 표시합니다
-  //     // var marker = new kakao.maps.Marker({
-  //     //   map: map,
-  //     //   position: coords
-  //     // });
-  //
-  //     // // 인포윈도우로 장소에 대한 설명을 표시합니다
-  //     // var infowindow = new kakao.maps.InfoWindow({
-  //     //   content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
-  //     // });
-  //     // infowindow.open(map, marker);
-  //
-  //     // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-  //     map.setCenter(coords);
-  //   }
-  // });
+  // 주소-좌표 변환 객체를 생성합니다
+  var geocoder = new kakao.maps.services.Geocoder();
+  // 전역 레벨에서 marker 변수를 선언하고 초기화
+  var marker = new daum.maps.Marker({
+    map: map
+  });
 
+  function printUserInfo() {
+    const userId = document.querySelector('#sessionId').value;
+    console.log(userId);
 
+    $.ajax({
+      url: '/reservation/select/userInfo.do',
+      data: {userId: userId},
+      type: 'post',
+      success: function (data) {
+        document.getElementById('sample6_postcode').value = data.userPostCode;
+        document.getElementById('sample6_address').value = data.userAddress;
+        document.getElementById('sample6_detailAddress').value = data.userAddressDetail;
+        document.getElementById('userName').value = data.userName;
+        document.getElementById('rvPhone').value = data.userPhone;
 
+        geocoder.addressSearch(data.userAddress, function (results, status) {
+          // 정상적으로 검색이 완료됐으면
+          if (status === daum.maps.services.Status.OK) {
+            var result = results[0]; // 첫번째 결과의 값을 활용
 
+            // 해당 주소에 대한 좌표를 받아서
+            var coords = new daum.maps.LatLng(result.y, result.x);
 
+            // 지도를 보여준다.
+            mapContainer.style.display = "block";
+            map.relayout();
+
+            // 지도 중심을 변경한다.
+            map.setCenter(coords);
+
+            // 마커를 결과값으로 받은 위치로 옮긴다.
+            marker.setPosition(coords);
+          }
+        })
+      },
+      error: function () {
+        alert("Ajax 오류! 관리자에게 문의하세요");
+      }
+    })
+  }
+
+  function printInsertInfo() {
+    document.getElementById('sample6_postcode').value = '';
+    document.getElementById('sample6_address').value = '';
+    document.getElementById('sample6_detailAddress').value = '';
+    document.getElementById('userName').value = '';
+    document.getElementById('rvPhone').value = '';
+
+    marker.setMap(null);
+    // 새로운 마커 생성
+    marker = new daum.maps.Marker({
+      map: map
+    });
+  }
 
 
 
