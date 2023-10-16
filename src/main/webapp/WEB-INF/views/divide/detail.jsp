@@ -225,17 +225,18 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <select class="form-select" aria-label="Default select example">
+          <select name="repCategory" class="form-select" aria-label="Default select example">
             <option selected>신고할 항목을 선택해주세요</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            <option value="fraud">사기 글이에요</option>
+            <option value="unpleasant">회원들에게 불쾌감을 주는 글이에요</option>
+            <option value="inapposite">부적절한 회원이에요</option>
+            <option value="other">기타 다른 사유가 있어요</option>
           </select>
-          <textarea name="" id="" cols="30" rows="10" style="width: 100%;resize: none;border: 1px solid #dee2e6;margin-top: 10px;border-radius: 7px;"></textarea>
+          <textarea name="repContent" id="" cols="30" rows="10" style="width: 100%;resize: none;border: 1px solid #dee2e6;margin-top: 10px;border-radius: 7px;"></textarea>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-          <button type="button" class="btn btn-success">작성 완료</button>
+          <button id="closeReport" type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          <button onclick="insertReport();" type="button" class="btn btn-success">작성 완료</button>
         </div>
       </div>
     </div>
@@ -458,6 +459,29 @@
       if(confirm("게시글을 삭제하시겠습니까?")){
         location.href = "/divide/delete.do?divNo=${dData.divide.divNo}";
       }
+    }
+
+    function insertReport() {
+      var closeReportButton = document.getElementById("closeReport");
+      var repCategory = document.getElementById("repCategory");
+      var repContent = document.getElementById("repContent");
+
+      $.ajax({
+        url: "/report/insert.do",
+        data: { repCategory: repCategory, repContent: repContent, divNo: "${dData.divide.divNo}"},
+        type: "POST",
+        success: function(data) {
+          if(data === "success"){
+            closeReportButton.click();
+            alert("신고가 접수되었습니다.");
+          }else{
+            alert("실패!");
+          }
+        },
+        error: function() {
+          alert("Ajax 오류! 관리자에게 문의하세요");
+        }
+      });
     }
     <!-- 로그인, 로그아웃 -->
     <jsp:include page="/include/loginJs.jsp"></jsp:include>
