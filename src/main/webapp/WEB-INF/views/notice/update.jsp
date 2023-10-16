@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -38,7 +39,7 @@
 
   <!-- summernote CSS File -->
   <link rel="stylesheet" href="../resources/assets/css/notice/summernote/summernote-lite.css">
-
+  
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- =======================================================
@@ -83,64 +84,68 @@
   <!-- End Hero -->
 
   <!-- 메인 -->
-  <main id="main" class="main">
-    <form class="notice-form" action="notice/update.do" method="post" enctype="multipart/form-data">
-      <h2>공지사항 수정</h2>
-      <hr>
-      <div class="container">
+	<main id="main" class="main">
+		<form class="notice-form" action="notice/update.do" method="post"
+			enctype="multipart/form-data">
+			<h2>공지사항 수정</h2>
+			<hr>
+			<div class="container">
 
 
-        <div class="row mb-3">
-          <label class="col-sm-1 col-form-label">카테고리</label>
-          <div class="col-sm-3">
-            <select name="noticeType" id="noticeType" class="form-select" aria-label="Default select example">
-              <option selected value="">선택</option>
-              <option value="service">서비스</option>
-              <option value="update">업데이트</option>
-            </select>
-          </div>
-        </div>
+				<div class="row mb-3">
+					<label class="col-sm-1 col-form-label">카테고리</label>
+					<div class="col-sm-3">
+						<select name="noticeType" id="noticeType" class="form-select"
+							aria-label="Default select example">
+							<option selected value="">선택</option>
+							<option value="service">서비스</option>
+							<option value="update">업데이트</option>
+						</select>
+					</div>
+				</div>
 
-        <!-- 카테고리에서 서비스 선택시 지역 선택버튼이 보임-->
-        <c:if>
-        <div class="row mb-3">
-          <label class="col-sm-1 col-form-label pt-0">지역</label>
-          <div class="col-sm-10">
-            <div class="from-check">
-              <input class="from-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-              <label class="from-check-label" for="gridRadios1">담당지역</label>
-            </div>
-          </div>
-        </div>
-        </c:if>
+				<!-- 카테고리에서 서비스 선택시 지역 버튼이 보임, 그외에는 전체로 보임-->
+				<div class="row mb-3">
+					<label class="col-sm-1 col-form-label pt-0">지역</label>
+					<div class="col-sm-10">
+						<div class="from-check">
+							<input class="from-check-input" type="radio" name="gridRadios"
+								id="gridRadios1" value="option1" checked> <label
+								class="from-check-label" for="gridRadios1">담당구역</label>
+						</div>
+					</div>
+				</div>
 
-        <div class="row mb-3">
-          <label for="inputText" class="col-sm-1 col-form-label">제목</label>
-          <div class="col-sm-6">
-            <input type="text" name="noticeTitle" id="noticeTitle" class="form-control" value="${notice.noticeTilte}">
-          </div>
-        </div>
+				<div class="row mb-3">
+					<label for="inputText" class="col-sm-1 col-form-label">제목</label>
+					<div class="col-sm-6">
+						<input type="text" name="noticeTitle" id="noticeTitle"
+							class="form-control" value="${notice.noticeTitle}">
+					</div>
+				</div>
 
-        <div class="row mb-3">
-          <label for="inputNumber" class="col-sm-1 col-form-label">첨부파일</label>
-          <div class="col-sm-6">
-            <input class="form-control" type="file" id="formFile">
-          </div>
-        </div>
+				<div class="row mb-3">
+					<label for="inputNumber" class="col-sm-1 col-form-label">첨부파일</label>
+					<div class="col-sm-6">
+						<input class="form-control" type="file" id="formFile"
+							name="uploadFile">
+					</div>
+				</div>
 
-        <div class="row mb-3">
-          <label for="inputPassword" class="col-sm-1 col-form-label">내용</label>
-          <div class="col-sm-10">
-            <textarea id="summernote" name="noticeContent"></textarea>
-          </div>
-        </div>
-      </div>
-      <hr>
-      <!-- <div class="col-sm-10"> -->
-      <button type="submit" class="btn btn-primary" onclick="notice_check(event)">수정하기</button>
-    </form>
-  </main>
-  <!-- End #main -->
+				<div class="row mb-3">
+					<label for="summernote" class="col-sm-1 col-form-label">내용</label>
+					<div class="col-sm-10">
+						<textarea id="summernote" name="noticeContent"></textarea>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<!-- <div class="col-sm-10"> -->
+			<button type="submit" class="btn btn-primary"
+				onclick="notice_check(event)">수정하기</button>
+		</form>
+	</main>
+	<!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <jsp:include page="/include/footer.jsp"></jsp:include>
@@ -172,62 +177,89 @@
   </script>
 
   <!-- summernote api -->
-  <script src="../resources/assets/js/summernote/summernote-lite.js"></script>
+   <script src="../resources/assets/js/summernote/summernote-lite.js"></script>
   <script src="../resources/assets/js/summernote/lang/summernote-ko-KR.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('#summernote').summernote({
-        placeholder: '내용을 작성하세요',
-        height: 400,
-        maxHeight: 800
-      });
+	<script>
+ 	<!-- 써머노트 스크립트 -->
+		$(document).ready(function() {
+			$('#summernote').summernote({
+				placeholder : '내용을 작성하세요',
+				height : 400,
+				maxHeight : 800
+			});
 
-      var savedHtmlContent = "<p>내용</p>"; // 저장한 HTML 내용을 여기에 추가
-      $('#summernote').summernote('code', savedHtmlContent);
-    });
-  </script>
+			// 저장한 HTML 내용을 여기에 추가
+			var savedHtmlContent = "<p>${notice.noticeContent}</p>";
+			$('#summernote').summernote('code', savedHtmlContent);
+		});
+	</script>
 
-  <!-- 기능 스크립트 -->
-  <script>
-    function notice_check() {
-      var noticeType = document.getElementById("noticeType").value;
-      var noticeTitle = document.getElementById("noticeTitle").value;
-      var noticeContent = $('#summernote').summernote('code').replace(/<\/?[^>]+(>|$)/g, "");
+	<!-- 기능 스크립트 -->
+	<script>
+		function notice_check() {
+			var noticeType = document.getElementById("noticeType").value;
+			var noticeTitle = document.getElementById("noticeTitle").value;
+			var noticeContent = $('#summernote').summernote('code').replace(
+					/<\/?[^>]+(>|$)/g, "");
 
-      if (noticeType == "") {
-        alert("카테고리를 선택해주세요.");
-        event.preventDefault();
-        return false;
-      };
+			if (noticeType == "") {
+				alert("카테고리를 선택해주세요.");
+				event.preventDefault();
+				return false;
+			}
+			;
 
-      if (noticeTitle == "") {
-        alert("제목을 입력해주세요.");
-        event.preventDefault();
-        noticeTitle.focus();
-        return false;
-      };
-      if (noticeTitle.length > 50){
-    	  alert("제목은 50글자까지만 작성 가능합니다.");
-    	  event.preventDefault();
-    	  noticeTitle.focus();
-    	  return false;
-      };
+			if (noticeTitle == "") {
+				alert("제목을 입력해주세요.");
+				event.preventDefault();
+				noticeTitle.focus();
+				return false;
+			}
+			;
+			if (noticeTitle.length > 50) {
+				alert("제목은 50글자까지만 작성 가능합니다.");
+				event.preventDefault();
+				noticeTitle.focus();
+				return false;
+			}
+			;
 
-      if (noticeContent.trim() == "") {
-        alert("내용을 입력해주세요.");
-        $('#summernote').summernote('focus');
-        event.preventDefault();
-        return false;
-      };
-      if (noticeContent.trim().length > 1000){
-    	  alert("내용은 1000글자까지만 작성 가능합니다.");
-          $('#summernote').summernote('focus');
-          event.preventDefault();
-          return false;   	  
-      };
+			if (noticeContent.trim() == "") {
+				alert("내용을 입력해주세요.");
+				$('#summernote').summernote('focus');
+				event.preventDefault();
+				return false;
+			}
+			;
+			if (noticeContent.trim().length > 1000) {
+				alert("내용은 1000글자까지만 작성 가능합니다.");
+				$('#summernote').summernote('focus');
+				event.preventDefault();
+				return false;
+			}
+			;
 
-    };
-  </script>
+		};
+
+		// "카테고리" 선택 상자의 값이 변경될 때 호출되는 함수
+		function updateRadioButtonLabel() {
+			var selectElement = document.getElementById("noticeType");
+			var radioLabelElement = document.querySelector(".from-check label");
+
+			if (selectElement.value === "service") {
+				radioLabelElement.textContent = "담당구역";
+			} else {
+				radioLabelElement.textContent = "전체";
+			}
+		}
+
+		// "카테고리" 선택 상자의 값이 변경될 때 이벤트 리스너 등록
+		var selectElement = document.getElementById("noticeType");
+		selectElement.addEventListener("change", updateRadioButtonLabel);
+
+		// 초기 레이블 설정
+		updateRadioButtonLabel();
+	</script>
 
 
 </body>

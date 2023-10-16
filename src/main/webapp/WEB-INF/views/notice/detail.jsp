@@ -76,47 +76,56 @@
   <!-- End Hero -->
 
   <!-- 메인 -->
-  <main id="main" class="main">
-    <div class="head">
-      <div class="notice-title"><h1>[서울] ${notice.noticeTitle }</h1></div>
-      <div class="notice-subtitle">
-        <div class="notice-info">
-          2023.09.30 | ${notice.noticeType }
-        </div>
-        <div class="notice-btn"> <!-- 관리자만 보이는 버튼 -->
-        <c:if test="${adminNo ne null }">
-          <button class="btn btn-primary" onclick="showModify('${modiUrl}');">수정하기</button>
-          <button class="btn btn-primary" onclick="deleteNotice('${delUrl}');">삭제하기</button>
-        </c:if>
-        </div>
-      </div>
-      <div class="icon"> <!-- 푸터에 트위터, 페북, 인스타가 있어서 이렇게 했는데 카카오 로그인이 가능하니 하나를 빼고 카카오톡을 넣는게 나을지 고민중임 -->
-        <li>
-          <i class="material-symbols-outlined" onclick="copyURL()">share</i>
-        </li>
-        <li>
-          <i class="fi fi-brands-twitter" onclick="shareTwitter()"></i>
-        </li>
-        <li>
-          <i class="fi fi-brands-facebook" onclick="shareFacebook()"></i>
-        </li>
-        <li>
-          <i class="fi fi-brands-instagram" onclick="shareInstagram()"></i>
-        </li>
-      </div>
-    </div>
-    <hr>
-    <div class="content">
-      <img src="../resources/assets/img/notice/공지사항.jpg">
-    </div>
-    <hr>
-    <div class="otherdetail">
-      <li>이전 | <a href="${ detailUrl }">${notice.noticeTitle }</a></li>
-      <li>다음 | <a href="${ detailUrl }">${notice.noticeTitle }</a></li>
-    </div>
-    <button class="btn btn-success" onclick="goList()">목록으로</button>
-  </main>
-  <!-- End #main -->
+	<main id="main" class="main">
+		<div class="head">
+			<div class="notice-title">
+				<h2>[지역] ${notice.noticeTitle }</h2>
+			</div>
+			<div class="notice-subtitle">
+				<div class="notice-info">${notice.noticeCreateDate } |
+					${notice.noticeType }</div>
+				<div class="notice-btn">
+					<!-- 관리자만 보이는 버튼 -->
+					<button class="btn btn-primary" onclick="showNoticeUpdate();">수정하기</button>
+					<button class="btn btn-primary"
+						onclick="deleteNotice('${delUrl}');">삭제하기</button>
+				</div>
+			</div>
+			<div class="icon">
+				<!-- 푸터에 트위터, 페북, 인스타가 있어서 이렇게 했는데 카카오 로그인이 가능하니 하나를 빼고 카카오톡을 넣는게 나을지 고민중임 -->
+				<li><i class="material-symbols-outlined" onclick="copyURL()">share</i>
+				</li>
+				<li><i class="fi fi-brands-twitter" onclick="shareTwitter()"></i>
+				</li>
+				<li><i class="fi fi-brands-facebook" onclick="shareFacebook()"></i>
+				</li>
+				<li><i class="fi fi-brands-instagram"
+					onclick="shareInstagram()"></i></li>
+			</div>
+		</div>
+		<hr>
+		<div class="content">${notice.noticeContent }</div>
+		<hr>
+		<!-- 이전글/다음글 -->
+		<div class="otherdetail">
+			<li>이전 | <c:if test="${preNoticeNo ne 0}">
+					<a
+						href="${detailUrl}?noticeNo=${preNoticeNo}&searchKeyword=${searchKeyword}">${notice.noticeTitle }</a>
+				</c:if> <c:if test="${preNoticeNo eq 0 }">
+					<span>이전 글이 없습니다.</span>
+				</c:if>
+			</li>
+			<li>다음 | <c:if test="${nextNoticeNo ne 0 }">
+					<a href="${detailUrl }?noticeNo=${nextNoticeNo}">${notice.noticeTitle }</a>
+				</c:if> <c:if test="${nextNoticeNo eq 0 }">
+					<span>다음 글이 없습니다.</span>
+				</c:if>
+			</li>
+		</div>
+
+		<button class="btn btn-success" onclick="goList()">목록으로</button>
+	</main>
+	<!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <jsp:include page="/include/footer.jsp"></jsp:include>
@@ -149,49 +158,61 @@
   </script>
 
   <!-- 기능 script -->
-  <script>
-    function showModify(modifyUrl) {
-      location.href = modifyUrl;
-    }
-    function deleteNotice(delUrl) {
-    	location.href = delUrl;
-    }
-    function goList() {
-      window.location.href = "./list.jsp"
-    }
-    
-    function copyURL() {
-      var pageUrl = window.location.href;
-      // 임시 input 엘리먼트 생성
-      var tempInput = document.createElement('input');
-      tempInput.value = pageUrl;
-      // input 엘리먼트를 화면에 추가하고 선택한 후 복사
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand('copy');
-      // input 엘리먼트 제거
-      document.body.removeChild(tempInput);
-      // 사용자에게 복사 완료 메시지 표시
-      alert('페이지 URL이 복사되었습니다.');
-    }
-    function shareFacebook() {
-      var pageUrl = window.location.href;
-      // 페이스북 공유 URL 생성
-      var facebookShareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl);
-      // 새 창에서 페이스북 공유 페이지 열기
-      window.open(facebookShareUrl, 'facebook-share-dialog', 'width=626,height=436');
-    }
-    function shareTwitter() {
-      var pageUrl = window.location.href;
-      var twitterShareUrl = 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(pageUrl);
-      window.open(twitterShareUrl, 'twitter-share-dialog', 'width=626,height=436');
-    }
-    function shareInstagram() {
-      var pageUrl = window.location.href;
-      var instagramShareUrl = 'https://www.instagram.com/share?url=' + encodeURIComponent(pageUrl);
-      window.open(instagramShareUrl, 'instagram-share-dialog', 'width=626,height=436');
-    }
-  </script>
+	<script>
+		function showNoticeUpdate() {
+			const noticeNo = "${notice.noticeNo}";
+			location.href = "/notice/update.do?noticeNo=" + noticeNo;
+		}
+
+		function deleteNotice() {
+			const noticeNo = "${notice.noticeNo}";
+			if (confirm("게시글을 삭제하시겠습니까?")) {
+				location.href = "/notice/delete.do?noticeNo=" + noticeNo;
+			}
+		}
+
+		function goList() {
+			location.href = "/notice/list.do"
+		}
+
+		function copyURL() {
+			var pageUrl = window.location.href;
+			// 임시 input 엘리먼트 생성
+			var tempInput = document.createElement('input');
+			tempInput.value = pageUrl;
+			// input 엘리먼트를 화면에 추가하고 선택한 후 복사
+			document.body.appendChild(tempInput);
+			tempInput.select();
+			document.execCommand('copy');
+			// input 엘리먼트 제거
+			document.body.removeChild(tempInput);
+			// 사용자에게 복사 완료 메시지 표시
+			alert('페이지 URL이 복사되었습니다.');
+		}
+		function shareFacebook() {
+			var pageUrl = window.location.href;
+			// 페이스북 공유 URL 생성
+			var facebookShareUrl = 'https://www.facebook.com/sharer/sharer.php?u='
+					+ encodeURIComponent(pageUrl);
+			// 새 창에서 페이스북 공유 페이지 열기
+			window.open(facebookShareUrl, 'facebook-share-dialog',
+					'width=626,height=436');
+		}
+		function shareTwitter() {
+			var pageUrl = window.location.href;
+			var twitterShareUrl = 'https://twitter.com/intent/tweet?url='
+					+ encodeURIComponent(pageUrl);
+			window.open(twitterShareUrl, 'twitter-share-dialog',
+					'width=626,height=436');
+		}
+		function shareInstagram() {
+			var pageUrl = window.location.href;
+			var instagramShareUrl = 'https://www.instagram.com/share?url='
+					+ encodeURIComponent(pageUrl);
+			window.open(instagramShareUrl, 'instagram-share-dialog',
+					'width=626,height=436');
+		}
+	</script>
 
 
 </body>
