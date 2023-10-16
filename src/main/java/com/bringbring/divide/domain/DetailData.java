@@ -21,6 +21,5 @@ public class DetailData {
     private City city;
     private District district;
     private WasteCategory wasteCategory;
-    private Heart heart;
 
 }

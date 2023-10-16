@@ -224,20 +224,20 @@
           <h1 class="modal-title fs-5" id="exampleModalLabel">신고하기</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <select name="repCategory" class="form-select" aria-label="Default select example">
-            <option selected>신고할 항목을 선택해주세요</option>
-            <option value="fraud">사기 글이에요</option>
-            <option value="unpleasant">회원들에게 불쾌감을 주는 글이에요</option>
-            <option value="inapposite">부적절한 회원이에요</option>
-            <option value="other">기타 다른 사유가 있어요</option>
-          </select>
-          <textarea name="repContent" id="" cols="30" rows="10" style="width: 100%;resize: none;border: 1px solid #dee2e6;margin-top: 10px;border-radius: 7px;"></textarea>
-        </div>
-        <div class="modal-footer">
-          <button id="closeReport" type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-          <button onclick="insertReport();" type="button" class="btn btn-success">작성 완료</button>
-        </div>
+          <div class="modal-body">
+            <select name="repCategory" class="form-select" aria-label="Default select example">
+              <option value="no" selected>신고할 항목을 선택해주세요</option>
+              <option value="fraud">사기 글이에요</option>
+              <option value="unpleasant">회원들에게 불쾌감을 주는 글이에요</option>
+              <option value="inappropriate">부적절한 회원이에요</option>
+              <option value="other">기타 다른 사유가 있어요</option>
+            </select>
+            <textarea name="repContent" id="" cols="30" rows="10" style="width: 100%;resize: none;border: 1px solid #dee2e6;margin-top: 10px;border-radius: 7px;"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button id="closeReport" type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <button onclick="insertReport();" type="button" class="btn btn-success">작성 완료</button>
+          </div>
       </div>
     </div>
   </div>
@@ -462,26 +462,38 @@
     }
 
     function insertReport() {
-      var closeReportButton = document.getElementById("closeReport");
-      var repCategory = document.getElementById("repCategory");
-      var repContent = document.getElementById("repContent");
+      if(confirm("신고를 완료하시겠어요?")){
+        var closeReportButton = document.getElementById("closeReport");
+        var repCategory = document.querySelector('select[name="repCategory"]').value;
+        var repContent = document.querySelector('textarea[name="repContent"]').value;
 
-      $.ajax({
-        url: "/report/insert.do",
-        data: { repCategory: repCategory, repContent: repContent, divNo: "${dData.divide.divNo}"},
-        type: "POST",
-        success: function(data) {
-          if(data === "success"){
-            closeReportButton.click();
-            alert("신고가 접수되었습니다.");
-          }else{
-            alert("실패!");
-          }
-        },
-        error: function() {
-          alert("Ajax 오류! 관리자에게 문의하세요");
+        if (repCategory === "no") {
+          alert("신고 항목을 선택해주세요.");
+          return false;
+        }else if(repContent === ""){
+          alert("신고 내용을 작성해주세요.");
+          return false;
         }
-      });
+
+        $.ajax({
+          url: "/report/insert.do",
+          data: { repCategory: repCategory, repContent: repContent, divNo: "${dData.divide.divNo}"},
+          type: "POST",
+          success: function(data) {
+            if(data === "success"){
+              alert("신고가 접수되었습니다.");
+              closeReportButton.click();
+              document.querySelector('select[name="repCategory"]').value = 'no';
+              document.querySelector('textarea[name="repContent"]').value = '';
+            }else{
+              alert("실패!");
+            }
+          },
+          error: function() {
+            alert("Ajax 오류! 관리자에게 문의하세요");
+          }
+        });
+      }
     }
     <!-- 로그인, 로그아웃 -->
     <jsp:include page="/include/loginJs.jsp"></jsp:include>
