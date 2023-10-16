@@ -107,7 +107,7 @@
             <option value="phone" <c:if test="${searchCondition =='phone'}">selected</c:if>>전화번호</option>
             <option value="region" <c:if test="${searchCondition =='region'}">selected</c:if>>관활지역</option>
           </select>
-          <input type="text" class="form-control rounded" placeholder="검색" name="searchKeyword" value="${searchKeyword}" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
+          <input type="text" class="form-control" placeholder="검색" name="searchKeyword" value="${searchKeyword}" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
           <input type="submit" class="btn btn-outline-success" id="user-serch-btn" value="검색"></input>
         </div>
         </form>
