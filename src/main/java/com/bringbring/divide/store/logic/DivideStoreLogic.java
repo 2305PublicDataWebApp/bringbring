@@ -77,4 +77,7 @@ public class DivideStoreLogic implements DivideStore{
 	@Override
 	public UpdateData selectUpdateDataByNo(int divNo) { return sqlSession.selectOne("DivideMapper.selectUpdateDataByNo", divNo); }
 
+	@Override
+	public int updateDivide(Divide divide) { return sqlSession.update("DivideMapper.updateDivide", divide); }
+
 }

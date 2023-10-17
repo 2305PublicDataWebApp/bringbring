@@ -38,4 +38,6 @@ public interface DivideStore {
 	int deleteDivide(int divNo);
 
     UpdateData selectUpdateDataByNo(int divNo);
+
+	int updateDivide(Divide divide);
 }

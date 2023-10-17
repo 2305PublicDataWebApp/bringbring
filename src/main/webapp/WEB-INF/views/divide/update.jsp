@@ -192,6 +192,7 @@
 						<label for="location">거래 희망 장소(선택)</label>
 						<input style="width: 500px;margin-right: 15px;" type="text" id="location">
 						<button type="button" class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
+						<input name="divNo" type="hidden" value="${uData.divide.divNo}">
 						<input name="divXCoordinate" type="hidden" id="coordinateX">
 						<input name="divYCoordinate" type="hidden" id="coordinateY">
 					</li>
@@ -449,18 +450,20 @@
 		// 파일 input 엘리먼트 가져오기
 		const fileInput = form.querySelector('input[type="file"][name="uploadFiles"]');
 		// 선택된 파일 가져오기
-		const selectedFile = fileInput.files[0];
-
-		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+		// const selectedFile = fileInput.files[0];
+		//
+		// var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
 
 		// 유효성 검사
 		if (divTitle.trim() === "") {
 			alert("제목을 입력해주세요.");
-		} else if (!selectedFile) {
-			alert("사진은 한 개 이상 둥록해주세요.");
-		} else if (inputElements.length > 11) {
-			alert("10개까지의 파일만 업로드할 수 있습니다.");insert.jsp
-		}else if (cityNo === "0") {
+		}
+		// else if (!selectedFile) {
+		// 	alert("사진은 한 개 이상 둥록해주세요.");
+		// } else if (inputElements.length > 11) {
+		// 	alert("10개까지의 파일만 업로드할 수 있습니다.");insert.jsp
+		// }
+		else if (cityNo === "0") {
 			alert("지역을 선택해주세요.");
 		} else if (wasteCategoryNo === "0") {
 			alert("종류를 선택해주세요.");
