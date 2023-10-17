@@ -90,7 +90,7 @@
           <h1 style="font-family: 'RixYeoljeongdo_Regular';">브링브링</h1>
           <h2 style="font-family: 'SUITE-Regular';">곤란했던 대형폐기물 처리, 브링브링에서 쉽고 간편하게</h2>
           <div class="d-flex justify-content-center justify-content-lg-start">
-            <a href="#about" class="btn-get-started scrollto">수거신청</a>
+            <a href="/reservation/select.do" class="btn-get-started scrollto">수거신청</a>
             <!-- <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox btn-watch-video"><i class="bi bi-play-circle"></i><span>Watch Video</span></a> -->
           </div>
         </div>
@@ -114,7 +114,7 @@
             <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
               <div class="icon-box">
                 <div class="icon"><i class="bi bi-truck"></i></div>
-                <h4 class="title"><a href="" class="stretched-link">수거 신청</a></h4>
+                <h4 class="title"><a href="/reservation/select.do" class="stretched-link">수거 신청</a></h4>
               </div>
             </div><!--End Icon Box -->
 

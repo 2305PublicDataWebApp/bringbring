@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -62,32 +63,8 @@
 
 <body>
 
-<!-- ======= Header ======= -->
-<header id="header" class="fixed-top ">
-  <div class="container d-flex align-items-center">
-    <img src="../../../resources/assets/img/main/cargo-truck-green.png" style="width: 46px;padding: 0px 7px 5px 0px;" alt="">
-    <h1 class="logo me-auto" style="font-family: 'RixYeoljeongdo_Regular';"><a href="index.html">브링브링</a></h1>
-    <!-- Uncomment below if you prefer to use an image logo -->
-    <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
-    <nav id="navbar" class="navbar">
-      <ul>
-        <li><a class="nav-link scrollto" href="#about">배출안내</a></li>
-        <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
-        <li><a class="nav-link   scrollto" href="#portfolio">공지사항</a></li>
-        <li><a class="nav-link scrollto" href="#team">문의게시판</a></li>
-        <li><a class="nav-link scrollto" href="#team">나눔게시판</a></li>
-
-        </li>
-        <li><button class="getstarted scrollto">로그인</button>
-          <!-- <a  href="#login">로그인</a> -->
-        </li>
-      </ul>
-      <i class="bi bi-list mobile-nav-toggle"></i>
-    </nav><!-- .navbar -->
-
-  </div>
-</header><!-- End Header -->
+<!-- 헤더 -->
+<jsp:include page="/include/header.jsp"></jsp:include>
 
 <div style="width: 100%;height: 74px;"></div>
 <!-- ======= Hero Section ======= -->
@@ -120,43 +97,52 @@
   <div id="infoContainer">
     <table class="table table-borderless">
       <tr>
-        <td>
+        <td style="padding-top: 20px">
           <label>배출 품목</label>
         </td>
         <td>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">가구 > 거울 > 높이 50cm 이상 > 1개</li>
-            <li class="list-group-item">가구 > 식탁(테이블) > 4인용 이상 > 1개</li>
-          </ul>
+          <table class="table table-borderless">
+            <c:forEach items="${wasteDataList}" var="item" varStatus="i">
+              <tr>
+                <td class="selectedItems" style="padding-bottom: 20px; padding-top: 20px; border-bottom: 1px solid #ccc;">
+                  <span class="selectSpan">선택 ${i.index + 1}</span><span>${item.wasteCategory.wasteCategoryName} > ${item.wasteType.wasteTypeName} > ${item.wasteInfo.wasteInfoStandard}</span>
+                </td>
+              </tr>
+            </c:forEach>
+          </table>
+<%--          <ul class="list-group list-group-flush" id="itemList">--%>
+
+<%--          </ul>--%>
         </td>
       </tr>
       <tr>
-        <td>
+        <td style="padding-top: 17px">
           <label>배출 장소</label>
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">서울시 중구</li>
+            <li class="list-group-item">${reservationInfo.rvAddr}</li>
           </ul>
         </td>
       </tr>
       <tr>
-        <td>
+        <td style="padding-top: 17px">
           <label>배출일</label>
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">2023-10-30</li>
+            <li class="list-group-item">${reservationInfo.rvRvDate}</li>
           </ul>
         </td>
       </tr>
       <tr>
-        <td>
+        <td style="padding-top: 17px">
           <label>수수료</label>
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">6,000원</li>
+            <li class="list-group-item">${reservationDetail.rvDetailFee}원</li>
+            <input type="hidden" id="rvDetailFee" name="rvDetailFee" value="${reservationDetail.rvDetailFee}원">
           </ul>
         </td>
       </tr>
@@ -188,75 +174,8 @@
 <!-- 메인 -->
 <!-- End #main -->
 
-
-<!-- ======= Footer ======= -->
-<footer id="footer">
-  <div class="footer-top">
-    <div class="container">
-      <div class="row">
-
-        <div class="col-lg-3 col-md-6 footer-contact">
-          <h3>브링브링</h3>
-          <p>
-            A108 Adam Street <br>
-            New York, NY 535022<br>
-            United States <br><br>
-            <strong>Phone:</strong> +1 5589 55488 55<br>
-            <strong>Email:</strong> info@example.com<br>
-          </p>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><i class="bx bx-chevron-right"></i> <a href="#"></a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Our Services</h4>
-          <ul>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-            <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-3 col-md-6 footer-links">
-          <h4>Our Social Networks</h4>
-          <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
-          <div class="social-links mt-3">
-            <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-            <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-            <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="container footer-bottom clearfix">
-    <div class="copyright">
-      &copy; Copyright <strong><span>Arsha</span></strong>. All Rights Reserved
-    </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-  </div>
-</footer><!-- End Footer -->
+<!-- 푸터 -->
+<jsp:include page="/include/footer.jsp"></jsp:include>
 
 <div id="preloader"></div>
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
@@ -273,7 +192,8 @@
 
 <!-- Template Main JS File -->
 <script src="../../../resources/assets/js/main.js"></script>
-
+<!--day.js-->
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.5/dayjs.min.js"></script>
 
 <!-- 채널톡 api -->
 <script>
@@ -285,30 +205,60 @@
 
 
   function requestPay() {
+    let uidDate = new dayjs().format("YYYYMMDDTHHmmss");
+    const Fee = document.querySelector('#rvDetailFee').value;
+    const userEmail = '${sessionScope.sessionId}';
+    const userName = '${sessionScope.sessionName}';
 
-  console.log("뭐야")
-  var IMP = window.IMP;
-  IMP.init("imp44058332"); // 예: imp00000000
-    // IMP.request_pay(param, callback) 결제창 호출
-    IMP.request_pay({ // param
-      pg: "html5_inicis",
-      pay_method: "card",
-      merchant_uid: "ORD20180131-0000011",
-      name: "브링브링",
-      amount: 6000,
-      buyer_email: "gildong@gmail.com",
-      buyer_name: "홍길동",
-      buyer_tel: "010-4242-4242",
-      buyer_addr: "서울특별시 강남구 신사동",
-      buyer_postcode: "01181"
-    }, function (rsp) { // callback
-      if (rsp.success) {
-        // 결제 성공 시 로직
-      } else {
-        // 결제 실패 시 로직
-      }
-    });
-  }
+
+    console.log(uidDate);
+    console.log("뭐야")
+    var IMP = window.IMP;
+    IMP.init("imp44058332"); // 예: imp00000000
+      // IMP.request_pay(param, callback) 결제창 호출
+      IMP.request_pay({ // param
+        pg: "html5_inicis",
+        pay_method: "card",
+        pay_currency: "₩",
+        merchant_uid: "BRING"+ uidDate,
+        name: "브링브링",
+        amount: 100,
+        buyer_email: userEmail,
+        buyer_name: userName
+        // buyer_tel: "010-4242-4242",
+        // buyer_addr: "서울특별시 강남구 신사동",
+        // buyer_postcode: "01181"
+      }, function (rsp) { // callback
+          console.log(rsp);
+        if (rsp.success) {
+          // 결제 성공 시 로직
+          let msg = '결제가 완료되었습니다.';
+          console.log(msg);
+
+          $.ajax({
+            type: "GET",
+            url: '/reservation/pay.do',
+            data: {
+              amount: 100,
+              pay_method: "card",
+              imp_uid: rsp.imp_uid,
+              merchant_uid: rsp.merchant_uid
+            },
+            success: function (result) {
+              location.href="/reservation/payComplete.do";
+            },
+            error: function (result) {
+              alert("Ajax 오류! 관리자에게 문의하세요");
+            }
+          });
+
+        } else {
+          // 결제 실패 시 로직
+          var msg = '결제에 실패하였습니다. 관리자에게 문의하세요';
+          alert(msg += '에러내용 : ' + rsp.error_msg);
+        }
+      });
+    }
 </script>
 
 <script>
