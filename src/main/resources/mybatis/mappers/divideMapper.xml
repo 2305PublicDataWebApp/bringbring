@@ -175,4 +175,10 @@
 	<update id="deleteDivide">
 		UPDATE DIVIDE_TBL SET IS_DIV_DELETED = 'Y' WHERE DIV_NO = #{value}
 	</update>
+	<update id="updateDivide">
+		UPDATE  DIVIDE_TBL SET
+		WASTE_CATEGORY_NO = #{wasteCategoryNo}, DIV_TITLE = #{divTitle}, DIV_CONTENT = #{divContent}, DIV_UPDATE_DATE = DEFAULT
+		, CITY_NO = #{cityNo}, DISTRICT_NO = #{districtNo}, DIV_X_COORDINATE = #{divXCoordinate}, DIV_Y_COORDINATE = #{divYCoordinate}
+		WHERE DIV_NO = #{divNo}
+	</update>
 </mapper>

@@ -8,10 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
 import com.bringbring.image.domain.Image;
-import com.bringbring.region.domain.District;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.bringbring.reservation.domain.WasteCategory;
 
 public interface DivideService {
 
@@ -39,4 +36,6 @@ public interface DivideService {
 	int deleteDivide(int divNo);
 
     UpdateData selectUpdateDataByNo(int divNo);
+
+	int updateDivide(Divide divide);
 }

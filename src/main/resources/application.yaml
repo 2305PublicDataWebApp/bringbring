@@ -16,6 +16,11 @@ spring:
       max-request-size: 100MB
       file-size-threshold: 0
       location: /tmp
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
 mybatis:
   configuration:
     jdbc-type-for-null: NULL    

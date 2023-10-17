@@ -1,38 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+		 pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ko">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>브링브링</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+	<title>브링브링</title>
+	<meta content="" name="description">
+	<meta content="" name="keywords">
 
-  <!-- Favicons -->
-  <link href="../resources/assets/img/main/icon-title.png" rel="icon">
-  <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
+	<!-- Favicons -->
+	<link href="../resources/assets/img/main/icon-title.png" rel="icon">
+	<link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 
-  <!-- Vendor CSS Files -->
-  <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+	<!-- Vendor CSS Files -->
+	<link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
+	<link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<link href="../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
 
-  <!-- Template Main CSS File -->
-  <link href="../resources/assets/css/style.css" rel="stylesheet">
-<%--  <link href="../resources/assets/css/common.css" rel="stylesheet">--%>
+	<!-- Template Main CSS File -->
+	<link href="../resources/assets/css/style.css" rel="stylesheet">
+	<%--  <link href="../resources/assets/css/common.css" rel="stylesheet">--%>
 
-  <!-- =======================================================
-  * Template Name: Arsha
-  * Updated: Sep 18 2023 with Bootstrap v5.3.2
-  * Template URL: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+	<!-- =======================================================
+    * Template Name: Arsha
+    * Updated: Sep 18 2023 with Bootstrap v5.3.2
+    * Template URL: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 	<!-- include summernote css/js -->
@@ -42,77 +42,77 @@
 	<script src="../resources/assets/js/summernote/lang/summernote-ko-KR.js"></script>
 
 	<!-- 카카오 api 관련 -->
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=043e510b873d1287a23e00d8444a6b47&libraries=services"></script>
-  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-  <style>
-    /* 여기서부터 이 html의 css */
-    main ul li{
-      list-style: none;
-      display: flex;
-      align-items: center;
-      padding: 15px;
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=043e510b873d1287a23e00d8444a6b47&libraries=services"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<style>
+		/* 여기서부터 이 html의 css */
+		main ul li{
+			list-style: none;
+			display: flex;
+			align-items: center;
+			padding: 15px;
 
-    }
-    main .divide-insert-menu label{
-      width: 150px;
-      text-align: center;
-    }
-    main .divide-insert-menu input[type="text"]{
-      width: 600px;
-      height: 35px;
-      /* font-size: 13px; */
-      border: 1px solid rgba(133, 133, 133, 0.5);
-      border-radius: 3px;
-    }
-    select{
-      border: 1px solid rgba(133, 133, 133, 0.5);
-      border-radius: 3px;
-    }
-    #file::-webkit-file-upload-button {
-      margin-right: 8px;
-    }
-    /* 썸머노트 css*/
-    .note-icon-caret:before {
-        width: 7px;
-    }
-    .dropdown-toggle::after {
-        border: 0px;
-    }
-    main select{
-      height: 35px;
-    }
-    .fileLayOut{
-    	font-size: 15px;
-    	border: 1px solid rgba(133, 133, 133, 0.5);
-    	width: 570px;
-    	border-radius: 3px;
-    }
-	.imgPreview{
-		width: 120px;
-		height: 120px;
-		background-position: 50% 50%;
-		border-top-left-radius: 10px;
-		border-top-right-radius: 10px;
-		background-repeat: no-repeat;
-		background-size: cover;
-		border: 1px solid rgb(25, 135, 84);
-		margin: 5px 15px 0px 15px;
-		border-bottom: 0px;
-	}
-	.deleteBtn{
-		border: 1px solid rgb(25, 135, 84);
-		background: rgb(255, 255, 255);
-		color: rgb(25, 135, 84);
-		margin-bottom: 20px;
-		width: 120px;
-		border-top-left-radius: 0px;
-		border-top-right-radius: 0px;
-		margin: 0px 15px 0px 15px;
-	}
-	.sortLeft{
-		float: left;
-	}
-  </style>
+		}
+		main .divide-insert-menu label{
+			width: 150px;
+			text-align: center;
+		}
+		main .divide-insert-menu input[type="text"]{
+			width: 600px;
+			height: 35px;
+			/* font-size: 13px; */
+			border: 1px solid rgba(133, 133, 133, 0.5);
+			border-radius: 3px;
+		}
+		select{
+			border: 1px solid rgba(133, 133, 133, 0.5);
+			border-radius: 3px;
+		}
+		#file::-webkit-file-upload-button {
+			margin-right: 8px;
+		}
+		/* 썸머노트 css*/
+		.note-icon-caret:before {
+			width: 7px;
+		}
+		.dropdown-toggle::after {
+			border: 0px;
+		}
+		main select{
+			height: 35px;
+		}
+		.fileLayOut{
+			font-size: 15px;
+			border: 1px solid rgba(133, 133, 133, 0.5);
+			width: 570px;
+			border-radius: 3px;
+		}
+		.imgPreview{
+			width: 120px;
+			height: 120px;
+			background-position: 50% 50%;
+			border-top-left-radius: 10px;
+			border-top-right-radius: 10px;
+			background-repeat: no-repeat;
+			background-size: cover;
+			border: 1px solid rgb(25, 135, 84);
+			margin: 5px 15px 0px 15px;
+			border-bottom: 0px;
+		}
+		.deleteBtn{
+			border: 1px solid rgb(25, 135, 84);
+			background: rgb(255, 255, 255);
+			color: rgb(25, 135, 84);
+			margin-bottom: 20px;
+			width: 120px;
+			border-top-left-radius: 0px;
+			border-top-right-radius: 0px;
+			margin: 0px 15px 0px 15px;
+		}
+		.sortLeft{
+			float: left;
+		}
+	</style>
 </head>
 
 <body>
