@@ -44,6 +44,29 @@ public class RestReservationController {
         }
     }
 
+    @GetMapping("/pay.do")
+    public void feePay(int amount, String pay_method, String imp_uid, String merchant_uid) throws Exception{
+
+        System.out.println("결제 성공");
+        System.out.println("결제 금액 : " + amount);
+        System.out.println("결제 수단 : " + pay_method);
+        System.out.println("imp_uid : " + imp_uid);
+        System.out.println("merchant_uid : " + merchant_uid);
+    }
+
+//    @InitBinder
+//    public void initBinder(WebDataBinder binder) {
+//        binder.registerCustomEditor(LocalDateTime.class, new PropertyEditorSupport() {
+//            @Override
+//            public void setAsText(String text) throws IllegalArgumentException {
+//                LocalDateTime value = LocalDateTime.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//                setValue(value);
+//            }
+//        });
+//    }
+
+
+
 //    @PostMapping("/select/insert.do")
 //    public ResponseEntity<List<Integer>> insertWasteSelect(@RequestBody List<Integer> wasteInfoNo, HttpSession session) {
 //        if (!wasteInfoNo.isEmpty()) {

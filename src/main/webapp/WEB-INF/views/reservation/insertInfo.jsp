@@ -104,7 +104,7 @@
   </div>
 
 </section>
-<div style="width: 100%;height: 1000px;">
+<div style="width: 100%;">
 
 <main>
   <h2 class="subject">정보 입력</h2>
@@ -124,6 +124,7 @@
   <div id="container-out">
     <form name="insertInfoForm" action="/reservation/insertInfo.do" method="post">
       <input type="hidden" id="sessionId" value="${sessionScope.sessionId}">
+      <input type="hidden" name="userNo" id="sessionNo" value="${userInfo.userNo}">
       <div id="infoContainer">
         <div class="container-in">
           <label>배출 주소</label>
@@ -132,6 +133,7 @@
             <input type="button" onclick="sample5_execDaumPostcode();" value="우편번호 찾기"><br>
             <input type="text" id="sample6_address" placeholder="주소" style="width: 400px"><br>
             <input type="text" id="sample6_detailAddress" placeholder="상세주소" style="width: 400px">
+            <input type="hidden" name="rvAddr" id="rvAddr">
 <%--            <input type="text" id="sample6_extraAddress" placeholder="참고항목">--%>
           </div>
         </div>
@@ -139,13 +141,14 @@
           <label>물품 배출 위치</label>
           <div class="input-div">
           <div id="map"></div>
-            <input type="text" name="rvAddrDetail" placeholder="배출할 장소의 상세 정보를 입력해주세요" style="width: 400px">
+            <input type="text" id="rvAddrDetail" name="rvAddrDetail" placeholder="배출할 장소의 상세 정보를 입력해주세요" style="width: 400px">
           </div>
         </div>
         <div class="container-in">
           <label>배출일</label>
           <div class="input-group date input-div" style="width: 520px">
-            <input type="text" name="rvRvDate" class="form-control" id="calenderControll"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            <input type="text" name="rvRvDate" class="form-control" id="calenderControll" placeholder="배출일을 지정해주세요"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            <input type="hidden" name="rvRvDate" id="rvRvDate">
             <label type="button" id="calenderClick" for="calenderControll">
               <img src="../../../resources/assets/img/reservation/calendar.png" id="calender">
             </label>
@@ -154,13 +157,19 @@
         <div class="container-in">
           <label>신청자명</label>
           <div class="input-div">
-            <input type="text" id="userName" name="userName" style="width: 400px">
+            <input type="text" id="rvName" name="rvName" placeholder="신청자의 이름을 입력해주세요" style="width: 400px">
           </div>
         </div>
         <div class="container-in">
           <label>휴대폰</label>
           <div class="input-div">
-            <input type="number" id="rvPhone" name="rvPhone" style="width: 400px">
+            <input type="number" id="rvPhone" name="rvPhone" placeholder="연락이 가능한 휴대전화 번호를 입력해주세요" style="width: 400px">
+          </div>
+        </div>
+        <div class="container-in">
+          <label>요청사항</label>
+          <div class="input-div">
+            <input type="text" id="rvRequest" name="rvRequest" placeholder="요청사항이 있으면 작성해주세요" style="width: 400px">
           </div>
         </div>
       </div>
@@ -206,6 +215,10 @@
 
 <!--주소 api 사용 script-->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<!--day.js-->
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.5/dayjs.min.js"></script>
+
 <!-- 채널톡 api -->
 <script>
   (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
@@ -300,6 +313,13 @@
     map: map
   });
 
+  let userPostCode = document.getElementById('sample6_postcode');
+  let userAddress = document.getElementById('sample6_address');
+  let userAddressDetail = document.getElementById('sample6_detailAddress');
+  let userName = document.getElementById('rvName');
+  let userPhone = document.getElementById('rvPhone');
+  // let rvAddr = document.querySelector('#rvAddr').value;
+
   function printUserInfo() {
     const userId = document.querySelector('#sessionId').value;
     console.log(userId);
@@ -309,11 +329,11 @@
       data: {userId: userId},
       type: 'post',
       success: function (data) {
-        document.getElementById('sample6_postcode').value = data.userPostCode;
-        document.getElementById('sample6_address').value = data.userAddress;
-        document.getElementById('sample6_detailAddress').value = data.userAddressDetail;
-        document.getElementById('userName').value = data.userName;
-        document.getElementById('rvPhone').value = data.userPhone;
+        userPostCode.value= data.userPostCode;
+        userAddress.value= data.userAddress;
+        userAddressDetail.value= data.userAddressDetail;
+        userName.value= data.userName;
+        userPhone.value= data.userPhone;
 
         geocoder.addressSearch(data.userAddress, function (results, status) {
           // 정상적으로 검색이 완료됐으면
@@ -342,11 +362,12 @@
   }
 
   function printInsertInfo() {
-    document.getElementById('sample6_postcode').value = '';
-    document.getElementById('sample6_address').value = '';
-    document.getElementById('sample6_detailAddress').value = '';
-    document.getElementById('userName').value = '';
-    document.getElementById('rvPhone').value = '';
+    userPostCode.value= '';
+    userAddress.value= '';
+    userAddressDetail.value= '';
+    userName.value= '';
+    userPhone.value= '';
+
 
     marker.setMap(null);
     // 새로운 마커 생성
@@ -354,6 +375,40 @@
       map: map
     });
   }
+
+  document.querySelector('#submitBtn').addEventListener('click', function () {
+    let rvAddrDetail = document.querySelector('#rvAddrDetail');
+    let rvRvDate = document.querySelector('#calenderControll').value;
+    let rvRequest = document.querySelector('#rvRequest');
+
+    let rvAddr = userAddress.value + ' ' +userAddressDetail.value;
+
+    // 날짜 파싱 및 서식 지정
+    // const formattedDate = dayjs(rvRvDateInput).format('YYYY-MM-DD'+'T'+'HH:mm:ss');
+    // let rvRvDate = document.querySelector('#rvRvDate');
+    // rvRvDate.value = formattedDate;
+    if(rvRequest.value == '') {
+      rvRequest.value = '요청사항 없음';
+    }
+
+    if(userPostCode.value== '' ||
+        userAddress.value== '' ||
+        userAddressDetail.value== '' ||
+        userName === '' ||
+        userName.value== '' ||
+        userPhone.value== '' ||
+        rvAddrDetail.value== '' ||
+        rvRvDate== ''
+    ) {
+      alert("모든 정보를 입력해야 합니다.");
+      document.querySelector('#rvAddr').value = rvAddr;
+      return false;
+    } else {
+      document.querySelector('#rvAddr').value = rvAddr;
+      console.log(rvAddr);
+      document.insertInfoForm.submit();
+    }
+  })
 
 
 
