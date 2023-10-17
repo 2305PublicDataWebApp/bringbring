@@ -41,6 +41,7 @@ public class NoticeServiceImpl implements NoticeService {
 	// 게시글 번호에 맞는 게시글 상세 조회
 	@Override
 	public Notice selectNoticeByNo(Integer noticeNo) {
+		
 		return noticeStore.selectNoticeByNo(noticeNo);
 	}
 
@@ -55,5 +56,6 @@ public class NoticeServiceImpl implements NoticeService {
 	public int deleteNotice(Notice notice) {
 		return noticeStore.deleteNotice(notice);
 	}
+
 
 }

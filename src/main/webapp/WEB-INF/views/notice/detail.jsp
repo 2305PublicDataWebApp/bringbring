@@ -86,9 +86,11 @@
 					${notice.noticeType }</div>
 				<div class="notice-btn">
 					<!-- 관리자만 보이는 버튼 -->
+					<c:if test="${adminNo ne 0}">
 					<button class="btn btn-primary" onclick="showNoticeUpdate();">수정하기</button>
 					<button class="btn btn-primary"
 						onclick="deleteNotice('${delUrl}');">삭제하기</button>
+						</c:if>
 				</div>
 			</div>
 			<div class="icon">
@@ -108,18 +110,12 @@
 		<hr>
 		<!-- 이전글/다음글 -->
 		<div class="otherdetail">
-			<li>이전 | <c:if test="${preNoticeNo ne 0}">
-					<a
-						href="${detailUrl}?noticeNo=${preNoticeNo}&searchKeyword=${searchKeyword}">${notice.noticeTitle }</a>
-				</c:if> <c:if test="${preNoticeNo eq 0 }">
-					<span>이전 글이 없습니다.</span>
-				</c:if>
+			<li>이전 | 
+					<a href="${detailUrl}?noticeNo=${preNoticeNo}&searchKeyword=${searchKeyword}">${notice.noticeTitle }</a>
+
 			</li>
-			<li>다음 | <c:if test="${nextNoticeNo ne 0 }">
+			<li>다음 | 
 					<a href="${detailUrl }?noticeNo=${nextNoticeNo}">${notice.noticeTitle }</a>
-				</c:if> <c:if test="${nextNoticeNo eq 0 }">
-					<span>다음 글이 없습니다.</span>
-				</c:if>
 			</li>
 		</div>
 
