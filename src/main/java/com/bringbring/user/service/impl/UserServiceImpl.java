@@ -80,4 +80,9 @@ public class UserServiceImpl implements UserService {
 		return userStore.selectOneFindPwd(user);
 	}
 
+	@Override
+	public int deleteUser(String userId) {
+		return userStore.deleteUser(userId);
+	}
+
 }

@@ -62,4 +62,11 @@ public interface UserService {
      */
 	User selectOneFindPwd(User user);
 
+	/**
+	 * 회원 탈퇴 service
+	 * @param userId
+	 * @return int
+	 */
+	int deleteUser(String userId);
+
 }

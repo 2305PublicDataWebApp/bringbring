@@ -110,6 +110,27 @@ public class UserController {
 			return "common/error";
 		}
 	}
+	
+	// 회원탈퇴 
+	@ResponseBody
+	@GetMapping("/delete.do")
+	public String deleteUser(
+			HttpSession session) {
+		String userId = (String)session.getAttribute("sessionId");
+		
+		int result = userService.deleteUser(userId);
+		if(result > 0) {
+			session.invalidate();
+			String response = "<script>alert('탈퇴가 완료되었습니다.');"
+					+ "location.href='/'</script>";
+			return response;
+		}else {
+			String response = "<script>alert('탈퇴에 실패하였습니다.');"
+					+ "location.href='/user/update.do'</script>";
+			return response;
+			
+		}
+	}
 
 	// 아이디(이메일) 중복 확인
 	@ResponseBody

@@ -24,7 +24,9 @@ public class UserStoreLogic implements UserStore{
 	}
 
 	@Override
-	public int selectListCount() { return sqlSession.selectOne("UserMapper.selectListCount"); }
+	public int selectListCount() { 
+		return sqlSession.selectOne("UserMapper.selectListCount"); 
+	}
 
 	@Override
 	public List<User> selectUserList(PageInfo pInfo) {
@@ -45,7 +47,9 @@ public class UserStoreLogic implements UserStore{
 	}
 
 	@Override
-	public User selectOneById(String userId) { return sqlSession.selectOne("UserMapper.selectOneById", userId); }
+	public User selectOneById(String userId) { 
+		return sqlSession.selectOne("UserMapper.selectOneById", userId); 
+	}
 
 	@Override
 	public int updateUser(User user) {
@@ -58,7 +62,14 @@ public class UserStoreLogic implements UserStore{
 	}
 
 	@Override
-	public int selectOneByNo(User user) { return sqlSession.selectOne("UserMapper.selectOneByMaxNo", user);}
+	public int selectOneByNo(User user) { 
+		return sqlSession.selectOne("UserMapper.selectOneByMaxNo", user);
+	}
+
+	@Override
+	public int deleteUser(String userId) {
+		return sqlSession.update("UserMapper.deleteUser", userId);
+	}
 
 
 }

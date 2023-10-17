@@ -155,7 +155,7 @@
     <script src="../resources/assets/js/main.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-    <!-- 회원가입 유효성 -->
+    <!-- 정보 수정 유효성 -->
     <script type="text/javascript">
 	    document.addEventListener('DOMContentLoaded', function () {
 	        const form = document.getElementById('update_form');
