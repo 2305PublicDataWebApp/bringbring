@@ -6,6 +6,7 @@ import com.bringbring.admin.domain.AdminDetails;
 import com.bringbring.admin.domain.Role;
 import com.bringbring.admin.store.AdminStore;
 import com.bringbring.common.PageInfo;
+import com.bringbring.report.domain.ReportDetails;
 import com.bringbring.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -109,5 +110,6 @@ public class AdminServiceImpl implements AdminService  {
 
     @Override
     public int deleteRole(int userNo) { return adminStore.deleteRole(userNo);}
+
 
 }

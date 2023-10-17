@@ -1,7 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reportMapper">
+
+    <resultMap id="reportResultMap" type="com.bringbring.report.domain.ReportDetails">
+        <id property="repNo" column="REP_NO" />
+        <result property="divNo" column="DIV_NO" />
+        <result property="userNo" column="USER_NO" />
+        <result property="repCategory" column="REP_CATEGORY" />
+        <result property="repContent" column="REP_CONTENT" />
+        <result property="repCreateDate" column="REP_CREATE_DATE" />
+        <result property="repUpdateDate" column="REP_UPDATE_DATE" />
+        <result property="isRepDeleted" column="IS_REP_DELETED" />
+        <result property="divTitle" column="DIV_TITLE" />
+        <result property="divContent" column="DIV_CONTENT" />
+        <result property="wasteCategoryNo" column="WASTE_CATEGORY_NO" />
+        <result property="divCreateDate" column="DIV_CREATE_DATE" />
+        <result property="divUpdateDate" column="DIV_UPDATE_DATE" />
+        <result property="divYn" column="DIV_YN" />
+        <result property="viewCount" column="VIEW_COUNT" />
+        <result property="isDivDeleted" column="IS_DIV_DELETED" />
+        <result property="cityNo" column="CITY_NO" />
+        <result property="districtNo" column="DISTRICT_NO" />
+        <result property="divXCoordinate" column="DIV_X_COORDINATE" />
+        <result property="divYCoordinate" column="DIV_Y_COORDINATE" />
+        <result property="heartCount" column="HEART_COUNT" />
+        <result property="userId" column="USER_ID" />
+    </resultMap>
+
     <insert id="insertReport">
         INSERT INTO REPORT_TBL VALUES (SEQ_REP_NO.NEXTVAL, #{divNo}, #{userNo}, #{repCategory}, #{repContent}, DEFAULT, DEFAULT, DEFAULT)
     </insert>
+
+    <update id="deleteDivide">
+        UPDATE DIVIDE_TBL SET IS_DIV_DELETED = 'Y' WHERE DIV_NO = #{divNo}
+    </update>
+
+    <update id="deleteReport">
+        UPDATE REPORT_TBL SET IS_REP_DELETED = 'Y' WHERE DIV_NO = #{divNo}
+    </update>
+    <select id="selectReportCount" resultType="_int">
+        SELECT COUNT(*) FROM REPORT_TBL
+    </select>
+
+    <select id="selectReportList" resultMap="reportResultMap">
+        SELECT r.REP_NO, d.DIV_NO, d.DIV_TITLE, d.DIV_CREATE_DATE, r.REP_CREATE_DATE, r.REP_CATEGORY, u.USER_ID, d.DIV_CONTENT
+        FROM REPORT_TBL r
+                 INNER JOIN DIVIDE_TBL d ON r.DIV_NO = d.DIV_NO
+                 INNER JOIN USER_TBL u ON d.USER_NO = u.USER_NO
+        WHERE r.IS_REP_DELETED = 'N'
+    </select>
+
+    <select id="slectDeleteRepCount" resultType="_int">
+        SELECT COUNT(*) FROM DIVIDE_TBL WHERE IS_DIV_DELETED = 'Y'
+    </select>
+
+    <select id="searchReportByKeyword" resultMap="reportResultMap">
+        SELECT r.REP_NO, d.DIV_NO, d.DIV_TITLE, d.DIV_CREATE_DATE, r.REP_CREATE_DATE, r.REP_CATEGORY, u.USER_ID, d.DIV_CONTENT
+        FROM REPORT_TBL r
+        INNER JOIN DIVIDE_TBL d ON r.DIV_NO = d.DIV_NO
+        INNER JOIN USER_TBL u ON d.USER_NO = u.USER_NO
+        <if test="searchCondition == 'all'">
+            WHERE r.IS_REP_DELETED = 'N' AND (USER_ID LIKE '%'||#{searchKeyword}||'%' OR DIV_TITLE LIKE '%'||#{searchKeyword}||'%')
+        </if>
+        <if test="searchCondition == 'id'">
+            WHERE r.IS_REP_DELETED = 'N' AND (USER_ID LIKE '%'||#{searchKeyword}||'%')
+        </if>
+        <if test="searchCondition == 'title'">
+            WHERE r.IS_REP_DELETED = 'N' AND (DIV_TITLE LIKE '%'||#{searchKeyword}||'%')
+        </if>
+        <if test="searchCondition == 'category'">
+            WHERE r.IS_REP_DELETED = 'N' AND (REF_CATEGORY LIKE '%'||#{searchKeyword}||'%')
+        </if>
+    </select>
+
+    <select id="getListReportCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM REPORT_TBL r
+        INNER JOIN DIVIDE_TBL d ON r.DIV_NO = d.DIV_NO
+        INNER JOIN USER_TBL u ON d.USER_NO = u.USER_NO
+        <if test="searchCondition == 'all'">
+            WHERE r.IS_REP_DELETED = 'N' AND (USER_ID LIKE '%'||#{searchKeyword}||'%' OR DIV_TITLE LIKE '%'||#{searchKeyword}||'%')
+        </if>
+        <if test="searchCondition == 'id'">
+            WHERE r.IS_REP_DELETED = 'N' AND (USER_ID LIKE '%'||#{searchKeyword}||'%')
+        </if>
+        <if test="searchCondition == 'title'">
+            WHERE r.IS_REP_DELETED = 'N' AND (DIV_TITLE LIKE '%'||#{searchKeyword}||'%')
+        </if>
+        <if test="searchCondition == 'category'">
+            WHERE r.IS_REP_DELETED = 'N' AND (REF_CATEGORY LIKE '%'||#{searchKeyword}||'%')
+        </if>
+    </select>
+
 </mapper>

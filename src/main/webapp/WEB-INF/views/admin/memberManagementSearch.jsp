@@ -115,7 +115,7 @@
         <br/>
         <div class="table-responsive">
           <table class="table align-middle text-center">
-              <thead class="table-light align-middle">
+              <thead class="table-success align-middle">
                   <tr>
                       <th>회원 번호</th>
                       <th>회원 아이디</th>

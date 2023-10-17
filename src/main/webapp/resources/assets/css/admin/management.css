@@ -64,3 +64,14 @@ h4 {
 .region-btn:hover {
     background: #43bc8a;
 }
+
+table a:hover {
+    color: #fff;
+    background: linear-gradient(to top, #bfffa1 40%, transparent 40%);
+}
+
+.deleted-row {
+    background-color: rgba(0, 0, 0, 0.1); /* 검은 투명 회색 배경색 */
+    color: #000; /* 텍스트 색상 */
+    /* 다른 스타일 속성을 필요에 따라 추가할 수 있습니다. */
+}

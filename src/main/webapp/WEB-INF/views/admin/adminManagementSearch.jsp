@@ -23,7 +23,7 @@
   <!-- Google Fonts -->
   <link
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">ㅂ
+    rel="stylesheet">
   <!-- Vendor CSS Files -->
   <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -57,9 +57,9 @@
   <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
     <div style="width: 1300px;margin: 0 auto;">
       <div style="float: left;margin-top: 60px;">
-        <h1>관리자 회원 관리</h1>
+        <h1>관리자 관리</h1>
         <div style="width: 100%;height: 30px;"></div>
-        <h4 style="color: rgb(189, 245, 229);">회원 정보 조회, 회원 탈퇴 관리, 관리자 권한 부여 페이지입니다. </h4>
+        <h4 style="color: rgb(189, 245, 229);">관리자 리스트와 관리자를 해임할 수 있는 페이지입니다.</h4>
       </div>
       <div style="display: flex;flex-direction: row;justify-content: flex-end;">
         <img src="../resources/assets/img/admin/page-icon.png" style="width: 250px;" alt="">
@@ -115,7 +115,7 @@
       <br/>
       <div class="table-responsive">
         <table class="table align-middle text-center">
-            <thead class="table-light align-middle">
+            <thead class="table-success align-middle">
                 <tr>
                     <th>관리자 번호</th>
                     <th>회원 아이디</th>

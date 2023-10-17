@@ -4,6 +4,7 @@ import com.bringbring.admin.domain.Admin;
 import com.bringbring.admin.domain.AdminDetails;
 import com.bringbring.admin.domain.Role;
 import com.bringbring.common.PageInfo;
+import com.bringbring.report.domain.ReportDetails;
 import com.bringbring.user.domain.User;
 
 import java.util.List;
@@ -119,7 +120,9 @@ public interface AdminStore {
     /**
      * 유저 권한 삭제 store
      * @param userNo
-     * @return
+     * @return int
      */
     int deleteRole(int userNo);
+
+
 }
