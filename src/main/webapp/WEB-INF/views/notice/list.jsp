@@ -98,7 +98,7 @@
 				</li>
 			</ul>
 
-			<form class="d-flex" action="./search.jsp" method="get">
+			<form class="d-flex" action="notice/search.do" method="get">
 				<input class="form-control me-2" type="search" placeholder="Search"
 					aria-label="Search" name="searchKeyword">
 				<button class="btn btn-outline-success" type="submit">검색</button>
@@ -122,26 +122,37 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="notice" items="${noticeList }" varStatus="i">
-								<tr>
-									<th scope="row">${i.count }</th>
-									<td>${notice.noticeType}</td>
-									<td>지역</td>
-									<c:url var="detailUrl" value="/notice/detail.do">
-										<c:param name="noticeNo" value="${notice.noticeNo }" />
-									</c:url>
-									<td style="width: 641.15px;"><a href="${detailUrl }">${notice.noticeTitle }</a>
-									</td>
-									<td><fmt:formatNumber pattern="###,###" value="123000" />
-									</td>
-									<td>${notice.noticeCreateDate}</td>
-								</tr>
+							<c:forEach var="notice" items="${noticeList }" varStatus="n">
+								<c:if test="${not empty notice.noticeCreateDate}">
+									<c:set var="currentDate"
+										value="<%=java.time.LocalDate.now()%>" />
+									<c:set var="sevenDaysAgo" value="${currentDate.minusDays(7)}" />
+									<tr>
+										<th scope="row">${n.count }</th>
+										<td>${notice.noticeType}</td>
+										<td>지역</td>
+										<c:url var="detailUrl" value="/notice/detail.do">
+											<c:param name="noticeNo" value="${notice.noticeNo }" />
+										</c:url>
+										<td style="width: 641.15px;"><a href="${detailUrl }"
+											onclick="increaseViewCount(${notice.noticeNo});">
+												${notice.noticeTitle } <c:if
+													test="${notice.noticeCreateDate.isAfter(sevenDaysAgo)}">
+													<img src="../resources/assets/img/notice/new_icon.png"
+														style="width: 20px; height: 20px;" />
+												</c:if>
+										</a></td>
+										<td id="noticeViewCount_${notice.noticeNo }">${notice.noticeViewCount }
+										</td>
+										<td>${notice.noticeCreateDate}</td>
+									</tr>
+								</c:if>
 							</c:forEach>
 						</tbody>
 					</table>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="pills-service" role="tabpanel"
+ 			<div class="tab-pane fade" id="pills-service" role="tabpanel"
 				aria-labelledby="service-tab">
 				<div class="col-lg-12">
 					<table class="table table-hover text-center">
@@ -156,15 +167,25 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="notice" items="${noticeList }" varStatus="i">
+							<c:forEach var="notice" items="${noticeList }" varStatus="n">
 								<c:if test="${notice.noticeType eq 'service' }">
 									<tr>
-										<th scope="row">${i.count }</th>
+										<th scope="row">${n.count }</th>
 										<td>${notice.noticeType}</td>
 										<td>지역</td>
-										<td style="width: 641.15px;"><a href="${detailUrl }">${notice.noticeTitle }</a>
+										<c:url var="detailUrl" value="/notice/detail.do">
+											<c:param name="noticeNo" value="${notice.noticeNo }" />
+										</c:url>
+										<td style="width: 641.15px;"><a href="${detailUrl }"
+											onclick="increaseViewCount(${notice.noticeNo});">
+												${notice.noticeTitle } <c:if
+													test="${notice.noticeCreateDate.isAfter(sevenDaysAgo)}">
+													<img src="../resources/assets/img/notice/new_icon.png"
+														style="width: 20px; height: 20px;" />
+												</c:if>
+										</a></td>
+										<td id="noticeViewCount_${notice.noticeNo }">${notice.noticeViewCount }
 										</td>
-										<td>조회수</td>
 										<td>${notice.noticeCreateDate}</td>
 									</tr>
 								</c:if>
@@ -188,15 +209,25 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="notice" items="${noticeList }" varStatus="i">
+							<c:forEach var="notice" items="${noticeList }" varStatus="n">
 								<c:if test="${notice.noticeType eq 'update' }">
 									<tr>
-										<th scope="row">${i.count }</th>
+										<th scope="row">${n.count }</th>
 										<td>${notice.noticeType}</td>
 										<td>지역</td>
-										<td style="width: 641.15px;"><a href="${detailUrl }">${notice.noticeTitle }</a>
+										<c:url var="detailUrl" value="/notice/detail.do">
+											<c:param name="noticeNo" value="${notice.noticeNo }" />
+										</c:url>
+										<td style="width: 641.15px;"><a href="${detailUrl }"
+											onclick="increaseViewCount(${notice.noticeNo});">
+												${notice.noticeTitle } <c:if
+													test="${notice.noticeCreateDate.isAfter(sevenDaysAgo)}">
+													<img src="../resources/assets/img/notice/new_icon.png"
+														style="width: 20px; height: 20px;" />
+												</c:if>
+										</a></td>
+										<td id="noticeViewCount_${notice.noticeNo }">${notice.noticeViewCount }
 										</td>
-										<td>조회수</td>
 										<td>${notice.noticeCreateDate}</td>
 									</tr>
 								</c:if>
@@ -207,39 +238,35 @@
 			</div>
 		</div>
 		<!-- 글쓰기버튼 관리자만 보임 -->
-
-		<button type="button" class="btn btn-success"
-			onclick="showNoticeInsert()">글쓰기</button>
-
+		<c:forEach var="notice" items="${noticeList }" >
+ 		<c:if test="${notice.adminNo eq 'admin'}">
+			<button type="button" class="btn btn-success"
+				onclick="showNoticeInsert()">글쓰기</button>
+		 </c:if>
+		 </c:forEach>
 		<!-- 페이징 -->
-		<nav aria-label="Page navigation example">
-			<ul class="pagination">
-				<li class="page-item"><c:if test="${noticeInfo.StartNavi != 1}">
-						<c:url var="preUrl" value="/notice/list.do">
-							<c:param name="page" value="${noticeInfo.StartNavi-1 }" />
-						</c:url>
-						<a class="page-link" href="${preUrl }" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</c:if></li>
-				<c:forEach begin="${noticeInfo.StartNavi }"
-					end="${noticeInfo.EndNavi }" var="n">
-					<li class="page-item"><c:url var="pageUrl"
-							value="/notice/list.do">
-							<c:param name="page" value="${n}"></c:param>
-						</c:url> <a class="page-link" href="${pageUrl }">${n }</a></li>
-				</c:forEach>
-				<li class="page-item"><c:if
-						test="${noticpInfoeInfo.EndNavi != noticeInfo.NaviTotalCount}">
-						<c:url var="nextUrl" value="/notice/list.do">
-							<c:param name="page" value="${pInfo.EndNavi+1  }" />
-						</c:url>
-						<a class="page-link" href="${nextUrl }" aria-label="Next"> <span
-							aria-hidden="true">&raquo;</span>
-						</a>
-					</c:if></li>
-			</ul>
-		</nav>
+					<div class="pageee">
+				<c:if test="${pInfo.startNavi != 1}">
+					<c:url var="preUrl" value="/notice/list.do">
+						<c:param name="page" value="${pInfo.startNavi -1 }" />
+					</c:url>
+					<a href="${preUrl }">[이전]</a>
+				</c:if>
+				<c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }"
+					var="n">
+					<c:url var="pageUrl" value="/notice/list.do">
+						<c:param name="page" value="${n }"></c:param>
+					</c:url>
+					<a href="${pageUrl }">${n }</a>&nbsp;
+					</c:forEach>
+				<c:if test="${pInfo.endNavi != pInfo.naviTotalCount }">
+					<c:url var="nextUrl" value="/notice/list.do">
+						<c:param name="page" value="${pInfo.endNavi +1 }" />
+					</c:url>
+					<a href="${nextUrl }">[다음]</a>
+				</c:if>
+			</div>
+		
 	</main>
 	<!-- End #main -->
 
@@ -277,11 +304,7 @@
 		function showNoticeInsert() {
 			location.href = "/notice/insert.do"
 		}
-
-		function searchByCategory(category) {
-			document.querySelector('input[name="noticeCategory"]').value = category;
-			document.querySelector('form').submit();
-		}
+		
 	</script>
 
 

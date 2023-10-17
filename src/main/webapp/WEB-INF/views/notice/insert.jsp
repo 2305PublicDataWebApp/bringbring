@@ -182,7 +182,8 @@
 			$('#summernote').summernote({
 				placeholder : '내용을 작성하세요',
 				height : 400,
-				maxHeight : 800
+				maxHeight : 800,
+				lang : 'ko-KR'
 			});
 		});
 	</script>
@@ -240,7 +241,7 @@
 			var radioLabelElement = document.querySelector(".from-check label");
 
 			if (selectElement.value === "service") {
-				radioLabelElement.textContent = "담당구역";
+				radioLabelElement.textContent = '${admin.adminOrg}';
 			} else {
 				radioLabelElement.textContent = "전체";
 			}

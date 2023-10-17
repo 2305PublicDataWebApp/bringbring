@@ -54,4 +54,6 @@ public interface NoticeStore {
 	 */
 	int updateNotice(Notice notice);
 
+
+
 }
