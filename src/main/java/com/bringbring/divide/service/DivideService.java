@@ -38,4 +38,6 @@ public interface DivideService {
     UpdateData selectUpdateDataByNo(int divNo);
 
 	int updateDivide(Divide divide);
+
+	Divide selectOneByNo(int divNo);
 }

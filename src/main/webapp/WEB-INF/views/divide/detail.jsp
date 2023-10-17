@@ -189,7 +189,7 @@
           채팅 2&nbsp;&nbsp;•&nbsp;
 <%--          <i class="bi bi-heart"></i>--%>
           찜 <span id="heartCount">${dData.divide.heartCount}</span> &nbsp;&nbsp;•&nbsp;
-          조회 ${dData.divide.viewCount}
+          조회 <span id="viewCount">${dData.divide.viewCount}</span>
         </div>
       </div>      
       <!-- 거래 희망장소 영역 -->
@@ -210,7 +210,8 @@
       <div data-aos="fade-up" id="map" style="width: 100%;height: 300px;border: 1px solid #ccc;"></div>
       <!-- 버튼 영역 -->
       <div data-aos="fade-up" style="margin: 0 auto;text-align: center;margin-top: 100px;">
-        <button onclick="openPopup('../chatting/list.html', 600, 1200)" class="btn btn-success btn-lg">1:1 채팅 신청</button>
+<%--        <button onclick="openPopup('/chatting/list')" class="btn btn-success btn-lg">1:1 채팅 신청</button>--%>
+        <button onclick="openPopup('/chatting/master')" class="btn btn-success btn-lg">1:1 채팅 신청</button>
       </div>
     </div>
 
@@ -280,6 +281,27 @@
 
       </script>
       <script>
+        $(document).ready(function() {
+          $.ajax({
+            url: "/divide/updateViewCount.do",
+            data: { divNo: ${dData.divide.divNo} },
+            type: "POST",
+            success: function(data) {
+              if(data > 0){
+                var viewCountSpan = document.getElementById("viewCount");
+                viewCountSpan.textContent = ""; // 기존 내용을 지우기
+                viewCountSpan.textContent = data; // 새로운 정수 값을 설정
+              }else{
+                alert("조회수 증가 실패!");
+              }
+
+            },
+            error: function() {
+              alert("Ajax 오류! 관리자에게 문의하세요");
+            }
+          });
+        });
+
         var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
         var xCoor = "${dData.divide.divYCoordinate}";
         var yCoor = "${dData.divide.divXCoordinate}";
@@ -498,6 +520,12 @@
 
     function updateDivide() {
       location.href = "/divide/update.do?divNo=${dData.divide.divNo}";
+    }
+
+    function openPopup(url) {
+      var name = "브링브링 채팅방";
+      var option = "width = 510, height = 700, top = 20, left = 200, location = no"
+      window.open(url, name, option);
     }
 
     <!-- 로그인, 로그아웃 -->
