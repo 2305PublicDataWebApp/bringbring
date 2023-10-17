@@ -421,7 +421,7 @@
 
 				for (var i = 0; i < data.length; i++) {
 					var option = document.createElement("option");
-					option.value = data[i].cityNo;
+					option.value = data[i].districtNo;
 					option.text = data[i].districtName;
 					districtNo.appendChild(option);
 				}
@@ -445,7 +445,7 @@
 				success : function(data) {
 					for (var i = 0; i < data.length; i++) {
 						var option = document.createElement("option");
-						option.value = data[i].cityNo;
+						option.value = data[i].districtNo;
 						option.text = data[i].districtName;
 						districtNo.appendChild(option);
 					}

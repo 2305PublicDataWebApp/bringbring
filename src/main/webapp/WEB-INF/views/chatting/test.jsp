@@ -6,8 +6,13 @@ pageEncoding="UTF-8"%>
     <meta charset="UTF-8">
     <title>Websocket Tutorial</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
     <link rel="stylesheet" href="../resources/assets/css/chatting/style.css">
+    <style>
+
+
+    </style>
 </head>
 <body>
 <div class="floating-chat expand enter">
@@ -15,8 +20,12 @@ pageEncoding="UTF-8"%>
     <div class="chat">
         <div class="header">
             <span class="title">
-                Chat or Die
+                <span style="cursor: pointer;"><</span> &nbsp;
+                이름
             </span>
+        </div>
+        <div class="text-center" style="margin: 0 auto;">
+            <p style="background-color: #a9a8a8;border-radius: 10px;padding: 0px 5px;">채팅방에 입장하였습니다.</p>
         </div>
         <ul id="msgArea" class="messages">
         </ul>

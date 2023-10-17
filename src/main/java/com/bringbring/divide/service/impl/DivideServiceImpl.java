@@ -87,6 +87,9 @@ public class DivideServiceImpl implements DivideService{
 	@Override
 	public int updateDivide(Divide divide) { return divideStore.updateDivide(divide); }
 
+	@Override
+	public Divide selectOneByNo(int divNo) { return divideStore.selectOneByNo(divNo); }
+
 
 	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
 		Map<String, Object> fileInfoMap = new HashMap<String, Object>();

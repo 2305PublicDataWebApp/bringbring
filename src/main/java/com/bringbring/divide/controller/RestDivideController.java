@@ -1,5 +1,6 @@
 package com.bringbring.divide.controller;
 
+import com.bringbring.divide.domain.Divide;
 import com.bringbring.divide.domain.Heart;
 import com.bringbring.divide.service.DivideService;
 import com.bringbring.region.domain.District;
@@ -66,5 +67,12 @@ public class RestDivideController {
             // 데이터가 없는 경우 404 Not Found 상태 코드 반환
             return -1;
         }
+    }
+
+    @PostMapping("/updateViewCount.do")
+    public int updateViewCount(int divNo) {
+        Divide divide = divideService.selectOneByNo(divNo);
+        divide.setViewCount((divide.getViewCount()+1));
+        return divide.getViewCount();
     }
 }
