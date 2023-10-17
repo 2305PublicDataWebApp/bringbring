@@ -180,7 +180,7 @@
 						</div>
 					</li>
 					<li>
-						<label for="location">거래 희망 장소</label>
+						<label for="location">거래 희망 장소(선택)</label>
 						<input style="width: 500px;margin-right: 15px;" type="text" id="location">
 						<button type="button" class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
 						<input name="divXCoordinate" type="hidden" id="coordinateX">

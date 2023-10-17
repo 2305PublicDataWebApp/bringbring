@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -72,12 +74,12 @@
       <div class="row">
         <div class="four col-md-3">
           <div class="counter-box colored">
-            <h4>신고 게시물 수 : 100</h4>
+            <h4> 누적 신고 수 : ${reportCount}</h4>
           </div>
         </div>
         <div class="col-md-3">
           <div class="counter-box colored">
-              <h4>삭제 된 게시물 수 : 50</h4>
+              <h4>삭제 된 게시물 수 : ${deleteCount}</h4>
           </div>
         </div>
     </section>
@@ -86,14 +88,17 @@
         <div>
           <h2>신고 게시글</h2>
         </div>
-        <div class="input-group" style="width: 400px; height: 30px;">
-          <select class="form-select" aria-label=".form-select-lg example" style="width: 20%;">
-            <option selected>작성자</option>
-            <option value="1">신고유형</option>
-          </select>
-          <input type="search" class="form-control" placeholder="검색" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
-          <button type="button" class="btn btn-outline-success" id="user-serch-btn">검색</button>
-        </div>
+        <form action="/admin/searchReport.do" method="GET">
+          <div class="input-group" style="width: 400px; height: 30px;">
+            <select name="searchCondition" class="form-select" aria-label=".form-select-lg example" style="width: 20%;">
+              <option value="all">전체</option>
+              <option value="id">작성자</option>
+              <option value="title">글제목</option>
+            </select>
+            <input type="text" class="form-control rounded" placeholder="검색어를 입력하세요" name="searchKeyword" style="width: 50%;" />
+            <input type="submit" class="btn btn-outline-success" id="user-serch-btn" value="검색"></input>
+          </div>
+        </form>
       </div>
       <br/>
       <div class="container">
@@ -101,46 +106,116 @@
           <div class="col-md-12">
             <div class="table-responsive">
               <table class="table align-middle text-center">
-                <thead class="table-light align-middle">
-                  <tr>
+                <thead class="align-middle">
+                  <tr class="table-success" >
                     <th>신고 번호</th>
-                    <th>작성 글 번호</th>
-                    <th>작성 글 제목</th>
+                    <th>글 번호</th>
                     <th>작성자</th>
+                    <th>글 제목</th>
                     <th>작성일</th>
+                    <th>신고일</th>
                     <th>신고 유형</th>
-                    <th>신고 내용</th>
                     <th>-</th>
                   </tr>
                 </thead>
                 <tbody>
+                <c:forEach var="report" items="${reportList}" varStatus="a">
                   <tr>
-                    <td>2</td>
-                    <td>222</td>
-                    <td>수댕이가 수댕해요</td>
-                    <td>khuser01@gmail.com</td>
-                    <td>2023-10-01</td>
-                    <td>비방</td>
-                    <td>수댕이가 수댕함</td>
-                    <td><button class="btn btn-success">게시글 삭제</button></td>
+                    <td>${report.repNo}</td>
+                    <td>${report.divNo}</td>
+                    <td>${report.userId}</td>
+                    <c:url var="detailUrl" value="/divide/detail.do">
+                      <c:param name="divNo" value="${report.divNo}"></c:param>
+                    </c:url>
+                    <td><a href="${detailUrl}">${report.divTitle}</td>
+                    <fmt:parseDate value="${report.divCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime1" type="both" />
+                    <td><fmt:formatDate value="${parseDateTime1}" pattern="yyyy-MM-dd" /></td>
+                    <fmt:parseDate value="${report.repCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime2" type="both" />
+                    <td><fmt:formatDate value="${parseDateTime2}" pattern="yyyy-MM-dd" /></td>
+                    <td>${report.repCategory}</td>
+                    <td>
+                      <button class="btn btn-success" data-bs-toggle="modal"
+                              data-bs-target="#reportModal"  data-div-no="${report.divNo }">게시글 삭제</button>
+                    </td>
                   </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>223</td>
-                    <td>집에가고 싶어요</td>
-                    <td>khuser01@gmail.com</td>
-                    <td>2023-10-01</td>
-                    <td>게시판 무관</td>
-                    <td>게시판에 어울리지 않음</td>
-                    <td><button class="btn btn-success">게시글 삭제</button></td>
-                  </tr>
+                  <div class="modal fade" id="reportModal" tabindex="-1"
+                       aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">신고 글 상세 정보</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" class="form-control" id="divNoModal"
+                                   name="memberId" required value="${report.divNo}">
+                            <div class="mb-3">
+                              <label  class="form-label"><h6>제목</h6></label>
+                              <div style="width: 100%;height:40px; resize: none;border: 1px solid #dee2e6; padding: 5px;">
+                                ${report.divTitle}
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label"><h6>작성자</h6></label>
+                              <div style="width: 100%;height:40px; resize: none;border: 1px solid #dee2e6; padding: 5px;">
+                                ${report.userId}
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label"><h6>글내용</h6></label>
+                              <div style="width: 100%;height:150px; resize: none;border: 1px solid #dee2e6; padding: 5px;">
+                               ${report.divContent}
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <label  class="form-label"><h6>신고유형</h6></label>
+                              <div>
+                                  ${report.repCategory}
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary"
+                                      data-bs-dismiss="modal">닫기</button>
+                              <button type="submit" class="btn btn-success" onclick="confirmDivideRemoval(${report.divNo})">게시글 삭제</button>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </c:forEach>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      
+      <div class="mt-5 d-flex justify-content-center">
+        <nav aria-label="Page navigation exampler">
+          <ul class="pagination">
+            <c:if test="${pInfo.startNavi ne '1' }">
+              <li class="page-item"><a class="page-link" href="/admin/reportList.do?page=${pInfo.startNavi-1 }" class="first"><i class="bi bi-chevron-left"></i></a></li>
+            </c:if>
+            <c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }" var="p">
+              <c:url var="pageUrl" value="/admin/reportList.do">
+                <c:param name="page" value="${p }"></c:param>
+              </c:url>
+              <c:choose>
+                <c:when test="${p == pInfo.currentPage}">
+                  <li class="page-item active" ><a href="${pageUrl}" class="page-link" style="background-color:#00AD7C; border-color: #00AD7C">${p}</a></li>
+                </c:when>
+                <c:otherwise>
+                  <li class="page-item"><a href="${pageUrl}" class="page-link">${p}</a></li>
+                </c:otherwise>
+              </c:choose>
+            </c:forEach>
+            <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount }">
+              <li class="page-item"><a class="page-link" href="/admin/reportList.do?page=${pInfo.endNavi+1 }" class="last"><i class="bi bi-chevron-right"></i></a></li>
+            </c:if>
+          </ul>
+        </nav>
+      </div>
+      </div>
     </section>
 
   </main>
@@ -203,6 +278,30 @@
             $('#wrapper').toggleClass('toggled');
       });  
     });
+
+    //관리자 해임
+    function confirmDivideRemoval(divNo) {
+      var confirmation = confirm("신고글을 삭제하시겠습니까?");
+      if (confirmation) {
+        $.ajax({
+          url: '/admin/divideDelete.do',
+          type: 'POST',
+          data: { divNo: divNo },
+          success: function(response) {
+            console.log(response);
+            if (response ==="success") {
+              alert("성공적으로 삭제 되었습니다.");
+              location.reload();
+            } else {
+              alert("신고글 삭제에 실패하였습니다. 다시 시도해주세요.");
+            }
+          },
+          error: function(error) {
+            alert("오류가 발생하였습니다. 다시 시도해주세요.");
+          }
+        });
+      }
+    }
 
   </script>
   

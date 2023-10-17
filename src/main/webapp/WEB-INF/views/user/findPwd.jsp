@@ -80,7 +80,7 @@
                     <div class="row mb-4">
                         <div class="form-floating col-10 p-0">
                             <input type="email" id="floatingEmail" name="userId" class="form-control" placeholder="Email" required>
-                            <label for="floatingEmail">이메일 주소</label>
+                            <label for="floatingEmail">아이디(이메일)</label>
                             <div class="invalid-feedback">
                                 이메일 주소를 입력해주세요.
                             </div>

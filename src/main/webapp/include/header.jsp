@@ -43,7 +43,7 @@
 							<c:if test="${sessionScope.sessionUserGrade eq 3}">
 								<!-- 최고 관리자 기능 -->
 								<li><a href="/admin/memberList.do">회원 관리</a></li>
-								<li><a href="/admin/reportM.do">신고 관리</a></li>
+								<li><a href="/admin/reportList.do">신고 관리</a></li>
 							</c:if>
 							<li><a href="/admin/contactM.do">문의 관리</a></li>
 							<li><a href="/admin/reservationM.do">배출 관리</a></li>

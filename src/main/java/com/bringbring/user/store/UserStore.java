@@ -69,4 +69,11 @@ public interface UserStore {
 	 */
 	public User selectOneFindPwd(User user);
 
+	/**
+	 * 회원 탈퇴 store
+	 * @param userId
+	 * @return int
+	 */
+	public int deleteUser(String userId);
+
 }

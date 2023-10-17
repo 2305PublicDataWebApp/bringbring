@@ -185,11 +185,11 @@
 					<li>
 						<label for="summernote">내용</label>
 						<div id="" class="d-flex justify-content-center flex-column" style="width: 600px;">
-							<textarea name="divContent" id="summernote" spellcheck="false" required></textarea>
+							<textarea name="divContent" id="summernote" spellcheck="false" required>${uData.divide.divContent}</textarea>
 						</div>
 					</li>
 					<li>
-						<label for="location">거래 희망 장소</label>
+						<label for="location">거래 희망 장소(선택)</label>
 						<input style="width: 500px;margin-right: 15px;" type="text" id="location">
 						<button type="button" class="btn btn-success" id="searchAddrBtn" onclick="sample5_execDaumPostcode();">주소 검색</button>
 						<input name="divXCoordinate" type="hidden" id="coordinateX">
@@ -290,25 +290,74 @@
 
 
 <script type="text/javascript">
-	// 지도에 장소 표시할 거~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-			mapOption = {
-				center: new kakao.maps.LatLng(37.566535, 126.9779692), // 지도의 중심좌표
-				level: 3 // 지도의 확대 레벨
-			};
+	var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+	var xCoor = "${uData.divide.divYCoordinate}";
+	var yCoor = "${uData.divide.divXCoordinate}";
+	if(xCoor === ""){
+		xCoor = "33.450701";
+		yCoor = "126.570667";
+	}
+	var options = { //지도를 생성할 때 필요한 기본 옵션
+		center: new kakao.maps.LatLng(xCoor, yCoor), //지도의 중심좌표.
+		level: 3 //지도의 레벨(확대, 축소 정도)
+	};
 
-	// 지도를 생성합니다
-	var map = new kakao.maps.Map(mapContainer, mapOption);
+	var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+	// 마커가 표시될 위치입니다
+	// var markerPosition  = new kakao.maps.LatLng(33.450701, 126.570667);
+	var markerPosition  = new kakao.maps.LatLng(xCoor, yCoor);
+	// 마커를 생성합니다
+	var marker = new kakao.maps.Marker({
+		position: markerPosition
+	})
+
+	// 마커가 지도 위에 표시되도록 설정합니다
+	marker.setMap(map);
+
+
+	// 데이터들을 저장할 배열 선언
+	var positions = [];
+
+	console.log(positions);
+	// 마커 이미지의 이미지 주소입니다
+	var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+	for (var i = 0; i < positions.length; i ++) {
+
+		// 마커 이미지의 이미지 크기 입니다
+		var imageSize = new kakao.maps.Size(24, 35);
+
+		// 마커 이미지를 생성합니다
+		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+		// 마커를 생성합니다
+		var marker = new kakao.maps.Marker({
+			map: map, // 마커를 표시할 지도
+			position: positions[i].latlng, // 마커를 표시할 위치
+			title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+			image : markerImage // 마커 이미지
+		});
+	}
 
 	// 주소-좌표 변환 객체를 생성합니다
 	var geocoder = new kakao.maps.services.Geocoder();
 
-	//마커를 미리 생성
-	var marker = new daum.maps.Marker({
-// 	    position: new daum.maps.LatLng(37.566535, 126.9779692),
-		map: map
-	});
+	function searchDetailAddrFromCoords(coords, callback) {
+		// 좌표로 법정동 상세 주소 정보를 요청합니다
+		geocoder.coord2Address(yCoor, xCoor, callback);
+	}
 
+	// 주소 변환
+	searchDetailAddrFromCoords(kakao.maps.LatLng(xCoor, yCoor), function(result, status) {
+		var detailAddr = result[0].address.address_name;
+		var divideAddress = document.getElementById("location");
+		if(divideAddress){
+			if(detailAddr !== "제주특별자치도 제주시 영평동 2181") {
+				divideAddress.value = detailAddr;
+			}
+		}
+	});
 
 	function sample5_execDaumPostcode() {
 		new daum.Postcode({

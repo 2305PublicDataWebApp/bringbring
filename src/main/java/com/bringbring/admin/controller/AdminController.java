@@ -7,6 +7,8 @@ import com.bringbring.common.PageInfo;
 import com.bringbring.region.domain.City;
 import com.bringbring.region.domain.Region;
 import com.bringbring.region.service.RegionService;
+import com.bringbring.report.domain.ReportDetails;
+import com.bringbring.report.service.ReportService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,31 +31,30 @@ public class AdminController {
 	private final UserService userService;
 	private final RegionService regionService;
 	private final AdminService adminService;
+	private final ReportService reportService;
 
 
 // 문의 관리
 	@GetMapping("/contactM.do")
-	public ModelAndView showContactManagement(ModelAndView mv) {
-		mv.setViewName("admin/contactManagement");
-		return mv;
+	public String showContactManagement(Model model) {
+		return "admin/contactManagement";
 	}
-	
-// 관할지역 예약조회	
+
+	// 관할지역 예약조회
 	@GetMapping("/localM.do")
-	public ModelAndView showLocalReservationManagement(ModelAndView mv) {
-		mv.setViewName("admin/localReservationManagement");
-		return mv;
+	public String showLocalReservationManagement(Model model) {
+		return "admin/localReservationManagement";
 	}
 
 // 회원 관리
 
 	//회원 리스트
 	@GetMapping("/memberList.do")
-	public ModelAndView userListManagement(ModelAndView mv
+	public String userListManagement(Model model
 			, @RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
 			, HttpSession session) {
-		int checkAdmin = (int)session.getAttribute("sessionUserGrade");
-		if(checkAdmin == 3){
+		int checkAdmin = (int) session.getAttribute("sessionUserGrade");
+		if (checkAdmin == 3) {
 			int userCount = userService.selectListCount();
 			int adminCount = adminService.selectListCount();
 			int deleteUserCount = adminService.selectDeletedUserCount();
@@ -61,16 +62,21 @@ public class AdminController {
 			List<User> userList = userService.selectUserList(pInfo);
 			List<City> cList = regionService.selectCityList();
 
-			mv.addObject("userList", userList).addObject("pInfo", pInfo).setViewName("/admin/memberManagement");
-			mv.addObject("userCount", userCount).addObject("adminCount", adminCount)
-					.addObject("cList", cList).addObject("deletedUser", deleteUserCount);
+			model.addAttribute("userList", userList)
+					.addAttribute("pInfo", pInfo)
+					.addAttribute("userCount", userCount)
+					.addAttribute("adminCount", adminCount)
+					.addAttribute("cList", cList)
+					.addAttribute("deletedUser", deleteUserCount);
+
+			return "/admin/memberManagement";
 		} else {
-			mv.addObject("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
-					.addObject("url", "/index.jsp")
-					.setViewName("common/error");
+			model.addAttribute("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
 		}
-		return mv;
 	}
+
 
 	//지역 리스트
 	@PostMapping("/selectRegion.do")
@@ -90,32 +96,31 @@ public class AdminController {
 
 	//관리자 임명
 	@PostMapping("/insertAdmin.do")
-	public ModelAndView insertAdmin(ModelAndView mv
+	public String insertAdmin(Model model
 			, @ModelAttribute Admin admin){
 		int checkAdmin = adminService.countAlreadyAdmin(admin.getUserNo());
 		System.out.println("관리자번호" + checkAdmin);
 		if (checkAdmin > 0) {
-			mv.addObject("msg", "이미 관리자입니다.")
-					.addObject("url", "/admin/memberList.do")
-					.setViewName("common/error");
+			model.addAttribute("msg", "이미 관리자입니다.")
+					.addAttribute("url", "/admin/memberList.do");
+			return "common/error";
 		} else {
 			int result = adminService.insertAdmin(admin);
 			if (result > 0) {
-				mv.addObject("msg", "관리자 임명 완료")
-						.addObject("url", "/admin/memberList.do")
-						.setViewName("common/error");
+				model.addAttribute("msg", "관리자 임명 완료")
+						.addAttribute("url", "/admin/memberList.do");
+				return "common/error";
 			} else {
-				mv.addObject("msg", "관리자 임명 실패")
-						.addObject("url", "/admin/memberList.do")
-						.setViewName("common/error");
+				model.addAttribute("msg", "관리자 임명 실패")
+						.addAttribute("url", "/admin/memberList.do");
+				return "common/error";
 			}
 		}
-		return mv;
 	}
 
 	//회원 검색
 	@GetMapping("/searchUser.do")
-	public ModelAndView showUserSearch(ModelAndView mv
+	public String showUserSearch(Model model
 			, @RequestParam("searchCondition") String searchCondition
 			, @RequestParam("searchKeyword") String searchKeyword
 			, @ModelAttribute User user
@@ -136,25 +141,23 @@ public class AdminController {
 			List<User> searchList = adminService.searchUserByKeyword(pageInfo, paramMap);
 
 			if (!searchList.isEmpty()) {
-				mv.addObject("searchCondition", searchCondition)
-						.addObject("searchKeyword", searchKeyword)
-						.addObject("pageInfo", pageInfo)
-						.addObject("searchList", searchList)
-						.addObject("userCount", userCount).addObject("adminCount", adminCount)
-						.addObject("cList", cList).addObject("deletedUser", deleteUserCount)
-						.setViewName("admin/memberManagementSearch");
+				model.addAttribute("searchCondition", searchCondition)
+						.addAttribute("searchKeyword", searchKeyword)
+						.addAttribute("pageInfo", pageInfo)
+						.addAttribute("searchList", searchList)
+						.addAttribute("userCount", userCount).addAttribute("adminCount", adminCount)
+						.addAttribute("cList", cList).addAttribute("deletedUser", deleteUserCount);
+				return "admin/memberManagementSearch";
 			} else {
-				mv.addObject("msg", "데이터 조회가 완료되지 않았습니다.")
-						.addObject("url", "/admin/memberList.do")
-						.setViewName("common/error");
+				model.addAttribute("msg", "데이터 조회가 완료되지 않았습니다.")
+						.addAttribute("url", "/admin/memberList.do");
+				return "common/error";
 			}
 		} else {
-			mv.addObject("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
-					.addObject("url", "/index.jsp")
-					.setViewName("common/error");
+			model.addAttribute("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
 		}
-
-		return mv;
 	}
 
 	//회원 탈퇴
@@ -172,7 +175,7 @@ public class AdminController {
 
 	//관리자 리스트
 	@GetMapping("/adminList.do")
-	public ModelAndView adminListManagement(ModelAndView mv
+	public String adminListManagement(Model model
 			,@RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
 			,HttpSession session) {
 		int checkAdmin = (int)session.getAttribute("sessionUserGrade");
@@ -182,19 +185,19 @@ public class AdminController {
 			int deleteUserCount = adminService.selectDeletedUserCount();
 			PageInfo pInfo = this.getPageInfo(currentPage, adminCount);
 			List<AdminDetails> adminList = adminService.selectAdminDetailsList(pInfo);
-			mv.addObject("adminList", adminList).addObject("pInfo", pInfo).setViewName("/admin/adminManagement");
-			mv.addObject("adminCount", adminCount).addObject("userCount", userCount).addObject("deletedUser", deleteUserCount);
+			model.addAttribute("adminList", adminList).addAttribute("pInfo", pInfo);
+			model.addAttribute("adminCount", adminCount).addAttribute("userCount", userCount).addAttribute("deletedUser", deleteUserCount);
+			return "admin/adminManagement";
 		} else {
-			mv.addObject("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
-					.addObject("url", "/index.jsp")
-					.setViewName("common/error");
+			model.addAttribute("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
 		}
-		return mv;
 	}
 
 	// 관리자 검색
 	@GetMapping("/searchAdmin.do")
-	public ModelAndView showAdminSearch(ModelAndView mv
+	public String showAdminSearch(Model model
 			, @RequestParam("searchCondition") String searchCondition
 			, @RequestParam("searchKeyword") String searchKeyword
 			, @RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
@@ -213,25 +216,23 @@ public class AdminController {
 			List<AdminDetails> searchList = adminService.searchAdminByKeyword(pInfo, paramMap);
 
 			if (!searchList.isEmpty()) {
-				mv.addObject("searchCondition", searchCondition)
-						.addObject("searchKeyword", searchKeyword)
-						.addObject("pInfo", pInfo)
-						.addObject("searchList", searchList)
-						.addObject("userCount", userCount).addObject("adminCount", adminCount)
-						.addObject("deletedUser", deleteUserCount)
-						.setViewName("admin/adminManagementSearch");
+				model.addAttribute("searchCondition", searchCondition)
+						.addAttribute("searchKeyword", searchKeyword)
+						.addAttribute("pInfo", pInfo)
+						.addAttribute("searchList", searchList)
+						.addAttribute("userCount", userCount).addAttribute("adminCount", adminCount)
+						.addAttribute("deletedUser", deleteUserCount);
+						return "admin/adminManagementSearch";
 			} else {
-				mv.addObject("msg", "데이터 조회가 완료되지 않았습니다.")
-						.addObject("url", "/admin/adminList.do")
-						.setViewName("common/error");
+				model.addAttribute("msg", "데이터 조회가 완료되지 않았습니다.")
+						.addAttribute("url", "/admin/adminList.do");
+				return "common/error";
 			}
 		} else {
-			mv.addObject("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
-					.addObject("url", "/index.jsp")
-					.setViewName("common/error");
+			model.addAttribute("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
 		}
-
-		return mv;
 	}
 
 	//관리자 해임
@@ -249,11 +250,104 @@ public class AdminController {
 	}
 
 //	신고 관리
-	@GetMapping("/reportM.do")
-	public ModelAndView showReportManagement(ModelAndView mv) {
-		mv.setViewName("admin/reportManagement");
-		return mv;
+	@GetMapping("/reportList.do")
+	public String showReportManagement(Model model
+			,@RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
+			,HttpSession session) {
+		int checkAdmin = (int)session.getAttribute("sessionUserGrade");
+		if(checkAdmin >= 2) {
+			int reportCount = reportService.selectReportCount();
+			int deleteCount = reportService.slectDeleteRepCount();
+			PageInfo pInfo = this.getPageInfo(currentPage, reportCount);
+			List<ReportDetails> reportDetailsList = reportService.selectReportList(pInfo);
+
+			Map<String, String> categoryMap = new HashMap<>();
+			categoryMap.put("fraud", "사기 글이에요");
+			categoryMap.put("unpleasant", "회원들에게 불쾌감을 주는 글이에요");
+			categoryMap.put("inappropriate", "부적절한 회원이에요");
+			categoryMap.put("other", "기타 다른 사유가 있어요");
+
+			for (ReportDetails report : reportDetailsList) {
+				String category = report.getRepCategory();
+				String categoryDescription = categoryMap.get(category);
+				report.setRepCategory(categoryDescription);
+			}
+
+			model.addAttribute("reportCount", reportCount).addAttribute("pInfo", pInfo).addAttribute("reportList", reportDetailsList)
+					.addAttribute("deleteCount", deleteCount);
+			return "admin/reportManagement";
+		} else {
+			model.addAttribute("msg", "관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
+		}
 	}
+
+	//신고 게시글 검색
+	@GetMapping("/searchReport.do")
+	public String showReportSearch(Model model
+			, @RequestParam("searchCondition") String searchCondition
+			, @RequestParam("searchKeyword") String searchKeyword
+			, @RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
+			, HttpSession session){
+
+		int checkAdmin = (int)session.getAttribute("sessionUserGrade");
+		if(checkAdmin >= 2) {
+			int reportCount = reportService.selectReportCount();
+			int deleteCount = reportService.slectDeleteRepCount();
+			Map<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("searchCondition", searchCondition);
+			paramMap.put("searchKeyword", searchKeyword);
+			int totalCount = reportService.getListReportCount(paramMap);
+			PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
+			List<ReportDetails> reportDetailsList = reportService.searchReportByKeyword(pInfo, paramMap);
+
+			Map<String, String> categoryMap = new HashMap<>();
+			categoryMap.put("fraud", "사기 글이에요");
+			categoryMap.put("unpleasant", "회원들에게 불쾌감을 주는 글이에요");
+			categoryMap.put("inappropriate", "부적절한 회원이에요");
+			categoryMap.put("other", "기타 다른 사유가 있어요");
+
+			for (ReportDetails report : reportDetailsList) {
+				String category = report.getRepCategory();
+				String categoryDescription = categoryMap.get(category);
+				report.setRepCategory(categoryDescription);
+			}
+
+			if (!reportDetailsList.isEmpty()) {
+				model.addAttribute("searchCondition", searchCondition)
+						.addAttribute("searchKeyword", searchKeyword)
+						.addAttribute("pInfo", pInfo)
+						.addAttribute("reportList", reportDetailsList)
+						.addAttribute("reportCount", reportCount)
+						.addAttribute("deleteCount", deleteCount);
+				return "admin/reportManagementSearch";
+			} else {
+				model.addAttribute("msg", "데이터 조회가 완료되지 않았습니다.")
+						.addAttribute("url", "/admin/reportList.do");
+				return "common/error";
+			}
+		} else {
+			model.addAttribute("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
+		}
+	}
+
+	//신고 게시글 삭제
+	@PostMapping("/divideDelete.do")
+	@ResponseBody
+	public String divideDelete(Model model
+			, @ModelAttribute ReportDetails reportDetails) {
+		int result = reportService.deleteDivide(reportDetails);
+		System.out.println(reportDetails.getDivNo());
+		if(result>0) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+
 	
 //	예약 상세 조회
 	@GetMapping("/rDetail.do")
@@ -266,13 +360,6 @@ public class AdminController {
 	@GetMapping("/reservationM.do")
 	public ModelAndView showReservationManagement(ModelAndView mv) {
 		mv.setViewName("admin/reservationManagement");
-		return mv;
-	}
-
-	//	테스트
-	@GetMapping("/test.do")
-	public ModelAndView showTest(ModelAndView mv) {
-		mv.setViewName("admin/test");
 		return mv;
 	}
 
