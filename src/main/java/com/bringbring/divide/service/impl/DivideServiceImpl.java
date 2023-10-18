@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bringbring.chatting.domain.UserData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
 import org.springframework.stereotype.Service;
@@ -89,6 +90,12 @@ public class DivideServiceImpl implements DivideService{
 
 	@Override
 	public Divide selectOneByNo(int divNo) { return divideStore.selectOneByNo(divNo); }
+
+	@Override
+	public int updateViewCount(Divide divide) { return divideStore.updateViewCount(divide); }
+
+	@Override
+	public UserData selectUserDataByNo(int divNo) { return divideStore.selectUserDataByNo(divNo); }
 
 
 	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {

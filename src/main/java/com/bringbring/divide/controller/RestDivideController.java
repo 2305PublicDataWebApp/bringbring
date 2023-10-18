@@ -70,9 +70,9 @@ public class RestDivideController {
     }
 
     @PostMapping("/updateViewCount.do")
-    public int updateViewCount(int divNo) {
-        Divide divide = divideService.selectOneByNo(divNo);
+    public int updateViewCount(Divide divide) {
         divide.setViewCount((divide.getViewCount()+1));
+        divideService.updateViewCount(divide);
         return divide.getViewCount();
     }
 }
