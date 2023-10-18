@@ -3,6 +3,7 @@ package com.bringbring.divide.store.logic;
 import java.util.List;
 import java.util.Map;
 
+import com.bringbring.chatting.domain.UserData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
 import com.bringbring.region.domain.District;
@@ -79,5 +80,11 @@ public class DivideStoreLogic implements DivideStore{
 
 	@Override
 	public int updateDivide(Divide divide) { return sqlSession.update("DivideMapper.updateDivide", divide); }
+
+	@Override
+	public int updateViewCount(Divide divide) { return sqlSession.update("DivideMapper.updateViewCount", divide); }
+
+	@Override
+	public UserData selectUserDataByNo(int divNo) { return sqlSession.selectOne("DivideMapper.selectUserDataByNo", divNo); }
 
 }

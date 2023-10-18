@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bringbring.chatting.domain.UserData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
 import com.bringbring.image.domain.Image;
@@ -40,4 +41,8 @@ public interface DivideService {
 	int updateDivide(Divide divide);
 
 	Divide selectOneByNo(int divNo);
+
+    int updateViewCount(Divide divide);
+
+	UserData selectUserDataByNo(int divNo);
 }

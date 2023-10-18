@@ -71,7 +71,6 @@ function sendNewMessage() {
     userInput.html('');
     // focus on input
     userInput.focus();
-
     messagesContainer.finish().animate({
         scrollTop: messagesContainer.prop("scrollHeight")
     }, 250);
