@@ -2,7 +2,6 @@ package com.bringbring.reservation.service;
 
 import com.bringbring.reservation.domain.WasteCategory;
 import com.bringbring.reservation.domain.WasteData;
-import com.bringbring.reservation.domain.WasteInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,5 +15,5 @@ public interface ReservationService {
 
     WasteData selectInfoNoData(Integer wasteInfoNo);
 
-    Map<String, Object> insertImages(WasteInfo wasteInfo, MultipartFile[] uploadFiles, HttpServletRequest request);
+    Map<String, Object> insertImages(String[] wasteInfo, MultipartFile[] uploadFiles, HttpServletRequest request);
 }
