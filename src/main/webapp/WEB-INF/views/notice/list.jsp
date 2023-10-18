@@ -238,35 +238,48 @@
 			</div>
 		</div>
 		<!-- 글쓰기버튼 관리자만 보임 -->
-		<c:forEach var="notice" items="${noticeList }" >
- 		<c:if test="${notice.adminNo eq 'admin'}">
+		<c:if test="${sessionScope.sessionUserGrade >=2 }">
 			<button type="button" class="btn btn-success"
 				onclick="showNoticeInsert()">글쓰기</button>
-		 </c:if>
-		 </c:forEach>
+		</c:if>
 		<!-- 페이징 -->
-					<div class="pageee">
-				<c:if test="${pInfo.startNavi != 1}">
-					<c:url var="preUrl" value="/notice/list.do">
-						<c:param name="page" value="${pInfo.startNavi -1 }" />
-					</c:url>
-					<a href="${preUrl }">[이전]</a>
+		<nav aria-label="Page navigation example">
+			<ul class="pagination">
+				<c:if test="${pInfo.startNavi != 1 }">
+					<li class="page-item">
+								<c:url var="preUrl" value="/notice/list.do">
+				<c:param name="page" value="${pInfo.startNavi-1  }" />
+			</c:url><a class="page-link"
+						href="#" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span></a></li>
 				</c:if>
+				
 				<c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }"
-					var="n">
+					var="p">
 					<c:url var="pageUrl" value="/notice/list.do">
-						<c:param name="page" value="${n }"></c:param>
+						<c:param name="page" value="${p }"></c:param>
 					</c:url>
-					<a href="${pageUrl }">${n }</a>&nbsp;
-					</c:forEach>
+					<c:choose>
+						<c:when test="${p == pInfo.currentPage}">
+							<li class="page-item active"><a href="${pageUrl}"
+								class="page-link" style="background-color: #00AD7C">${p}</a></li>
+						</c:when>
+						<c:otherwise>
+							<li class="page-item"><a href="${pageUrl}" class="page-link">${p}</a></li>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+
 				<c:if test="${pInfo.endNavi != pInfo.naviTotalCount }">
-					<c:url var="nextUrl" value="/notice/list.do">
-						<c:param name="page" value="${pInfo.endNavi +1 }" />
-					</c:url>
-					<a href="${nextUrl }">[다음]</a>
+					<li class="page-item">
+								<c:url var="nextUrl" value="/notice/list.do">
+				<c:param name="page" value="${pInfo.startEndNavi+1  }" />
+			</c:url><a class="page-link"
+						href="#" aria-label="Next"><span aria-hidden="true">다음</span></a></li>
 				</c:if>
-			</div>
-		
+			</ul>
+		</nav>
+
 	</main>
 	<!-- End #main -->
 

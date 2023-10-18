@@ -28,7 +28,7 @@
 	          <li><a class="nav-link scrollto" href="#about">배출안내</a></li>
 	          <li><a class="nav-link scrollto" href="/reservation/select.do">배출신청</a></li>
 	          <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
-	          <li><a class="nav-link scrollto" href="#portfolio">공지사항</a></li>
+	          <li><a class="nav-link scrollto" href="/notice/list.do">공지사항</a></li>
 	          <li><a class="nav-link scrollto" href="/divide/list.do">나눔게시판</a></li>
 	          
 	          <c:if test="${sessionScope.sessionId eq null}">
