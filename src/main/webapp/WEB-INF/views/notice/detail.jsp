@@ -86,7 +86,7 @@
 					${notice.noticeType }</div>
 				<div class="notice-btn">
 					<!-- 관리자만 보이는 버튼 -->
-					<c:if test="${adminNo ne 0}">
+			<c:if test="${sessionScope.sessionUserGrade >=2 }">
 					<button class="btn btn-primary" onclick="showNoticeUpdate();">수정하기</button>
 					<button class="btn btn-primary"
 						onclick="deleteNotice('${delUrl}');">삭제하기</button>
