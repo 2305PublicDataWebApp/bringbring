@@ -2,7 +2,6 @@ package com.bringbring.reservation.service.impl;
 
 import com.bringbring.reservation.domain.WasteCategory;
 import com.bringbring.reservation.domain.WasteData;
-import com.bringbring.reservation.domain.WasteInfo;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.reservation.store.ReservationStore;
 import lombok.RequiredArgsConstructor;
@@ -39,14 +38,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Map<String, Object> insertImages(WasteInfo wasteInfo, MultipartFile[] uploadFiles, HttpServletRequest request) {
+    public Map<String, Object> insertImages(String[] wasteInfo, MultipartFile[] uploadFiles, HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
 
         // 파일 업로드 및 저장
         List<Map<String, String>> saveImgs = uploadImages(uploadFiles, request);
 
         // wasteInfoNo 저장
-        result.put("wasteInfoNo", wasteInfo.getWasteInfoNo());
+//        result.put("wasteInfoNo", wasteInfNo);
 
         // 이미지 정보 저장
         result.put("imagePaths", saveImgs);

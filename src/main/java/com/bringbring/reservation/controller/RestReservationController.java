@@ -1,5 +1,6 @@
 package com.bringbring.reservation.controller;
 
+import com.bringbring.reservation.domain.Pay;
 import com.bringbring.reservation.domain.WasteData;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -45,13 +47,15 @@ public class RestReservationController {
     }
 
     @GetMapping("/pay.do")
-    public void feePay(int amount, String pay_method, String imp_uid, String merchant_uid) throws Exception{
+    public void feePay(Pay pay, HttpSession session) throws Exception{
+        session.setAttribute("payInfo", pay);
+        System.out.println("pay = " + pay);
 
         System.out.println("결제 성공");
-        System.out.println("결제 금액 : " + amount);
-        System.out.println("결제 수단 : " + pay_method);
-        System.out.println("imp_uid : " + imp_uid);
-        System.out.println("merchant_uid : " + merchant_uid);
+        System.out.println("결제 금액 : " + pay.getPayAmount());
+        System.out.println("결제 수단 : " + pay.getPayMethod());
+//        System.out.println("imp_uid : " + imp_uid);
+        System.out.println("merchant_uid : " + pay.getPayId());
     }
 
 //    @InitBinder
