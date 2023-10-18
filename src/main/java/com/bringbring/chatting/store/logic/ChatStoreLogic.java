@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 @RequiredArgsConstructor
 public class ChatStoreLogic implements ChatStore {
@@ -14,4 +17,7 @@ public class ChatStoreLogic implements ChatStore {
 
     @Override
     public int insertChat(Chat chat) { return sqlSession.insert("ChatMapper.insertChat", chat); }
+
+    @Override
+    public List<Chat> selectChatListByMap(Map<String, Object> map) { return sqlSession.selectList("ChatMapper.selectChatListByMap", map); }
 }

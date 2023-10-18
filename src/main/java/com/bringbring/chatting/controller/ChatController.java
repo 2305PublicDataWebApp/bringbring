@@ -1,6 +1,8 @@
 package com.bringbring.chatting.controller;
 
+import com.bringbring.chatting.domain.Chat;
 import com.bringbring.chatting.domain.UserData;
+import com.bringbring.chatting.service.ChatService;
 import com.bringbring.divide.service.DivideService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,6 +28,7 @@ public class ChatController extends Socket {
 
     private final DivideService divideService;
     private final UserService userService;
+    private final ChatService chatService;
 
 
     @GetMapping("/{id}")
@@ -35,7 +41,14 @@ public class ChatController extends Socket {
         String userId = (String)session.getAttribute("sessionId");
         if(id.equals(userId)){
             User user = userService.selectOneById(userId);
+            Map<String, Object> map = new HashMap<String, Object>();
+//            작성자랑 채팅시작자가 다를 때
+            map.put("divNo", divNo);
+            map.put("userNo", user.getUserNo());
+            map.put("getUserNo", userData.getUser().getUserNo());
+            List<Chat> chatList = chatService.selectChatListByMap(map);
             model.addAttribute("name", user.getUserName()).addAttribute("user", user);
+            model.addAttribute("cList", chatList);
 
         }else if(id.equals("master")){
             model.addAttribute("name", "master");

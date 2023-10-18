@@ -162,7 +162,9 @@
           <h3 style="margin-bottom: 15px;">${dData.divide.divTitle}</h3>
           <p style="margin-bottom: 5px;">${dData.wasteCategory.wasteCategoryName}</p>
           <p style="margin: 0px;">
-            ${dData.divide.divCreateDate}
+            <fmt:parseDate value="${dData.divide.divCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime1" type="both" />
+            <fmt:formatDate value="${parseDateTime1}" pattern="yyyy. MM. dd." />
+<%--            ${dData.divide.divCreateDate}--%>
           </p>
         </div>
         <div id="heartDiv" style="width: 8%;text-align: center;" class="align-self-center">

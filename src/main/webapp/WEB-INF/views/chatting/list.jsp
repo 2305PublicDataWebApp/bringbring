@@ -1,6 +1,7 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko" >
 <head>
@@ -35,23 +36,48 @@ pageEncoding="UTF-8"%>
                     <c:if test="${sessionId eq uData.user.userId}">
                         <button type="button" style="padding: 9px 10px 7px 10px; border-radius: 6px;background-color: #222;font-family: 'LINESeedKR-Bd';font-size: 14px;" readonly>나눔 완료</button>
                     </c:if>
-                    <span class="divideTitle">${uData.divide.divTitle}</span>
+                    <span class="divideTitle">
+<%--                        <a href="/divide/detail.do?divNo=${uData.divide.divNo}">--%>
+                            ${uData.divide.divTitle}
+<%--                        </a>--%>
+                    </span>
                 </div>
                 <ul id="msgArea" class="messages">
-<%--                    <div>--%>
-<%--                        <li class='other'>안뇽 나야</li>--%>
-<%--                    </div>--%>
-<%--                    <div>--%>
-<%--                        <p class="infoMessageArea">--%>
-<%--                        <span class="infoMessage">--%>
-<%--                            관리자님이 입장하셨습니다.--%>
-<%--                        </span>--%>
-<%--                        </p>--%>
-<%--                    </div>--%>
+<%--                    이전날짜 저장--%>
+                    <c:set var="previousDate" value="" scope="page" />
+                    <c:forEach var="chat" items="${cList}" varStatus="i">
+                        <fmt:parseDate value="${chat.chatCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime" type="both" />
+                        <fmt:parseDate value="${chat.chatCreateDate}" pattern="yyyy-MM-dd" var="parseDate" type="both" />
+                        <c:if test="${parseDate ne previousDate}">
+                            <%-- 현재 날짜와 이전 날짜가 다른 경우에만 날짜를 출력합니다. --%>
+                            <p class="infoMessageArea">
+                                <span class="infoMessage"><fmt:formatDate value="${parseDate}" pattern="yyyy년 MM월 dd일" /></span>
+                            </p>
+                            <%-- 현재 날짜를 이전 날짜로 업데이트합니다. --%>
+                            <c:set var="previousDate" value="${parseDate}" scope="page" />
+                        </c:if>
+
+                        <c:if test="${user.userNo eq chat.userNo}">
+                            <div class="chatDiv">
+                                <li class='other'>${chat.chatContent}</li>
+                                <span style="float: right;padding: 27px 6px 0px 0px;color: #222;font-size: 13px;">
+                                    <fmt:formatDate value="${parseDateTime}" pattern="HH:mm" />
+                                </span>
+                            </div>
+                        </c:if>
+                        <c:if test="${user.userNo ne chat.userNo}">
+                            <div class="chatDiv">
+                                <li class='self'>${chat.chatContent}</li>
+                                <span style="padding: 26px 0px 0px 6px;float:left;color: #222;font-size: 13px;">
+                                    <fmt:formatDate value="${parseDateTime}" pattern="HH:mm" />
+                                </span>
+                            </div>
+                        </c:if>
+                    </c:forEach>
                 </ul>
                 <div class="footer">
                     <div id="opinion" class="text-box messageArea" contenteditable="true" disabled="true" onkeyup="enterkey()"></div>
-                    <button id="sendBtn" style="background-color: #17594A;padding: 0px 10px;border-top-left-radius: 0px;border-bottom-left-radius: 0px">
+                    <button id="sendBtn" class="align-self-center" style="background-color: #17594A;padding: 4px 10px 0px 10px;border-top-left-radius: 0px;border-bottom-left-radius: 0px">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
                             <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
                         </svg>
@@ -65,216 +91,228 @@ pageEncoding="UTF-8"%>
 <script  src="../resources/assets/js/chatting/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-</body>
-<script>
-    function closeCurrentWindow(){
-        window.close();
-    }
+    <script>
+        <%--document.addEventListener('DOMContentLoaded', function() {--%>
+        <%--    const selfMessage = document.querySelector('.floating-chat .chat .messages li.self:before');--%>
+        <%--    let newImageUrl = '';--%>
+        <%--    if("${uData.user.userProfilePath}" !== null){--%>
+        <%--        newImageUrl = '${uData.user.userProfilePath}';--%>
+        <%--    }else{--%>
+        <%--        newImageUrl = '../../img/divide/free-icon-user-847969.png';--%>
+        <%--    }--%>
+        <%--    selfMessage.style.backgroundImage = "url("+newImageUrl+")";--%>
+        <%--    // 새 이미지 URL을 설정합니다.--%>
+        <%--});--%>
 
-    document.getElementById("sendBtn").addEventListener("click", function() {
-        send();
-    });
-
-    const username = "${name}";
-
-    const websocket = new WebSocket("ws://localhost:8888/ws/chat");
-    websocket.onmessage = onMessage;
-    websocket.onopen = onOpen;
-    websocket.onclose = onClose;
-
-    let isSeeing = true;
-    document.addEventListener("visibilitychange", function() {
-        console.log(document.visibilityState);
-        if(document.visibilityState == "hidden"){
-            isSeeing = false;
-        }else{
-            isSeeing = true;
+        function closeCurrentWindow(){
+            window.close();
         }
-    });
 
-    var newExcitingAlerts = (function () {
-        var oldTitle = document.title;
-        var msg = "★Message!★";
-        var timeoutId;
-        var blink = function() { document.title = document.title == msg ? ' ' : msg;
-            if(isSeeing == true){
-                clear();
-            }
-        };
-        var clear = function() {
-            clearInterval(timeoutId);
-            document.title = oldTitle;
-            window.onmousemove = null;
-            timeoutId = null;
-        };
-        return function () {
-            if (!timeoutId) {
-                timeoutId = setInterval(blink, 1000);
-            }
-        };
-    }());
-
-    setInterval(() => console.log(new Date()), 10000); //prevent chrome refresh
-
-    $(document).ready(function(){
-        $(".floating-chat").click();
-
-        $("#disconn").on("click", (e) => {
-            disconnect();
-        })
-
-        $("#button-send").on("click", (e) => {
+        document.getElementById("sendBtn").addEventListener("click", function() {
             send();
         });
-    })
 
-    function enterkey(){
-        if (window.event.keyCode == 13) {
-            send();
-        }
-    }
-    function send(){
-        console.log(username + ":" + $("#opinion").text());
-        if($("#opinion").text() != ""){
-            websocket.send(username + ":" + $("#opinion").text());
-            $("#opinion").text('');
-        }
-    }
+        const username = "${name}";
 
-    function onClose(evt) {
-        var str = username + ": 님이 방을 나가셨습니다.";
-        websocket.send(str);
-    }
+        const websocket = new WebSocket("ws://localhost:8888/ws/chat");
+        websocket.onmessage = onMessage;
+        websocket.onopen = onOpen;
+        websocket.onclose = onClose;
 
-    function onOpen(evt) {
-        var str = username + ": 님이 입장하셨습니다.";
-        websocket.send(str);
-    }
+        let isSeeing = true;
+        document.addEventListener("visibilitychange", function() {
+            console.log(document.visibilityState);
+            if(document.visibilityState == "hidden"){
+                isSeeing = false;
+            }else{
+                isSeeing = true;
+            }
+        });
 
-    function onMessage(msg) {
-        var data = msg.data;
-        var sessionId = null;
-        var message = null;
-        var arr = data.split(":");
-
-        for(var i=0; i<arr.length; i++){
-            console.log('arr[' + i + ']: ' + arr[i]);
-        }
-
-        var cur_session = username;
-
-        console.log("cur_session : " + cur_session);
-
-
-        sessionId = arr[0];
-        message = arr[1];
-
-        if("${uData.user.userNo} ne ${user.userNo}"){
-            $.ajax({
-                url: "/chatting/insert.do",
-                data: { divNo: ${uData.divide.divNo}
-                    , userNo: ${user.userNo}
-                    , getUserNo: ${uData.user.userNo}
-                    , chatContent: message
-                },
-                type: "POST",
-                success: function(data) {
-                    if(data === "success"){
-                        alert("insert 성공!");
-                    }else{
-                        alert("조회수 증가 실패!");
-                    }
-
-                },
-                error: function() {
-                    alert("Ajax 오류! 관리자에게 문의하세요");
+        var newExcitingAlerts = (function () {
+            var oldTitle = document.title;
+            var msg = "★Message!★";
+            var timeoutId;
+            var blink = function() { document.title = document.title == msg ? ' ' : msg;
+                if(isSeeing == true){
+                    clear();
                 }
+            };
+            var clear = function() {
+                clearInterval(timeoutId);
+                document.title = oldTitle;
+                window.onmousemove = null;
+                timeoutId = null;
+            };
+            return function () {
+                if (!timeoutId) {
+                    timeoutId = setInterval(blink, 1000);
+                }
+            };
+        }());
+
+        setInterval(() => console.log(new Date()), 10000); //prevent chrome refresh
+
+        $(document).ready(function(){
+            $(".floating-chat").click();
+
+            $("#disconn").on("click", (e) => {
+                disconnect();
+            })
+
+            $("#button-send").on("click", (e) => {
+                send();
             });
-        }
+        })
 
-        console.log("sessionID : " + sessionId);
-        console.log("cur_session : " + cur_session);
-
-
-
-        var divElement = document.createElement("div");
-        var liElement = document.createElement("li");
-
-        if(message == undefined){
-            message = "채팅이 종료되었습니다.";
-        }
-        if(message == " 님이 입장하셨습니다."){
-            message = sessionId + "님이 입장하셨습니다.";
-            var ulElement = document.getElementById("msgArea");
-            // p 요소 생성
-            var pElement = document.createElement("p");
-            pElement.setAttribute("class", "infoMessageArea");
-
-            // span 요소 생성
-            var spanElement = document.createElement("span");
-            spanElement.setAttribute("class", "infoMessage");
-
-            // 텍스트 노드 생성 및 추가
-            var textNode = document.createTextNode(message);
-
-            // span 요소에 텍스트 노드 추가
-            spanElement.appendChild(textNode);
-
-            // p 요소에 span 요소 추가
-            pElement.appendChild(spanElement);
-
-            // ul 요소에 p 요소 추가
-            ulElement.appendChild(pElement);
-        }else{
-            if(sessionId == cur_session){
-
-                // var ulElement = document.getElementById("msgArea");
-                // // p 요소 생성
-                // var pElement = document.createElement("p");
-                // pElement.setAttribute("class", "infoMessageArea");
-                //
-                // // span 요소 생성
-                // var spanElement = document.createElement("span");
-                // spanElement.setAttribute("class", "infoMessage");
-                //
-                // // 텍스트 노드 생성 및 추가
-                // var textNode = document.createTextNode(message);
-                //
-                // // span 요소에 텍스트 노드 추가
-                // spanElement.appendChild(textNode);
-                //
-                // // p 요소에 span 요소 추가
-                // pElement.appendChild(spanElement);
-                //
-                // // ul 요소에 p 요소 추가
-                // ulElement.appendChild(pElement);
-
-                divElement.setAttribute("class", "chatDiv");
-                liElement.setAttribute("class", "other");
-                var textNode = document.createTextNode(message);
-                liElement.appendChild(textNode);
-                divElement.append(liElement);
-                $("#msgArea").append(divElement);
-
-
+        function enterkey(){
+            if (window.event.keyCode == 13) {
+                send();
             }
-            else{
-                divElement.setAttribute("class", "chatDiv");
-                liElement.setAttribute("class", "self");
-                var textNode = document.createTextNode(message);
-                liElement.appendChild(textNode);
-                divElement.append(liElement);
-                $("#msgArea").append(divElement);
+        }
+        function send(){
+            console.log(username + ":" + $("#opinion").text());
+            if($("#opinion").text() != ""){
+                websocket.send(username + ":" + $("#opinion").text());
+                $("#opinion").text('');
+            }
+        }
 
-                if(isSeeing == false){
-                    newExcitingAlerts();
+        function onClose(evt) {
+            var str = username + ": 님이 방을 나가셨습니다.";
+            websocket.send(str);
+        }
+
+        function onOpen(evt) {
+            var str = username + ": 님이 입장하셨습니다.";
+            websocket.send(str);
+        }
+
+        function onMessage(msg) {
+            var data = msg.data;
+            var sessionId = null;
+            var message = null;
+            var arr = data.split(":");
+
+            for(var i=0; i<arr.length; i++){
+                console.log('arr[' + i + ']: ' + arr[i]);
+            }
+
+            var cur_session = username;
+
+            console.log("cur_session : " + cur_session);
+
+
+            sessionId = arr[0];
+            message = arr[1];
+
+
+            console.log("sessionID : " + sessionId);
+            console.log("cur_session : " + cur_session);
+
+
+
+            var divElement = document.createElement("div");
+            var liElement = document.createElement("li");
+
+            if(message == undefined){
+                message = "채팅이 종료되었습니다.";
+            }
+            if(message == " 님이 입장하셨습니다."){
+                message = sessionId + "님이 입장하셨습니다.";
+                var ulElement = document.getElementById("msgArea");
+                // p 요소 생성
+                var pElement = document.createElement("p");
+                pElement.setAttribute("class", "infoMessageArea");
+
+                // span 요소 생성
+                var spanElement = document.createElement("span");
+                spanElement.setAttribute("class", "infoMessage");
+
+                // 텍스트 노드 생성 및 추가
+                var textNode = document.createTextNode(message);
+
+                // span 요소에 텍스트 노드 추가
+                spanElement.appendChild(textNode);
+
+                // p 요소에 span 요소 추가
+                pElement.appendChild(spanElement);
+
+                // ul 요소에 p 요소 추가
+                ulElement.appendChild(pElement);
+            }else{
+                if(sessionId == cur_session){
+
+                    // var ulElement = document.getElementById("msgArea");
+                    // // p 요소 생성
+                    // var pElement = document.createElement("p");
+                    // pElement.setAttribute("class", "infoMessageArea");
+                    //
+                    // // span 요소 생성
+                    // var spanElement = document.createElement("span");
+                    // spanElement.setAttribute("class", "infoMessage");
+                    //
+                    // // 텍스트 노드 생성 및 추가
+                    // var textNode = document.createTextNode(message);
+                    //
+                    // // span 요소에 텍스트 노드 추가
+                    // spanElement.appendChild(textNode);
+                    //
+                    // // p 요소에 span 요소 추가
+                    // pElement.appendChild(spanElement);
+                    //
+                    // // ul 요소에 p 요소 추가
+                    // ulElement.appendChild(pElement);
+
+                    divElement.setAttribute("class", "chatDiv");
+                    liElement.setAttribute("class", "other");
+                    var textNode = document.createTextNode(message);
+                    liElement.appendChild(textNode);
+                    divElement.append(liElement);
+                    $("#msgArea").append(divElement);
+
+                    <%--if("${uData.user.userNo} ne ${user.userNo}"){--%>
+                    $.ajax({
+                        url: "/chatting/insert.do",
+                        data: { divNo: ${uData.divide.divNo}
+                            , userNo: ${user.userNo}
+                            , getUserNo: ${uData.user.userNo}
+                            , chatContent: message
+                        },
+                        type: "POST",
+                        success: function(data) {
+                            if(data === "success"){
+                                // alert("insert 성공!");
+                            }else{
+                                alert("채팅저장 실패!");
+                            }
+
+                        },
+                        error: function() {
+                            alert("Ajax 오류! 관리자에게 문의하세요");
+                        }
+                    });
+                    // }
+
+                }
+                else{
+                    divElement.setAttribute("class", "chatDiv");
+                    liElement.setAttribute("class", "self");
+                    var textNode = document.createTextNode(message);
+                    liElement.appendChild(textNode);
+                    divElement.append(liElement);
+                    $("#msgArea").append(divElement);
+
+                    if(isSeeing == false){
+                        newExcitingAlerts();
+                    }
                 }
             }
-        }
 
-        document.getElementById("msgArea").scrollTop = document.getElementById("msgArea").scrollHeight;
-    }
-</script>
+            document.getElementById("msgArea").scrollTop = document.getElementById("msgArea").scrollHeight;
+        }
+    </script>
+</body>
 <style>
     .text-box div:nth-child(n+1) {
         display: none;
