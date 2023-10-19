@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inquireMapper">
+	<select id="selectInquireListByUserNo" resultType="Inquire">
+		SELECT * FROM INQUIRE_TBL WHERE USER_NO = #{userNo } AND IS_INQ_DELETED = 'N' ORDER BY INQ_NO DESC
+	</select>
+</mapper>

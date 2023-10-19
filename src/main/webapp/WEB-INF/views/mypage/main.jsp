@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -82,8 +84,8 @@
             <div class="container">
                 <div class="row" style="min-height:750px;">
                     <div class="mypage_sidebar col-3 p-5">
-                        <a href="#" class="fs-1">신청 내역</a>
-                        <a href="#" class="fs-1">문의 내역</a>
+                        <a href="/mypage/enroll.do" class="fs-1">신청 내역</a>
+                        <a href="/mypage/inquire.do" class="fs-1">문의 내역</a>
                         <a href="#" class="fs-1">채팅 내역</a>
                     </div>
                     <div class="col-9 ps-5 pt-5">
@@ -111,7 +113,7 @@
                                 </div>
                                 <div class="col-3 text-end">
                                     <!-- 상세보기 모달 -->
-                                    <a href="#">상세보기 >></a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#enroll_modal">상세보기 >></a>
                                     <p class="fw-1 fs-1 pt-5">신청 완료</p>
                                 </div>
                             </div>
@@ -119,38 +121,101 @@
 
                         <div class="container mt-5 p-0">
                             <h3>최근 문의 내역</h3>
-                            <table class="table table-hover table-bordered">
-                                <colgroup>
-                                    <col width=8%>
-                                    <col width=51%>
-                                    <col width=15%>
-                                    <col width=14%>
-                                </colgroup>
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="text-center">번호</th>
-                                        <th>제목</th>
-                                        <th class="text-center">답변 여부</th>
-                                        <th class="text-center">작성일</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>결제에서 넘어가지가 않아요, 확인 바랍니다.</td>
-                                        <td class="text-center">답변 대기중</td>
-                                        <td class="text-center">2023-10-01</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">2</td>
-                                        <td>예약 날짜 지났는데 안가져가서 문의드려요</td>
-                                        <td class="text-center">답변 완료</td>
-                                        <td class="text-center">2023-09-27</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <c:if test="${empty inquireList}">
+                            	<p>최근 문의한 내역이 없습니다.</p>
+                            </c:if>
+                         	<c:if test="${!empty inquireList}" >
+	                            <table class="table table-hover table-bordered">
+	                                <colgroup>
+	                                    <col width=8%>
+	                                    <col width=51%>
+	                                    <col width=15%>
+	                                    <col width=14%>
+	                                </colgroup>
+	                                <thead class="table-light">
+	                                    <tr>
+	                                        <th class="text-center">번호</th>
+	                                        <th>제목</th>
+	                                        <th class="text-center">답변 여부</th>
+	                                        <th class="text-center">작성일</th>
+	                                    </tr>
+	                                </thead>
+	                                <tbody>
+		                                	<c:forEach var="inquire" items="${inquireList }" begin="0" end="1" varStatus="i">
+			                                    <tr>
+			                                        <td class="text-center">${i.count }</td>
+			                                        <td>${inquire.inqTitle }</td>
+			                                        <td class="text-center">
+														<!-- fn:contains를 사용하여 문자열 비교 -->
+			                                        	<c:choose>
+			                                        		<c:when test="${fn:contains(inquire.answerYn, 'Y')}">답변 완료</c:when>
+			                                        		<c:when test="${fn:contains(inquire.answerYn, 'N')}">답변 대기중</c:when>
+			                                        	</c:choose>
+			                                        </td>
+			                                        <td class="text-center">
+			                                        	<!-- LocalDateTime을 Date type으로 변경 후 format형태로 변형 -->
+			                                        	<fmt:parseDate value="${inquire.inqCreateDate }"
+			                                        		pattern="yyyy-MM-dd" var="parseDate" type="both" />
+			                                        	<fmt:formatDate pattern="yyyy-MM-dd" value="${parseDate }" />
+			                                        </td>
+			                                    </tr>
+		                                	</c:forEach>
+	                                </tbody>
+	                            </table>
+                            </c:if>
                         </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="enroll_modal" tabindex="-1"
+                    aria-labelledby="enroll_modal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="enroll_modal_Label">상세 내역</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body container">
+                        <div class="modal_border_bottom p-3">
+                            <p>예약 번호 : 1234-1234</p>
+                            <p class="m-0">예약 날짜 : 2023-10-01</p>
+                        </div>
+                        <div class="modal_border_bottom p-3">
+                            <p class="fs-5">장소 : 서울특별시 중구 남대문로 120 그레이즈 청계</p>
+                            <div class="row">
+                                <div class="col-4 text-center">
+                                    <img src="../resources/assets/img/mypage/Test_img.jpg" class="rounded">
+                                </div>
+                                <div class="col-8 row">
+                                    <div class="col-10 pt-4">
+                                        <h3>책상</h3>
+                                    </div>
+                                    <div class="col-6">
+                                        <p>수량 :  1개</p>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <p>5,000원</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="row p-3 pb-0">
+                                <div class="col">
+                                    <p class="fs-4 m-0">총 결제 금액</p>
+                                </div>
+                                <div class="col">
+                                    <p class="fs-4 m-0 text-end">5,000원</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> -->
+                        <input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소">
                     </div>
                 </div>
             </div>
