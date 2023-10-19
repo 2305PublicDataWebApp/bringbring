@@ -56,7 +56,7 @@
     <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
       <div style="width: 1300px;margin: 0 auto;">
         <div style="float: left;margin-top: 60px;">
-          <h1>관리자 회원 관리</h1>
+          <h1>회원 관리</h1>
           <div style="width: 100%;height: 30px;"></div>
           <h4 style="color: rgb(189, 245, 229);">회원 정보 조회, 회원 탈퇴 관리, 관리자 권한 부여 페이지입니다. </h4>
         </div>
