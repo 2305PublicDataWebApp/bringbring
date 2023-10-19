@@ -57,6 +57,25 @@ public class ReservationController {
             return "/common/error";
         }
     }
+    @PostMapping("/addImage.do")
+    public String addImages(ModelAndView mv
+            , @RequestParam(value="wasteInfoNo", required = false) String[] wasteInfoNo
+            , @ModelAttribute MultipartFile[] uploadFiles
+            , HttpServletRequest request
+            , HttpSession session
+            , Model model) {
+
+        Map<String, Object> result = reservationService.addImages(wasteInfoNo , uploadFiles, request);
+        if(result != null) {
+            session.setAttribute("imageAdd", result);
+        } else {
+            model.addAttribute("msg", "사진 업로드에 실패했습니다")
+                    .addAttribute("url", "/reservation/addImage.do");
+            return "/common/error";
+        }
+        return "redirect:/reservation/insertInfo.do";
+    }
+
     @GetMapping("/insertInfo.do")
     public String showInsertInfo(HttpSession httpSession, Model model) {
         String userId = (String) httpSession.getAttribute("sessionId");
@@ -68,7 +87,7 @@ public class ReservationController {
     }
 
     @PostMapping("/insertInfo.do")
-    public String insertInfo(HttpSession session, @Valid @ModelAttribute("reservation") Reservation reservation) {
+    public String insertInfo(HttpSession session, @Valid @ModelAttribute Reservation reservation) {
         session.setAttribute("reservationUserInfo", reservation);
         return "redirect:/reservation/payment.do";
     }
@@ -104,48 +123,12 @@ public class ReservationController {
 
     @GetMapping("/payComplete.do")
     public String payComplete(HttpSession session, Model model) {
-
+        // 세션의 데이터들 저장하면서 insert 후 성공 시 완료 페이지로 이동하기
+        // 실패 시 결제 실패 창
+        System.out.println("session.getAttribute(\"\") = " + session.getAttribute(""));
         return "/reservation/payComplete";
     }
 
 
 
-    @PostMapping("/addImage.do")
-    public ModelAndView insertImage(ModelAndView mv
-            , @RequestParam(value="wasteInfoNo", required = false) String[] wasteInfoNo
-            , @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
-            , HttpServletRequest request
-            , HttpSession httpSession) {
-
-        for (MultipartFile file : uploadFiles) {
-            System.out.println("File Name: " + file.getOriginalFilename());
-            System.out.println("File Size: " + file.getSize());
-            // 기타 파일 정보 로깅
-        }
-        Map<String, Object> result = reservationService.insertImages(wasteInfoNo , uploadFiles, request);
-
-
-        // 이미지와 wasteInfoNo를 Map에 저장한 결과를 확인
-        for (Map.Entry<String, Object> entry : result.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-
-            // 만약 값(value)이 Map인 경우, 다시 반복하여 출력
-            if (value instanceof Map) {
-                System.out.println(key + " is a Map:");
-                Map<String, String> innerMap = (Map<String, String>) value;
-                for (Map.Entry<String, String> innerEntry : innerMap.entrySet()) {
-                    String innerKey = innerEntry.getKey();
-                    String innerValue = innerEntry.getValue();
-                    System.out.println(innerKey + " = " + innerValue);
-                }
-            } else {
-                System.out.println(key + " = " + value);
-            }
-        }
-
-            mv.setViewName("/reservation/insertInfo");
-            return mv;
-        }
-
-    }
+}
