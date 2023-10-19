@@ -10,7 +10,9 @@
   <title>브링브링</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
-  
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <!-- Favicons -->
   <link href="../resources/assets/img/main/icon-title.png" rel="icon">
   <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
@@ -144,131 +146,15 @@
       </div>
 
     </section>
+  <section>
     <!-- 날씨 -->
     <div class="container mt-5" data-aos="fade-up">
       <div class="section-title">
         <h2>날씨 서비스</h2>
-        <p>커스텀해서 쓰면될 듯</p>
+        <p>기상청에서 제공하는 날씨로 현재 픽업률을 알려줍니다.</p>
       </div>
       <div id="weatherCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel" >
-        <div class="carousel-inner"> 
-              <div class="carousel-item active" style="padding: 20px;">
-                  <div class="row">
-                      <div class="col-md-2">
-                          <div class="icon-box">
-                              <div class="icon"><i class="bi bi-brightness-high"></i></div>
-                              <h4><a href="#">서울</a></h4>
-                              <p>습도: 30%</p>
-                              <p>강수량: 30mm</p>
-                              <p>픽업 지연 확률: 70%</p>
-                          </div>
-                      </div>
-                      <div class="col-md-2">
-                          <div class="icon-box">
-                              <div class="icon"><i class="bi bi-cloud-drizzle"></i></div>
-                              <h4><a href="#">인천</a></h4>
-                              <p>습도: 30%</p>
-                              <p>강수량: 30mm</p>
-                              <p>픽업 지연 확률: 70%</p>
-                          </div>
-                      </div>
-                      <div class="col-md-2">
-                          <div class="icon-box">
-                              <div class="icon"><i class="bi bi-cloud-sun"></i></div>
-                              <h4><a href="#">경기</a></h4>
-                              <p>습도: 30%</p>
-                              <p>강수량: 30mm</p>
-                              <p>픽업 지연 확률: 70%</p>
-                          </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="icon-box">
-                            <div class="icon"><i class="bi bi-cloud-sun"></i></div>
-                            <h4><a href="#">강원</a></h4>
-                            <p>습도: 30%</p>
-                            <p>강수량: 30mm</p>
-                            <p>픽업 지연 확률: 70%</p>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="icon-box">
-                          <div class="icon"><i class="bi bi-cloud-sun"></i></div>
-                          <h4><a href="#">부산</a></h4>
-                          <p>습도: 30%</p>
-                          <p>강수량: 30mm</p>
-                          <p>픽업 지연 확률: 70%</p>
-                      </div>
-                  </div>
-                  <div class="col-md-2">
-                    <div class="icon-box">
-                        <div class="icon"><i class="bi bi-cloud-sun"></i></div>
-                        <h4><a href="#">속초</a></h4>
-                        <p>습도: 30%</p>
-                        <p>강수량: 30mm</p>
-                        <p>픽업 지연 확률: 70%</p>
-                    </div>
-                </div>
-                  </div>
-              </div>
-              <div class="carousel-item" style="padding: 20px;">
-                  <div class="row">
-                      <div class="col-md-2">
-                          <div class="icon-box">
-                              <div class="icon"><i class="bi bi-umbrella"></i></div>
-                              <h4><a href="#">부산</a></h4>
-                              <p>습도: 30%</p>
-                              <p>강수량: 30mm</p>
-                              <p>픽업 지연 확률: 70%</p>
-                          </div>
-                      </div>
-                      <div class="col-md-2">
-                          <div class="icon-box">
-                              <div class="icon"><i class="bi bi-cloud-rain-heavy"></i></div>
-                              <h4><a href="#">전북</a></h4>
-                              <p>습도: 30%</p>
-                              <p>강수량: 30mm</p>
-                              <p>픽업 지연 확률: 70%</p>
-                          </div>
-                      </div>
-                      <div class="col-md-2">
-                          <div class="icon-box">
-                              <div class="icon"><i class="bi bi-cloud-snow"></i></div>
-                              <h4><a href="#">전남</a></h4>
-                              <p>습도: 30%</p>
-                              <p>강수량: 30mm</p>
-                              <p>픽업 지연 확률: 70%</p>
-                          </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="icon-box">
-                            <div class="icon"><i class="bi bi-cloud-snow"></i></div>
-                            <h4><a href="#">경북</a></h4>
-                            <p>습도: 30%</p>
-                            <p>강수량: 30mm</p>
-                            <p>픽업 지연 확률: 70%</p>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="icon-box">
-                          <div class="icon"><i class="bi bi-cloud-snow"></i></div>
-                          <h4><a href="#">경남</a></h4>
-                          <p>습도: 30%</p>
-                          <p>강수량: 30mm</p>
-                          <p>픽업 지연 확률: 70%</p>
-                      </div>
-                  </div>
-                  <div class="col-md-2">
-                    <div class="icon-box">
-                        <div class="icon"><i class="bi bi-cloud-snow"></i></div>
-                        <h4><a href="#">제주</a></h4>
-                        <p>습도: 30%</p>
-                        <p>강수량: 30mm</p>
-                        <p>픽업 지연 확률: 70%</p>
-                    </div>
-                </div>
-                  </div>
-              </div>
-
+        <div class="carousel-inner">
           </div>
           <button class="carousel-control-prev " type="button" data-bs-target="#weatherCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -850,8 +736,190 @@
    
     <!-- 로그인, 로그아웃 -->
     <jsp:include page="/include/loginJs.jsp"></jsp:include>
+
+    $(document).ready(function() {
+      var today = new Date();
+      var year = today.getFullYear();
+      var month = (today.getMonth() + 1).toString().padStart(2, '0');
+      var day = today.getDate().toString().padStart(2, '0');
+      var hours = today.getHours()
+
+      var baseTime;
+      if (hours >= 23 || hours < 2) {
+        baseTime = "0200";
+      } else if (hours < 5) {
+        baseTime = "0500";
+      } else if (hours < 8) {
+        baseTime = "0800";
+      } else if (hours < 11) {
+        baseTime = "1100";
+      } else if (hours < 14) {
+        baseTime = "1400";
+      } else if (hours < 17) {
+        baseTime = "1700";
+      } else if (hours < 20) {
+        baseTime = "2000";
+      } else {
+        baseTime = "2300";
+      }
+
+      var korea = [
+        {'region' : '서울','nx' : 60,'ny' : 127},
+        {'region' : '인천','nx' : 55,'ny' : 124},
+        {'region' : '경기','nx' : 60,'ny' : 121},
+        {'region' : '강원','nx' : 92,'ny' : 131},
+        {'region' : '충북','nx' : 69,'ny' : 106},
+        {'region' : '충남','nx' : 68,'ny' : 100},
+        {'region' : '전북','nx' : 63,'ny' : 89},
+        {'region' : '전남','nx' : 50,'ny' : 67},
+        {'region' : '경남','nx' : 90,'ny' : 77},
+        {'region' : '경북','nx' : 91,'ny' : 106},
+        {'region' : '부산','nx' : 98,'ny' : 76},
+        {'region' : '대구','nx' : 89,'ny' : 90},
+        {'region' : '광주','nx' : 58,'ny' : 74},
+        {'region' : '대전','nx' : 67,'ny' : 100},
+        {'region' : '울산','nx' : 102,'ny' : 84},
+        {'region' : '제주','nx' : 52,'ny' : 38}
+      ];
+
+      var apikey = "uy3jYbeNo9pdYLz%2FbZXRO%2F3tFw9FcY6FjN1mlzXiPnfDm4yy4z4ceuYU2ValrUULBJVlrX6JBznSjobmLH1A7w%3D%3D";
+
+      function sendRequest(index) {
+        if (index >= korea.length) {
+          return; // 모든 요청이 완료되면 함수 종료
+        }
+
+        var regionInfo = korea[index];
+        var regionName = regionInfo.region;
+        var nx = regionInfo.nx;
+        var ny = regionInfo.ny;
+
+        var ForecastGribURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
+        ForecastGribURL += "?ServiceKey=" + apikey;
+        ForecastGribURL += "&base_date=" + year + month + day;
+        ForecastGribURL += "&base_time=" + baseTime   ;
+        ForecastGribURL += "&nx=" + nx + "&ny=" + ny;
+
+        $.ajax({
+          url: ForecastGribURL,
+          type: 'GET',
+          success: function(data) {
+            var $data = $(data).find("response>body>items>item");
+            var temp = '';
+            var rainAmount = '';
+            var rain = '';
+            var skyValue = '';
+            var ptyValue = '';
+            var rainProbability = '';
+
+            $.each($data, function(i, o) {
+              var category = $(o).find("category").text();
+              var fcstValue = $(o).find("fcstValue").text();
+
+              if (category === 'TMP') {
+                temp = fcstValue;
+              } else if (category === 'SKY') { //하늘상태
+                skyValue = parseInt(fcstValue);
+              } else if (category === 'PTY') { //강수상태
+                ptyValue = parseInt(fcstValue);
+              } else if (category === 'PCP') {
+                rainAmount = fcstValue; // 강수량 (mm)
+              } else if (category === 'POP') {
+                rainProbability = fcstValue; // 강수확률 (%)
+              }
+            });
+
+            // SKY 값과 PTY 값을 기반으로 아이콘 클래스 결정
+            var iconClass = '';
+            if (ptyValue === 0) {
+              switch (skyValue) {
+                case 1:
+                  iconClass = 'bi-sun'; // 맑음
+                  break;
+                case 2:
+                  iconClass = 'bi-cloud-sun'; // 구름조금
+                  break;
+                case 3:
+                  iconClass = 'bi-cloud'; // 구름많음
+                  break;
+                case 4:
+                  iconClass = 'bi-cloudy'; // 흐림
+                  break;
+                default:
+                  iconClass = 'bi-question'; // 알 수 없는 날씨 상태에 대한 기본 아이콘
+              }
+            } else if (ptyValue === 1 || ptyValue === 2) {
+              iconClass = 'bi-cloud-rain'; // 비
+            } else if (ptyValue === 3) {
+              iconClass = 'bi-snow'; // 눈
+            }
+
+            var ment = "";
+            var mentIcon = '';
+            if (ptyValue === 0 && skyValue !==null) {
+              ment = "픽업 가능 ";
+              mentIcon = 'bi-truck';
+            } else if (ptyValue === 1 || ptyValue === 2) {
+              ment = "픽업 지연";
+              mentIcon = 'bi-sign-stop';
+            } else if (ptyValue === 3) {
+              ment = "픽업 지연";
+              mentIcon = 'bi-sign-stop';
+            }
+            console.log(ment);
+
+
+// 날씨 정보를 캐러셀에 추가하는 로직
+            var weatherInfo = '<div class="col-md-2">' +
+                    '<div class=icon-box>' +
+                    '<div class="icon"><i class="bi ' + iconClass + '"></i></div>' +
+                    '<h5 class="text-center"><a href=#>' + regionName + '</a></h5>' +
+                    '<p class="text-center">기온: ' + temp + ' ℃</p>' +
+                    '<p class="text-center">강수량: ' + rainAmount + ' </p>' +
+                    '<p class="text-center">강수확률: ' + rainProbability + ' %</p>' +
+                    '<p class="text-center">'+ ment + '</p>' +
+                    '<div class="icon"><i class="bi ' + mentIcon + '"></i></div>' +
+                    '</div>';
+
+            if (index % 6 === 0) {
+              // 첫 번째 아이템일 때 새로운 캐러셀 아이템을 열 때
+              var carouselItem = $('<div class="carousel-item" style="position: relative; padding: 20px;"></div>');
+              var row = $('<div class="row"></div>');
+              row.append(weatherInfo);
+              carouselItem.append(row);
+
+              // 첫 번째 아이템일 때 "active" 클래스 추가
+              if (index === 0) {
+                carouselItem.addClass('active');
+              }
+
+              $('#weatherCarousel .carousel-inner').append(carouselItem);
+            } else {
+              // 나머지 아이템일 때 현재 캐러셀 아이템에 날씨 정보 추가
+              $('#weatherCarousel .carousel-inner .carousel-item:last-child .row').append(weatherInfo);
+            }
+
+            console.log(index);
+
+              // $('#weatherCarousel .carousel-inner .carousel-item:last-child .row').append(weatherInfo);
+
+
+            sendRequest(index + 1);
+          },
+          error: function() {
+            console.error("Failed to fetch data for index: " + index);
+            // 다음 요청 보내기 (재귀 호출)
+            sendRequest(index + 1);
+          }
+        });
+      }
+
+      // 첫 번째 요청 보내기 (재귀 함수 시작)
+      sendRequest(0);
+    });
+
   </script>
-  
+
 </body>
 
 </html>
