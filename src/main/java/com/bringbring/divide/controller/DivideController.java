@@ -85,11 +85,11 @@ public class DivideController {
 		}
 //		date.format(DateTimeFormatter.ISO_DATE);
 		model.addAttribute("iList", imageList).addAttribute("dData", detailData);
-		return "divide/datail";
+		return "divide/detail";
 	}
 
 	@GetMapping("/update.do")
-	public String updateDivide(Model model
+	public String showDivideUpdate(Model model
 			, int divNo) {
 
 		List<WasteCategory> wasteCategories = reservationService.selectWasteCategoryList();
@@ -97,17 +97,20 @@ public class DivideController {
 		UpdateData updateData = divideService.selectUpdateDataByNo(divNo);
 
 		model.addAttribute("wList", wasteCategories).addAttribute("cList", cityList);
-//		System.out.println(updateData);
 		model.addAttribute("uData", updateData);
 		return "divide/update";
 	}
 
-	@GetMapping("/delete.do")
-	public String deleteDivide(int divNo) {
+	@PostMapping("/update.do")
+	public String updateDivide(Divide divide
+			, Model model) {
 
-		int result = divideService.deleteDivide(divNo);
-		return "redirect:/divide/list.do";
+		divideService.updateDivide(divide);
+		return "redirect:/divide/detail.do?divNo="+divide.getDivNo();
 	}
+
+	@GetMapping("/delete.do")
+	public String deleteDivide(int divNo) { divideService.deleteDivide(divNo); return "redirect:/divide/list.do"; }
 
 	@GetMapping("/list.do")
 	public String showDivideList(Model model

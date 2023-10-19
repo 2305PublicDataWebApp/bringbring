@@ -9,9 +9,9 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bringbring.chatting.domain.UserData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
-import com.bringbring.region.domain.District;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bringbring.divide.service.DivideService;
 import com.bringbring.divide.store.DivideStore;
 import com.bringbring.image.domain.Image;
-import com.bringbring.reservation.domain.WasteCategory;
 
 import lombok.RequiredArgsConstructor;
 
@@ -85,6 +84,18 @@ public class DivideServiceImpl implements DivideService{
 
 	@Override
 	public UpdateData selectUpdateDataByNo(int divNo) { return divideStore.selectUpdateDataByNo(divNo); }
+
+	@Override
+	public int updateDivide(Divide divide) { return divideStore.updateDivide(divide); }
+
+	@Override
+	public Divide selectOneByNo(int divNo) { return divideStore.selectOneByNo(divNo); }
+
+	@Override
+	public int updateViewCount(Divide divide) { return divideStore.updateViewCount(divide); }
+
+	@Override
+	public UserData selectUserDataByNo(int divNo) { return divideStore.selectUserDataByNo(divNo); }
 
 
 	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {

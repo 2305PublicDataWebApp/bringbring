@@ -3,7 +3,6 @@ package com.bringbring.reservation.controller;
 import com.bringbring.reservation.domain.Reservation;
 import com.bringbring.reservation.domain.ReservationDetail;
 import com.bringbring.reservation.domain.WasteData;
-import com.bringbring.reservation.domain.WasteInfo;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
@@ -113,7 +112,7 @@ public class ReservationController {
 
     @PostMapping("/addImage.do")
     public ModelAndView insertImage(ModelAndView mv
-            , WasteInfo wasteInfo
+            , @RequestParam(value="wasteInfoNo", required = false) String[] wasteInfoNo
             , @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
             , HttpServletRequest request
             , HttpSession httpSession) {
@@ -123,7 +122,7 @@ public class ReservationController {
             System.out.println("File Size: " + file.getSize());
             // 기타 파일 정보 로깅
         }
-        Map<String, Object> result = reservationService.insertImages(wasteInfo, uploadFiles, request);
+        Map<String, Object> result = reservationService.insertImages(wasteInfoNo , uploadFiles, request);
 
 
         // 이미지와 wasteInfoNo를 Map에 저장한 결과를 확인

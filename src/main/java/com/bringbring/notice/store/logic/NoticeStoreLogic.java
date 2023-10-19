@@ -42,6 +42,7 @@ public class NoticeStoreLogic implements NoticeStore {
 	// 게시글 번호에 맞는 게시글 상세 조회
 	@Override
 	public Notice selectNoticeByNo(Integer noticeNo) {
+		sqlSession.update("NoticeMapper.updateViewCount", noticeNo);
 		return sqlSession.selectOne("NoticeMapper.selectNoticeByNo", noticeNo);
 	}
 
@@ -56,4 +57,6 @@ public class NoticeStoreLogic implements NoticeStore {
 	public int updateNotice(Notice notice) {
 		return sqlSession.update("NoticeMapper.updateNotice", notice);
 	}
+
+
 }

@@ -155,11 +155,15 @@
   });
 
   const imgCount = new Map();
+  // input file
   const imgUploads = document.querySelectorAll('.uploadImg');
 
+  // input 요소의 이미지 업로드 이벤트 처리
   function handlerInputChange(e) {
+    // input 요소와 가장 가까이 있는 tr 찾기
     const tr = e.target.closest('tr');
 
+    // tr에 대한 imgCount를 0으로 설정
     imgCount.set(tr, 0);
 
     if (!imgCount.has(tr)) {
@@ -168,7 +172,7 @@
 
     imgCount.set(tr, imgCount.get(tr) + 1);
 
-    console.log('뭔데?????' + imgCount.get(tr));
+    console.log('추가한 이미지' + imgCount.get(tr));
 
     if (imgCount.get(tr) > 2) {
       alert('이미지는 물품당 2개까지 첨부할 수 있습니다.');
@@ -183,7 +187,10 @@
     });
   });
 
-  // 파일 업로드 버튼과 관련된 "사진 추가" 버튼들을 선택합니다.
+
+
+
+  // 파일 업로드 버튼과 관련된 "사진 추가" 버튼들을 선택
   const uploadBtns = document.querySelectorAll('.pic-Add-Btn');
   uploadBtns.forEach((upload) => {
     const relatedUpload = upload.previousElementSibling;
@@ -194,6 +201,8 @@
     }
   });
 
+
+  // 이미지 업로드와 미리보기 관리
   const rows = document.querySelectorAll('.pic-tr');
 
   rows.forEach((row) => {
@@ -205,6 +214,7 @@
     uploadImg.addEventListener('change', (e) => getImgs(e, preview));
   });
 
+  // 업로드된 이미지를 가져와서 미리보기함
   function getImgs(e, preview) {
     const uploadFiles = [];
     const files = e.currentTarget.files;
@@ -230,16 +240,17 @@
     }
 
     // 이미지를 추가한 후 현재 파일 목록을 업데이트
-    e.target.value = ''; // 파일 input 초기화
+    // e.target.value = ''; // 파일 input 초기화
   }
 
+  // 미리보기 생성
   function createElement(e, file) {
     let tr = e.target;
 
-    for (let i = 0; i < tr.length; i++) {
-      let cellValue = tr[i].innerHTML; // or cells[i].textContent.
-      console.log(cellValue);
-    }
+    // for (let i = 0; i < tr.length; i++) {
+    //   let cellValue = tr[i].innerHTML; // or cells[i].textContent.
+    //   console.log(cellValue);
+    // }
 
     const li = document.createElement('li');
     const img = document.createElement('img');
@@ -267,7 +278,6 @@
 
     deleteBtn.addEventListener('click', (e) => {
       li.remove();
-      // 더 많은 처리 작업이 있을 경우 여기에 추가
       // 이미지를 삭제하면 files 배열에서도 해당 파일을 제거
       const tr = e.target.closest('tr');
       if (tr) {
@@ -284,6 +294,76 @@
     return li;
 
   }
+
+
+  function submitFormBtn() {
+    console.log("아");
+
+    // 모든 .formList 요소를 선택
+    const formLists = document.querySelectorAll('.formList');
+
+    // FormData를 현재 폼에 설정
+    const form = document.getElementById('uploadForm');
+    form.enctype = 'multipart/form-data';
+    form.method = 'POST';
+
+    // FormData를 폼에 설정
+    const formData = new FormData();
+
+    // 각 .formList 요소를 순회하며 FormData에 파일 필드와 데이터 추가
+    formLists.forEach(function (formList) {
+      const listId = formList.dataset.listId; // data-list-id 속성을 사용하여 리스트 ID 가져옴
+      const wasteInfoNo = formList.querySelector('.wasteInfoNo').value;
+      const fileInput = formList.querySelector('.uploadImg');
+
+      console.log("fileInput"+fileInput + wasteInfoNo);
+
+      if (fileInput && fileInput.files.length > 0) {
+        formData.append("listId", listId);
+        formData.append("wasteInfoNo", wasteInfoNo);
+        for (let i = 0; i < fileInput.files.length; i++) {
+          formData.append("uploadFiles[]", fileInput.files[i]);
+        }
+        console.log("파일이 선택됨");
+      } else {
+        console.log("파일이 선택되지 않았음");
+      }
+    });
+    //
+    // formData.forEach(function (value, key) {
+    //   const input = document.createElement('input');
+    //   input.type = 'hidden';
+    //   input.name = key;
+    //   input.value = value;
+    //   form.appendChild(input);
+    // });
+
+    console.log(formData);
+    console.log(form);
+
+    console.log("uploadFiles: " + formData.get('uploadFiles[]'));
+    console.log("wasteInfoNo: " + formData.get('wasteInfoNo'));
+
+    for (const [key, value] of formData.entries()) {
+      console.log(key + ": " + value);
+    }
+
+    // 파일 업로드 필드에서 파일을 추가한 후 파일 읽어보는 코드
+    // const file = formData.get('uploadFiles');
+    //
+    // if (file instanceof File) {
+    //   const reader = new FileReader();
+    //
+    //   reader.onload = function (e) {
+    //     const fileContents = e.target.result;
+    //     console.log("File Contents: " + fileContents);
+    //   };
+    //
+    //   reader.readAsText(file); // 파일을 텍스트로 읽음
+    // }
+
+    form.submit();
+  };
 
   // // 파일 업로드 필드와 업로드 버튼 요소 가져오기
   // const fileInputs = document.querySelectorAll('.uploadFiles');
@@ -309,7 +389,7 @@
   //     console.log(key, value);
   //   });
   //
-  //   // 서버로 데이터를 보내는 부분 (서버 URL을 자신의 환경에 맞게 수정)
+  //   // 서버로 데이터를 보내는 부분
   //   try {
   //     const response = await fetch('/reservation/addImage.do', {
   //       method: 'POST',
@@ -328,52 +408,6 @@
   // });
   //
   //
-
-
-  function submitFormBtn() {
-    console.log("아");
-
-    // 모든 .formList 요소를 선택
-    const formLists = document.querySelectorAll('.formList');
-
-    // FormData를 현재 폼에 설정
-    const form = document.getElementById('uploadForm'); // 폼의 ID를 사용하여 폼 요소 선택
-    form.enctype = 'multipart/form-data'; // 폼의 enctype을 설정
-    form.method = 'POST'; // 폼의 전송 방식을 설정
-
-    // FormData를 폼에 설정
-    const formData = new FormData();
-
-    // 각 .formList 요소를 순회하며 FormData에 파일 필드와 데이터 추가
-    formLists.forEach(function (formList) {
-      const listId = formList.dataset.listId; // data-list-id 속성을 사용하여 리스트 ID 가져옴
-      // const fileInput = formList.querySelector('input[type="file"]');
-      const fileInput = formList.querySelector('.uploadImg');
-
-      console.log("fileInput"+fileInput);
-
-      if (fileInput && fileInput.files.length > 0) {
-        formData.append("listId", listId);
-        formData.append("uploadFiles", fileInput.files[0]);
-        console.log("파일이 선택됨");
-      } else {
-        console.log("파일이 선택되지 않았음");
-      }
-    });
-
-    formData.forEach(function (value, key) {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = value;
-      form.appendChild(input);
-    });
-
-    console.log(form);
-
-    console.log("uploadFiles: " + formData.get('uploadFiles'));
-    // form.submit();
-  };
 
 
 </script>

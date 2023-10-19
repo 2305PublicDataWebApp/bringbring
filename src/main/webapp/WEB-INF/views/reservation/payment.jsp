@@ -239,10 +239,10 @@
             type: "GET",
             url: '/reservation/pay.do',
             data: {
-              amount: 100,
-              pay_method: "card",
-              imp_uid: rsp.imp_uid,
-              merchant_uid: rsp.merchant_uid
+              payAmount: 100,
+              payMethod: "card",
+              // imp_uid: rsp.imp_uid,
+              payId: rsp.merchant_uid
             },
             success: function (result) {
               location.href="/reservation/payComplete.do";

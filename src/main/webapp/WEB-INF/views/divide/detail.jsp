@@ -162,7 +162,9 @@
           <h3 style="margin-bottom: 15px;">${dData.divide.divTitle}</h3>
           <p style="margin-bottom: 5px;">${dData.wasteCategory.wasteCategoryName}</p>
           <p style="margin: 0px;">
-            ${dData.divide.divCreateDate}
+            <fmt:parseDate value="${dData.divide.divCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime1" type="both" />
+            <fmt:formatDate value="${parseDateTime1}" pattern="yyyy. MM. dd." />
+<%--            ${dData.divide.divCreateDate}--%>
           </p>
         </div>
         <div id="heartDiv" style="width: 8%;text-align: center;" class="align-self-center">
@@ -189,7 +191,7 @@
           채팅 2&nbsp;&nbsp;•&nbsp;
 <%--          <i class="bi bi-heart"></i>--%>
           찜 <span id="heartCount">${dData.divide.heartCount}</span> &nbsp;&nbsp;•&nbsp;
-          조회 ${dData.divide.viewCount}
+          조회 <span id="viewCount">${dData.divide.viewCount}</span>
         </div>
       </div>      
       <!-- 거래 희망장소 영역 -->
@@ -210,7 +212,9 @@
       <div data-aos="fade-up" id="map" style="width: 100%;height: 300px;border: 1px solid #ccc;"></div>
       <!-- 버튼 영역 -->
       <div data-aos="fade-up" style="margin: 0 auto;text-align: center;margin-top: 100px;">
-        <button onclick="openPopup('../chatting/list.html', 600, 1200)" class="btn btn-success btn-lg">1:1 채팅 신청</button>
+        <c:if test="${sessionId ne null && sessionId ne dData.user.userId}">
+          <button onclick="openPopup('/chatting/${sessionId}?divNo=${dData.divide.divNo}')" class="btn btn-success btn-lg">1:1 채팅 신청</button>
+        </c:if>
       </div>
     </div>
 
@@ -280,10 +284,32 @@
 
       </script>
       <script>
+        $(document).ready(function() {
+          $.ajax({
+            url: "/divide/updateViewCount.do",
+            data: { divNo: ${dData.divide.divNo}, viewCount: ${dData.divide.viewCount} },
+            type: "POST",
+            success: function(data) {
+              if(data > 0){
+                var viewCountSpan = document.getElementById("viewCount");
+                viewCountSpan.textContent = ""; // 기존 내용을 지우기
+                viewCountSpan.textContent = data; // 새로운 정수 값을 설정
+              }else{
+                alert("조회수 증가 실패!");
+              }
+
+            },
+            error: function() {
+              alert("Ajax 오류! 관리자에게 문의하세요");
+            }
+          });
+        });
+
         var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
         var xCoor = "${dData.divide.divYCoordinate}";
         var yCoor = "${dData.divide.divXCoordinate}";
         if(xCoor === ""){
+          container.style.display = "none";
           xCoor = "33.450701";
           yCoor = "126.570667";
         }
@@ -498,6 +524,14 @@
 
     function updateDivide() {
       location.href = "/divide/update.do?divNo=${dData.divide.divNo}";
+    }
+
+    function openPopup(url) {
+      if(confirm("${dData.user.userName}님께 채팅 신청을 하시겠어요?")){
+        var name = "브링브링 채팅방";
+        var option = "width = 516, height = 668, top = 20, left = 200, location = no"
+        window.open(url, name, option);
+      }
     }
 
     <!-- 로그인, 로그아웃 -->

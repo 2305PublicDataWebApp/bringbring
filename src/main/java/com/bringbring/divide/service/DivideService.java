@@ -5,13 +5,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bringbring.chatting.domain.UserData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
 import com.bringbring.image.domain.Image;
-import com.bringbring.region.domain.District;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.bringbring.reservation.domain.WasteCategory;
 
 public interface DivideService {
 
@@ -39,4 +37,12 @@ public interface DivideService {
 	int deleteDivide(int divNo);
 
     UpdateData selectUpdateDataByNo(int divNo);
+
+	int updateDivide(Divide divide);
+
+	Divide selectOneByNo(int divNo);
+
+    int updateViewCount(Divide divide);
+
+	UserData selectUserDataByNo(int divNo);
 }
