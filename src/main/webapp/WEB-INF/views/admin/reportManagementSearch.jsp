@@ -58,7 +58,7 @@
   <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
     <div style="width: 1300px;margin: 0 auto;">
       <div style="float: left;margin-top: 60px;">
-        <h1>관리자 신고 관리</h1>
+        <h1>신고 관리</h1>
         <div style="width: 100%;height: 30px;"></div>
         <h4 style="color: rgb(189, 245, 229);">회원들이 신고한 게시물을 관리하는 페이지입니다.</h4>
       </div>
@@ -128,7 +128,7 @@
                     <c:url var="detailUrl" value="/divide/detail.do">
                       <c:param name="divNo" value="${report.divNo}"></c:param>
                     </c:url>
-                    <td><a href="${detailUrl}">${report.divTitle}</td>
+                    <td><a href="${detailUrl}">${report.divTitle}</a></td>
                     <fmt:parseDate value="${report.divCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime1" type="both" />
                     <td><fmt:formatDate value="${parseDateTime1}" pattern="yyyy-MM-dd" /></td>
                     <fmt:parseDate value="${report.repCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime2" type="both" />

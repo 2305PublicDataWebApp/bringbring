@@ -29,4 +29,12 @@ public class User {
 	private String userProfilePath;
 	private long userProfileLength;
 	private char isUserDeleted;
+	
+	public User(String userId, String userPwd, String userName) {
+		super();
+		this.userId = userId;
+		this.userPwd = userPwd;
+		this.userName = userName;
+	}
+	
 }

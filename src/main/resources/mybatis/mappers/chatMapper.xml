@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChatMapper">
+    <select id="selectChatListByMap" resultType="Chat">
+        SELECT * FROM CHAT_TBL WHERE DIV_NO = 62
+        AND ((USER_NO = #{userNo} OR USER_NO = #{getUserNo})AND (GET_USER_NO = #{userNo} OR GET_USER_NO = #{getUserNo}))
+        ORDER BY CHAT_CREATE_DATE
+    </select>
+    <insert id="insertChat">
+        INSERT INTO CHAT_TBL VALUES (SEQ_CHAT_NO.NEXTVAL, #{divNo}, #{userNo}, #{getUserNo}, #{chatContent}, DEFAULT, DEFAULT, DEFAULT)
+    </insert>
+
+</mapper>

@@ -3,6 +3,7 @@ package com.bringbring.divide.store;
 import java.util.List;
 import java.util.Map;
 
+import com.bringbring.chatting.domain.UserData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
 import com.bringbring.image.domain.Image;
@@ -40,4 +41,8 @@ public interface DivideStore {
     UpdateData selectUpdateDataByNo(int divNo);
 
 	int updateDivide(Divide divide);
+
+    int updateViewCount(Divide divide);
+
+	UserData selectUserDataByNo(int divNo);
 }

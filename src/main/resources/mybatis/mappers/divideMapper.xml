@@ -28,6 +28,11 @@
 		<association property="wasteCategory" resultMap="wasteCategory"/>
 	</resultMap>
 
+	<resultMap id="userData" type="com.bringbring.chatting.domain.UserData">
+		<association property="divide" resultMap="divide"/>
+		<association property="user" resultMap="user"/>
+	</resultMap>
+
 	<resultMap id="divide" type="com.bringbring.divide.domain.Divide">
 		<id property="divNo" column="DIV_NO" />
 		<result property="userNo" column="USER_NO" />
@@ -154,6 +159,9 @@
 		  JOIN WASTE_CATEGORY_TBL D ON A.WASTE_CATEGORY_NO = D.WASTE_CATEGORY_NO
 		WHERE DIV_NO = #{value}
 	</select>
+	<select id="selectUserDataByNo" resultMap="userData">
+		SELECT * FROM DIVIDE_TBL JOIN USER_TBL USING(USER_NO) WHERE DIV_NO = #{value}
+	</select>
   	<insert id="insertDivide">
   		INSERT INTO DIVIDE_TBL VALUES (
       SEQ_DIV_NO.NEXTVAL , #{userNo}, #{wasteCategoryNo}, #{divTitle}, #{divContent},
@@ -180,5 +188,8 @@
 		WASTE_CATEGORY_NO = #{wasteCategoryNo}, DIV_TITLE = #{divTitle}, DIV_CONTENT = #{divContent}, DIV_UPDATE_DATE = DEFAULT
 		, CITY_NO = #{cityNo}, DISTRICT_NO = #{districtNo}, DIV_X_COORDINATE = #{divXCoordinate}, DIV_Y_COORDINATE = #{divYCoordinate}
 		WHERE DIV_NO = #{divNo}
+	</update>
+	<update id="updateViewCount">
+		UPDATE DIVIDE_TBL SET VIEW_COUNT = #{viewCount} WHERE DIV_NO = #{divNo}
 	</update>
 </mapper>

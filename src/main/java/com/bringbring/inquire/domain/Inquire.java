@@ -22,5 +22,6 @@ public class Inquire {
     private char answerYn;
     private char isInqDeleted;
     private String inqCategory;
-    private String inqRegion;
+    private int cityNo;
+    private int districtNo;
 }

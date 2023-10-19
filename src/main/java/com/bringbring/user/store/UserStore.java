@@ -1,6 +1,7 @@
 package com.bringbring.user.store;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bringbring.common.PageInfo;
 import com.bringbring.user.domain.User;
@@ -75,5 +76,20 @@ public interface UserStore {
 	 * @return int
 	 */
 	public int deleteUser(String userId);
+
+	/**
+	 * 카카오로그인 user_tbl 추가 store
+	 * @param userInfo
+	 */
+	public int insertKakao(Map<String, Object> userInfo);
+	
+	/**
+	 * 카카오로그인 social_user_tbl 추가 store
+	 * @param kakaoUser
+	 * @return
+	 */
+//	public int insertkakao1(User kakaoUser);
+
+
 
 }

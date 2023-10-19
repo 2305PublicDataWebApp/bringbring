@@ -1,117 +1,321 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="ko">
-
+<html lang="ko" >
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="UTF-8">
+    <title>${uData.user.userName}님 과의 채팅</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
 
-  <title>브링브링</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+    <!-- Favicons -->
+    <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+    <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<%--    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>--%>
+    <link rel="stylesheet" href="../resources/assets/css/chatting/style.css">
+    <style>
 
 
-  <!-- Favicons -->
-  <link href="../resources/assets/img/main/title-icon.png" rel="icon">
-  <link href="../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="../resources/assets/css/style.css" rel="stylesheet">
-  <link href="../resources/assets/css/common.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: Arsha
-  * Updated: Sep 18 2023 with Bootstrap v5.3.2
-  * Template URL: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
-  
+    </style>
 </head>
-
 <body>
+    <div style="margin: 0 auto;">
+        <div class="floating-chat expand enter">
+            <i class="fa fa-comments" aria-hidden="true"></i>
+            <div class="chat">
+                <div class="header">
+                <span class="title">
+                    <span onclick="closeCurrentWindow()" style="cursor: pointer;"><</span> &nbsp;
+                    ${uData.user.userName}
+                </span>
+                </div>
+                <div class="header text-center" style="border-bottom: 1px solid #17594A;padding-left: 10px;margin-bottom: 5px;">
+                    <c:if test="${sessionId eq uData.user.userId}">
+                        <button type="button" style="padding: 9px 10px 7px 10px; border-radius: 6px;background-color: #222;font-family: 'LINESeedKR-Bd';font-size: 14px;" readonly>나눔 완료</button>
+                    </c:if>
+                    <span class="divideTitle">
+<%--                        <a href="/divide/detail.do?divNo=${uData.divide.divNo}">--%>
+                            ${uData.divide.divTitle}
+<%--                        </a>--%>
+                    </span>
+                </div>
+                <ul id="msgArea" class="messages">
+<%--                    이전날짜 저장--%>
+                    <c:set var="previousDate" value="" scope="page" />
+                    <c:forEach var="chat" items="${cList}" varStatus="i">
+                        <fmt:parseDate value="${chat.chatCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime" type="both" />
+                        <fmt:parseDate value="${chat.chatCreateDate}" pattern="yyyy-MM-dd" var="parseDate" type="both" />
+                        <c:if test="${parseDate ne previousDate}">
+                            <%-- 현재 날짜와 이전 날짜가 다른 경우에만 날짜를 출력합니다. --%>
+                            <p class="infoMessageArea">
+                                <span class="infoMessage"><fmt:formatDate value="${parseDate}" pattern="yyyy년 MM월 dd일" /></span>
+                            </p>
+                            <%-- 현재 날짜를 이전 날짜로 업데이트합니다. --%>
+                            <c:set var="previousDate" value="${parseDate}" scope="page" />
+                        </c:if>
 
-  <main style="width: 100%; margin: 0 auto; padding: 50px 0px 50px 0px;">
-    <div style="width: 600px; height: 1150px; margin: 0 auto; background-color: black; border-radius: 50px;">
-      <div style="width: 100%;height: 15px;"></div>
-      <div style="width: 570px;height: 1120px;border-radius: 35px;background-color: white;margin: 0 auto;">
-        <div style="width: 100%;height: 100px;text-align: center;margin: 0 auto;">
-          <!-- <i class="bi bi-dot" style="font-size: 75px;"></i> -->
-          <i class="bi bi-dash-lg" style="font-size: 80px;"></i>
-          <!-- <i class="bi bi-dot" style="font-size: 50px;"></i> -->
-        </div>  
-        <div style="margin: 0 auto;width: 550px; height: 750px; background-color: #00AD7C;">
-          <div style="width: 100%;height: 80px;margin-top: 15px;border-bottom: 1px solid #17594A;">
-            <i class="bi bi-chevron-left" style="float: left;font-size: 32px;margin: 0px 10px 0px 10px;padding-top: 15px;"></i>
-            <h3 style="padding-top: 26px;">닉네임</h3>
-          </div>
-          <div style="width: 100%;display: flex;height: 62px;padding: 12px 0px 12px 12px;border-bottom: 1px solid #17594A;">
-            <button class="btn btn-dark">나눔 완료</button>
-            <h6 style="padding: 10px 0px 0px 10px;">게시글 제목이 들어갈 자리입니다.</h6>
-          </div>
-          <div style="width: 100%;height: 608px;padding: 20px;">
-            <div style="width: 100%;height: 60px;float: left;">
-              <img src="../resources/assets/img/divide/free-icon-user-847969.png" style="width: 40px;float: left;margin: 10px 10px 0px 0px;" alt="">
-              <textarea type="text" style="float: left;;width: 300px;height: 40px;border-radius: 8px;border: 0px;resize: none;margin-top: 10px;"></textarea>
-              <p style="padding-top: 30px;letter-spacing: 1px;">&nbsp;&nbsp;12:03</p>
+                        <c:if test="${user.userNo eq chat.userNo}">
+                            <div class="chatDiv">
+                                <li class='other'>${chat.chatContent}</li>
+                                <span style="float: right;padding: 27px 6px 0px 0px;color: #222;font-size: 13px;">
+                                    <fmt:formatDate value="${parseDateTime}" pattern="HH:mm" />
+                                </span>
+                            </div>
+                        </c:if>
+                        <c:if test="${user.userNo ne chat.userNo}">
+                            <div class="chatDiv">
+                                <li class='self'>${chat.chatContent}</li>
+                                <span style="padding: 26px 0px 0px 6px;float:left;color: #222;font-size: 13px;">
+                                    <fmt:formatDate value="${parseDateTime}" pattern="HH:mm" />
+                                </span>
+                            </div>
+                        </c:if>
+                    </c:forEach>
+                </ul>
+                <div class="footer">
+                    <div id="opinion" class="text-box messageArea" contenteditable="true" disabled="true" onkeyup="enterkey()"></div>
+                    <button id="sendBtn" class="align-self-center" style="background-color: #17594A;padding: 4px 10px 0px 10px;border-top-left-radius: 0px;border-bottom-left-radius: 0px">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+                            <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <div style="width: 100%;height: 60px;float: left;">
-              <textarea type="text" style="width: 300px;height: 40px;resize: none;margin-top: 10px;border-radius: 8px;border: 0px;float: right;margin-right: 20px;"></textarea>
-              <p style="padding-top: 30px;margin-right: 10px;letter-spacing: 1px;float: right;">&nbsp;&nbsp;12:03</p>
-            </div>
-          </div>
         </div>
-        <div style="width: 550px;margin: 0 auto;height: 80px;display: flex;flex-direction: row;justify-content: flex-end;background-color: #F0F3F3;border: 2px solid #00AD7C;;">
-          <input type="text" style="border-top-left-radius: 8px;border-bottom-left-radius: 8px;width: 475px;height: 40px;margin-top: 20px;border: 2px solid #00AD7C;" placeholder=" 채팅 내용을 입력해주세요.">
-          <button class="btn btn-success" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px;height: 40px;margin: 20px 10px 0px 10px;"><i class="bi bi-send-fill"></i></button>
-        </div>
-        <div style="width: 100%;height: 100px;margin: 0 auto;text-align: center;margin-top: 20px;">
-          <i class="bi bi-circle" style="font-size: 90px;"></i>
-        </div>
-      </div>
     </div>
-  </main>
-  <!-- 메인 -->
-<!-- End #main -->
+<!-- partial -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+<script  src="../resources/assets/js/chatting/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        <%--document.addEventListener('DOMContentLoaded', function() {--%>
+        <%--    const selfMessage = document.querySelector('.floating-chat .chat .messages li.self:before');--%>
+        <%--    let newImageUrl = '';--%>
+        <%--    if("${uData.user.userProfilePath}" !== null){--%>
+        <%--        newImageUrl = '${uData.user.userProfilePath}';--%>
+        <%--    }else{--%>
+        <%--        newImageUrl = '../../img/divide/free-icon-user-847969.png';--%>
+        <%--    }--%>
+        <%--    selfMessage.style.backgroundImage = "url("+newImageUrl+")";--%>
+        <%--    // 새 이미지 URL을 설정합니다.--%>
+        <%--});--%>
+
+        function closeCurrentWindow(){
+            window.close();
+        }
+
+        document.getElementById("sendBtn").addEventListener("click", function() {
+            send();
+        });
+
+        const username = "${name}";
+
+        const websocket = new WebSocket("ws://localhost:8888/ws/chat");
+        websocket.onmessage = onMessage;
+        websocket.onopen = onOpen;
+        websocket.onclose = onClose;
+
+        let isSeeing = true;
+        document.addEventListener("visibilitychange", function() {
+            console.log(document.visibilityState);
+            if(document.visibilityState == "hidden"){
+                isSeeing = false;
+            }else{
+                isSeeing = true;
+            }
+        });
+
+        var newExcitingAlerts = (function () {
+            var oldTitle = document.title;
+            var msg = "★Message!★";
+            var timeoutId;
+            var blink = function() { document.title = document.title == msg ? ' ' : msg;
+                if(isSeeing == true){
+                    clear();
+                }
+            };
+            var clear = function() {
+                clearInterval(timeoutId);
+                document.title = oldTitle;
+                window.onmousemove = null;
+                timeoutId = null;
+            };
+            return function () {
+                if (!timeoutId) {
+                    timeoutId = setInterval(blink, 1000);
+                }
+            };
+        }());
+
+        setInterval(() => console.log(new Date()), 10000); //prevent chrome refresh
+
+        $(document).ready(function(){
+            $(".floating-chat").click();
+
+            $("#disconn").on("click", (e) => {
+                disconnect();
+            })
+
+            $("#button-send").on("click", (e) => {
+                send();
+            });
+        })
+
+        function enterkey(){
+            if (window.event.keyCode == 13) {
+                send();
+            }
+        }
+        function send(){
+            console.log(username + ":" + $("#opinion").text());
+            if($("#opinion").text() != ""){
+                websocket.send(username + ":" + $("#opinion").text());
+                $("#opinion").text('');
+            }
+        }
+
+        function onClose(evt) {
+            var str = username + ": 님이 방을 나가셨습니다.";
+            websocket.send(str);
+        }
+
+        function onOpen(evt) {
+            var str = username + ": 님이 입장하셨습니다.";
+            websocket.send(str);
+        }
+
+        function onMessage(msg) {
+            var data = msg.data;
+            var sessionId = null;
+            var message = null;
+            var arr = data.split(":");
+
+            for(var i=0; i<arr.length; i++){
+                console.log('arr[' + i + ']: ' + arr[i]);
+            }
+
+            var cur_session = username;
+
+            console.log("cur_session : " + cur_session);
+
+
+            sessionId = arr[0];
+            message = arr[1];
+
+
+            console.log("sessionID : " + sessionId);
+            console.log("cur_session : " + cur_session);
 
 
 
-  <!-- Vendor JS Files -->
-  <script src="../resources/assets/vendor/aos/aos.js"></script>
-  <script src="../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="../resources/assets/vendor/php-email-form/validate.js"></script>
+            var divElement = document.createElement("div");
+            var liElement = document.createElement("li");
 
-  <!-- Template Main JS File -->
-  <script src="../resources/assets/js/main.js"></script>
+            if(message == undefined){
+                message = "채팅이 종료되었습니다.";
+            }
+            if(message == " 님이 입장하셨습니다."){
+                message = sessionId + "님이 입장하셨습니다.";
+                var ulElement = document.getElementById("msgArea");
+                // p 요소 생성
+                var pElement = document.createElement("p");
+                pElement.setAttribute("class", "infoMessageArea");
 
-  <!-- 채널톡 api -->
-  <script>
-    // (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-    //
-    // ChannelIO('boot', {
-    //   "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    // });
+                // span 요소 생성
+                var spanElement = document.createElement("span");
+                spanElement.setAttribute("class", "infoMessage");
 
-  </script>
-  
-  
+                // 텍스트 노드 생성 및 추가
+                var textNode = document.createTextNode(message);
+
+                // span 요소에 텍스트 노드 추가
+                spanElement.appendChild(textNode);
+
+                // p 요소에 span 요소 추가
+                pElement.appendChild(spanElement);
+
+                // ul 요소에 p 요소 추가
+                ulElement.appendChild(pElement);
+            }else{
+                if(sessionId == cur_session){
+
+                    // var ulElement = document.getElementById("msgArea");
+                    // // p 요소 생성
+                    // var pElement = document.createElement("p");
+                    // pElement.setAttribute("class", "infoMessageArea");
+                    //
+                    // // span 요소 생성
+                    // var spanElement = document.createElement("span");
+                    // spanElement.setAttribute("class", "infoMessage");
+                    //
+                    // // 텍스트 노드 생성 및 추가
+                    // var textNode = document.createTextNode(message);
+                    //
+                    // // span 요소에 텍스트 노드 추가
+                    // spanElement.appendChild(textNode);
+                    //
+                    // // p 요소에 span 요소 추가
+                    // pElement.appendChild(spanElement);
+                    //
+                    // // ul 요소에 p 요소 추가
+                    // ulElement.appendChild(pElement);
+
+                    divElement.setAttribute("class", "chatDiv");
+                    liElement.setAttribute("class", "other");
+                    var textNode = document.createTextNode(message);
+                    liElement.appendChild(textNode);
+                    divElement.append(liElement);
+                    $("#msgArea").append(divElement);
+
+                    <%--if("${uData.user.userNo} ne ${user.userNo}"){--%>
+                    $.ajax({
+                        url: "/chatting/insert.do",
+                        data: { divNo: ${uData.divide.divNo}
+                            , userNo: ${user.userNo}
+                            , getUserNo: ${uData.user.userNo}
+                            , chatContent: message
+                        },
+                        type: "POST",
+                        success: function(data) {
+                            if(data === "success"){
+                                // alert("insert 성공!");
+                            }else{
+                                alert("채팅저장 실패!");
+                            }
+
+                        },
+                        error: function() {
+                            alert("Ajax 오류! 관리자에게 문의하세요");
+                        }
+                    });
+                    // }
+
+                }
+                else{
+                    divElement.setAttribute("class", "chatDiv");
+                    liElement.setAttribute("class", "self");
+                    var textNode = document.createTextNode(message);
+                    liElement.appendChild(textNode);
+                    divElement.append(liElement);
+                    $("#msgArea").append(divElement);
+
+                    if(isSeeing == false){
+                        newExcitingAlerts();
+                    }
+                }
+            }
+
+            document.getElementById("msgArea").scrollTop = document.getElementById("msgArea").scrollHeight;
+        }
+    </script>
 </body>
-
+<style>
+    .text-box div:nth-child(n+1) {
+        display: none;
+    }
+</style>
 </html>

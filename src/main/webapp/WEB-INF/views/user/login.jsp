@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -79,10 +80,10 @@
             </div>
 
             <div class="sns_buttons_div">
-                <button type="button" class="kakao_login_btn rounded">
+                <button type="button" onclick="kakao_btn();" class="kakao_login_btn rounded">
                     <img src="../resources/assets/img/user/kakao_login_btn.png" alt="카카오 로그인" onclick="">
                 </button><br>
-                <button type="button" class="naver_login_btn rounded">
+                <button type="button" onclick="naver_btn();" class="naver_login_btn rounded">
                     <img src="../resources/assets/img/user/naver_login_btn.png" alt="네이버 로그인" onclick="">
                 </button>
             </div>
@@ -108,7 +109,36 @@
 
     <!-- Template Main JS File -->
     <script src="../resources/assets/js/main.js"></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
+	<script>
+		function naver_btn() {
+			const clientId = 'oWq7iXzHYNRYo_as3iSc';
+			var naverUrl = "${naverUrl }";
+			window.location.href = naverUrl;
+		}
+		
+		Kakao.init('b82d0f1e81f80d7dfb52a8b896d5b146'); // JavaScript 키
+		function kakao_btn() {
+			Kakao.Auth.authorize({
+			redirectUri: 'http://127.0.0.1:8888/social/kakaoLogin.do',
+			scope: 'account_email, profile_nickname', 
+			success: function(success) {
+				console.log("카카오 인증 성공", authObj);
+				// 로그인 또는 인증 성공 시 처리
+			},
+			fail: function(err) {
+				console.log("카카오 인증 실패", err);
+				// 로그인 또는 인증 실패 시 처리
+			},
+			});
+		}
+// 		function kakao_btn() {
+// 		    const clientId = 'b82d0f1e81f80d7dfb52a8b896d5b146';   // 자바스크립트 키
+// 		    const redirectUrl ='http://127.0.0.1:8888/social/kakaoLogin.do';    // redirectUtl 
+// 		    location.href = 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id='+clientId+'&redirect_uri='+redirectUrl;
+// 		}
+	</script>
     <!-- 채널톡 api -->
     <script>
         (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();

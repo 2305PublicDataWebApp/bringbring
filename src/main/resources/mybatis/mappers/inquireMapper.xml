@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InquireMapper">
+	<resultMap id="InquireDetailsResultMap" type="com.bringbring.inquire.domain.InquireDetails">
+		<id property="inqNo" column="INQ_NO"/>
+		<result property="userNo" column="USER_NO"/>
+		<result property="userId" column="USER_ID" />
+		<result property="inqTitle" column="INQ_TITLE" />
+		<result property="userName" column="USER_NAME" />
+		<result property="inqCreateDate" column="INQ_CREATE_DATE" />
+		<result property="answerYn" column="ANSWER_YN"/>
+		<result property="cityNo" column="CITY_NO" />
+		<result property="districtNo" column="DISTRICT_NO" />
+		<result property="inqCategory" column="INQ_CATEGORY" />
+		<result property="cityName" column="CITY_NAME" />
+	</resultMap>
+
+	<select id="selectInqListCount" resultType="_int">
+		SELECT COUNT(*) FROM INQUIRE_TBL
+	</select>
+
+	<select id="selectInquireList" resultMap="InquireDetailsResultMap">
+		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY
+		FROM INQUIRE_TBL i
+		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+	</select>
+
+	<select id="selectInquiriesByAnswer" resultMap="InquireDetailsResultMap">
+		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY
+		FROM INQUIRE_TBL i
+		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+		WHERE i.ANSWER_YN = #{answerYn}
+	</select>
+
+	<select id="selectInquireByCityNo" resultMap="InquireDetailsResultMap">
+		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY
+		FROM INQUIRE_TBL i
+				 JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+		WHERE i.CITY_NO = #{cityNo}
+	</select>
+
+	<select id="selectInquireCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM INQUIRE_TBL i
+				 JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+		WHERE i.ANSWER_YN =  #{answerYn}
+	</select>
+
+	<select id="selectInquireCountByCity" resultType="_int">
+		SELECT COUNT(*)
+		FROM INQUIRE_TBL i
+				 JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+		WHERE i.CITY_NO = #{cityNo}
+	</select>
+
+
+	<select id="searchInqListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM INQUIRE_TBL i
+		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+		JOIN CITY_TBL c ON i.CITY_NO = c.CITY_NO
+		<if test="searchCondition == 'all'">
+			WHERE c.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR u.USER_ID LIKE '%'||#{searchKeyword}||'%' OR i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'city'">
+			WHERE c.CITY_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'id'">
+			WHERE u.USER_ID LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'category'">
+			WHERE i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+
+	<select id="searchInquireByKeyword" resultMap="InquireDetailsResultMap">
+		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY
+		FROM INQUIRE_TBL i
+		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+		JOIN CITY_TBL c ON i.CITY_NO = c.CITY_NO
+		<if test="searchCondition == 'all'">
+			WHERE c.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR u.USER_ID LIKE '%'||#{searchKeyword}||'%' OR i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'city'">
+			WHERE c.CITY_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'id'">
+			WHERE u.USER_ID LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'category'">
+			WHERE i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+</mapper>
