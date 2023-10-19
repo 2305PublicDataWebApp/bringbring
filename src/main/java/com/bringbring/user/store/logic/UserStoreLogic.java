@@ -1,6 +1,7 @@
 package com.bringbring.user.store.logic;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bringbring.common.PageInfo;
 import org.apache.ibatis.session.RowBounds;
@@ -70,6 +71,12 @@ public class UserStoreLogic implements UserStore{
 	public int deleteUser(String userId) {
 		return sqlSession.update("UserMapper.deleteUser", userId);
 	}
+
+	@Override
+	public int insertKakao(Map<String, Object> userInfo) {
+		return sqlSession.insert("UserMapper.insertKakao", userInfo);
+	}
+
 
 
 }
