@@ -21,4 +21,6 @@ public class Chat {
     private LocalDateTime chatCreateDate;
     private char isChatDeleted;
     private char chatDivYn;
+    private int chatRoomNo;
+
 }

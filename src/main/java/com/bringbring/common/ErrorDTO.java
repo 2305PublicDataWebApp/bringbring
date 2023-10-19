@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 
 @ControllerAdvice
@@ -33,5 +34,13 @@ public class ErrorDTO {
 		model.addAttribute("url", "/");
         return "common/error";
     }
+
+	@ExceptionHandler(IOException.class)
+	public String IOExcept(IOException e, Model model){
+		System.out.println(e.getMessage());
+		model.addAttribute("msg", "IOException발생 뭐가 오류지..?");
+		model.addAttribute("url", "/");
+		return "common/error";
+	}
 
 }
