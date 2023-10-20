@@ -5,6 +5,8 @@ import com.bringbring.admin.domain.AdminDetails;
 import com.bringbring.admin.domain.Role;
 import com.bringbring.common.PageInfo;
 import com.bringbring.report.domain.ReportDetails;
+import com.bringbring.reservation.domain.Reservation;
+import com.bringbring.reservation.domain.ReservationAdmin;
 import com.bringbring.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
@@ -109,6 +111,23 @@ public class AdminStoreLogic implements AdminStore {
     @Override
     public int deleteRole(int userNo) {
         return sqlSession.delete("AdminMapper.deleteRole", userNo);
+    }
+
+    @Override
+    public int selectListResCount() { return sqlSession.selectOne("ReservationMapper.selectListResCount"); }
+
+    @Override
+    public int selectListCountByCompletionY() { return sqlSession.selectOne("ReservationMapper.selectListCountByCompletionY"); }
+
+    @Override
+    public int selectListCountByCompletionN() { return sqlSession.selectOne("ReservationMapper.selectListCountByCompletionN"); }
+
+    @Override
+    public List<ReservationAdmin> selectReservationList(PageInfo pInfo) {
+        int limit = pInfo.getRecordCountPerPage();
+        int offset = (pInfo.getCurrentPage() - 1) * limit;
+        RowBounds rowBounds = new RowBounds(offset, limit);
+        return sqlSession.selectList("ReservationMapper.selectReservationList", null, rowBounds);
     }
 
 }

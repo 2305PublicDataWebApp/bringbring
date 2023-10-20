@@ -12,6 +12,9 @@ import com.bringbring.region.domain.Region;
 import com.bringbring.region.service.RegionService;
 import com.bringbring.report.domain.ReportDetails;
 import com.bringbring.report.service.ReportService;
+import com.bringbring.reservation.domain.Reservation;
+import com.bringbring.reservation.domain.ReservationAdmin;
+import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +40,7 @@ public class AdminController {
 	private final AdminService adminService;
 	private final ReportService reportService;
 	private final InquireService inquireService;
+	private final ReservationService reservationService;
 
 // 문의 관리
 	@GetMapping("/contactList.do")
@@ -375,12 +379,30 @@ public class AdminController {
 		mv.setViewName("admin/reservationDetail");
 		return mv;
 	}
-	
+
 //	예약 조회
-	@GetMapping("/reservationM.do")
-	public ModelAndView showReservationManagement(ModelAndView mv) {
-		mv.setViewName("admin/reservationManagement");
-		return mv;
+	@GetMapping("/reservationList.do")
+	public String showReservationManagement(Model model
+			,@RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
+			,HttpSession session) {
+		int checkAdmin = (int)session.getAttribute("sessionUserGrade");
+		if(checkAdmin >= 2) {
+			// 배출 예약 건수
+			// 접수된 건수(신청)
+			// 완료된 건(완료)
+			int resCount = adminService.selectListResCount();
+			int resCountByCompletionY = adminService.selectListCountByCompletionY();
+			int resCountByCompletionN = adminService.selectListCountByCompletionN();
+			PageInfo pInfo = this.getPageInfo(currentPage, resCount);
+			List<ReservationAdmin> reservationList = adminService.selectReservationList(pInfo);
+			model.addAttribute("resList", reservationList).addAttribute("pInfo", pInfo);
+			model.addAttribute("resCount", resCount).addAttribute("resCountY", resCountByCompletionY).addAttribute("resCountX", resCountByCompletionN);
+			return "admin/reservationManagement";
+		} else {
+			model.addAttribute("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
+		}
 	}
 
 	@GetMapping("/test.do")

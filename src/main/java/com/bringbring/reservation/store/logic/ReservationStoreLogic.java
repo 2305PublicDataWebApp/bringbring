@@ -68,5 +68,6 @@ public class ReservationStoreLogic implements ReservationStore {
     @Override
     public List<ReservationComplete> selectReservationCompleteInfo(String payId) {
         return sqlSession.selectList("ReservationMapper.selectReservationCompleteInfo", payId);
+
     }
 }

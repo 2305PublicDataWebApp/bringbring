@@ -80,6 +80,26 @@
         <result property="imageRename" column="IMAGE_RENAME" />
         <result property="imagePath" column="IMAGE_PATH" />
     </resultMap>
+    <resultMap id="city" type="com.bringbring.region.domain.City">
+        <id property="cityNo" column="CITY_NO" />
+        <result property="cityName" column="CITY_NAME"/>
+    </resultMap>
+    <resultMap id="district" type="com.bringbring.region.domain.District">
+        <id property="districtNo" column="DISTRICT_NO" />
+        <result property="districtName" column="DISTRICT_NAME"/>
+    </resultMap>
+    <resultMap id="reservationAdmin" type="com.bringbring.reservation.domain.ReservationAdmin">
+        <association property="wasteCategory" resultMap="wasteCategory"/>
+        <association property="wasteType" resultMap="wasteType"/>
+        <association property="wasteInfo" resultMap="wasteInfo"/>
+        <association property="reservation" resultMap="reservation"/>
+        <association property="reservationDetail" resultMap="reservationDetail"/>
+        <association property="pay" resultMap="pay"/>
+        <association property="connection" resultMap="connection"/>
+        <association property="image" resultMap="image"/>
+        <association property="city" resultMap="city"/>
+        <association property="district" resultMap="district"/>
+    </resultMap>
 
     <insert id="insertResertvation" parameterType="com.bringbring.reservation.domain.Reservation" >
         insert into RESERVATION_TBL values (SEQ_RV_NO.NEXTVAL, TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(SEQ_RV_DISCHARGE_NO.NEXTVAL, 8, '0'), #{userNo}, #{cityNo}, #{districtNo}, #{rvAddr}, #{rvPhone}, #{rvRequest}, #{rvName},
@@ -153,4 +173,21 @@
         where PAY_ID = #{value}
     </select>
 
+    <select id="selectListCountByCompletionY" resultType="_int" >
+        SELECT COUNT(*) FROM RESERVATION_TBL WHERE IS_RV_COMPLETION = 'Y'
+    </select>
+
+    <select id="selectListCountByCompletionN" resultType="_int" >
+        SELECT COUNT(*) FROM RESERVATION_TBL WHERE IS_RV_COMPLETION = 'N'
+    </select>
+
+    <select id="selectReservationList" resultMap="reservationAdmin">
+        SELECT r.RV_NO, r.RV_NAME, r.RV_ADDR, d.DISTRICT_NAME, r.RV_APPLICATION_DATE, r.RV_RV_DATE, p.IS_PAY_STATUS, r.IS_RV_COMPLETION
+        FROM
+            RESERVATION_TBL r
+                JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
+                JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
+                LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+                ORDER BY r.RV_NO DESC
+    </select>
 </mapper>

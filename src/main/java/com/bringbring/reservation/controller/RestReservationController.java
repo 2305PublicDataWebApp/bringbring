@@ -82,7 +82,12 @@ public class RestReservationController {
 //        }
 
 
+        String payId = pay.getPayId();
+
+        ReservationComplete reservationComplete = reservationService.selectReservationCompleteInfo(payId);
+
         if (result >= 4) {
+            session.setAttribute("reservationComplete", reservationComplete);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Failure", HttpStatus.INTERNAL_SERVER_ERROR);

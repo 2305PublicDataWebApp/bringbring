@@ -19,4 +19,5 @@ public interface ReservationService {
     Integer insertReservation(List<Integer> selectedItems, Map<String, Object> imageAdd, Reservation reservationUserInfo, ReservationDetail reservationDetail, Pay pay);
 
     List<ReservationComplete> selectReservationCompleteInfo(String payId);
+
 }
