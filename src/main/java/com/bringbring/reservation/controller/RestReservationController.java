@@ -81,11 +81,6 @@ public class RestReservationController {
 //            System.out.println("e.getMessage() = " + e.getMessage());
 //        }
 
-
-        String payId = pay.getPayId();
-
-        ReservationComplete reservationComplete = reservationService.selectReservationCompleteInfo(payId);
-
         if (result >= 4) {
             session.setAttribute("reservationComplete", reservationComplete);
             return new ResponseEntity<>("Success", HttpStatus.OK);
