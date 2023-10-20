@@ -1,6 +1,7 @@
 package com.bringbring.inquire.service.Impl;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.domain.InquireDetails;
 import com.bringbring.inquire.store.InquireStore;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.service.InquireService;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -45,5 +48,15 @@ public class InquireServiceImpl implements InquireService {
   
     @Override
 	  public List<Inquire> selectInquireListByUserNo(int userNo) { return inquireStore.selectInquireListByUserNo(userNo); }
+
+//    @Override
+//    public int insertInquire(Inquire inquire, MultipartFile[] uploadFiles, HttpServletRequest request) {
+//        // 문의게시글 정보 저장
+//        int result = inquireStore.insertInquire(inquire);
+//        // 저장 성공시 파일 업로드
+//        if(result > 0) {
+//            int imageGroupNo = inquireStore.selectMaxNo();
+//        }
+//    }
 
 }

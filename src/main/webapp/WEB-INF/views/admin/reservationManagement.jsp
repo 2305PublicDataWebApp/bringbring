@@ -56,7 +56,7 @@
   <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
     <div style="width: 1300px;margin: 0 auto;">
       <div style="float: left;margin-top: 60px;">
-        <h1>관리자 배출 관리</h1>
+        <h1>배출 관리</h1>
         <div style="width: 100%;height: 30px;"></div>
         <h4 style="color: rgb(189, 245, 229);">회원들이 예약한 배출 정보를 관리할 수 있습니다.</h4>
       </div>

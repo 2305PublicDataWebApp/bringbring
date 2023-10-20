@@ -53,5 +53,10 @@ public class ReportStoreLogic implements ReportStore {
     public int getListReportCount(Map<String, String> paramMap) {
         return sqlSession.selectOne("reportMapper.getListReportCount", paramMap);
     }
+
+    @Override
+    public List<ReportDetails> getReportDetailsByDivNo(int divNo) {
+        return sqlSession.selectList("reportMapper.getReportDetailsByDivNo", divNo);
+    }
 }
 

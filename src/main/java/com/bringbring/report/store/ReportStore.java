@@ -62,4 +62,11 @@ public interface ReportStore {
      * @return int
      */
     int getListReportCount(Map<String, String> paramMap);
+
+    /**
+     * 게시물 번호로 신고 게시물 조회 store
+     * @param divNo
+     * @return
+     */
+    List<ReportDetails> getReportDetailsByDivNo(int divNo);
 }
