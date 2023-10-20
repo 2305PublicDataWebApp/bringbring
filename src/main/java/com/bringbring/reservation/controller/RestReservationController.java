@@ -1,9 +1,6 @@
 package com.bringbring.reservation.controller;
 
-import com.bringbring.reservation.domain.Pay;
-import com.bringbring.reservation.domain.Reservation;
-import com.bringbring.reservation.domain.ReservationDetail;
-import com.bringbring.reservation.domain.WasteData;
+import com.bringbring.reservation.domain.*;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
@@ -68,7 +65,12 @@ public class RestReservationController {
 
         Integer result = reservationService.insertReservation(selectedItems, imageAdd, reservationUserInfo, reservationDetail, pay);
 
+        String payId = pay.getPayId();
+
+        ReservationComplete reservationComplete = reservationService.selectReservationCompleteInfo(payId);
+
         if (result >= 4) {
+            session.setAttribute("reservationComplete", reservationComplete);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Failure", HttpStatus.INTERNAL_SERVER_ERROR);

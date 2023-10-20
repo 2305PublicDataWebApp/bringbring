@@ -105,6 +105,24 @@ public class ReservationServiceImpl implements ReservationService {
         return insertTotal;
     }
 
+    @Override
+    public ReservationComplete selectReservationCompleteInfo(String payId) {
+        return reservationStore.selectReservationCompleteInfo(payId);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // ***************** 이미지 관련 *****************
     // 세션에 저장용, 실제 저장은 x

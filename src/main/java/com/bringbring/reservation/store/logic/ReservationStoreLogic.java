@@ -64,4 +64,9 @@ public class ReservationStoreLogic implements ReservationStore {
     public int insertPay(Pay pay) {
         return sqlSession.insert("ReservationMapper.insertPay", pay);
     }
+
+    @Override
+    public ReservationComplete selectReservationCompleteInfo(String payId) {
+        return sqlSession.selectOne("ReservationMapper.selectReservationCompleteInfo", payId);
+    }
 }

@@ -114,10 +114,15 @@
           <label>배출 품목</label>
         </td>
         <td>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">가구 > 거울 > 높이 50cm 이상 > 1개</li>
-            <li class="list-group-item">가구 > 식탁(테이블) > 4인용 이상 > 1개</li>
-          </ul>
+          <table class="table table-borderless">
+            <c:forEach items="${wasteDataList}" var="item" varStatus="i">
+              <tr>
+                <td class="selectedItems" style="padding-bottom: 20px; padding-top: 20px; border-bottom: 1px solid #ccc;">
+                  <span class="selectSpan">선택 ${i.index + 1}</span><span>${item.wasteCategory.wasteCategoryName} > ${item.wasteType.wasteTypeName} > ${item.wasteInfo.wasteInfoStandard}</span>
+                </td>
+              </tr>
+            </c:forEach>
+          </table>
         </td>
       </tr>
       <tr>
