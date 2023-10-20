@@ -7,6 +7,7 @@
         <association property="wasteInfo" resultMap="wasteInfo"/>
     </resultMap>
     <resultMap id="reservationComplete" type="com.bringbring.reservation.domain.ReservationComplete">
+        <association property="wasteData" resultMap="wasteDataResultMap"/>
         <association property="wasteCategory" resultMap="wasteCategory"/>
         <association property="wasteType" resultMap="wasteType"/>
         <association property="wasteInfo" resultMap="wasteInfo"/>
@@ -35,6 +36,8 @@
         <id property="rvNo" column="RV_NO" />
         <result property="rvDischargeNo" column="RV_DISCHARGE_NO" />
         <result property="userNo" column="USER_NO" />
+        <result property="cityNo" column="CITY_NO" />
+        <result property="districtNo" column="DISTRICT_NO" />
         <result property="rvAddr" column="RV_ADDR" />
         <result property="rvPhone" column="RV_PHONE" />
         <result property="rvRequest" column="RV_REQUEST" />
@@ -99,12 +102,12 @@
     </resultMap>
 
     <insert id="insertResertvation" parameterType="com.bringbring.reservation.domain.Reservation" >
-        insert into RESERVATION_TBL values (SEQ_RV_NO.NEXTVAL, TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(SEQ_RV_DISCHARGE_NO.NEXTVAL, 8, '0'), #{userNo}, #{rvAddr}, #{rvPhone}, #{rvRequest}, #{rvName},
+        insert into RESERVATION_TBL values (SEQ_RV_NO.NEXTVAL, TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(SEQ_RV_DISCHARGE_NO.NEXTVAL, 8, '0'), #{userNo}, #{cityNo}, #{districtNo}, #{rvAddr}, #{rvPhone}, #{rvRequest}, #{rvName},
                                             #{rvAddrDetail}, DEFAULT, #{rvRvDate}, DEFAULT, DEFAULT)
     </insert>
-<!--    <insert id="insertReservationDetail">-->
-<!--        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, #{rvDetailTotal}, #{rvDetailFee})-->
-<!--    </insert>-->
+    <!--    <insert id="insertReservationDetail">-->
+    <!--        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, #{rvDetailTotal}, #{rvDetailFee})-->
+    <!--    </insert>-->
     <insert id="insertReservationDetail" parameterType="com.bringbring.reservation.domain.ReservationDetail" >
         <selectKey keyProperty="rvDeatilNo" resultType="int" order="BEFORE">
             select SEQ_RV_DETAIL_SELECT_NO.nextval as rvDeatilNo from dual
@@ -117,29 +120,29 @@
             select SEQ_RV_IMAGE_SELECT_NO.NEXTVAL as imageNo from dual
         </selectKey>
         insert into IMAGE_TBL values (
-                                         SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath}
-                                     )
+        SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath}
+        )
     </insert>
     <insert id="insertConnection">
         insert into RV_CONNECTION_TBL values (
-                                              SEQ_RV_CONNECTION_NO.NEXTVAL, #{rvDetailNo}, #{wasteInfoNo}, #{imageNo}
+                                                 SEQ_RV_CONNECTION_NO.NEXTVAL, #{rvDetailNo}, #{wasteInfoNo}, #{imageNo}
                                              )
     </insert>
     <insert id="insertPay">
         insert into PAY_TBL values (
-                                    SEQ_PAY_NO.NEXTVAL, #{rvDetailNo}, #{userId}, #{payId}, #{payMethod}, #{payAmount}, #{payCurrency}, SYSDATE, DEFAULT, DEFAULT
+                                       SEQ_PAY_NO.NEXTVAL, #{rvDetailNo}, #{userId}, #{payId}, #{payMethod}, #{payAmount}, #{payCurrency}, SYSDATE, DEFAULT, DEFAULT
                                    )
     </insert>
 
-<!--    <insert id="insertReservationDetail">-->
-<!--        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, )-->
-<!--    </insert>-->
+    <!--    <insert id="insertReservationDetail">-->
+    <!--        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, )-->
+    <!--    </insert>-->
 
 
     <select id="selectWasteList" resultMap="wasteDataResultMap">
         select * from WASTE_CATEGORY_TBL
-            JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
-            JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
+                          JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
+                          JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
         where WASTE_CATEGORY_NAME=#{wasteCategoryName}
 
     </select>
@@ -148,8 +151,8 @@
     </select>
     <select id="slectInfoNoData" resultMap="wasteDataResultMap">
         select * from WASTE_CATEGORY_TBL
-            JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
-            JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
+                          JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
+                          JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
         where WASTE_INFO_NO=#{value}
     </select>
     <select id="selectRvDetailMaxNo" resultType="ReservationDetail">
@@ -168,10 +171,6 @@
                           join RESERVATION_TBL using (RV_NO)
                           join PAY_TBL using (RV_DETAIL_NO)
         where PAY_ID = #{value}
-    </select>
-
-    <select id="selectListResCount" resultType="_int">
-        SELECT COUNT(*) FROM RESERVATION_TBL
     </select>
 
     <select id="selectListCountByCompletionY" resultType="_int" >

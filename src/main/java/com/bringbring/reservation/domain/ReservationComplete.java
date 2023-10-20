@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ReservationComplete {
 
+    private WasteData wasteData;
     private Reservation reservation;
     private ReservationDetail reservationDetail;
     private WasteCategory wasteCategory;

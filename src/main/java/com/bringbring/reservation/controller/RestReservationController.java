@@ -56,14 +56,31 @@ public class RestReservationController {
         Map<String, Object> imageAdd = (Map<String, Object>) session.getAttribute("imageAdd");
         Reservation reservationUserInfo = (Reservation) session.getAttribute("reservationUserInfo");
 
-        List<Object> insertInfo = new ArrayList<>();
-        insertInfo.add(selectedItems);
-        insertInfo.add(imageAdd);
-        insertInfo.add(reservationUserInfo);
-        insertInfo.add(reservationDetail);
-        insertInfo.add(pay);
+//        Integer result = 0;
+//
+//        try {
+
+            List<Object> insertInfo = new ArrayList<>();
+            insertInfo.add(selectedItems);
+            insertInfo.add(imageAdd);
+            insertInfo.add(reservationUserInfo);
+            insertInfo.add(reservationDetail);
+            insertInfo.add(pay);
 
         Integer result = reservationService.insertReservation(selectedItems, imageAdd, reservationUserInfo, reservationDetail, pay);
+        System.out.println("result = " + result);
+
+            String payId = pay.getPayId();
+
+            List<ReservationComplete> reservationComplete = reservationService.selectReservationCompleteInfo(payId);
+
+
+            session.setAttribute("reservationComplete", reservationComplete);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("e.getMessage() = " + e.getMessage());
+//        }
+
 
         String payId = pay.getPayId();
 

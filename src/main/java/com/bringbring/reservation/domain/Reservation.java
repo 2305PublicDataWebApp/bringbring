@@ -1,9 +1,11 @@
 package com.bringbring.reservation.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,11 +22,13 @@ public class Reservation {
     private String rvRequest;
     private String rvName;
     private String rvAddrDetail;
-    private LocalDateTime rvApplicationDate;
-    @NonNull
+    private Date rvApplicationDate;
+    //    @NonNull
     private Date rvRvDate;
     private char isRvCompletion;
     private char isRvCancel;
+    private int cityNo;
+    private int districtNo;
 }
 
 
