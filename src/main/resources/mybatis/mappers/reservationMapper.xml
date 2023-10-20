@@ -21,6 +21,83 @@
         <result property="wasteInfoStandard" column="WASTE_INFO_STANDARD" />
         <result property="wasteInfoFee" column="WASTE_INFO_FEE" />
     </resultMap>
+    <resultMap id="reservationResultMap" type="com.bringbring.reservation.domain.Reservation">
+        <id property="rvNo" column="RV_NO" />
+        <result property="rvDischargeNo" column="RV_DISCHARGE_NO" />
+        <result property="userNo" column="USER_NO" />
+        <result property="rvAddr" column="RV_ADDR" />
+        <result property="rvPhone" column="RV_PHONE" />
+        <result property="rvRequest" column="RV_REQUEST" />
+        <result property="rvName" column="RV_NAME" />
+        <result property="rvAddrDetail" column="RV_ADDR_DETAIL" />
+        <result property="rvApplicationDate" column="RV_APPLICATION_DATE" />
+        <result property="rvRvDate" column="RV_RV_DATE" />
+        <result property="isRvCompletion" column="IS_RV_COMPLETION" />
+        <result property="isRvCancel" column="IS_RV_CANCEL" />
+    </resultMap>
+    <resultMap id="reservationDetailResultMap" type="com.bringbring.reservation.domain.ReservationDetail">
+        <id property="rvDeatilNo" column="RV_DETAIL_NO" />
+        <result property="rvNo" column="RV_NO" />
+        <result property="rvDetailTotal" column="RV_DETAIL_TOTAL" />
+        <result property="rvDetailFee" column="RV_DETAIL_FEE" />
+    </resultMap>
+    <resultMap id="payResultMap" type="com.bringbring.reservation.domain.Pay">
+        <id property="payNo" column="PAY_NO" />
+        <result property="rvDetailNo" column="RV_DETAIL_NO" />
+        <result property="userId" column="USER_ID" />
+        <result property="payId" column="PAY_ID" />
+        <result property="payMethod" column="PAY_METHOD" />
+        <result property="payAmount" column="PAY_AMOUNT" />
+        <result property="payCurrency" column="PAY_CURRENCY" />
+        <result property="payDate" column="PAY_DATE" />
+        <result property="isPayStatus" column="IS_PAY_STATUS" />
+        <result property="isPayCancel" column="IS_PAY_CANCEL" />
+    </resultMap>
+    <resultMap id="image" type="com.bringbring.image.domain.Image">
+        <id property="imageNo" column="IMAGE_NO" />
+        <result property="tableName" column="TABLE_NAME" />
+        <result property="imageGroupNo" column="IMAGE_GROUP_NO" />
+        <result property="imageName" column="IMAGE_NAME" />
+        <result property="imageRename" column="IMAGE_RENAME" />
+        <result property="imagePath" column="IMAGE_PATH" />
+    </resultMap>
+
+    <insert id="insertResertvation" parameterType="com.bringbring.reservation.domain.Reservation" >
+        insert into RESERVATION_TBL values (SEQ_RV_NO.NEXTVAL, TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(SEQ_RV_DISCHARGE_NO.NEXTVAL, 8, '0'), #{userNo}, #{rvAddr}, #{rvPhone}, #{rvRequest}, #{rvName},
+                                            #{rvAddrDetail}, DEFAULT, #{rvRvDate}, DEFAULT, DEFAULT)
+    </insert>
+<!--    <insert id="insertReservationDetail">-->
+<!--        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, #{rvDetailTotal}, #{rvDetailFee})-->
+<!--    </insert>-->
+    <insert id="insertReservationDetail" parameterType="com.bringbring.reservation.domain.ReservationDetail" >
+        <selectKey keyProperty="rvDeatilNo" resultType="int" order="BEFORE">
+            select SEQ_RV_DETAIL_SELECT_NO.nextval as rvDeatilNo from dual
+        </selectKey>
+        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, #{rvDetailTotal}, #{rvDetailFee})
+    </insert>
+
+    <insert id="insertReservationImage" parameterType="com.bringbring.image.domain.Image">
+        <selectKey keyProperty="imageNo" resultType="int" order="BEFORE" >
+            select SEQ_RV_IMAGE_SELECT_NO.NEXTVAL as imageNo from dual
+        </selectKey>
+        insert into IMAGE_TBL values (
+                                         SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath}
+                                     )
+    </insert>
+    <insert id="insertConnection">
+        insert into RV_CONNECTION_TBL values (
+                                              SEQ_RV_CONNECTION_NO.NEXTVAL, #{rvDetailNo}, #{wasteInfoNo}, #{imageNo}
+                                             )
+    </insert>
+    <insert id="insertPay">
+        insert into PAY_TBL values (
+                                    SEQ_PAY_NO.NEXTVAL, #{rvDetailNo}, #{userId}, #{payId}, #{payMethod}, #{payAmount}, #{payCurrency}, SYSDATE, DEFAULT, DEFAULT
+                                   )
+    </insert>
+
+<!--    <insert id="insertReservationDetail">-->
+<!--        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, )-->
+<!--    </insert>-->
 
 
     <select id="selectWasteList" resultMap="wasteDataResultMap">
@@ -33,11 +110,17 @@
     <select id="selectWasteCategoryList" resultType="WasteCategory">
         select * from WASTE_CATEGORY_TBL
     </select>
-    <select id="sleectInfoNoData" resultMap="wasteDataResultMap">
+    <select id="slectInfoNoData" resultMap="wasteDataResultMap">
         select * from WASTE_CATEGORY_TBL
             JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
             JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
         where WASTE_INFO_NO=#{value}
+    </select>
+    <select id="selectRvDetailMaxNo" resultType="ReservationDetail">
+        SELECT MAX(RV_DETAIL_NO) FROM RESERVATION_DETAIL_TBL
+    </select>
+    <select id="selectReservationImage" resultType="Image">
+        select IMAGE_NO from IMAGE_TBL where IMAGE_RENAME = #{value}
     </select>
 
 </mapper>

@@ -97,7 +97,7 @@
                 <div class="container">
                     <div class="row mb-4">
                         <div class="form-floating col-10 p-0">
-                            <input type="text" id="floatingPostcode" class="form-control" name="userPostCode" placeholder="Postcode" value="${userOne.userPostCode }" required>
+                            <input type="text" id="floatingPostcode" class="form-control" name="userPostCode" placeholder="Postcode" value="${userOne.userPostCode }" required readonly>
                             <label for="floatingPostcode">우편번호</label>
                             <div class="invalid-feedback">
                                 주소를 검색하여 입력해주세요.
@@ -174,7 +174,7 @@
     	//프로필 업로드 및 미리보기
         const profileImageInput = document.getElementById('profile_img');
         const profileImagePreview = document.getElementById('profile_image_preview');
-        const defaultProfileImage = 'Test_img2.png';
+        const defaultProfileImage = 'default_image.png';
 
         profileImageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];

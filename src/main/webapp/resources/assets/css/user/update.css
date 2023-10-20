@@ -68,7 +68,7 @@ main .insert_btn_input:active
 }
 
 /* 이미지 미리보기 스타일 - 이미지가 없을 때 */
-#profile_image_preview[src="Test_img2.png"] {
+#profile_image_preview[src="default_image.png"] {
     width: 120px; /* 너비 설정 */
     height: 120px; /* 높이 설정 */
     border-radius: 50%; /* 동그라미 모양 */

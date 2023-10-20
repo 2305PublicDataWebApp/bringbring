@@ -51,17 +51,5 @@ public class SocialLoginController {
 		}
 		
 	}
-//	
-//	private final SocialLoginService socialLoginService;
-//	
-//	
-//	@GetMapping("/naverLogin.do")
-//	public String naverLogin(
-//			Model model) {
-//		String naverLoginurl = socialLoginService.getNaverAuthorizeUrl("auhtorize");
-//		model.addAttribute("naverUrl", naverLoginurl);
-//		return "redirect:"+naverLoginurl;
-//	}
-	
 
 }

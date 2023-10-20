@@ -7,11 +7,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class ReservationDetail {
-    private int rvDeatilNo;
-    private int rvNo;
-    private int rvDetailTotal;
-    private int rvDetailFee;
+@NoArgsConstructor
+public class Connection {
+
+    private int rvConnectionNo;
+    private int rvDetailNo;
+    private int wasteInfoNo;
+    private int imageNo;
 }

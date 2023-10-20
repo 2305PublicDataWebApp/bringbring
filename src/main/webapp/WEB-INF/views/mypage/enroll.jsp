@@ -73,7 +73,7 @@
             <div class="mypage_top_div ps-5 pb-3 mt-3" style="height:75px;">
                 <h1 class="d-inline">일용자님</h1>
                 <div class="d-inline">
-                    <a href="#">
+                    <a href="/user/update.do">
                         <img src="../resources/assets/img/mypage/mypage_gear.png" class="h-100 pb-3">
                     </a>
                 </div>
@@ -82,8 +82,8 @@
             <div class="container">
                 <div class="row" style="min-height:750px;">
                     <div class="mypage_sidebar col-3 p-5">
-                        <a href="#" class="fs-1">신청 내역</a>
-                        <a href="#" class="fs-1">문의 내역</a>
+                        <a href="/mypage/enroll.do" class="fs-1">신청 내역</a>
+                        <a href="/mypage/inquire.do" class="fs-1">문의 내역</a>
                         <a href="#" class="fs-1">채팅 내역</a>
                     </div>
                     <div class="col-9 ps-5 pt-5">
@@ -119,7 +119,7 @@
                                     <p class="fs-4">결재 금액 5,000원</p>
                                 </div>
                                 <div class="col-3 text-end">
-                                    <a href="#">상세보기 >></a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#enroll_modal">상세보기 >></a>
                                     <p class="fw-1 fs-1 pt-5">신청 취소</p>
                                 </div>
                             </div>
@@ -137,7 +137,7 @@
                                     <p class="fs-4">결재 금액 5,000원</p>
                                 </div>
                                 <div class="col-3 text-end">
-                                    <a href="#">상세보기 >></a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#enroll_modal">상세보기 >></a>
                                     <p class="fw-1 fs-1 pt-5">처리 완료</p>
                                 </div>
                             </div>

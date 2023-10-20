@@ -21,7 +21,7 @@ public class Pay {
     private String payCurrency;
     private Date payDate;
     private char isPayStatus;
-    private Character isPayCancel;
+    private char isPayCancel;
 
 
 }

@@ -7,6 +7,7 @@ import com.bringbring.inquire.store.InquireStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.service.InquireService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +45,9 @@ public class InquireServiceImpl implements InquireService {
 
     @Override
     public int searchInqListCount(Map<String, String> paramMap) { return inquireStore.searchInqListCount(paramMap); }
+  
+    @Override
+	  public List<Inquire> selectInquireListByUserNo(int userNo) { return inquireStore.selectInquireListByUserNo(userNo); }
 
 //    @Override
 //    public int insertInquire(Inquire inquire, MultipartFile[] uploadFiles, HttpServletRequest request) {

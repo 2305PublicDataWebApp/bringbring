@@ -206,7 +206,9 @@
 
   function requestPay() {
     let uidDate = new dayjs().format("YYYYMMDDTHHmmss");
-    const Fee = document.querySelector('#rvDetailFee').value;
+    const rvDetailTotal = ${reservationDetail.rvDetailTotal};
+    // const Fee = document.querySelector('#rvDetailFee').value;
+    const Fee = 100;
     const userEmail = '${sessionScope.sessionId}';
     const userName = '${sessionScope.sessionName}';
 
@@ -222,7 +224,7 @@
         pay_currency: "₩",
         merchant_uid: "BRING"+ uidDate,
         name: "브링브링",
-        amount: 100,
+        amount: Fee,
         buyer_email: userEmail,
         buyer_name: userName
         // buyer_tel: "010-4242-4242",
@@ -233,21 +235,29 @@
         if (rsp.success) {
           // 결제 성공 시 로직
           let msg = '결제가 완료되었습니다.';
+          let date = dayjs();
+          let format = "YYYY-MM-DD HH:mm:s";
+          let nowDate = date.format(format);
           console.log(msg);
 
           $.ajax({
             type: "GET",
             url: '/reservation/pay.do',
             data: {
-              payAmount: 100,
+              userId : userEmail,
+              rvDetailTotal: rvDetailTotal,
+              rvDetailFee: Fee,
+              payAmount: Fee,
               payMethod: "card",
+              payCurrency: "₩",
+              // payDate: nowDate,
               // imp_uid: rsp.imp_uid,
               payId: rsp.merchant_uid
             },
-            success: function (result) {
+            success: function () {
               location.href="/reservation/payComplete.do";
             },
-            error: function (result) {
+            error: function () {
               alert("Ajax 오류! 관리자에게 문의하세요");
             }
           });

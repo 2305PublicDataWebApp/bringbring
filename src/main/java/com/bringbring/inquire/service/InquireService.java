@@ -75,4 +75,11 @@ public interface InquireService {
      * @return
      */
 //    int insertInquire(Inquire inquire, MultipartFile[] uploadFiles, HttpServletRequest request);
-}
+
+    /**
+	  * 회원별 문의내역 리스트 service
+	  * @param userNo
+	  * @return Inquire
+	  */
+	  List<Inquire> selectInquireListByUserNo(int userNo);
+
