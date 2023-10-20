@@ -23,6 +23,7 @@
     </resultMap>
     <resultMap id="reservationResultMap" type="com.bringbring.reservation.domain.Reservation">
         <id property="rvNo" column="RV_NO" />
+        <result property="rvDischargeNo" column="RV_DISCHARGE_NO" />
         <result property="userNo" column="USER_NO" />
         <result property="rvAddr" column="RV_ADDR" />
         <result property="rvPhone" column="RV_PHONE" />
@@ -61,8 +62,8 @@
         <result property="imagePath" column="IMAGE_PATH" />
     </resultMap>
 
-    <insert id="insertResertvation">
-        insert into RESERVATION_TBL values (SEQ_RV_NO.NEXTVAL, #{userNo}, #{rvAddr}, #{rvPhone}, #{rvPhone}, #{rvName},
+    <insert id="insertResertvation" parameterType="com.bringbring.reservation.domain.Reservation" >
+        insert into RESERVATION_TBL values (SEQ_RV_NO.NEXTVAL, TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(SEQ_RV_DISCHARGE_NO.NEXTVAL, 8, '0'), #{userNo}, #{rvAddr}, #{rvPhone}, #{rvRequest}, #{rvName},
                                             #{rvAddrDetail}, DEFAULT, #{rvRvDate}, DEFAULT, DEFAULT)
     </insert>
 <!--    <insert id="insertReservationDetail">-->
