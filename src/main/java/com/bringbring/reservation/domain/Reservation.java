@@ -15,6 +15,8 @@ public class Reservation {
     private int rvNo;
     private String rvDischargeNo;
     private int userNo;
+    private int cityNo;
+    private int districtNo;
     private String rvAddr;
     private String rvPhone;
     private String rvRequest;

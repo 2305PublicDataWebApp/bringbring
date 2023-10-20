@@ -85,7 +85,7 @@
           </div>
         </div>
         <div class="col-md-3">
-          <button onclick="location.href='/admin/reservationM.do'" class="region-btn" style="width: 300px; height: 80px; border: none;">
+          <button onclick="location.href='/admin/reservationList.do'" class="region-btn" style="width: 300px; height: 80px; border: none;">
               <h4>전체 예약조회</h4> 
           </div>
         </div>

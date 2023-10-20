@@ -90,5 +90,6 @@ public interface InquireService {
      * @return Inquire
      */
     List<Inquire> selectInquireListByUserNo(int userNo);
+
 }
 

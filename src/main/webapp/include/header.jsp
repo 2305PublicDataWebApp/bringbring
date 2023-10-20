@@ -46,7 +46,7 @@
 								<li><a href="/admin/reportList.do">신고 관리</a></li>
 							</c:if>
 							<li><a href="/admin/contactList.do">문의 관리</a></li>
-							<li><a href="/admin/reservationM.do">배출 관리</a></li>
+							<li><a href="/admin/reservationList.do">배출 관리</a></li>
 						</ul>
 					</li>
 				</c:if>
