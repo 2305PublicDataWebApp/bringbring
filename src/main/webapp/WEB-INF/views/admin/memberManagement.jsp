@@ -151,7 +151,6 @@
                             탈퇴 승인
                           </button>
                         </c:if>
-
                       </td>
                     </tr>
                     <div class="modal fade" id="adminModal" tabindex="-1"

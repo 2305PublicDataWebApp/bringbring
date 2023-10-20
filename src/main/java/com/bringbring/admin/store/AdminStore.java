@@ -5,6 +5,8 @@ import com.bringbring.admin.domain.AdminDetails;
 import com.bringbring.admin.domain.Role;
 import com.bringbring.common.PageInfo;
 import com.bringbring.report.domain.ReportDetails;
+import com.bringbring.reservation.domain.Reservation;
+import com.bringbring.reservation.domain.ReservationAdmin;
 import com.bringbring.user.domain.User;
 
 import java.util.List;
@@ -124,5 +126,28 @@ public interface AdminStore {
      */
     int deleteRole(int userNo);
 
+    /**
+     * 예약 건 수 조회 store
+     * @return
+     */
+    int selectListResCount();
 
+    /**
+     *  예약 완료된 갯수 조회 store
+     * @return
+     */
+    int selectListCountByCompletionY();
+
+    /**
+     * 예약 접수된 갯수 조회 store
+     * @return
+     */
+    int selectListCountByCompletionN();
+
+    /**
+     * 예약 리스트 조회 store
+     * @param pInfo
+     * @return
+     */
+    List<ReservationAdmin> selectReservationList(PageInfo pInfo);
 }

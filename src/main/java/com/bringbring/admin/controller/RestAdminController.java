@@ -122,4 +122,5 @@ public class RestAdminController {
         return ResponseEntity.ok(reportDetailsList);
     }
 
+
 }
