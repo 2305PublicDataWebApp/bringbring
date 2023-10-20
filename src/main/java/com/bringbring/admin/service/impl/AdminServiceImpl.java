@@ -7,6 +7,8 @@ import com.bringbring.admin.domain.Role;
 import com.bringbring.admin.store.AdminStore;
 import com.bringbring.common.PageInfo;
 import com.bringbring.report.domain.ReportDetails;
+import com.bringbring.reservation.domain.Reservation;
+import com.bringbring.reservation.domain.ReservationAdmin;
 import com.bringbring.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -110,6 +112,18 @@ public class AdminServiceImpl implements AdminService  {
 
     @Override
     public int deleteRole(int userNo) { return adminStore.deleteRole(userNo);}
+
+    @Override
+    public int selectListResCount() { return adminStore.selectListResCount(); }
+
+    @Override
+    public int selectListCountByCompletionY() { return adminStore.selectListCountByCompletionY(); }
+
+    @Override
+    public int selectListCountByCompletionN() { return adminStore.selectListCountByCompletionN(); }
+
+    @Override
+    public List<ReservationAdmin> selectReservationList(PageInfo pInfo) { return adminStore.selectReservationList(pInfo); }
 
 
 }

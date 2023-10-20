@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -72,17 +74,17 @@
       <div class="row">
         <div class="four col-md-3">
           <div class="counter-box colored">
-            <h4>배출예약 건수 : 100</h4>
+            <h4>누적신청수  : ${resCount}</h4>
           </div>
         </div>
         <div class="col-md-3">
           <div class="counter-box colored">
-              <h4>접수된 건수 : 50</h4>
+              <h4>신청접수 : ${resCountX}</h4>
           </div>
         </div>
         <div class="col-md-3">
           <div class="counter-box colored">
-              <h4>완료된 건수 : 50</h4>
+              <h4>예약완료 : ${resCountY}</h4>
           </div>
         </div>
         <div class="col-md-3">
@@ -109,12 +111,11 @@
       </div>
       <br/>
       <div class="table-responsive">
-        <table class="table align-middle text-center table-hover">
-            <thead class="table-light align-middle">
+        <table class="table align-middle text-center">
+            <thead class="table-success align-middle">
                 <tr>
                     <th>예약 번호</th>
-                    <th>이름</th>
-                    <th>주소</th>
+                    <th>신청자</th>
                     <th>배출지역</th>
                     <th>신청일</th>
                     <th>예약일</th>
@@ -122,29 +123,55 @@
                     <th>상태</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr onclick="location.href='../admin/emissionManagement.html'" style="cursor:pointer;">
-                  <td>1</td>
-                  <td>정수댕</td>
-                  <td>서울시 동대문구 전농동</td>
-                  <td>전농동</td>
-                  <td>2023-10-01</td>
-                  <td>2023-10-03</td>
-                  <td>O</td>
-                  <td>예약 완료</td>
-                </tr>
-                <tr onclick="location.href='../admin/emissionManagement.html'" style="cursor:pointer;">
-                  <td>2</td>
-                  <td>김아름</td>
-                  <td>의정부시</td>
-                  <td>수댕동</td>
-                  <td>2023-10-02</td>
-                  <td>2023-10-05</td>
-                  <td>O</td>
-                  <td>접수 완료</td>
-                </tr> 
-            </tbody>
+          <tbody>
+          <c:forEach var="res" items="${resList}" varStatus="r">
+            <tr>
+              <td>${res.reservation.rvNo}</td>
+              <td>${res.reservation.rvName}</td>
+              <td>${res.district.districtName}</td>
+              <fmt:parseDate value="${res.reservation.rvApplicationDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime" type="both" />
+              <td><fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" /></td>
+              <td>${res.reservation.rvRvDate}</td>
+              <td>${res.pay.isPayStatus}</td>
+              <td>
+                  <c:if test="${res.reservation.isRvCompletion.toString() eq 'Y'}">
+                      <p>접수완료</p>
+                  </c:if>
+                <c:if test="${res.reservation.isRvCompletion.toString() eq 'N'}">
+                  <button type="button" class="btn btn-success" onclick="redirectToReservationDetail(${res.reservation.rvNo})">
+                    예약처리
+                  </button>
+                </c:if>
+              </td>
+            </tr>
+          </c:forEach>
+          </tbody>
         </table>
+        <div class="mt-5 d-flex justify-content-center">
+          <nav aria-label="Page navigation exampler">
+            <ul class="pagination">
+              <c:if test="${pInfo.startNavi ne '1' }">
+                <li class="page-item"><a class="page-link" href="/admin/reservationList.do?page=${pInfo.startNavi-1 }" class="first"><i class="bi bi-chevron-left"></i></a></li>
+              </c:if>
+              <c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }" var="p">
+                <c:url var="pageUrl" value="/admin/reservationList.do">
+                  <c:param name="page" value="${p }"></c:param>
+                </c:url>
+                <c:choose>
+                  <c:when test="${p == pInfo.currentPage}">
+                    <li class="page-item active" ><a href="${pageUrl}" class="page-link" style="background-color:#00AD7C; border-color: #00AD7C">${p}</a></li>
+                  </c:when>
+                  <c:otherwise>
+                    <li class="page-item"><a href="${pageUrl}" class="page-link">${p}</a></li>
+                  </c:otherwise>
+                </c:choose>
+              </c:forEach>
+              <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount }">
+                <li class="page-item"><a class="page-link" href="/admin/reservationList.do?page=${pInfo.endNavi+1 }" class="last"><i class="bi bi-chevron-right"></i></a></li>
+              </c:if>
+            </ul>
+          </nav>
+        </div>
     </div>
     </section>
 
@@ -209,8 +236,13 @@
       });  
     });
 
+    function redirectToReservationDetail(reNo) {
+      var url = '/admin/reservationDetail.do?reNo=' + reNo;
+      window.location.href = url;
+    }
   </script>
-  
+
+
   
 </body>
 
