@@ -132,11 +132,11 @@
             <td>${admin.userPhone}</td>
             <td>${admin.adminCreateDate}</td>
             <td>${admin.regionName}</td>
-            <c:if test="${admin.adminNo ne 1}">
               <td>
+            <c:if test="${admin.q ne 1}">
                 <button class="btn btn-success" onclick="confirmAdminRemoval(${admin.userNo})">관리자 해임</button>
-              </td>
             </c:if>
+              </td>
           </tr>
         </c:forEach>
         </tbody>

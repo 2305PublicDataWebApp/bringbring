@@ -1,8 +1,11 @@
 package com.bringbring.inquire.service;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.domain.InquireDetails;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +66,16 @@ public interface InquireService {
      * @return
      */
     int searchInqListCount(Map<String, String> paramMap);
-  
+
+    /**
+     * 문의 등록 service
+     * @param inquire
+     * @param uploadFiles
+     * @param request
+     * @return
+     */
+//    int insertInquire(Inquire inquire, MultipartFile[] uploadFiles, HttpServletRequest request);
+
     /**
 	  * 회원별 문의내역 리스트 service
 	  * @param userNo
@@ -71,4 +83,3 @@ public interface InquireService {
 	  */
 	  List<Inquire> selectInquireListByUserNo(int userNo);
 
-}

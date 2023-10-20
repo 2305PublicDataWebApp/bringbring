@@ -149,37 +149,33 @@
                                   aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <input type="hidden" class="form-control" id="divNoModal"
-                                   name="memberId" required value="${report.divNo}">
-                            <div class="mb-3">
-                              <label  class="form-label"><h6>제목</h6></label>
-                              <div style="width: 100%;height:40px; resize: none;border: 1px solid #dee2e6; padding: 5px;">
-                                ${report.divTitle}
-                              </div>
+                          <input type="text" class="form-control" id="divNoModal"
+                                 name="memberId" required>
+                          <div class="mb-3">
+                            <label  class="form-label"><h6>제목</h6></label>
+                            <div id="modalTitle" style="width: 100%;height:40px; resize: none;border: 1px solid #dee2e6; padding: 5px;">
                             </div>
-                            <div class="mb-3">
-                              <label class="form-label"><h6>작성자</h6></label>
-                              <div style="width: 100%;height:40px; resize: none;border: 1px solid #dee2e6; padding: 5px;">
-                                ${report.userId}
-                              </div>
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label"><h6>작성자</h6></label>
+                            <div id="modalUserId" style="width: 100%;height:40px; resize: none;border: 1px solid #dee2e6; padding: 5px;">
                             </div>
-                            <div class="mb-3">
-                              <label class="form-label"><h6>글내용</h6></label>
-                              <div style="width: 100%;height:150px; resize: none;border: 1px solid #dee2e6; padding: 5px;">
-                               ${report.divContent}
-                              </div>
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label"><h6>글내용</h6></label>
+                            <div id="modalContent"  style="width: 100%;height:150px; resize: none;border: 1px solid #dee2e6; padding: 5px;">
                             </div>
-                            <div class="mb-3">
-                              <label  class="form-label"><h6>신고유형</h6></label>
-                              <div>
-                                  ${report.repCategory}
-                              </div>
+                          </div>
+                          <div class="mb-3">
+                            <label  class="form-label"><h6>신고유형</h6></label>
+                            <div id="modalCategory" >
                             </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary"
-                                      data-bs-dismiss="modal">닫기</button>
-                              <button type="submit" class="btn btn-success" onclick="confirmDivideRemoval(${report.divNo})">게시글 삭제</button>
-                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">닫기</button>
+                            <button type="submit" class="btn btn-success" onclick="confirmDivideRemoval(${report.divNo})">게시글 삭제</button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -282,7 +278,47 @@
       });  
     });
 
-    //관리자 해임
+    $(document).ready(function () {
+      // 모달이 열릴 때의 이벤트 리스너 등록
+      $('#reportModal').on('show.bs.modal', function (e) {
+        var button = $(e.relatedTarget);
+        var divNo = button.data('div-no');
+        $('#divNoModal').val(divNo);
+        $.ajax({
+          url: '/admin/reportListDetail.do',
+          type: 'GET',
+          data: { divNo: divNo },
+          dataType: 'json',
+          success: function(response) {
+            var reportDetails = response; // 서버에서 반환한 JSON 데이터를 변수에 저장
+            var plainTextContent = stripHtmlTags(reportDetails[0].divContent);
+            $('#modalTitle').text(reportDetails[0].divTitle); // 예시: 첫 번째 객체의 divTitle을 표시
+            $('#modalContent').text(plainTextContent); // 예시: 첫 번째 객체의 divContent를 표시
+            $('#modalCategory').text(reportDetails[0].repCategory); // 예시: 첫 번째 객체의 repCategory를 표시
+            $('#modalUserId').text(reportDetails[0].userId); // 예시: 첫 번째 객체의 repCategory를 표시
+          },
+          error: function(error) {
+            console.error('Error fetching divide details: ', error);
+          }
+        });
+
+      });
+
+      function stripHtmlTags(html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+      }
+      // 신고글 삭제 버튼 클릭 시 이벤트 처리
+      $(document).on('click', '.report-button', function() {
+        var divNo = $(this).data('div-no');
+        confirmDivideRemoval(divNo);
+      });
+
+    });
+
+
+
+    //신고글 삭제
     function confirmDivideRemoval(divNo) {
       var confirmation = confirm("신고글을 삭제하시겠습니까?");
       if (confirmation) {
@@ -305,6 +341,7 @@
         });
       }
     }
+
 
   </script>
   
