@@ -103,7 +103,7 @@
                 <div class="container">
                     <div class="row mb-4">
                         <div class="form-floating col-10 p-0">
-                            <input type="text" id="floatingPostcode" class="form-control" name="userPostCode" placeholder="Postcode" required>
+                            <input type="text" id="floatingPostcode" class="form-control" name="userPostCode" placeholder="Postcode" required readonly>
                             <label for="floatingPostcode">우편번호</label>
                             <div class="invalid-feedback">
                                 주소를 검색하여 입력해주세요.
@@ -185,7 +185,7 @@
         });
         
      	// 입력란에서 입력이 발생할 때 전화번호 유효성 검사
-        document.getElementById('floatingPhone').addEventListener("input", function (event) {
+        document.getElementById('floatingPhone').addEventListener("keyup", function (event) {
 	        const phoneValue = document.getElementById('floatingPhone').value;
 			
             // 전화번호 유효성 검사 (예: 숫자로만 이루어져야 함)
@@ -197,7 +197,8 @@
 		        phoneError.style.height = "10px";
                 phoneError.innerHTML = "숫자만 입력 가능합니다.";
                 phoneError.style.color = "red";
-            }else {
+            }
+            if(phoneValue === ""){
             	phoneError.innerHTML = "전화번호를 입력해주세요.";
             	phoneError.classList.remove('mt-1')
 	            phoneError.classList.add('invalid-feedback');

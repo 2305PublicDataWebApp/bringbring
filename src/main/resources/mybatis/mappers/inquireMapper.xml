@@ -91,4 +91,8 @@
 			WHERE i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
 		</if>
 	</select>
+  
+  <select id="selectInquireListByUserNo" resultType="Inquire">
+		SELECT * FROM INQUIRE_TBL WHERE USER_NO = #{userNo } AND IS_INQ_DELETED = 'N' ORDER BY INQ_NO DESC
+  </select>
 </mapper>

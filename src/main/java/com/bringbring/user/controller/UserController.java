@@ -37,6 +37,7 @@ public class UserController {
 	private final AdminService adminService;
 	private final UserService userService;
 	private final EmailService emailService;
+	private final SocialLoginService socialLoginService;
 
 	// 로그인 
 	@GetMapping("/login.do")
@@ -73,8 +74,12 @@ public class UserController {
 	// 로그아웃 기능
 	@GetMapping("/logout.do")
 	public String userLogout(
-			HttpSession session) {
+			HttpSession session) throws Exception {
+		String access_token = (String)session.getAttribute("access_token");
 		if(session != null) {
+			if(access_token != null) {				
+				socialLoginService.kakaoLogout(access_token);
+			}
 			session.invalidate();
 		}
 		return "redirect:/";
@@ -93,9 +98,9 @@ public class UserController {
 			@ModelAttribute User user
 			, Model model) {
 		
-		user.setUserProfileName("Test_img2.png");
-		user.setUserProfileRename("Test_img2.png");
-		user.setUserProfilePath("../resources/assets/img/mypage/Test_img2.png");
+		user.setUserProfileName("default_image.png");
+		user.setUserProfileRename("default_image.png");
+		user.setUserProfilePath("../resources/assets/img/mypage/default_image.png");
 		user.setUserProfileLength(0L);
 
 		int result = userService.insertUser(user);
