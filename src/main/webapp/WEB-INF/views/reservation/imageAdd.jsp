@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+         pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -15,7 +15,7 @@
 
   <!-- Favicons -->
   <link href="../../../resources/assets/img/main/title-icon.png" rel="icon">
-    <link href="../../../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../../../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -45,7 +45,7 @@
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  
+
   <link rel="stylesheet" href="../../../resources/assets/css/reservation/imageAdd.css">
   <link rel="stylesheet" href="../../../resources/assets/css/reservation/common.css">
 </head>
@@ -72,56 +72,56 @@
 </section>
 <div style="width: 100%;height: 1000px;">
 
-<main>
-  <h2 class="subject">대형 폐기물 사진 추가</h2>
-  <div>
-    <div class="progress-bar out-progress-bar">
-      <div class="progress-bar in-progress-bar"></div>
+  <main>
+    <h2 class="subject">대형 폐기물 사진 추가</h2>
+    <div>
+      <div class="progress-bar out-progress-bar">
+        <div class="progress-bar in-progress-bar"></div>
+      </div>
     </div>
-  </div>
-  <p class="title">선택할 물품 사진 추가</p>
-  <hr>
-  <div>
-    <form name="uploadForm" id="uploadForm" action="/reservation/addImage.do" method="post" enctype="multipart/form-data">
-    <table class="table">
-      <tbody>
-      <c:forEach items="${wasteDataList}" var="item" varStatus="i">
-          <tr>
-            <th scope="row">선택 ${i.index + 1}</th>
-            <td>${item.wasteType.wasteTypeName}</td>
-            <td>${item.wasteInfo.wasteInfoStandard}</td>
-            <td>${item.wasteInfo.wasteInfoFee}원</td>
-          </tr>
-        <tr class="pic-tr">
-          <td style="width: 12%">
-            <div class="file-Add-Td">
-              <div class="file-Add-Div list formList" data-list-id="${i.index}">
-                <div class="pic-Add-Btn">
-                  <img src="../../../resources/assets/img/reservation/pic-add.png">
+    <p class="title">선택할 물품 사진 추가</p>
+    <hr>
+    <div>
+      <form name="uploadForm" id="uploadForm" action="/reservation/addImage.do" method="post" enctype="multipart/form-data">
+        <table class="table">
+          <tbody>
+          <c:forEach items="${wasteDataList}" var="item" varStatus="i">
+            <tr>
+              <th scope="row">선택 ${i.index + 1}</th>
+              <td>${item.wasteType.wasteTypeName}</td>
+              <td>${item.wasteInfo.wasteInfoStandard}</td>
+              <td>${item.wasteInfo.wasteInfoFee}원</td>
+            </tr>
+            <tr class="pic-tr">
+              <td style="width: 12%">
+                <div class="file-Add-Td">
+                  <div class="file-Add-Div list formList" data-list-id="${i.index}">
+                    <div class="pic-Add-Btn">
+                      <img src="../../../resources/assets/img/reservation/pic-add.png">
+                    </div>
+                    <input type="file" name="uploadFiles" class="uploadImg" accept="image/*" required multiple="multiple" style="display: none;">
+                    <input type="hidden" class="wasteInfoNo" name="wasteInfoNo" value="${item.wasteInfo.wasteInfoNo}">
+                    <div class="pic-Add-Btn">
+                      <button class="btn btn-outline-success pic-Add-Btn" onclick="document.getElementById('uploadImg').click()">사진 추가</button>
+                    </div>
+                  </div>
                 </div>
-                <input type="file" name="uploadFiles" class="uploadImg" accept="image/*" required multiple="multiple" style="display: none;">
-                <input type="hidden" class="wasteInfoNo" name="wasteInfoNo" value="${item.wasteInfo.wasteInfoNo}">
-                <div class="pic-Add-Btn">
-                  <button class="btn btn-outline-success pic-Add-Btn" onclick="document.getElementById('uploadImg').click()">사진 추가</button>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td colspan="5">
-            <ul class="img-preview">
-            </ul>
-          </td>
-        </tr>
-      </c:forEach>
-      </tbody>
-    </table>
-    </form>
-  </div>
-  <div id="submit_btn_box">
-    <button class="btn btn-success" id="submitBtn" type="button" onclick="submitFormBtn();">사진 추가하기</button>
-<%--    <button class="btn btn-success" id="submitButton" type="button">사진 추가하기</button>--%>
-  </div>
-</main>
+              </td>
+              <td colspan="5">
+                <ul class="img-preview">
+                </ul>
+              </td>
+            </tr>
+          </c:forEach>
+          </tbody>
+        </table>
+      </form>
+    </div>
+    <div id="submit_btn_box">
+      <button class="btn btn-success" id="submitBtn" type="button" onclick="submitFormBtn();">사진 추가하기</button>
+      <%--    <button class="btn btn-success" id="submitButton" type="button">사진 추가하기</button>--%>
+    </div>
+  </main>
 </div><!-- End Hero -->
 
 <!-- 메인 -->
@@ -222,11 +222,12 @@
     const docFrag = new DocumentFragment();
 
     // 파일 갯수 검사
-    if (imgPreview.children.length + e.currentTarget.files.length > 2) {
-      alert('이미지는 물품당 2개까지 첨부할 수 있습니다.');
+    if (imgPreview.children.length + e.currentTarget.files.length > 1) {
+      alert('이미지는 한장씩 첨부할 수 있습니다.');
       e.target.value = '';
       return;
     }
+
 
     // 이미지 파일만 처리
     const imageFiles = Array.from(e.currentTarget.files).filter(file => file.type.match("image/.*"));
@@ -310,13 +311,15 @@
     // FormData를 폼에 설정
     const formData = new FormData();
 
+    let hasFiles = false; // 이미지 첨부 여부를 나타내는 변수
+
     // 각 .formList 요소를 순회하며 FormData에 파일 필드와 데이터 추가
     formLists.forEach(function (formList) {
       const listId = formList.dataset.listId; // data-list-id 속성을 사용하여 리스트 ID 가져옴
       const wasteInfoNo = formList.querySelector('.wasteInfoNo').value;
       const fileInput = formList.querySelector('.uploadImg');
 
-      console.log("fileInput"+fileInput + wasteInfoNo);
+      console.log("fileInput" + fileInput + wasteInfoNo);
 
       if (fileInput && fileInput.files.length > 0) {
         formData.append("listId", listId);
@@ -324,46 +327,58 @@
         for (let i = 0; i < fileInput.files.length; i++) {
           formData.append("uploadFiles[]", fileInput.files[i]);
         }
+        hasFiles = true; // 이미지가 첨부되었음을 표시
         console.log("파일이 선택됨");
       } else {
         console.log("파일이 선택되지 않았음");
+        hasFiles = false;
+        return false; // 이미지가 첨부되지 않았을 때 폼 전송 중지
       }
     });
-    //
-    // formData.forEach(function (value, key) {
-    //   const input = document.createElement('input');
-    //   input.type = 'hidden';
-    //   input.name = key;
-    //   input.value = value;
-    //   form.appendChild(input);
-    // });
 
-    console.log(formData);
-    console.log(form);
+    if (hasFiles) {
+      console.log(formData);
+      console.log(form);
 
-    console.log("uploadFiles: " + formData.get('uploadFiles[]'));
-    console.log("wasteInfoNo: " + formData.get('wasteInfoNo'));
+      console.log("uploadFiles: " + formData.get('uploadFiles[]'));
+      console.log("wasteInfoNo: " + formData.get('wasteInfoNo'));
 
-    for (const [key, value] of formData.entries()) {
-      console.log(key + ": " + value);
+      form.submit();
+      for (const [key, value] of formData.entries()) {
+        console.log(key + ": " + value);
+      }
+    } else {
+      alert('물품마다 이미지는 반드시 첨부해야 합니다.');
     }
 
-    // 파일 업로드 필드에서 파일을 추가한 후 파일 읽어보는 코드
-    // const file = formData.get('uploadFiles');
-    //
-    // if (file instanceof File) {
-    //   const reader = new FileReader();
-    //
-    //   reader.onload = function (e) {
-    //     const fileContents = e.target.result;
-    //     console.log("File Contents: " + fileContents);
-    //   };
-    //
-    //   reader.readAsText(file); // 파일을 텍스트로 읽음
-    // }
+  }
 
-    form.submit();
-  };
+
+
+
+
+
+  // 파일 업로드 필드에서 파일을 추가한 후 파일 읽어보는 코드
+  // const file = formData.get('uploadFiles');
+  //
+  // if (file instanceof File) {
+  //   const reader = new FileReader();
+  //
+  //   reader.onload = function (e) {
+  //     const fileContents = e.target.result;
+  //     console.log("File Contents: " + fileContents);
+  //   };
+  //
+  //   reader.readAsText(file); // 파일을 텍스트로 읽음
+  // }
+
+
+
+
+
+
+
+
 
   // // 파일 업로드 필드와 업로드 버튼 요소 가져오기
   // const fileInputs = document.querySelectorAll('.uploadFiles');

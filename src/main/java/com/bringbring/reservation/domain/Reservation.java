@@ -17,11 +17,14 @@ public class Reservation {
     private String rvRequest;
     private String rvName;
     private String rvAddrDetail;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime rvApplicationDate;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NonNull
     private Date rvRvDate;
     private char isRvCompletion;
     private char isRvCancel;
 }
+
+
+
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")

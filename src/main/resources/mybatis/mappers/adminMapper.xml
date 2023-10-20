@@ -40,7 +40,6 @@
 		DELETE FROM ROLE_TBL WHERE USER_NO = #{userNo}
 	</delete>
 
-	<!-- 매핑된 결과를 사용하는 SELECT 쿼리 -->
 	<select id="selectAdminDetailsList" resultMap="adminResultMap">
 		SELECT a.ADMIN_NO, u.USER_ID, u.USER_PHONE, a.ADMIN_CREATE_DATE, r.REGION_NAME, u.USER_NO
 		FROM ADMIN_TBL a

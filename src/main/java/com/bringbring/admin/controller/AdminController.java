@@ -4,6 +4,9 @@ import com.bringbring.admin.domain.Admin;
 import com.bringbring.admin.domain.AdminDetails;
 import com.bringbring.admin.service.AdminService;
 import com.bringbring.common.PageInfo;
+import com.bringbring.inquire.domain.Inquire;
+import com.bringbring.inquire.domain.InquireDetails;
+import com.bringbring.inquire.service.InquireService;
 import com.bringbring.region.domain.City;
 import com.bringbring.region.domain.Region;
 import com.bringbring.region.service.RegionService;
@@ -12,6 +15,7 @@ import com.bringbring.report.service.ReportService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,12 +36,29 @@ public class AdminController {
 	private final RegionService regionService;
 	private final AdminService adminService;
 	private final ReportService reportService;
-
+	private final InquireService inquireService;
 
 // 문의 관리
-	@GetMapping("/contactM.do")
-	public String showContactManagement(Model model) {
-		return "admin/contactManagement";
+	@GetMapping("/contactList.do")
+	public String contactListManagement(Model model
+			, @RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
+			, HttpSession session) {
+		int checkAdmin = (int) session.getAttribute("sessionUserGrade");
+		if (checkAdmin >= 2) {
+			int inquireCount = inquireService.selectInqListCount();
+			PageInfo pInfo = this.getPageInfo(currentPage, inquireCount);
+			List<InquireDetails> inqList = inquireService.selectInquireList(pInfo);
+			List<City> cList = regionService.selectCityList();
+			model.addAttribute("inqList", inqList)
+					.addAttribute("pInfo", pInfo)
+					.addAttribute("inquireCount", inquireCount)
+					.addAttribute("cList", cList);
+			return "/admin/contactManagement";
+		} else {
+			model.addAttribute("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
+		}
 	}
 
 	// 관할지역 예약조회
@@ -361,6 +382,11 @@ public class AdminController {
 	public ModelAndView showReservationManagement(ModelAndView mv) {
 		mv.setViewName("admin/reservationManagement");
 		return mv;
+	}
+
+	@GetMapping("/test.do")
+	public String test(Model model) {
+		return "admin/test";
 	}
 
 	public PageInfo getPageInfo(Integer currentPage, Integer totalCount) {
