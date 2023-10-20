@@ -60,8 +60,8 @@ public class ReservationServiceImpl implements ReservationService {
         int imageTotal = imageAdd.size();
         System.out.println("imageTotal = " + imageTotal);
 
-
-
+//
+//
         try {
 
             if (reservationUserInfo != null) {
@@ -94,7 +94,7 @@ public class ReservationServiceImpl implements ReservationService {
             if (insertTotal != (3 + imageResult)) {
                 throw new RuntimeException("결제가 제대로 처리되지 않습니다.");
             }
-
+//
         }catch (Exception ex) {
         System.err.println("예외 발생: " + ex.getMessage());
         ex.printStackTrace();

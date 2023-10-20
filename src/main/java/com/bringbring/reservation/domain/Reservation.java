@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Reservation {
     private int rvNo;
+    private String rvDischargeNo;
     private int userNo;
     private String rvAddr;
     private String rvPhone;
