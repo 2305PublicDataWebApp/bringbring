@@ -6,7 +6,7 @@ pageEncoding="UTF-8"%>
 <html lang="ko" >
 <head>
     <meta charset="UTF-8">
-    <title>${uData.user.userName}님 과의 채팅</title>
+    <title>${getUser.userName}님 과의 채팅</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
 
     <!-- Favicons -->
@@ -89,9 +89,67 @@ pageEncoding="UTF-8"%>
 <!-- partial -->
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
 <script  src="../resources/assets/js/chatting/script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>\
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
     <script>
+        //테스트
+        $(document).ready(function(){
+
+            var roomName = [[${room.name}]];
+            var roomId = [[${room.roomId}]];
+            var username = [[${authentication.principal.username}]];
+
+            console.log(roomName + ", " + roomId + ", " + username);
+
+            var sockJs = new SockJS("/stomp/chat");
+            //1. SockJS를 내부에 들고있는 stomp를 내어줌
+            var stomp = Stomp.over(sockJs);
+
+            //2. connection이 맺어지면 실행
+            stomp.connect({}, function (){
+                console.log("STOMP Connection")
+
+                //4. subscribe(path, callback)으로 메세지를 받을 수 있음
+                stomp.subscribe("/sub/chat/room/" + roomId, function (chat) {
+                    var content = JSON.parse(chat.body);
+
+                    var writer = content.writer;
+                    var str = '';
+
+                    if(writer === username){
+                        str = "<div class='col-6'>";
+                        str += "<div class='alert alert-secondary'>";
+                        str += "<b>" + writer + " : " + message + "</b>";
+                        str += "</div></div>";
+                        $("#msgArea").append(str);
+                    }
+                    else{
+                        str = "<div class='col-6'>";
+                        str += "<div class='alert alert-warning'>";
+                        str += "<b>" + writer + " : " + message + "</b>";
+                        str += "</div></div>";
+                        $("#msgArea").append(str);
+                    }
+
+                    $("#msgArea").append(str);
+                });
+
+                //3. send(path, header, message)로 메세지를 보낼 수 있음
+                stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writer: username}))
+            });
+
+            $("#button-send").on("click", function(e){
+                var msg = document.getElementById("msg");
+
+                console.log(username + ":" + msg.value);
+                stomp.send('/pub/chat/message', {}, JSON.stringify({roomId: roomId, message: msg.value, writer: username}));
+                msg.value = '';
+            });
+        });
+        //테스트
+
         function formatTime(hours, minutes) {
             return (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
         }
@@ -117,10 +175,10 @@ pageEncoding="UTF-8"%>
 
         const username = "${name}";
 
-        const websocket = new WebSocket("ws://localhost:8888/ws/chat");
-        websocket.onmessage = onMessage;
-        websocket.onopen = onOpen;
-        websocket.onclose = onClose;
+        // const websocket = new WebSocket("ws://localhost:8888/ws/chat");
+        // websocket.onmessage = onMessage;
+        // websocket.onopen = onOpen;
+        // websocket.onclose = onClose;
 
         let isSeeing = true;
         document.addEventListener("visibilitychange", function() {
@@ -248,27 +306,6 @@ pageEncoding="UTF-8"%>
             }else{
                 if(sessionId == cur_session){
 
-                    // var ulElement = document.getElementById("msgArea");
-                    // // p 요소 생성
-                    // var pElement = document.createElement("p");
-                    // pElement.setAttribute("class", "infoMessageArea");
-                    //
-                    // // span 요소 생성
-                    // var spanElement = document.createElement("span");
-                    // spanElement.setAttribute("class", "infoMessage");
-                    //
-                    // // 텍스트 노드 생성 및 추가
-                    // var textNode = document.createTextNode(message);
-                    //
-                    // // span 요소에 텍스트 노드 추가
-                    // spanElement.appendChild(textNode);
-                    //
-                    // // p 요소에 span 요소 추가
-                    // pElement.appendChild(spanElement);
-                    //
-                    // // ul 요소에 p 요소 추가
-                    // ulElement.appendChild(pElement);
-
                     divElement.setAttribute("class", "chatDiv");
                     liElement.setAttribute("class", "other");
                     spanElement.setAttribute("class", "otherTime");
@@ -281,28 +318,27 @@ pageEncoding="UTF-8"%>
                     $("#msgArea").append(divElement);
 
                     <%--if("${uData.user.userNo} ne ${user.userNo}"){--%>
-                    $.ajax({
-                        url: "/chatting/insert.do",
-                        data: { divNo: ${uData.divide.divNo}
-                            , userNo: ${user.userNo}
-                            , getUserNo: ${uData.user.userNo}
-                            , chatContent: message
-                            , chatRoomNo: ${cList.get(0).chatRoomNo}
-                        },
-                        type: "POST",
-                        success: function(data) {
-                            if(data === "success"){
-                                // alert("insert 성공!");
-                            }else{
-                                alert("채팅저장 실패!");
-                            }
+                    <%--$.ajax({--%>
+                    <%--    url: "/chatting/insert.do",--%>
+                    <%--    data: { divNo: ${uData.divide.divNo}--%>
+                    <%--        , userNo: ${user.userNo}--%>
+                    <%--        , getUserNo: ${getUser.userNo}--%>
+                    <%--        , chatContent: message--%>
+                    <%--        , chatRoomNo: ${cList.get(0).chatRoomNo}--%>
+                    <%--    },--%>
+                    <%--    type: "POST",--%>
+                    <%--    success: function(data) {--%>
+                    <%--        if(data === "success"){--%>
+                    <%--            // alert("insert 성공!");--%>
+                    <%--        }else{--%>
+                    <%--            alert("채팅저장 실패!");--%>
+                    <%--        }--%>
 
-                        },
-                        error: function() {
-                            alert("Ajax 오류! 관리자에게 문의하세요");
-                        }
-                    });
-                    // }
+                    <%--    },--%>
+                    <%--    error: function() {--%>
+                    <%--        alert("Ajax 오류! 관리자에게 문의하세요");--%>
+                    <%--    }--%>
+                    <%--});--%>
 
                 }
                 else{

@@ -212,9 +212,9 @@
       <div data-aos="fade-up" id="map" style="width: 100%;height: 300px;border: 1px solid #ccc;"></div>
       <!-- 버튼 영역 -->
       <div data-aos="fade-up" style="margin: 0 auto;text-align: center;margin-top: 100px;">
-        <c:if test="${sessionId ne null && sessionId ne dData.user.userId}">
-          <button onclick="openPopup('/chatting/${sessionId}?divNo=${dData.divide.divNo}')" class="btn btn-success btn-lg">1:1 채팅 신청</button>
-        </c:if>
+<%--        <c:if test="${sessionId ne null && sessionId ne dData.user.userId}">--%>
+          <button onclick="openPopup('/chatting/${sessionId}?divNo=${dData.divide.divNo}&getUserId=admin@kh.com')" class="btn btn-success btn-lg">1:1 채팅 신청</button>
+<%--        </c:if>--%>
       </div>
     </div>
 

@@ -23,4 +23,8 @@ public class Chat {
     private char chatDivYn;
     private int chatRoomNo;
 
+//    public enum messageType{
+//        ENTER, TALK;
+//    }
+
 }

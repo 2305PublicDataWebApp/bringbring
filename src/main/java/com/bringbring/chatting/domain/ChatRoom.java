@@ -12,51 +12,23 @@ import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatRoom {
-     String id;
-     Set<WebSocketSession> sessions = new HashSet<>();
+	private String roomId;
+	private String name;
+	private Set<WebSocketSession> sessions = new HashSet<>();
+	//WebSocketSession은 Spring에서 Websocket Connection이 맺어진 세션
 
-	public ChatRoom(String room_id) { this.id = room_id; }
+	public static ChatRoom create(String name){
+		ChatRoom room = new ChatRoom();
 
-	public void handleMessage(WebSocketSession session, Chat chat, ObjectMapper objectMapper) throws JsonProcessingException {
-        if (chat.getChatNo() > 0)
-            join(session); 
-        else
-        	send(chat, objectMapper);
-    }
-
-    private void join(WebSocketSession session) {
-        sessions.add(session);
-    }
-    
-    private <T> void send(T messageObject, ObjectMapper objectMapper) throws JsonProcessingException {
-        TextMessage message = new TextMessage(objectMapper.writeValueAsString(messageObject));
-  
-        sessions.parallelStream().forEach(session -> {
-			try {
-				session.sendMessage(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-    }
-    
-	public void remove(WebSocketSession target) {
-	  String targetId = target.getId();
-	  sessions.removeIf(session -> session.getId().equals(targetId));
-	 }
-
-	public String getId() {
-		return id;
+		room.roomId = UUID.randomUUID().toString();
+		room.name = name;
+		return room;
 	}
-
-	public Set<WebSocketSession> getSessions() {
-		return sessions;
-	}
- 
 }
