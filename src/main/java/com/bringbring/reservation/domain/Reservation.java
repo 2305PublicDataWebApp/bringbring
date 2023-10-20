@@ -27,8 +27,6 @@ public class Reservation {
     private Date rvRvDate;
     private char isRvCompletion;
     private char isRvCancel;
-    private int cityNo;
-    private int districtNo;
 }
 
 
