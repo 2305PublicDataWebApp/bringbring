@@ -173,10 +173,6 @@
         where PAY_ID = #{value}
     </select>
 
-    <select id="selectListResCount" resultType="_int">
-        SELECT COUNT(*) FROM RESERVATION_TBL
-    </select>
-
     <select id="selectListCountByCompletionY" resultType="_int" >
         SELECT COUNT(*) FROM RESERVATION_TBL WHERE IS_RV_COMPLETION = 'Y'
     </select>

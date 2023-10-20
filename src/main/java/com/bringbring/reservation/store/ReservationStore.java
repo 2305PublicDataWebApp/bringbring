@@ -27,4 +27,5 @@ public interface ReservationStore {
     int insertPay(Pay pay);
 
     List<ReservationComplete> selectReservationCompleteInfo(String payId);
+
 }
