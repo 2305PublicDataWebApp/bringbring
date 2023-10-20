@@ -61,9 +61,9 @@ public class ReservationServiceImpl implements ReservationService {
         System.out.println("imageTotal = " + imageTotal);
 
 
-
-
-        try {
+//
+//
+//        try {
 
             if (reservationUserInfo != null) {
                 reservationResult = reservationStore.insertResertvation(reservationUserInfo);
@@ -96,17 +96,17 @@ public class ReservationServiceImpl implements ReservationService {
                 throw new RuntimeException("결제가 제대로 처리되지 않습니다.");
             }
 
-        }catch (Exception ex) {
-        System.err.println("예외 발생: " + ex.getMessage());
-        ex.printStackTrace();
-    }
+//        }catch (Exception ex) {
+//        System.err.println("예외 발생: " + ex.getMessage());
+//        ex.printStackTrace();
+//    }
 
         System.out.println("insertTotal = " + insertTotal);
         return insertTotal;
     }
 
     @Override
-    public ReservationComplete selectReservationCompleteInfo(String payId) {
+    public List<ReservationComplete> selectReservationCompleteInfo(String payId) {
         return reservationStore.selectReservationCompleteInfo(payId);
     }
 
@@ -198,7 +198,7 @@ public class ReservationServiceImpl implements ReservationService {
                 for (int i = 0; i < valueList.size(); i++) {
                     HashMap<String, Object> innerMap = (HashMap<String, Object>) valueList.get(i);
 
-                    try {
+//                    try {
 
 
                         // 여기에서 innerMap을 사용하여 필드 값을 추출하고 처리
@@ -239,10 +239,10 @@ public class ReservationServiceImpl implements ReservationService {
 
 
 
-                    }catch (Exception ex) {
-                        System.err.println("예외 발생: " + ex.getMessage());
-                        ex.printStackTrace();
-                    }
+//                    }catch (Exception ex) {
+//                        System.err.println("예외 발생: " + ex.getMessage());
+//                        ex.printStackTrace();
+//                    }
                 }
 
 

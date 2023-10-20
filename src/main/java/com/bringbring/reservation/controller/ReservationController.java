@@ -1,6 +1,9 @@
 package com.bringbring.reservation.controller;
 
+import com.bringbring.region.domain.City;
+import com.bringbring.region.service.RegionService;
 import com.bringbring.reservation.domain.Reservation;
+import com.bringbring.reservation.domain.ReservationComplete;
 import com.bringbring.reservation.domain.ReservationDetail;
 import com.bringbring.reservation.domain.WasteData;
 import com.bringbring.reservation.service.ReservationService;
@@ -27,6 +30,7 @@ public class ReservationController {
 
     private final ReservationService reservationService;
     private final UserService userService;
+    private final RegionService regionService;
     // 페이지 이동
     @GetMapping("/select.do")
     public String showWasteSelect() {
@@ -79,9 +83,11 @@ public class ReservationController {
     @GetMapping("/insertInfo.do")
     public String showInsertInfo(HttpSession httpSession, Model model) {
         String userId = (String) httpSession.getAttribute("sessionId");
+        List<City> cityList = regionService.selectCityList();
         if (userId != null && !userId.isEmpty()) {
             User user = userService.selectOneById(userId);
-            model.addAttribute("userInfo", user);
+            model.addAttribute("userInfo", user)
+                    .addAttribute("cList", cityList);
         }
         return "/reservation/insertInfo";
     }
@@ -125,7 +131,8 @@ public class ReservationController {
     public String payComplete(HttpSession session, Model model) {
         // 세션의 데이터들 저장하면서 insert 후 성공 시 완료 페이지로 이동하기
         // 실패 시 결제 실패 창
-        System.out.println("session.getAttribute(\"\") = " + session.getAttribute(""));
+        List<ReservationComplete> reservationComplete = (List<ReservationComplete>) session.getAttribute("reservationComplete");
+        model.addAttribute("reservationComplete", reservationComplete);
         return "/reservation/payComplete";
     }
 
