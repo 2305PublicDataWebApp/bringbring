@@ -17,4 +17,6 @@ public interface ReservationService {
     Map<String, Object> addImages(String[] wasteInfo, MultipartFile[] uploadFiles, HttpServletRequest request);
 
     Integer insertReservation(List<Integer> selectedItems, Map<String, Object> imageAdd, Reservation reservationUserInfo, ReservationDetail reservationDetail, Pay pay);
+
+    ReservationComplete selectReservationCompleteInfo(String payId);
 }

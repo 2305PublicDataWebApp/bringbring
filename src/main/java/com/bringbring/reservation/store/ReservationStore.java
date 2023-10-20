@@ -25,4 +25,6 @@ public interface ReservationStore {
     int insertConnection(Connection connection);
 
     int insertPay(Pay pay);
+
+    ReservationComplete selectReservationCompleteInfo(String payId);
 }
