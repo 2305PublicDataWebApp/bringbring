@@ -1,5 +1,7 @@
 package com.bringbring.mypage.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -7,7 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bringbring.mypage.service.MypageService;
+import com.bringbring.inquire.domain.Inquire;
+import com.bringbring.inquire.service.InquireService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
 
@@ -18,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/mypage")
 public class MypageController {
 	
-	private final MypageService mypageService;
+	private final InquireService inquireService;
 	private final UserService userService;
 	
 	// 마이페이지 메인
@@ -27,9 +30,16 @@ public class MypageController {
 			HttpSession session
 			, Model model) {
 		
+		// 유저 정보가져옴
 		String userId = (String)session.getAttribute("sessionId");
 		User userOne = userService.selectOneById(userId);
-		if(userOne != null) {
+		
+		int userNo = userOne.getUserNo();
+		List<Inquire> inquireList = inquireService.selectInquireListByUserNo(userNo);
+		
+		if(userOne != null && inquireList != null) {
+			// 문의 내역 가져옴
+			model.addAttribute("inquireList", inquireList);
 			model.addAttribute("userOne", userOne);
 			return "mypage/main";
 		}else {
@@ -41,5 +51,18 @@ public class MypageController {
 		}
 	}
 	
+	// 신청내역 탭으로 이동
+	@GetMapping("/enroll.do")
+	public String showMypageEnroll() {
+		
+		return "mypage/enroll";
+	}
+	
+	// 문의내역 탭으로 이동
+		@GetMapping("/inquire.do")
+		public String showMypageInquire() {
+			
+			return "mypage/inquire";
+		}
 	
 }

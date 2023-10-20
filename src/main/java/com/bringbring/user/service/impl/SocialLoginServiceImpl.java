@@ -139,9 +139,9 @@ public class SocialLoginServiceImpl implements SocialLoginService{
         userInfo.put("userName", userNickName);
         userInfo.put("userId", userId);
         userInfo.put("access_token", access_token);
-        userInfo.put("userProfileName","Test_img2.png");
-        userInfo.put("userProfileRename","Test_img2.png");
-        userInfo.put("userProfilePath","../resources/assets/img/mypage/Test_img2.png");
+        userInfo.put("userProfileName","default_image.png");
+        userInfo.put("userProfileRename","default_image.png");
+        userInfo.put("userProfilePath","../resources/assets/img/mypage/default_image.png");
         userInfo.put("userProfileLength",0L);
         
         User kakaoUser = userStore.selectOneById(userId);
@@ -158,29 +158,28 @@ public class SocialLoginServiceImpl implements SocialLoginService{
         
         return userInfo;
 	}
-	
-//	public int insertUserAndSocial(User kakaoUser, User kakaoUser1) {
-//		int result = userStore.insertKakao(kakaoUser1);
-//		int result1 = userStore.insertkakao1(kakaoUser);
-//		return result+result1;
-//	}
 
+	@Override
+	public void kakaoLogout(String access_Token) throws Exception {
+		String reqURL = "https://kapi.kakao.com/v1/user/logout";
+		URL url = new URL(reqURL);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+        int responseCode = conn.getResponseCode();
+        System.out.println("responseCode : " + responseCode);
+        
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        
+        String result = "";
+        String line = "";
+        
+        while ((line = br.readLine()) != null) {
+            result += line;
+        }
+        System.out.println(result);
+		
+	}
 	
-	
-//    @Value("${spring.security.oauth2.client.registration.naver.client-id}")
-//    private String naverClientId;
-//    @Value("${spring.security.oauth2.client.registration.naver.redirect-uri}")
-//    private String naverRedirectUri;
-//    @Value("${spring.security.oauth2.client.provider.naver.authorization-uri}")
-//    private String naverAuthorizationUri;
-//	
-//	@Override
-//	public String getNaverAuthorizeUrl(String type) {
-//		naverAuthorizationUri += "?response_type=code"
-//				+ "&client_id=" + naverClientId
-//				+ "&redirect_uri=" + naverRedirectUri
-//				+ "&state=" + type;
-//		return naverAuthorizationUri;
-//	}
 
 }

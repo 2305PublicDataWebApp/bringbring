@@ -117,8 +117,9 @@
 			var naverUrl = "${naverUrl }";
 			window.location.href = naverUrl;
 		}
-		
+		// 초기화
 		Kakao.init('b82d0f1e81f80d7dfb52a8b896d5b146'); // JavaScript 키
+		Kakao.isInitialized();
 		function kakao_btn() {
 			Kakao.Auth.authorize({
 			redirectUri: 'http://127.0.0.1:8888/social/kakaoLogin.do',
@@ -133,11 +134,6 @@
 			},
 			});
 		}
-// 		function kakao_btn() {
-// 		    const clientId = 'b82d0f1e81f80d7dfb52a8b896d5b146';   // 자바스크립트 키
-// 		    const redirectUrl ='http://127.0.0.1:8888/social/kakaoLogin.do';    // redirectUtl 
-// 		    location.href = 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id='+clientId+'&redirect_uri='+redirectUrl;
-// 		}
 	</script>
     <!-- 채널톡 api -->
     <script>
