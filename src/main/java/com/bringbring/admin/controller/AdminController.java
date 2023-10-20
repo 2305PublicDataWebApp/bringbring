@@ -82,7 +82,6 @@ public class AdminController {
 			PageInfo pInfo = this.getPageInfo(currentPage, userCount);
 			List<User> userList = userService.selectUserList(pInfo);
 			List<City> cList = regionService.selectCityList();
-
 			model.addAttribute("userList", userList)
 					.addAttribute("pInfo", pInfo)
 					.addAttribute("userCount", userCount)

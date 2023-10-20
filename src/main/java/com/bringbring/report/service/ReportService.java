@@ -62,4 +62,11 @@ public interface ReportService {
      * @return int
      */
     int getListReportCount(Map<String, String> paramMap);
+
+    /**
+     * 게시글 번호로 신고글 조회 service
+     * @param divNo
+     * @return
+     */
+    List<ReportDetails> getReportDetailsByDivNo(int divNo);
 }

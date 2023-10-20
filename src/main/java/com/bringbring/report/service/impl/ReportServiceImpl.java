@@ -54,4 +54,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public int getListReportCount(Map<String, String> paramMap) { return reportStore.getListReportCount(paramMap); }
+
+    @Override
+    public List<ReportDetails> getReportDetailsByDivNo(int divNo) { return reportStore.getReportDetailsByDivNo(divNo); }
 }

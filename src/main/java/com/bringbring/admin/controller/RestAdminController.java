@@ -3,6 +3,8 @@ package com.bringbring.admin.controller;
 import com.bringbring.common.PageInfo;
 import com.bringbring.inquire.domain.InquireDetails;
 import com.bringbring.inquire.service.InquireService;
+import com.bringbring.report.domain.ReportDetails;
+import com.bringbring.report.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ public class RestAdminController {
 
     private final InquireService inquireService;
     private final AdminController adminController;
+    private final ReportService reportService;
+
     private static final String API_KEY = "uy3jYbeNo9pdYLz%2FbZXRO%2F3tFw9FcY6FjN1mlzXiPnfDm4yy4z4ceuYU2ValrUULBJVlrX6JBznSjobmLH1A7w%3D%3D";
     private static final String API_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
     //문의글 답변 유무에 따른 리스트
@@ -98,4 +102,24 @@ public class RestAdminController {
         // API 응답을 그대로 클라이언트로 반환
         return API_URL + "?ServiceKey=" + API_KEY;
     }
+
+
+    //신고글 조회
+    @GetMapping("/reportListDetail.do")
+    public ResponseEntity<List<ReportDetails>> getReportDetails(@RequestParam("divNo") int divNo) {
+        List<ReportDetails> reportDetailsList = reportService.getReportDetailsByDivNo(divNo);
+        Map<String, String> categoryMap = new HashMap<>();
+        categoryMap.put("fraud", "사기 글이에요");
+        categoryMap.put("unpleasant", "회원들에게 불쾌감을 주는 글이에요");
+        categoryMap.put("inappropriate", "부적절한 회원이에요");
+        categoryMap.put("other", "기타 다른 사유가 있어요");
+
+        for (ReportDetails report : reportDetailsList) {
+            String category = report.getRepCategory();
+            String categoryDescription = categoryMap.get(category);
+            report.setRepCategory(categoryDescription);
+        }
+        return ResponseEntity.ok(reportDetailsList);
+    }
+
 }

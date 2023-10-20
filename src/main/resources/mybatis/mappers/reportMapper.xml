@@ -92,4 +92,11 @@
         </if>
     </select>
 
+    <select id="getReportDetailsByDivNo" resultMap="reportResultMap">
+        SELECT d.DIV_NO, d.DIV_TITLE, d.DIV_CREATE_DATE, r.REP_CREATE_DATE, r.REP_CATEGORY, u.USER_ID, d.DIV_CONTENT, d.DIV_TITLE
+        FROM REPORT_TBL r
+                 INNER JOIN DIVIDE_TBL d ON r.DIV_NO = d.DIV_NO
+                 INNER JOIN USER_TBL u ON d.USER_NO = u.USER_NO
+        WHERE d.DIV_NO = #{divNo}
+    </select>
 </mapper>
