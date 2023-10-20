@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-
 import com.bringbring.inquire.store.InquireStore;
-
 import java.util.List;
 import java.util.Map;
 
@@ -61,5 +59,8 @@ public class InquireStoreLogic implements InquireStore{
         RowBounds rowBounds = new RowBounds(offset, limit);
         return sqlSession.selectList("InquireMapper.searchInquireByKeyword", paramMap, rowBounds);
     }
+
+   	@Override
+	  public List<Inquire> selectInquireListByUserNo(int userNo) { return sqlSession.selectList("inquireMapper.selectInquireListByUserNo",userNo); }
 
 }

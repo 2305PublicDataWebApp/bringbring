@@ -209,7 +209,8 @@
                         'color': 'red'
                     });
                     phoneError.text("숫자만 입력 가능합니다.");
-                } else {
+                } 
+                if( phoneValue === "") {
                     phoneError.text("전화번호를 입력해주세요.");
                     phoneError.removeClass('mt-1');
                     phoneError.addClass('invalid-feedback');
@@ -239,7 +240,7 @@
     	};
    		// 이메일 인증번호 체크 함수
 		function chkEmailConfirm(data){
-			$('#email_code_check').on("keyup", function(){
+			$('#floatingEmailCode').on("keyup", function(){
 				$('#email_code_check').removeClass('invalid-feedback').addClass('mt-1')
 				.css({
 				    'font-size': '14px',
@@ -250,13 +251,13 @@
 					$("#email_code_check").css({
 						"color" : "red"
 					})
-					return false;
+// 					return false;
 				} else { 
 					$('#email_code_check').text("인증번호가 일치합니다.")
 					$("#email_code_check").css({
 						"color" : "green"
 					})
-					return true;
+// 					return true;
 				}
 				if ($('#floatingEmailCode') === "") {
 					$('#email_code_check').text("인증 번호를 입력해주세요.");

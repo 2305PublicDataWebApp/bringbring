@@ -57,4 +57,11 @@ public interface InquireStore {
      * @return
      */
     List<InquireDetails> searchInquireByKeyword(PageInfo pInfo, Map<String, String> paramMap);
+
+    /**
+	  * 회원별 문의내역 리스트 store
+	  * @param userNo
+	  * @return Inquire
+	  */
+	  List<Inquire> selectInquireListByUserNo(int userNo);
 }

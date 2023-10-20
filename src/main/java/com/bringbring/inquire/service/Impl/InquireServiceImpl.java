@@ -6,6 +6,7 @@ import com.bringbring.inquire.store.InquireStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.service.InquireService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,5 +42,8 @@ public class InquireServiceImpl implements InquireService {
 
     @Override
     public int searchInqListCount(Map<String, String> paramMap) { return inquireStore.searchInqListCount(paramMap); }
+  
+    @Override
+	  public List<Inquire> selectInquireListByUserNo(int userNo) { return inquireStore.selectInquireListByUserNo(userNo); }
 
 }
