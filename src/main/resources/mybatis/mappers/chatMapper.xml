@@ -7,7 +7,7 @@
         ORDER BY CHAT_CREATE_DATE
     </select>
     <insert id="insertChat">
-        INSERT INTO CHAT_TBL VALUES (SEQ_CHAT_NO.NEXTVAL, #{divNo}, #{userNo}, #{getUserNo}, #{chatContent}, DEFAULT, DEFAULT, DEFAULT)
+        INSERT INTO CHAT_TBL VALUES (SEQ_CHAT_NO.NEXTVAL, #{divNo}, #{userNo}, #{getUserNo}, #{chatContent}, DEFAULT, DEFAULT, DEFAULT, #{chatRoomNo})
     </insert>
 
 </mapper>

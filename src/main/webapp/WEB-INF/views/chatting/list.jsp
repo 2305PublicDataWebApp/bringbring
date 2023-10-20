@@ -60,7 +60,7 @@ pageEncoding="UTF-8"%>
                         <c:if test="${user.userNo eq chat.userNo}">
                             <div class="chatDiv">
                                 <li class='other'>${chat.chatContent}</li>
-                                <span style="float: right;padding: 27px 6px 0px 0px;color: #222;font-size: 13px;">
+                                <span class="otherTime">
                                     <fmt:formatDate value="${parseDateTime}" pattern="HH:mm" />
                                 </span>
                             </div>
@@ -68,7 +68,7 @@ pageEncoding="UTF-8"%>
                         <c:if test="${user.userNo ne chat.userNo}">
                             <div class="chatDiv">
                                 <li class='self'>${chat.chatContent}</li>
-                                <span style="padding: 26px 0px 0px 6px;float:left;color: #222;font-size: 13px;">
+                                <span class="selfTime">
                                     <fmt:formatDate value="${parseDateTime}" pattern="HH:mm" />
                                 </span>
                             </div>
@@ -77,7 +77,7 @@ pageEncoding="UTF-8"%>
                 </ul>
                 <div class="footer">
                     <div id="opinion" class="text-box messageArea" contenteditable="true" disabled="true" onkeyup="enterkey()"></div>
-                    <button id="sendBtn" class="align-self-center" style="background-color: #17594A;padding: 4px 10px 0px 10px;border-top-left-radius: 0px;border-bottom-left-radius: 0px">
+                    <button id="sendBtn" class="align-self-center" style="background-color: #17594A;padding: 2px 10px 0px 10px;border-top-left-radius: 0px;border-bottom-left-radius: 0px">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
                             <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
                         </svg>
@@ -92,17 +92,20 @@ pageEncoding="UTF-8"%>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
     <script>
-        <%--document.addEventListener('DOMContentLoaded', function() {--%>
-        <%--    const selfMessage = document.querySelector('.floating-chat .chat .messages li.self:before');--%>
-        <%--    let newImageUrl = '';--%>
-        <%--    if("${uData.user.userProfilePath}" !== null){--%>
-        <%--        newImageUrl = '${uData.user.userProfilePath}';--%>
-        <%--    }else{--%>
-        <%--        newImageUrl = '../../img/divide/free-icon-user-847969.png';--%>
-        <%--    }--%>
-        <%--    selfMessage.style.backgroundImage = "url("+newImageUrl+")";--%>
-        <%--    // 새 이미지 URL을 설정합니다.--%>
-        <%--});--%>
+        function formatTime(hours, minutes) {
+            return (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+        }
+
+        function displayCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+
+            return formatTime(hours, minutes);
+        }
+
+        // 호출하여 현재 시간 표시
+        console.log(displayCurrentTime());
 
         function closeCurrentWindow(){
             window.close();
@@ -214,9 +217,11 @@ pageEncoding="UTF-8"%>
 
             var divElement = document.createElement("div");
             var liElement = document.createElement("li");
+            var spanElement = document.createElement("span");
 
             if(message == undefined){
-                message = "채팅이 종료되었습니다.";
+                // message = "채팅이 종료되었습니다.";
+                return false;
             }
             if(message == " 님이 입장하셨습니다."){
                 message = sessionId + "님이 입장하셨습니다.";
@@ -266,9 +271,13 @@ pageEncoding="UTF-8"%>
 
                     divElement.setAttribute("class", "chatDiv");
                     liElement.setAttribute("class", "other");
+                    spanElement.setAttribute("class", "otherTime");
                     var textNode = document.createTextNode(message);
                     liElement.appendChild(textNode);
+                    var textNode = document.createTextNode(displayCurrentTime());
+                    spanElement.appendChild(textNode);
                     divElement.append(liElement);
+                    divElement.append(spanElement);
                     $("#msgArea").append(divElement);
 
                     <%--if("${uData.user.userNo} ne ${user.userNo}"){--%>
@@ -278,6 +287,7 @@ pageEncoding="UTF-8"%>
                             , userNo: ${user.userNo}
                             , getUserNo: ${uData.user.userNo}
                             , chatContent: message
+                            , chatRoomNo: ${cList.get(0).chatRoomNo}
                         },
                         type: "POST",
                         success: function(data) {
@@ -298,9 +308,13 @@ pageEncoding="UTF-8"%>
                 else{
                     divElement.setAttribute("class", "chatDiv");
                     liElement.setAttribute("class", "self");
+                    spanElement.setAttribute("class", "selfTime");
                     var textNode = document.createTextNode(message);
                     liElement.appendChild(textNode);
+                    var textNode = document.createTextNode(displayCurrentTime());
+                    spanElement.appendChild(textNode);
                     divElement.append(liElement);
+                    divElement.append(spanElement);
                     $("#msgArea").append(divElement);
 
                     if(isSeeing == false){
