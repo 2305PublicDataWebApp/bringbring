@@ -61,6 +61,6 @@ public class InquireStoreLogic implements InquireStore{
     }
 
    	@Override
-	  public List<Inquire> selectInquireListByUserNo(int userNo) { return sqlSession.selectList("inquireMapper.selectInquireListByUserNo",userNo); }
+	  public List<Inquire> selectInquireListByUserNo(int userNo) { return sqlSession.selectList("InquireMapper.selectInquireListByUserNo",userNo); }
 
 }
