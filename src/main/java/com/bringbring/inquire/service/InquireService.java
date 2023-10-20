@@ -1,6 +1,7 @@
 package com.bringbring.inquire.service;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.domain.InquireDetails;
 
 import java.util.List;
