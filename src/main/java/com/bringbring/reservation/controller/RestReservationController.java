@@ -56,10 +56,6 @@ public class RestReservationController {
         Map<String, Object> imageAdd = (Map<String, Object>) session.getAttribute("imageAdd");
         Reservation reservationUserInfo = (Reservation) session.getAttribute("reservationUserInfo");
 
-//        Integer result = 0;
-//
-//        try {
-
             List<Object> insertInfo = new ArrayList<>();
             insertInfo.add(selectedItems);
             insertInfo.add(imageAdd);
@@ -74,15 +70,9 @@ public class RestReservationController {
 
             List<ReservationComplete> reservationComplete = reservationService.selectReservationCompleteInfo(payId);
 
-
-            session.setAttribute("reservationComplete", reservationComplete);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println("e.getMessage() = " + e.getMessage());
-//        }
+            session.setAttribute("payId", payId);
 
         if (result >= 4) {
-            session.setAttribute("reservationComplete", reservationComplete);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Failure", HttpStatus.INTERNAL_SERVER_ERROR);

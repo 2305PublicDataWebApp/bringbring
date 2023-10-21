@@ -20,4 +20,5 @@ public interface ReservationService {
 
     List<ReservationComplete> selectReservationCompleteInfo(String payId);
 
+    List<WasteData> selectpayCompleteWasteDate(String payId);
 }

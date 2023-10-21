@@ -105,7 +105,7 @@
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">1234</li>
+            <li class="list-group-item">${reservationComplete.get(0).reservation.rvDischargeNo}</li>
           </ul>
         </td>
       </tr>
@@ -115,13 +115,18 @@
         </td>
         <td>
           <table class="table table-borderless">
-            <c:forEach items="${wasteDataList}" var="item" varStatus="i">
-              <tr>
-                <td class="selectedItems" style="padding-bottom: 20px; padding-top: 20px; border-bottom: 1px solid #ccc;">
-                  <span class="selectSpan">선택 ${i.index + 1}</span><span>${item.wasteCategory.wasteCategoryName} > ${item.wasteType.wasteTypeName} > ${item.wasteInfo.wasteInfoStandard}</span>
-                </td>
-              </tr>
-            </c:forEach>
+
+            <c:forEach items="${wasteData}" var="item" varStatus="i">
+            <tr>
+              <td class="selectedItems" style="padding-bottom: 20px; padding-top: 20px; border-bottom: 1px solid #ccc;">
+                <span class="selectSpan">선택 ${i.index + 1}</span>
+                <span>${wasteData.get(i.index).wasteCategory.wasteCategoryName}  >
+                      ${wasteData.get(i.index).wasteType.wasteTypeName} >
+                    ${wasteData.get(i.index).wasteInfo.wasteInfoStandard}</span>
+              </td>
+            </tr>
+          </c:forEach>
+
           </table>
         </td>
       </tr>
@@ -131,7 +136,7 @@
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">서울시 중구</li>
+            <li class="list-group-item">${reservationComplete.get(0).reservation.rvAddr}</li>
           </ul>
         </td>
       </tr>
@@ -141,7 +146,7 @@
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">2023-10-30</li>
+            <li class="list-group-item">${reservationComplete.get(0).reservation.rvRvDate}</li>
           </ul>
         </td>
       </tr>
@@ -151,7 +156,7 @@
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">6,000원</li>
+            <li class="list-group-item">${reservationComplete.get(0).reservationDetail.rvDetailFee}</li>
           </ul>
         </td>
       </tr>

@@ -3,7 +3,6 @@ package com.bringbring.reservation.controller;
 import com.bringbring.region.domain.City;
 import com.bringbring.region.service.RegionService;
 import com.bringbring.reservation.domain.Reservation;
-import com.bringbring.reservation.domain.ReservationComplete;
 import com.bringbring.reservation.domain.ReservationDetail;
 import com.bringbring.reservation.domain.WasteData;
 import com.bringbring.reservation.service.ReservationService;
@@ -131,8 +130,10 @@ public class ReservationController {
     public String payComplete(HttpSession session, Model model) {
         // 세션의 데이터들 저장하면서 insert 후 성공 시 완료 페이지로 이동하기
         // 실패 시 결제 실패 창
-        List<ReservationComplete> reservationComplete = (List<ReservationComplete>) session.getAttribute("reservationComplete");
-        model.addAttribute("reservationComplete", reservationComplete);
+//        List<ReservationComplete> reservationComplete = (List<ReservationComplete>) session.getAttribute("reservationComplete");
+        String payId = (String) session.getAttribute("payId");
+        List<WasteData> wasteData = reservationService.selectpayCompleteWasteDate(payId);
+        model.addAttribute("wasteData", wasteData);
         return "/reservation/payComplete";
     }
 
