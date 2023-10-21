@@ -1,6 +1,7 @@
 package com.bringbring.chatting.store.logic;
 
 import com.bringbring.chatting.domain.Chat;
+import com.bringbring.chatting.domain.ChatRoom;
 import com.bringbring.chatting.store.ChatStore;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
@@ -20,4 +21,13 @@ public class ChatStoreLogic implements ChatStore {
 
     @Override
     public List<Chat> selectChatListByMap(Map<String, Object> map) { return sqlSession.selectList("ChatMapper.selectChatListByMap", map); }
+
+    @Override
+    public ChatRoom selectChatRoom(Map<String, Object> chatRoomMap) { return sqlSession.selectOne("ChatMapper.selectChatRoom", chatRoomMap); }
+
+    @Override
+    public int insertChatRoom(Map<String, Object> chatRoomMap) { return sqlSession.insert("ChatMapper.insertChatRoom", chatRoomMap); }
+
+    @Override
+    public List<Chat> selectChatRoomListByNo(int chatroomNo) { return sqlSession.selectList("ChatMapper.selectChatRoomListByNo", chatroomNo); }
 }
