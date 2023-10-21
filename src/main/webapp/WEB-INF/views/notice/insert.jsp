@@ -64,7 +64,7 @@
   <!-- ======= Header ======= -->
   <jsp:include page="/include/header.jsp"></jsp:include>
   
-  
+  <div style="width: 100%;height: 74px;"></div>  
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
     <div style="width: 1300px;margin: 0 auto;">
@@ -85,7 +85,7 @@
 
   <!-- 메인 -->
 	<main id="main" class="main">
-		<form class="notice-form" action="notice/insert.do" method="post"
+		<form class="notice-form" action="/notice/insert.do" method="post"
 			enctype="multipart/form-data">
 			<h2>공지사항 작성</h2>
 			<hr>
@@ -95,7 +95,7 @@
 					<div class="col-sm-3">
 						<select name="noticeType" id="noticeType" class="form-select"
 							aria-label="Default select example">
-							<option selected value="">선택</option>
+							<option selected value="choice">선택</option>
 							<option value="service">서비스</option>
 							<option value="update">업데이트</option>
 						</select>
@@ -122,9 +122,9 @@
 				</div>
 
 				<div class="row mb-3">
-					<label for="formFile" class="col-sm-1 col-form-label">첨부파일</label>
+					<label for="uploadFile" class="col-sm-1 col-form-label">첨부파일</label>
 					<div class="col-sm-6">
-						<input class="form-control" type="file" id="formFile"
+						<input class="form-control" type="file" id="uploadFile"
 							name="uploadFile">
 					</div>
 				</div>
@@ -133,6 +133,7 @@
 					<label for="summernote" class="col-sm-1 col-form-label">내용</label>
 					<div class="col-sm-10">
 						<textarea id="summernote" name="noticeContent"></textarea>
+
 					</div>
 				</div>
 			</div>
@@ -178,14 +179,28 @@
 	<script
 		src="../resources/assets/js/summernote/lang/summernote-ko-KR.js"></script>
 	<script>
-		$(document).ready(function() {
-			$('#summernote').summernote({
-				placeholder : '내용을 작성하세요',
-				height : 400,
-				maxHeight : 800,
-				lang : 'ko-KR'
-			});
-		});
+	$(document).ready(function(){
+	$('#summernote').summernote({
+		height: 400,                 // 에디터 높이
+		minHeight: null,             // 최소 높이
+		maxHeight: 800,             // 최대 높이
+		focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+		lang: "ko-KR",					// 한글 설정
+		toolbar: [
+		    ['style', ['style']],
+		    ['font', ['bold', 'italic', 'underline', 'clear']],
+		    ['fontname', ['fontname']],
+		    ['color', ['color']],
+		    ['para', ['ul', 'ol', 'paragraph']],
+		    ['height', ['height']],
+		    ['table', ['table']],
+		    ['insert', ['link', 'picture', 'hr']],
+		    ['view', ['codeview']],
+		    ['help', ['help']]
+		  ],
+		placeholder: '내용을 작성하세요'	//placeholder 설정
+	});
+});
 	</script>
 
 	<!-- 기능 스크립트 -->
@@ -196,7 +211,7 @@
 			var noticeContent = $('#summernote').summernote('code').replace(
 					/<\/?[^>]+(>|$)/g, "");
 
-			if (noticeType == "") {
+			if (noticeType == "choice") {
 				alert("카테고리를 선택해주세요.");
 				event.preventDefault();
 				return false;
@@ -241,7 +256,7 @@
 			var radioLabelElement = document.querySelector(".from-check label");
 
 			if (selectElement.value === "service") {
-				radioLabelElement.textContent = '${admin.adminOrg}';
+				radioLabelElement.textContent = '${regionName}';
 			} else {
 				radioLabelElement.textContent = "전체";
 			}

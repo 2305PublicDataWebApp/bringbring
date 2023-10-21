@@ -64,7 +64,7 @@
   <!-- ======= Header ======= -->
   <jsp:include page="/include/header.jsp"></jsp:include>
   
-  
+    <div style="width: 100%;height: 74px;"></div>
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
     <div style="width: 1300px;margin: 0 auto;">
@@ -85,21 +85,18 @@
 
   <!-- 메인 -->
 	<main id="main" class="main">
-		<form class="notice-form" action="notice/update.do" method="post"
+		<form class="notice-form" action="/notice/update.do" method="post"
 			enctype="multipart/form-data">
 			<h2>공지사항 수정</h2>
 			<hr>
 			<div class="container">
-
-
 				<div class="row mb-3">
 					<label class="col-sm-1 col-form-label">카테고리</label>
 					<div class="col-sm-3">
 						<select name="noticeType" id="noticeType" class="form-select"
-							aria-label="Default select example">
-							<option selected value="">선택</option>
-							<option value="service">서비스</option>
-							<option value="update">업데이트</option>
+							aria-label="Default select example" onFocus="this.initialSelect = this.selectedIndex;" onChange="this.selectedIndex = this.initialSelect;">
+								<option value="service" <c:if test="${notice.noticeType =='service' }">selected</c:if>>서비스</option>
+								<option value="update" <c:if test="${notice.noticeType == 'update' }">selected</c:if>>업데이트</option>
 						</select>
 					</div>
 				</div>
@@ -110,8 +107,9 @@
 					<div class="col-sm-10">
 						<div class="from-check">
 							<input class="from-check-input" type="radio" name="gridRadios"
-								id="gridRadios1" value="option1" checked> <label
-								class="from-check-label" for="gridRadios1">담당구역</label>
+								id="gridRadios1" value="option1" checked>
+								<c:if test="${notice.noticeType == 'service' }"><label class="from-check-label" for="gridRadios1">${notice.regionName }</label></c:if>
+								<c:if test="${notice.noticeType == 'update' }"><label class="from-check-label" for="gridRadios1">전체</label></c:if>
 						</div>
 					</div>
 				</div>
@@ -181,17 +179,32 @@
   <script src="../resources/assets/js/summernote/lang/summernote-ko-KR.js"></script>
 	<script>
  	<!-- 써머노트 스크립트 -->
-		$(document).ready(function() {
-			$('#summernote').summernote({
-				placeholder : '내용을 작성하세요',
-				height : 400,
-				maxHeight : 800
-			});
-
-			// 저장한 HTML 내용을 여기에 추가
-			var savedHtmlContent = "<p>${notice.noticeContent}</p>";
-			$('#summernote').summernote('code', savedHtmlContent);
+	$(document).ready(function(){
+		$('#summernote').summernote({
+			height: 400,                 // 에디터 높이
+			minHeight: null,             // 최소 높이
+			maxHeight: 800,             // 최대 높이
+			focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+			lang: "ko-KR",					// 한글 설정
+			toolbar: [
+			    ['style', ['style']],
+			    ['font', ['bold', 'italic', 'underline', 'clear']],
+			    ['fontname', ['fontname']],
+			    ['color', ['color']],
+			    ['para', ['ul', 'ol', 'paragraph']],
+			    ['height', ['height']],
+			    ['table', ['table']],
+			    ['insert', ['link', 'picture', 'hr']],
+			    ['view', ['codeview']],
+			    ['help', ['help']]
+			  ],
+			placeholder: '내용을 작성하세요'	//placeholder 설정
 		});
+		// 저장한 HTML 내용을 여기에 추가
+		var savedHtmlContent = "<p>${notice.noticeContent}</p>";
+		$('#summernote').summernote('code', savedHtmlContent);
+	});
+
 	</script>
 
 	<!-- 기능 스크립트 -->
@@ -202,7 +215,7 @@
 			var noticeContent = $('#summernote').summernote('code').replace(
 					/<\/?[^>]+(>|$)/g, "");
 
-			if (noticeType == "") {
+			if (noticeType == "choice") {
 				alert("카테고리를 선택해주세요.");
 				event.preventDefault();
 				return false;
@@ -241,24 +254,6 @@
 
 		};
 
-		// "카테고리" 선택 상자의 값이 변경될 때 호출되는 함수
-		function updateRadioButtonLabel() {
-			var selectElement = document.getElementById("noticeType");
-			var radioLabelElement = document.querySelector(".from-check label");
-
-			if (selectElement.value === "service") {
-				radioLabelElement.textContent = "담당구역";
-			} else {
-				radioLabelElement.textContent = "전체";
-			}
-		}
-
-		// "카테고리" 선택 상자의 값이 변경될 때 이벤트 리스너 등록
-		var selectElement = document.getElementById("noticeType");
-		selectElement.addEventListener("change", updateRadioButtonLabel);
-
-		// 초기 레이블 설정
-		updateRadioButtonLabel();
 	</script>
 
 
