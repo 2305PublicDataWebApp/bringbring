@@ -97,11 +97,10 @@ pageEncoding="UTF-8"%>
         //테스트
         $(document).ready(function(){
 
-            var roomName = [[${room.name}]];
-            var roomId = [[${room.roomId}]];
-            var username = [[${authentication.principal.username}]];
+            var chatroomNo = "${room.chatroomNo}";
+            var username = "${user.userName}";
 
-            console.log(roomName + ", " + roomId + ", " + username);
+            console.log(chatroomNo + ", " + username);
 
             var sockJs = new SockJS("/stomp/chat");
             //1. SockJS를 내부에 들고있는 stomp를 내어줌
@@ -112,40 +111,95 @@ pageEncoding="UTF-8"%>
                 console.log("STOMP Connection")
 
                 //4. subscribe(path, callback)으로 메세지를 받을 수 있음
-                stomp.subscribe("/sub/chat/room/" + roomId, function (chat) {
+                stomp.subscribe("/sub/chatting", function (chat) {
                     var content = JSON.parse(chat.body);
+                    var chatArray = content.body;
 
-                    var writer = content.writer;
-                    var str = '';
+                    for (var i = 0; i < chatArray.length; i++) {
 
-                    if(writer === username){
-                        str = "<div class='col-6'>";
-                        str += "<div class='alert alert-secondary'>";
-                        str += "<b>" + writer + " : " + message + "</b>";
-                        str += "</div></div>";
-                        $("#msgArea").append(str);
+                        var divElement = document.createElement("div");
+                        var liElement = document.createElement("li");
+                        var spanElement = document.createElement("span");
+
+                        if(chatArray[i].userNo === ${user.userNo}){
+
+                            divElement.setAttribute("class", "chatDiv");
+                            liElement.setAttribute("class", "other");
+                            spanElement.setAttribute("class", "otherTime");
+                            var textNode = document.createTextNode(chatArray[i].chatContent);
+                            liElement.appendChild(textNode);
+                            var textNode = document.createTextNode(displayCurrentTime());
+                            spanElement.appendChild(textNode);
+                            divElement.append(liElement);
+                            divElement.append(spanElement);
+                        }
+                        else if(chatArray[i].userNo !== ${user.userNo}){
+                            divElement.setAttribute("class", "chatDiv");
+                            liElement.setAttribute("class", "self");
+                            spanElement.setAttribute("class", "selfTime");
+                            var textNode = document.createTextNode(chatArray[i].chatContent);
+                            liElement.appendChild(textNode);
+                            var textNode = document.createTextNode(displayCurrentTime());
+                            spanElement.appendChild(textNode);
+                            divElement.append(liElement);
+                            divElement.append(spanElement);
+                        }
+                        $("#msgArea").append(divElement);
                     }
-                    else{
-                        str = "<div class='col-6'>";
-                        str += "<div class='alert alert-warning'>";
-                        str += "<b>" + writer + " : " + message + "</b>";
-                        str += "</div></div>";
-                        $("#msgArea").append(str);
-                    }
-
-                    $("#msgArea").append(str);
+                    document.getElementById("msgArea").scrollTop = document.getElementById("msgArea").scrollHeight;
                 });
 
                 //3. send(path, header, message)로 메세지를 보낼 수 있음
-                stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writer: username}))
+                stomp.send('/pub/message/'+chatroomNo, {}, JSON.stringify({chatroomNo: chatroomNo, writer: username}))
             });
 
-            $("#button-send").on("click", function(e){
-                var msg = document.getElementById("msg");
+            $("#sendBtn").on("click", function(e){
+                var msg = document.getElementById("opinion");
+                // DB 보내기
+                console.log(username + ":" + msg.textContent);
+                $.ajax({
+                    url: "/chatting/insert.do",
+                    data: { divNo: ${uData.divide.divNo}
+                        , userNo: ${user.userNo}
+                        , getUserNo: ${getUser.userNo}
+                        , chatContent: msg.textContent
+                        , chatRoomNo: chatroomNo
+                    },
+                    type: "POST",
+                    success: function(data) {
+                        if(data === "success"){
+                            // alert("insert 성공!");
+                        }else{
+                            alert("채팅저장 실패!");
+                        }
 
-                console.log(username + ":" + msg.value);
-                stomp.send('/pub/chat/message', {}, JSON.stringify({roomId: roomId, message: msg.value, writer: username}));
-                msg.value = '';
+                    },
+                    error: function() {
+                        alert("Ajax 오류! 관리자에게 문의하세요");
+                    }
+                });
+                    // DB로 보내기
+
+                stomp.send('/pub/message/'+chatroomNo, {}, JSON.stringify({chatroomNo: chatroomNo, message: msg.textContent, writer: username}));
+                // 추가하기
+                var divElement = document.createElement("div");
+                var liElement = document.createElement("li");
+                var spanElement = document.createElement("span");
+
+                divElement.setAttribute("class", "chatDiv");
+                liElement.setAttribute("class", "other");
+                spanElement.setAttribute("class", "otherTime");
+                var textNode = document.createTextNode(msg.textContent);
+                liElement.appendChild(textNode);
+                var textNode = document.createTextNode(displayCurrentTime());
+                spanElement.appendChild(textNode);
+                divElement.append(liElement);
+                divElement.append(spanElement);
+
+                $("#msgArea").append(divElement);
+
+                // 추가하기 끝
+                msg.textContent = '';
             });
         });
         //테스트
@@ -169,9 +223,9 @@ pageEncoding="UTF-8"%>
             window.close();
         }
 
-        document.getElementById("sendBtn").addEventListener("click", function() {
-            send();
-        });
+        // document.getElementById("sendBtn").addEventListener("click", function() {
+        //     send();
+        // });
 
         const username = "${name}";
 
@@ -212,7 +266,7 @@ pageEncoding="UTF-8"%>
             };
         }());
 
-        setInterval(() => console.log(new Date()), 10000); //prevent chrome refresh
+        //setInterval(() => console.log(new Date()), 10000); //prevent chrome refresh
 
         $(document).ready(function(){
             $(".floating-chat").click();
@@ -231,22 +285,25 @@ pageEncoding="UTF-8"%>
                 send();
             }
         }
-        function send(){
-            console.log(username + ":" + $("#opinion").text());
-            if($("#opinion").text() != ""){
-                websocket.send(username + ":" + $("#opinion").text());
-                $("#opinion").text('');
-            }
-        }
+        // function send(){
+        //     console.log(username + ":" + $("#opinion").text());
+        //     if($("#opinion").text() != ""){
+        //         stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: $("#opinion").text(), writer: username}));
+        //         // websocket.send(username + ":" + $("#opinion").text());
+        //         $("#opinion").text('');
+        //     }
+        // }
 
         function onClose(evt) {
             var str = username + ": 님이 방을 나가셨습니다.";
-            websocket.send(str);
+            stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: str, writer: username}));
+            // websocket.send(str);
         }
 
         function onOpen(evt) {
             var str = username + ": 님이 입장하셨습니다.";
-            websocket.send(str);
+            stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: str, writer: username}));
+            // websocket.send(str);
         }
 
         function onMessage(msg) {

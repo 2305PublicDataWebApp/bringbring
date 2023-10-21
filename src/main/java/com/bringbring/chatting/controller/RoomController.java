@@ -1,7 +1,14 @@
 package com.bringbring.chatting.controller;
 
+import com.bringbring.chatting.domain.Chat;
+import com.bringbring.chatting.service.ChatService;
+import com.bringbring.region.domain.District;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,41 +17,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/chat")
 @Log4j2
 public class RoomController {
 
-    private final ChatRoomRepository repository;
-
-    //채팅방 목록 조회
-    @GetMapping(value = "/rooms")
-    public ModelAndView rooms(){
-
-        log.info("# All Chat Rooms");
-        ModelAndView mv = new ModelAndView("chat/rooms");
-
-        mv.addObject("list", repository.findAllRooms());
-
-        return mv;
-    }
+    private final ChatService chatService;
 
     //채팅방 개설
-    @PostMapping(value = "/room")
-    public String create(@RequestParam String name, RedirectAttributes rttr){
+    @MessageMapping("/message")
+    @SendTo("/sub/chatting")
+    public ResponseEntity<List<Chat>> create(
+            @PathVariable int chatroomNo
+    ) {
 
-        log.info("# Create Chat Room , name: " + name);
-        rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(name));
-        return "redirect:/chat/rooms";
+        List<Chat> chatList = chatService.selectChatRoomListByNo(chatroomNo);
+//        model.addAttribute("cList", chatList);
+//        return "redirect:/chatting?userId="+chatList.get(0).;
+        return ResponseEntity.ok(chatList);
     }
 
-    //채팅방 조회
-    @GetMapping("/room")
-    public void getRoom(String roomId, Model model){
-
-        log.info("# get Chat Room, roomID : " + roomId);
-
-        model.addAttribute("room", repository.findRoomById(roomId));
-    }
 }

@@ -6,8 +6,19 @@
         AND ((USER_NO = #{userNo} OR USER_NO = #{getUserNo})AND (GET_USER_NO = #{userNo} OR GET_USER_NO = #{getUserNo}))
         ORDER BY CHAT_CREATE_DATE
     </select>
+    <select id="selectChatRoom" resultType="ChatRoom" >
+        SELECT * FROM CHATROOM_TBL WHERE DIV_NO = #{divNo}
+        AND ( USER_NO = #{userNo} OR USER_NO = #{getUserNo} )
+        AND ( GET_USER_NO = #{userNo} OR GET_USER_NO = #{getUserNo} )
+    </select>
+    <select id="selectChatRoomListByNo" resultType="Chat">
+        SELECT * FROM CHAT_TBL WHERE CHATROOM_NO = #{value} ORDER BY CHAT_CREATE_DATE
+    </select>
     <insert id="insertChat">
         INSERT INTO CHAT_TBL VALUES (SEQ_CHAT_NO.NEXTVAL, #{divNo}, #{userNo}, #{getUserNo}, #{chatContent}, DEFAULT, DEFAULT, DEFAULT, #{chatRoomNo})
+    </insert>
+    <insert id="insertChatRoom">
+        INSERT INTO CHATROOM_TBL VALUES(SEQ_CHATROOM_NO.NEXTVAL, #{divNo}, #{userNo}, #{getUserNo}, DEFAULT)
     </insert>
 
 </mapper>
