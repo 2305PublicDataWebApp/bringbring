@@ -56,7 +56,7 @@
   <!-- ======= Header ======= -->
   <jsp:include page="/include/header.jsp"></jsp:include>
   
-  
+   <div style="width: 100%;height: 74px;"></div>
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
     <div style="width: 1300px;margin: 0 auto;">
@@ -79,18 +79,28 @@
 	<main id="main" class="main">
 		<div class="head">
 			<div class="notice-title">
-				<h2>[지역] ${notice.noticeTitle }</h2>
+				<h2>						
+					<c:if test="${notice.noticeType == 'service'}">[ ${notice.regionName}]</c:if>
+					<c:if test="${notice.noticeType == 'update'}">[ 전체 ]</c:if> 
+					${notice.noticeTitle }</h2>
 			</div>
 			<div class="notice-subtitle">
 				<div class="notice-info">${notice.noticeCreateDate } |
 					${notice.noticeType }</div>
 				<div class="notice-btn">
+				<c:url var="delUrl" value="/notice/delete.do">
+					<c:param name="noticeNo" value="${notice.noticeNo }" />
+				 	<c:param name="userNo" value="${notice.userNo }" />
+				</c:url>
+				<c:url var="modiUrl" value="/notice/update.do">
+					<c:param name="noticeNo" value="${notice.noticeNo }" />
+				</c:url>
 					<!-- 관리자만 보이는 버튼 -->
 			<c:if test="${sessionScope.sessionUserGrade >=2 }">
-					<button class="btn btn-primary" onclick="showNoticeUpdate();">수정하기</button>
+					<button class="btn btn-primary" onclick="showUpdateNotice('${modiUrl}');">수정하기</button>
 					<button class="btn btn-primary"
 						onclick="deleteNotice('${delUrl}');">삭제하기</button>
-						</c:if>
+			</c:if>
 				</div>
 			</div>
 			<div class="icon">
@@ -106,17 +116,45 @@
 			</div>
 		</div>
 		<hr>
-		<div class="content">${notice.noticeContent }</div>
+		<div class="content">${notice.noticeContent }
+
+</div>
 		<hr>
 		<!-- 이전글/다음글 -->
 		<div class="otherdetail">
-			<li>이전 | 
-					<a href="${detailUrl}?noticeNo=${preNoticeNo}&searchKeyword=${searchKeyword}">${notice.noticeTitle }</a>
+        <table id="nextBoard">
+            <tr>
+                <td style="width:70px;">이전</td>
+                <td>
+                	<c:choose>
+                		<c:when test="${notice.preNoticeNo == 0 }">
+                			<span style="coloc:gray;">이전글이 없습니다.</span>
+                		</c:when>
+                		<c:otherwise>
+                			<span class="preNoticeTitle">
+                				<a href="/notice/detail?noticeNo=${notice.preNoticeNo}"></a>
+                			</span>
+                		</c:otherwise>
+                	</c:choose>
+                </td>
+            </tr>
 
-			</li>
-			<li>다음 | 
-					<a href="${detailUrl }?noticeNo=${nextNoticeNo}">${notice.noticeTitle }</a>
-			</li>
+            <tr style="border-top: 1px solid #dbdbdb;">
+                <td>다음</td>
+                <td>
+                	<c:choose>
+                		<c:when test="${notice.nextNoticeNo == 0 }">
+                			<span style="coloc:gray;">다음글이 없습니다.</span>
+                		</c:when>
+                		<c:otherwise>
+                			<span class="nextNoticeTitle">
+                				<a href="/notice/detail?noticeNo=${notice.nextNoticeNo}"></a>
+                			</span>
+                		</c:otherwise>
+                	</c:choose>
+                </td>
+            </tr>
+        </table>
 		</div>
 
 		<button class="btn btn-success" onclick="goList()">목록으로</button>
@@ -155,15 +193,13 @@
 
   <!-- 기능 script -->
 	<script>
-		function showNoticeUpdate() {
-			const noticeNo = "${notice.noticeNo}";
-			location.href = "/notice/update.do?noticeNo=" + noticeNo;
+		function showUpdateNotice(modiUrl) {
+			location.href = modiUrl;
 		}
 
-		function deleteNotice() {
-			const noticeNo = "${notice.noticeNo}";
+		function deleteNotice(delUrl) {
 			if (confirm("게시글을 삭제하시겠습니까?")) {
-				location.href = "/notice/delete.do?noticeNo=" + noticeNo;
+				location.href = delUrl;
 			}
 		}
 
