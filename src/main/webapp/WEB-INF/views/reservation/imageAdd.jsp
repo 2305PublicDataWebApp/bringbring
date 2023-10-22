@@ -70,7 +70,7 @@
   </div>
 
 </section>
-<div style="width: 100%;height: 1000px;">
+<div style="width: 100%;">
 
   <main>
     <h2 class="subject">대형 폐기물 사진 추가</h2>
@@ -99,7 +99,7 @@
                     <div class="pic-Add-Btn">
                       <img src="../../../resources/assets/img/reservation/pic-add.png">
                     </div>
-                    <input type="file" name="uploadFiles" class="uploadImg" accept="image/*" required multiple="multiple" style="display: none;">
+                    <input type="file" name="uploadFiles" class="uploadImg" accept="image/*" required multiple style="display: none;">
                     <input type="hidden" class="wasteInfoNo" name="wasteInfoNo" value="${item.wasteInfo.wasteInfoNo}">
                     <div class="pic-Add-Btn">
                       <button class="btn btn-outline-success pic-Add-Btn" onclick="document.getElementById('uploadImg').click()">사진 추가</button>
@@ -154,17 +154,34 @@
     "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
   });
 
+
+
   const imgCount = new Map();
   // input file
   const imgUploads = document.querySelectorAll('.uploadImg');
+    var filesArr = []; // 업로드한 파일을 저장하는 배열
+    // input 요소의 이미지 업로드 이벤트 처리
 
-  // input 요소의 이미지 업로드 이벤트 처리
-  function handlerInputChange(e) {
+    function handlerInputChange(e) {
     // input 요소와 가장 가까이 있는 tr 찾기
     const tr = e.target.closest('tr');
+    var files = e.target.files; // 선택한 파일 목록을 가져옴
+    // var filesArr = Array.prototype.slice.call(files);
+    // var fileArr = fileListArr.slice(); // 파일 목록 배열을 복사
+    var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+      const wasteInfoNo = event.target.closest('tr').querySelector('.wasteInfoNo').value;
+
+
+      // 파일을 배열에 추가
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        filesArr.push({file, wasteInfoNo});
+      }
+
+      console.log("fileArrs", filesArr);
 
     // tr에 대한 imgCount를 0으로 설정
-    imgCount.set(tr, 0);
+    // imgCount.set(tr, 0);
 
     if (!imgCount.has(tr)) {
       imgCount.set(tr, 0);
@@ -173,20 +190,32 @@
     imgCount.set(tr, imgCount.get(tr) + 1);
 
     console.log('추가한 이미지' + imgCount.get(tr));
+    // Map을 전체적으로 확인하려면 다음과 같이 출력할 수 있습니다.
+    console.log('전체 imgCount Map:', imgCount);
 
-    if (imgCount.get(tr) > 2) {
-      alert('이미지는 물품당 2개까지 첨부할 수 있습니다.');
+
+
+    if (imgCount.get(tr) > 4) {
+      alert('이미지는 물품당 4개까지 첨부할 수 있습니다.');
       e.target.value = '';
-      imgCount.set(tr, 2);
+      imgCount.set(tr, 4);
+    }
+  }
+
+  // 파일을 배열에서 제거
+  function removeFileFromArray(file, wasteInfoNo) {
+    const fileIndex = filesArr.findIndex(item => item.file.name === file.name && item.wasteInfoNo === wasteInfoNo);
+    if (fileIndex !== -1) {
+      filesArr.splice(fileIndex, 1);
     }
   }
 
   imgUploads.forEach((input) => {
     input.addEventListener('change', function (e) {
+console.log("imgUploads ", imgUploads);
       handlerInputChange(e);
     });
   });
-
 
 
 
@@ -217,16 +246,23 @@
   // 업로드된 이미지를 가져와서 미리보기함
   function getImgs(e, preview) {
     const uploadFiles = [];
-    const files = e.currentTarget.files;
+    const files = e.target.files;
     const imgPreview = e.target.closest('tr').querySelector('.img-preview');
+    const wasteInfoNo = e.target.closest('tr').querySelector('.wasteInfoNo').value;
     const docFrag = new DocumentFragment();
-
     // 파일 갯수 검사
-    if (imgPreview.children.length + e.currentTarget.files.length > 1) {
+    if (imgPreview.children.length + e.currentTarget.files.length > 4) {
       alert('이미지는 한장씩 첨부할 수 있습니다.');
       e.target.value = '';
       return;
     }
+
+    // 파일을 uploadFiles 배열에 추가
+    for (let i = 0; i < e.currentTarget.files.length; i++) {
+
+      uploadFiles.push(e.currentTarget.files[i]);
+    }
+
 
 
     // 이미지 파일만 처리
@@ -234,7 +270,7 @@
     for (const imageFile of imageFiles) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const preview = createElement(e, imageFile);
+        const preview = createElement(e, imageFile, wasteInfoNo);
         imgPreview.appendChild(preview);
       };
       reader.readAsDataURL(imageFile);
@@ -245,13 +281,8 @@
   }
 
   // 미리보기 생성
-  function createElement(e, file) {
+  function createElement(e, file, wasteInfoNo) {
     let tr = e.target;
-
-    // for (let i = 0; i < tr.length; i++) {
-    //   let cellValue = tr[i].innerHTML; // or cells[i].textContent.
-    //   console.log(cellValue);
-    // }
 
     const li = document.createElement('li');
     const img = document.createElement('img');
@@ -279,6 +310,8 @@
 
     deleteBtn.addEventListener('click', (e) => {
       li.remove();
+      removeFileFromArray(file, wasteInfoNo);
+      console.log("fileArr", filesArr);
       // 이미지를 삭제하면 files 배열에서도 해당 파일을 제거
       const tr = e.target.closest('tr');
       if (tr) {
@@ -289,6 +322,7 @@
         if (fileIndex !== -1) {
           files.splice(fileIndex, 1);
         }
+
       }
     });
 
@@ -298,7 +332,6 @@
 
 
   function submitFormBtn() {
-    console.log("아");
 
     // 모든 .formList 요소를 선택
     const formLists = document.querySelectorAll('.formList');
@@ -307,122 +340,106 @@
     const form = document.getElementById('uploadForm');
     form.enctype = 'multipart/form-data';
     form.method = 'POST';
-
-    // FormData를 폼에 설정
     const formData = new FormData();
-
     let hasFiles = false; // 이미지 첨부 여부를 나타내는 변수
 
-    // 각 .formList 요소를 순회하며 FormData에 파일 필드와 데이터 추가
-    formLists.forEach(function (formList) {
-      const listId = formList.dataset.listId; // data-list-id 속성을 사용하여 리스트 ID 가져옴
-      const wasteInfoNo = formList.querySelector('.wasteInfoNo').value;
-      const fileInput = formList.querySelector('.uploadImg');
+    let allRowsHaveImages = true; // 모든 행에 이미지가 첨부되었음을 가정
+    let alertShown = false; // 알림이 이미 표시되었는지 여부를 추적
 
-      console.log("fileInput" + fileInput + wasteInfoNo);
+    // 각 행(tr)마다 이미지 업로드 확인 및 FormData에 추가
+    formLists.forEach(formList => {
+      const uploadFiles = Array.from(formList.querySelectorAll('.uploadImg'));
 
-      if (fileInput && fileInput.files.length > 0) {
-        formData.append("listId", listId);
-        formData.append("wasteInfoNo", wasteInfoNo);
-        for (let i = 0; i < fileInput.files.length; i++) {
-          formData.append("uploadFiles[]", fileInput.files[i]);
+      // 이미지 첨부 여부를 확인
+      if (uploadFiles.length < 1) {
+        allRowsHaveImages = false; // 이미지가 없는 행이 있음을 표시
+        if (!alertShown) {
+          alert('최소한 한 장의 이미지를 첨부해야 합니다.');
+          alertShown = true; // 알림을 한 번만 표시
         }
-        hasFiles = true; // 이미지가 첨부되었음을 표시
-        console.log("파일이 선택됨");
-      } else {
-        console.log("파일이 선택되지 않았음");
-        hasFiles = false;
-        return false; // 이미지가 첨부되지 않았을 때 폼 전송 중지
+        return;
+      }
+
+      const wasteInfoNo = uploadFiles[0].closest('tr').querySelector('.wasteInfoNo').value;
+
+      const filesArrForTr = filesArr.filter(fileObj => fileObj.wasteInfoNo === wasteInfoNo);
+
+      if (filesArrForTr.length < 1) {
+        allRowsHaveImages = false; // 이미지가 없는 행이 있음을 표시
+        if (!alertShown) {
+          alert('각 행당 최소한 한 장의 이미지를 첨부해야 합니다.');
+          alertShown = true; // 알림을 한 번만 표시
+        }
+        return;
+      }
+
+      // FormData에 해당 행(tr)의 이미지 파일 추가
+      for (let i = 0; i < filesArrForTr.length; i++) {
+        formData.append('file', filesArrForTr[i].file);
+        formData.append('wasteInfoNo', filesArrForTr[i].wasteInfoNo);
       }
     });
 
-    if (hasFiles) {
-      console.log(formData);
-      console.log(form);
-
-      console.log("uploadFiles: " + formData.get('uploadFiles[]'));
-      console.log("wasteInfoNo: " + formData.get('wasteInfoNo'));
-
-      form.submit();
-      for (const [key, value] of formData.entries()) {
-        console.log(key + ": " + value);
-      }
-    } else {
-      alert('물품마다 이미지는 반드시 첨부해야 합니다.');
+    // 모든 행에 이미지가 첨부되었을 때에만 서버 요청을 보냄
+    if (allRowsHaveImages) {
+      $.ajax({
+        url: '/reservation/imageUpload.do',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          location.href = "/reservation/insertInfo.do";
+          console.log('업로드 완료', response);
+        },
+        error: function(error) {
+          alert("Ajax 오류! 관리자에게 문의 바랍니다.");
+          console.error('업로드 실패', error);
+        }
+      });
     }
 
+
+
+    // // 각 .formList 요소를 순회하며 FormData에 파일 필드와 데이터 추가
+    // formLists.forEach(function (formList) {
+    //   const listId = formList.dataset.listId; // data-list-id 속성을 사용하여 리스트 ID 가져옴
+    //   const wasteInfoNo = formList.querySelector('.wasteInfoNo').value;
+    //   const fileInput = formList.querySelector('.uploadImg');
+    //
+    //   console.log("fileInput" + fileInput + wasteInfoNo);
+    //
+    //   if (fileInput && fileInput.files.length > 0) {
+    //     formData.append("listId", listId);
+    //     formData.append("wasteInfoNo", wasteInfoNo);
+    //     for (let i = 0; i < fileInput.files.length; i++) {
+    //       formData.append("uploadFiles[]", fileInput.files[i]);
+    //     }
+    //     hasFiles = true; // 이미지가 첨부되었음을 표시
+    //     console.log("파일이 선택됨");
+    //   } else {
+    //     console.log("파일이 선택되지 않았음");
+    //     hasFiles = false;
+    //     return false; // 이미지가 첨부되지 않았을 때 폼 전송 중지
+    //   }
+    // });
+    //
+    // if (hasFiles) {
+    //   console.log(formData);
+    //   console.log(form);
+    //
+    //   console.log("uploadFiles: " + formData.get('uploadFiles[]'));
+    //   console.log("wasteInfoNo: " + formData.get('wasteInfoNo'));
+    //
+    //   form.submit();
+    //   for (const [key, value] of formData.entries()) {
+    //     console.log(key + ": " + value);
+    //   }
+    // } else {
+    //   alert('물품마다 이미지는 반드시 첨부해야 합니다.');
+    // }
+
   }
-
-
-
-
-
-
-  // 파일 업로드 필드에서 파일을 추가한 후 파일 읽어보는 코드
-  // const file = formData.get('uploadFiles');
-  //
-  // if (file instanceof File) {
-  //   const reader = new FileReader();
-  //
-  //   reader.onload = function (e) {
-  //     const fileContents = e.target.result;
-  //     console.log("File Contents: " + fileContents);
-  //   };
-  //
-  //   reader.readAsText(file); // 파일을 텍스트로 읽음
-  // }
-
-
-
-
-
-
-
-
-
-  // // 파일 업로드 필드와 업로드 버튼 요소 가져오기
-  // const fileInputs = document.querySelectorAll('.uploadFiles');
-  // const uploadButton = document.getElementById('submitButton');
-  // const form = document.getElementById('uploadForm');
-  //
-  // console.log(uploadButton);
-  //
-  // // 업로드 버튼 클릭 이벤트 리스너 추가
-  // uploadButton.addEventListener('click', async () => {
-  //   const formData = new FormData();
-  //
-  //   // 모든 파일 업로드 필드에서 선택한 파일을 FormData에 추가
-  //   fileInputs.forEach(input => {
-  //     const files = input.files;
-  //     for (let i = 0; i < files.length; i++) {
-  //       formData.append('uploadedFiles', files[i]);
-  //       console.log(formData.get('uploadedFiles'));
-  //     }
-  //   });
-  //
-  //   formData.forEach((value, key) => {
-  //     console.log(key, value);
-  //   });
-  //
-  //   // 서버로 데이터를 보내는 부분
-  //   try {
-  //     const response = await fetch('/reservation/addImage.do', {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
-  //
-  //     if (response.ok) {
-  //       // 성공적으로 업로드되었을 때 수행할 작업
-  //       console.log('파일 업로드 성공');
-  //     } else {
-  //       console.error('파일 업로드 실패');
-  //     }
-  //   } catch (error) {
-  //     console.error('파일 업로드 중 오류 발생', error);
-  //   }
-  // });
-  //
-  //
 
 
 </script>

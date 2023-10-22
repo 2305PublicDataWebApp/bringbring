@@ -28,4 +28,12 @@ public interface ReservationStore {
 
     List<ReservationComplete> selectReservationCompleteInfo(String payId);
 
+    Image selectImageNo(String imageRename);
+
+    Reservation selectReservationNo(int userNo);
+
+    ReservationDetail selectReservationDetailNo(int rvNo);
+
+    List<WasteData> selectpayCompleteWasteDate(String payId);
+
 }

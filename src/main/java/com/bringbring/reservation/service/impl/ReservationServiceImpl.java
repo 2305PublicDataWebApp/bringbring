@@ -72,8 +72,15 @@ public class ReservationServiceImpl implements ReservationService {
             // 성공
 
             if (reservationDetail != null  && reservationResult > 0) {
+                int rvNo = reservationUserInfo.getRvNo();
+//                int userNo = reservationUserInfo.getUserNo();
+//                Reservation rvNoSelect = reservationStore.selectReservationNo(userNo);
+                reservationDetail.setRvNo(rvNo);
                 reservationDetailResult = reservationStore.insertReservationDetail(reservationDetail);
+
+//                ReservationDetail rvDetailNoSelect = reservationStore.selectReservationDetailNo(rvNo);
                 rvDetailNo = reservationDetail.getRvDeatilNo();
+                reservationDetail.setRvDeatilNo(rvDetailNo);
                 System.out.println("rvDetailNo = " + rvDetailNo);
                 System.out.println("reservationDetailResult = " + reservationDetailResult);
             }
@@ -111,18 +118,10 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationStore.selectReservationCompleteInfo(payId);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public List<WasteData> selectpayCompleteWasteDate(String payId) {
+        return reservationStore.selectpayCompleteWasteDate(payId);
+    }
 
 
     // ***************** 이미지 관련 *****************
@@ -219,7 +218,8 @@ public class ReservationServiceImpl implements ReservationService {
                             // 이미지 객체가 성공적으로 데이터베이스에 삽입됨
 
                             // 이미지 객체에 이미지 번호를 가져옵니다.
-                            int imageNo = image.getImageNo();
+                            Image imageNoSelect = reservationStore.selectImageNo(imageRename);
+                            int imageNo = imageNoSelect.getImageNo();
 
                             // 가져온 이미지 번호와 imageAdd가 가지고 있는 정보로 연결 테이블에 삽입합니다.
                             Connection connection = new Connection();
