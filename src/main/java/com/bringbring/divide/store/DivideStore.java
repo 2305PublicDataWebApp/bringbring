@@ -47,4 +47,6 @@ public interface DivideStore {
 	UserData selectUserDataByNo(int divNo);
 
     List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo);
+
+    int deleteImage(int imageNo);
 }

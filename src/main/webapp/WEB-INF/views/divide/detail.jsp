@@ -110,9 +110,9 @@
 
   <div style="width: 100%;height: 74px;"></div>
     
-  <main style="width: 100%;margin: 0 auto;padding-top: 50px;">
+  <main style="width: 100%;margin: 0 auto;padding-top: 50px;" data-aos="fade-up">
     <!-- 캐러셀 영역 -->
-    <div id="carouselExampleIndicators" data-aos="fade-up" class="carousel slide" style="margin-bottom: 45px;">
+    <div id="carouselExampleIndicators" class="carousel slide" style="margin-bottom: 45px;">
       <div class="carousel-indicators">
         <c:forEach var="image" items="${iList}" varStatus="loop">
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${loop.index}" class="<c:if test='${loop.first}'>active</c:if>" aria-label="Slide ${loop.index + 1}"></button>
@@ -136,7 +136,7 @@
       </button>
     </div>
 
-    <div style="width: 850px;margin: 0 auto;" data-aos="fade-up">
+    <div style="width: 850px;margin: 0 auto;" >
       <!-- 프로필 영역 -->
       <div style="width: 100%;height: 130px;border-bottom: 2px solid #ccc;border-top: 2px solid #ccc;">
         <div style="float: left;">
@@ -157,12 +157,13 @@
         </div>
       </div>
       <!-- 제목 영역 -->
-      <div style="width: 100%;border-bottom: 1px solid #ccc;display: flex;" data-aos="fade-up">
+      <div style="width: 100%;border-bottom: 1px solid #ccc;display: flex;" >
         <div style="padding: 35px 15px;width: 92%;">
           <h3 style="margin-bottom: 15px;">${dData.divide.divTitle}</h3>
           <p style="margin-bottom: 5px;">${dData.wasteCategory.wasteCategoryName}</p>
           <p style="margin: 0px;">
-            <fmt:parseDate value="${dData.divide.divCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime1" type="both" />
+<%--            <fmt:parseDate value="${dData.divide.divCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime1" type="both" />--%>
+            <fmt:parseDate value="${dData.divide.divCreateDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parseDateTime1" type="both" />
             <fmt:formatDate value="${parseDateTime1}" pattern="yyyy. MM. dd." />
 <%--            ${dData.divide.divCreateDate}--%>
           </p>
@@ -181,21 +182,21 @@
         </div>
       </div>
       <!-- 내용 영역 -->
-      <div data-aos="fade-up" style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;">
+      <div style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;">
         <div style="padding: 35px 15px;width: 100%;">
           <div style="width: 100%;margin: 0px 0px 100px 0px;">${dData.divide.divContent}</div>
 <%--          <textarea cols="88" rows="15" style="resize: none; border: none; outline: none; width: 100%;" readonly>${dData.divide.divContent}</textarea>--%>
         </div>
         <div style="margin: 0px 10px 7px 0px;">
 <%--          <i class="bi bi-chat"></i>--%>
-          채팅 2&nbsp;&nbsp;•&nbsp;
+          채팅 <span>${dData.divide.chatroomCount}</span>&nbsp;&nbsp;•&nbsp;
 <%--          <i class="bi bi-heart"></i>--%>
-          찜 <span id="heartCount">${dData.divide.heartCount}</span> &nbsp;&nbsp;•&nbsp;
+          찜 <span id="heartCount">${dData.divide.heartCount}</span> &nbsp;•&nbsp;
           조회 <span id="viewCount">${dData.divide.viewCount}</span>
         </div>
       </div>      
       <!-- 거래 희망장소 영역 -->
-      <div data-aos="fade-up" style="width: 100%;">
+      <div style="width: 100%;">
         <div style="padding: 35px 15px;">
           <h3>거래 희망 장소</h3>
           <p style="margin-bottom: 5px;">
@@ -209,9 +210,9 @@
         </div>
       </div>
       <!-- 지도 영역 -->
-      <div data-aos="fade-up" id="map" style="width: 100%;height: 300px;border: 1px solid #ccc;"></div>
+      <div id="map" style="width: 100%;height: 300px;border: 1px solid #ccc;"></div>
       <!-- 버튼 영역 -->
-      <div data-aos="fade-up" style="margin: 0 auto;text-align: center;margin-top: 100px;">
+      <div style="margin: 0 auto;text-align: center;margin-top: 100px;">
 <%--        <c:if test="${sessionId ne null && sessionId ne dData.user.userId}">--%>
           <button onclick="openPopup('/chatting/${sessionId}?divNo=${dData.divide.divNo}&getUserId=${dData.user.userId}')" class="btn btn-success btn-lg">1:1 채팅 신청</button>
 <%--        </c:if>--%>
