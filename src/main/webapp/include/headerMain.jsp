@@ -56,5 +56,9 @@
 	
 	    </div>
 	  </header><!-- End Header -->
+		  <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+		  <script>
+	  		<jsp:include page="/include/loginJs.jsp"></jsp:include>
+		</script>
 	</body>
 </html>

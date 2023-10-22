@@ -80,11 +80,11 @@
             </div>
 
             <div class="sns_buttons_div">
-                <button type="button" onclick="kakao_btn();" class="kakao_login_btn rounded">
-                    <img src="../resources/assets/img/user/kakao_login_btn.png" alt="카카오 로그인" onclick="">
+                <button type="button" class="kakao_login_btn rounded">
+                    <img src="../resources/assets/img/user/kakao_login_btn.png" alt="카카오 로그인" onclick="kakao_btn();">
                 </button><br>
-                <button type="button" onclick="naver_btn();" class="naver_login_btn rounded">
-                    <img src="../resources/assets/img/user/naver_login_btn.png" alt="네이버 로그인" onclick="">
+                <button type="button" class="naver_login_btn rounded">
+                    <img src="../resources/assets/img/user/naver_login_btn.png" alt="네이버 로그인" onclick="naver_btn();">
                 </button>
             </div>
         </div>
@@ -109,30 +109,35 @@
 
     <!-- Template Main JS File -->
     <script src="../resources/assets/js/main.js"></script>
-    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
 	<script>
-		function naver_btn() {
-			const clientId = 'oWq7iXzHYNRYo_as3iSc';
-			var naverUrl = "${naverUrl }";
-			window.location.href = naverUrl;
-		}
-		// 초기화
-		Kakao.init('b82d0f1e81f80d7dfb52a8b896d5b146'); // JavaScript 키
-		Kakao.isInitialized();
+// 	    // 쿠키 삭제 함수
+// 	    function deleteCookie(name) {
+// 	        document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT; domain=.kakao.com; path=/;';
+// 	    }
+// 	    deleteCookie('_kawlt');
+	
+// 		// 초기화
+// 		Kakao.init('b82d0f1e81f80d7dfb52a8b896d5b146'); // JavaScript 키
+// 		console.log(Kakao.isInitialized());
+
 		function kakao_btn() {
 			Kakao.Auth.authorize({
-			redirectUri: 'http://127.0.0.1:8888/social/kakaoLogin.do',
-			scope: 'account_email, profile_nickname', 
-			success: function(success) {
-				console.log("카카오 인증 성공", authObj);
-				// 로그인 또는 인증 성공 시 처리
-			},
-			fail: function(err) {
-				console.log("카카오 인증 실패", err);
-				// 로그인 또는 인증 실패 시 처리
-			},
+				redirectUri : 'http://127.0.0.1:8888/social/kakaoLogin.do',
+				scope : 'account_email, profile_nickname',
+				success : function(success) {
+					console.log("카카오 인증 성공", success);
+					// 로그인 또는 인증 성공 시 처리
+				},
+				fail : function(err) {
+					console.log("카카오 인증 실패", err);
+					// 로그인 또는 인증 실패 시 처리
+				},
 			});
+		}
+		// 네이버 로그인
+		function naver_btn() {
+			window.location.href = "/social/naverLoginUrl.do";
 		}
 	</script>
     <!-- 채널톡 api -->
