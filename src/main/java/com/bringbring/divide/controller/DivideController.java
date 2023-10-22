@@ -83,7 +83,6 @@ public class DivideController {
 			Heart heart = divideService.selectHeartByMap(map);
 			model.addAttribute("heart", heart);
 		}
-//		date.format(DateTimeFormatter.ISO_DATE);
 		model.addAttribute("iList", imageList).addAttribute("dData", detailData);
 		return "divide/detail";
 	}
@@ -140,7 +139,6 @@ public class DivideController {
 			List<ResponseData> responseData = divideService.selectResponseDataList(pInfo);
 			model.addAttribute("rData", responseData);
 		}
-
 
 		model.addAttribute("pInfo", pInfo);
 

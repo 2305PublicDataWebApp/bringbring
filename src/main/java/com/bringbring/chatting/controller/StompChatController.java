@@ -23,6 +23,12 @@ public class StompChatController {
         template.convertAndSend("/sub/chatting/" + message.getChatroomNo(), message);
     }
 
+    @MessageMapping(value = "/chat/close")
+    public void close(ChatMessageDTO message){
+        message.setMessage("님이 채팅방에서 퇴장하였습니다.");
+        template.convertAndSend("/sub/chatting/" + message.getChatroomNo(), message);
+    }
+
     @MessageMapping(value = "/chat/message")
     public void message(ChatMessageDTO message){
         template.convertAndSend("/sub/chatting/" + message.getChatroomNo(), message);

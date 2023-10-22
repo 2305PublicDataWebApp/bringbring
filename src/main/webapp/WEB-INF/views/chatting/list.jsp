@@ -17,19 +17,24 @@ pageEncoding="UTF-8"%>
 <%--    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>--%>
     <link rel="stylesheet" href="../resources/assets/css/chatting/style.css">
     <style>
-
-
+        /*.floating-chat .chat .messages li.self:before {*/
+        /*    background-image: url(../resources/assets/img/divide/free-icon-gift-3835774.png);*/
+        /*}*/
+        .header a:link, .header a:visited{
+            color: #103b31;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
     <div style="margin: 0 auto;">
         <div class="floating-chat expand enter">
-            <i class="fa fa-comments" aria-hidden="true"></i>
+            <i class="fa fa-comments" ></i>
             <div class="chat">
                 <div class="header">
                 <span class="title">
-                    <span onclick="closeCurrentWindow()" style="cursor: pointer;"><</span> &nbsp;
-                    ${uData.user.userName}
+                    <span id="closeWindow" style="cursor: pointer;"><</span> &nbsp;
+                    ${getUser.userName}
                 </span>
                 </div>
                 <div class="header text-center" style="border-bottom: 1px solid #17594A;padding-left: 10px;margin-bottom: 5px;">
@@ -37,9 +42,9 @@ pageEncoding="UTF-8"%>
                         <button type="button" style="padding: 9px 10px 7px 10px; border-radius: 6px;background-color: #222;font-family: 'LINESeedKR-Bd';font-size: 14px;" readonly>나눔 완료</button>
                     </c:if>
                     <span class="divideTitle">
-<%--                        <a href="/divide/detail.do?divNo=${uData.divide.divNo}">--%>
+                        <a href="/divide/detail.do?divNo=${uData.divide.divNo}">
                             ${uData.divide.divTitle}
-<%--                        </a>--%>
+                        </a>
                     </span>
                 </div>
                 <ul id="msgArea" class="messages">
@@ -78,7 +83,7 @@ pageEncoding="UTF-8"%>
                     </c:forEach>
                 </ul>
                 <div class="footer">
-                    <div id="opinion" class="text-box messageArea" contenteditable="true" disabled="true" onkeyup="enterkey()"></div>
+                    <div id="opinion" class="text-box messageArea" contenteditable="true" disabled="true" ></div>
                     <button id="sendBtn" class="align-self-center" style="background-color: #17594A;padding: 2px 10px 0px 10px;border-top-left-radius: 0px;border-bottom-left-radius: 0px">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
                             <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
@@ -114,7 +119,6 @@ pageEncoding="UTF-8"%>
 
                 //4. subscribe(path, callback)으로 메세지를 받을 수 있음
                 stomp.subscribe("/sub/chatting/"+chatroomNo, function (chat) {
-                    console.log("뭐가먼저 실행1");
 
                     var content = JSON.parse(chat.body);
 
@@ -134,8 +138,19 @@ pageEncoding="UTF-8"%>
                         spanElement.appendChild(textNode);
                         pElement.appendChild(spanElement);
                         ulElement.appendChild(pElement);
-                    }
-                    else{
+                    } else if(content.message === "님이 채팅방에서 퇴장하였습니다."){
+                        message = content.writer + "님이 퇴장하셨습니다.";
+                        var ulElement = document.getElementById("msgArea");
+                        var pElement = document.createElement("p");
+                        pElement.setAttribute("class", "infoMessageArea");
+                        var spanElement = document.createElement("span");
+                        spanElement.setAttribute("class", "infoMessage");
+                        var textNode = document.createTextNode(message);
+
+                        spanElement.appendChild(textNode);
+                        pElement.appendChild(spanElement);
+                        ulElement.appendChild(pElement);
+                    } else{
                         if(content.userNo === ${user.userNo}){
 
                             divElement.setAttribute("class", "chatDiv");
@@ -170,52 +185,45 @@ pageEncoding="UTF-8"%>
             });
 
             $("#sendBtn").on("click", function(e){
-                console.log("뭐가먼저 실행2");
+                // enterkey();
                 var msg = document.getElementById("opinion");
+                if(msg.textContent.length < 1){
+                    return false;
+                }
                 // DB 보내기
                 console.log(username + ":" + msg.textContent);
-                $.ajax({
-                    url: "/chatting/insert.do",
-                    data: { divNo: ${uData.divide.divNo}
-                        , userNo: ${user.userNo}
-                        , getUserNo: ${getUser.userNo}
-                        , chatContent: msg.textContent
-                        , chatRoomNo: chatroomNo
-                    },
-                    type: "POST",
-                    success: function(data) {
-                        console.log("뭐가먼저 실행3");
-                        if(data === "success"){
+                <%--$.ajax({--%>
+                <%--    url: "/chatting/insert.do",--%>
+                <%--    data: { divNo: ${uData.divide.divNo}--%>
+                <%--        , userNo: ${user.userNo}--%>
+                <%--        , getUserNo: ${getUser.userNo}--%>
+                <%--        , chatContent: msg.textContent--%>
+                <%--        , chatRoomNo: chatroomNo--%>
+                <%--    },--%>
+                <%--    type: "POST",--%>
+                <%--    success: function(data) {--%>
+                <%--        if(data === "success"){--%>
 
-                        }else{
-                            alert("채팅저장 실패!");
-                        }
+                <%--        }else{--%>
+                <%--            alert("채팅저장 실패!");--%>
+                <%--        }--%>
 
-                    },
-                    error: function() {
-                        alert("Ajax 오류! 관리자에게 문의하세요");
-                    }
-                });
-                // 추가하기
-                // var divElement = document.createElement("div");
-                // var liElement = document.createElement("li");
-                // var spanElement = document.createElement("span");
-                //
-                // divElement.setAttribute("class", "chatDiv");
-                // liElement.setAttribute("class", "other");
-                // spanElement.setAttribute("class", "otherTime");
-                // var textNode = document.createTextNode(msg.textContent);
-                // liElement.appendChild(textNode);
-                // var textNode = document.createTextNode(displayCurrentTime());
-                // spanElement.appendChild(textNode);
-                // divElement.append(liElement);
-                // divElement.append(spanElement);
-                //
-                // $("#msgArea").append(divElement);
+                <%--    },--%>
+                <%--    error: function() {--%>
+                <%--        alert("Ajax 오류! 관리자에게 문의하세요");--%>
+                <%--    }--%>
+                <%--});--%>
+
                 stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: msg.textContent, writer: username, userNo: ${user.userNo}}));
 
                 // 추가하기 끝
                 msg.textContent = '';
+            });
+
+            $("#closeWindow").on("click", function(e){
+                stomp.send('/pub/chat/close', {}, JSON.stringify({chatroomNo: ${room.chatroomNo}, writer: username, userNo: ${user.userNo}}));
+                window.close();
+
             });
         });
         //테스트
@@ -232,76 +240,20 @@ pageEncoding="UTF-8"%>
             return formatTime(hours, minutes);
         }
 
+        const sendBtn = document.getElementById('sendBtn');
         // 호출하여 현재 시간 표시
+
         console.log(displayCurrentTime());
 
-        function closeCurrentWindow(){
-            window.close();
-        }
+        const opinion = document.getElementById('opinion');
 
-
-        const username = "${name}";
-
-
-        // let isSeeing = true;
-        // document.addEventListener("visibilitychange", function() {
-        //     console.log(document.visibilityState);
-        //     if(document.visibilityState == "hidden"){
-        //         isSeeing = false;
-        //     }else{
-        //         isSeeing = true;
-        //     }
-        // });
-        //
-        // var newExcitingAlerts = (function () {
-        //     var oldTitle = document.title;
-        //     var msg = "★Message!★";
-        //     var timeoutId;
-        //     var blink = function() { document.title = document.title == msg ? ' ' : msg;
-        //         if(isSeeing == true){
-        //             clear();
-        //         }
-        //     };
-        //     var clear = function() {
-        //         clearInterval(timeoutId);
-        //         document.title = oldTitle;
-        //         window.onmousemove = null;
-        //         timeoutId = null;
-        //     };
-        //     return function () {
-        //         if (!timeoutId) {
-        //             timeoutId = setInterval(blink, 1000);
-        //         }
-        //     };
-        // }());
-
-        //setInterval(() => console.log(new Date()), 10000); //prevent chrome refresh
-
-        // $(document).ready(function(){
-        //     $(".floating-chat").click();
-        //
-        //     $("#disconn").on("click", (e) => {
-        //         disconnect();
-        //     })
-        //
-        //     $("#button-send").on("click", (e) => {
-        //         send();
-        //     });
-        // })
-
-        function enterkey(){
-            if (window.event.keyCode == 13) {
-                send();
+        // Enter 키가 눌렸을 때 sendBtn 클릭
+        opinion.addEventListener('keydown', function(event) {
+            if (event.keyCode === 13) {
+                sendBtn.click();
             }
-        }
-        // function send(){
-        //     console.log(username + ":" + $("#opinion").text());
-        //     if($("#opinion").text() != ""){
-        //         stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: $("#opinion").text(), writer: username}));
-        //         // websocket.send(username + ":" + $("#opinion").text());
-        //         $("#opinion").text('');
-        //     }
-        // }
+        });
+
 
         function onClose(evt) {
             var str = username + ": 님이 방을 나가셨습니다.";
@@ -309,104 +261,13 @@ pageEncoding="UTF-8"%>
             // websocket.send(str);
         }
 
-        function onOpen(evt) {
-            var str = username + ": 님이 입장하셨습니다.";
-            stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: str, writer: username}));
-            // websocket.send(str);
-        }
-
-        function onMessage(msg) {
-            var data = msg.data;
-            var sessionId = null;
-            var message = null;
-            var arr = data.split(":");
-
-            for(var i=0; i<arr.length; i++){
-                console.log('arr[' + i + ']: ' + arr[i]);
-            }
-
-            var cur_session = username;
-
-            console.log("cur_session : " + cur_session);
 
 
-            sessionId = arr[0];
-            message = arr[1];
-
-
-            console.log("sessionID : " + sessionId);
-            console.log("cur_session : " + cur_session);
-
-
-
-            var divElement = document.createElement("div");
-            var liElement = document.createElement("li");
-            var spanElement = document.createElement("span");
-
-            if(message == undefined){
-                // message = "채팅이 종료되었습니다.";
-                return false;
-            }
-            if(message == " 님이 입장하셨습니다."){
-                message = sessionId + "님이 입장하셨습니다.";
-                var ulElement = document.getElementById("msgArea");
-                // p 요소 생성
-                var pElement = document.createElement("p");
-                pElement.setAttribute("class", "infoMessageArea");
-
-                // span 요소 생성
-                var spanElement = document.createElement("span");
-                spanElement.setAttribute("class", "infoMessage");
-
-                // 텍스트 노드 생성 및 추가
-                var textNode = document.createTextNode(message);
-
-                // span 요소에 텍스트 노드 추가
-                spanElement.appendChild(textNode);
-
-                // p 요소에 span 요소 추가
-                pElement.appendChild(spanElement);
-
-                // ul 요소에 p 요소 추가
-                ulElement.appendChild(pElement);
-            }else{
-                if(sessionId == cur_session){
-
-                    divElement.setAttribute("class", "chatDiv");
-                    liElement.setAttribute("class", "other");
-                    spanElement.setAttribute("class", "otherTime");
-                    var textNode = document.createTextNode(message);
-                    liElement.appendChild(textNode);
-                    var textNode = document.createTextNode(displayCurrentTime());
-                    spanElement.appendChild(textNode);
-                    divElement.append(liElement);
-                    divElement.append(spanElement);
-                    $("#msgArea").append(divElement);
-
-                }
-                else{
-                    divElement.setAttribute("class", "chatDiv");
-                    liElement.setAttribute("class", "self");
-                    spanElement.setAttribute("class", "selfTime");
-                    var textNode = document.createTextNode(message);
-                    liElement.appendChild(textNode);
-                    var textNode = document.createTextNode(displayCurrentTime());
-                    spanElement.appendChild(textNode);
-                    divElement.append(liElement);
-                    divElement.append(spanElement);
-                    $("#msgArea").append(divElement);
-
-                    if(isSeeing == false){
-                        newExcitingAlerts();
-                    }
-                }
-            }
-        }
     </script>
 </body>
 <style>
-    /*.text-box div:nth-child(n+1) {*/
-    /*    display: none;*/
-    /*}*/
+    .text-box div:nth-child(n+1) {
+        display: none;
+    }
 </style>
 </html>

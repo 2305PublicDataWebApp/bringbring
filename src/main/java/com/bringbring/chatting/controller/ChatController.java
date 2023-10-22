@@ -57,12 +57,7 @@ public class ChatController extends Socket {
                 int result = chatService.insertChatRoom(chatRoomMap);
                 chatRoom = chatService.selectChatRoom(chatRoomMap);
             }
-//            map = new HashMap<String, Object>();
             List<Chat> chatList = chatService.selectChatRoomListByNo(chatRoom.getChatroomNo());
-//            map.put("divNo", divNo);
-//            map.put("userNo", user.getUserNo());
-//            map.put("getUserNo", userData.getUser().getUserNo());
-//            List<Chat> chatList = chatService.selectChatListByMap(map);
             if(chatList.size() > 0){
                 model.addAttribute("cList", chatList);
             }
@@ -85,12 +80,7 @@ public class ChatController extends Socket {
                 int result = chatService.insertChatRoom(chatRoomMap);
                 chatRoom = chatService.selectChatRoom(chatRoomMap);
             }
-//            map = new HashMap<String, Object>();
             List<Chat> chatList = chatService.selectChatRoomListByNo(chatRoom.getChatroomNo());
-//            map.put("divNo", divNo);
-//            map.put("userNo", user.getUserNo());
-//            map.put("getUserNo", userData.getUser().getUserNo());
-//            List<Chat> chatList = chatService.selectChatListByMap(map);
             if(chatList.size() > 0){
                 model.addAttribute("cList", chatList);
             }

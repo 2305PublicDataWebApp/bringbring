@@ -189,9 +189,9 @@
         </div>
         <div style="margin: 0px 10px 7px 0px;">
 <%--          <i class="bi bi-chat"></i>--%>
-          채팅 2&nbsp;&nbsp;•&nbsp;
+          채팅 <span>${dData.divide.chatroomCount}</span>&nbsp;&nbsp;•&nbsp;
 <%--          <i class="bi bi-heart"></i>--%>
-          찜 <span id="heartCount">${dData.divide.heartCount}</span> &nbsp;&nbsp;•&nbsp;
+          찜 <span id="heartCount">${dData.divide.heartCount}</span> &nbsp;•&nbsp;
           조회 <span id="viewCount">${dData.divide.viewCount}</span>
         </div>
       </div>      
