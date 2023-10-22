@@ -216,7 +216,7 @@
              )
         where ROWNUM = 1;
     </select>
-    <select id="selectpayCompleteWasteDate" resultMap="wasteDataResultMap">
+    <select id="selectpayCompleteWasteDate" resultMap="reservationComplete">
         select WASTE_CATEGORY_NAME, WASTE_TYPE_NAME, WASTE_INFO_STANDARD,
                RV_DISCHARGE_NO, RV_ADDR, RV_RV_DATE, RV_DETAIL_FEE
             from WASTE_CATEGORY_TBL

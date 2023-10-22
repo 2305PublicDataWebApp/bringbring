@@ -7,8 +7,11 @@ import com.bringbring.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,24 @@ public class RestReservationController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/imageUpload.do")
+    @ResponseBody
+    public String handleFileUpload(@RequestParam("file") MultipartFile[] uploadFiles
+            , @RequestParam("wasteInfoNo") String[] wasteInfoNo
+            , HttpServletRequest request
+            , HttpSession session, Model model) {
+        Map<String, Object> result = reservationService.addImages(wasteInfoNo , uploadFiles, request);
+        if(result != null) {
+            session.setAttribute("imageAdd", result);
+            return "success";
+        } else {
+            model.addAttribute("msg", "사진 업로드에 실패했습니다")
+                    .addAttribute("url", "/reservation/addImage.do");
+            return "/common/error";
+        }
+    }
+
 
     @PostMapping("/select/userInfo.do")
     public ResponseEntity<User> selectUserInfo(@RequestParam String userId) {
