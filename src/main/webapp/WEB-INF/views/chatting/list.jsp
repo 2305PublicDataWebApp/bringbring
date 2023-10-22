@@ -46,12 +46,14 @@ pageEncoding="UTF-8"%>
 <%--                    이전날짜 저장--%>
                     <c:set var="previousDate" value="" scope="page" />
                     <c:forEach var="chat" items="${cList}" varStatus="i">
-                        <fmt:parseDate value="${chat.chatCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime" type="both" />
+                        <fmt:parseDate value="${chat.chatCreateDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parseDateTime" type="both" />
                         <fmt:parseDate value="${chat.chatCreateDate}" pattern="yyyy-MM-dd" var="parseDate" type="both" />
                         <c:if test="${parseDate ne previousDate}">
                             <%-- 현재 날짜와 이전 날짜가 다른 경우에만 날짜를 출력합니다. --%>
                             <p class="infoMessageArea">
-                                <span class="infoMessage"><fmt:formatDate value="${parseDate}" pattern="yyyy년 MM월 dd일" /></span>
+                                <span class="infoMessage">
+                                    <fmt:formatDate value="${parseDate}" pattern="yyyy년 MM월 dd일" />
+                                </span>
                             </p>
                             <%-- 현재 날짜를 이전 날짜로 업데이트합니다. --%>
                             <c:set var="previousDate" value="${parseDate}" scope="page" />
@@ -96,7 +98,7 @@ pageEncoding="UTF-8"%>
     <script>
         //테스트
         $(document).ready(function(){
-
+            openElement();
             var chatroomNo = "${room.chatroomNo}";
             var username = "${user.userName}";
 
@@ -111,33 +113,46 @@ pageEncoding="UTF-8"%>
                 console.log("STOMP Connection")
 
                 //4. subscribe(path, callback)으로 메세지를 받을 수 있음
-                stomp.subscribe("/sub/chatting", function (chat) {
+                stomp.subscribe("/sub/chatting/"+chatroomNo, function (chat) {
+                    console.log("뭐가먼저 실행1");
+
                     var content = JSON.parse(chat.body);
-                    var chatArray = content.body;
 
-                    for (var i = 0; i < chatArray.length; i++) {
+                    var divElement = document.createElement("div");
+                    var liElement = document.createElement("li");
+                    var spanElement = document.createElement("span");
 
-                        var divElement = document.createElement("div");
-                        var liElement = document.createElement("li");
+                    if(content.message === "님이 채팅방에 참여하였습니다."){
+                        message = content.writer + "님이 입장하셨습니다.";
+                        var ulElement = document.getElementById("msgArea");
+                        var pElement = document.createElement("p");
+                        pElement.setAttribute("class", "infoMessageArea");
                         var spanElement = document.createElement("span");
+                        spanElement.setAttribute("class", "infoMessage");
+                        var textNode = document.createTextNode(message);
 
-                        if(chatArray[i].userNo === ${user.userNo}){
+                        spanElement.appendChild(textNode);
+                        pElement.appendChild(spanElement);
+                        ulElement.appendChild(pElement);
+                    }
+                    else{
+                        if(content.userNo === ${user.userNo}){
 
                             divElement.setAttribute("class", "chatDiv");
                             liElement.setAttribute("class", "other");
                             spanElement.setAttribute("class", "otherTime");
-                            var textNode = document.createTextNode(chatArray[i].chatContent);
+                            var textNode = document.createTextNode(content.message);
                             liElement.appendChild(textNode);
                             var textNode = document.createTextNode(displayCurrentTime());
                             spanElement.appendChild(textNode);
                             divElement.append(liElement);
                             divElement.append(spanElement);
                         }
-                        else if(chatArray[i].userNo !== ${user.userNo}){
+                        else if(content.userNo !== ${user.userNo}){
                             divElement.setAttribute("class", "chatDiv");
                             liElement.setAttribute("class", "self");
                             spanElement.setAttribute("class", "selfTime");
-                            var textNode = document.createTextNode(chatArray[i].chatContent);
+                            var textNode = document.createTextNode(content.message);
                             liElement.appendChild(textNode);
                             var textNode = document.createTextNode(displayCurrentTime());
                             spanElement.appendChild(textNode);
@@ -146,14 +161,16 @@ pageEncoding="UTF-8"%>
                         }
                         $("#msgArea").append(divElement);
                     }
+
                     document.getElementById("msgArea").scrollTop = document.getElementById("msgArea").scrollHeight;
                 });
 
                 //3. send(path, header, message)로 메세지를 보낼 수 있음
-                stomp.send('/pub/message/'+chatroomNo, {}, JSON.stringify({chatroomNo: chatroomNo, writer: username}))
+                stomp.send('/pub/chat/enter', {}, JSON.stringify({chatroomNo: chatroomNo, writer: username, userNo: ${user.userNo}}))
             });
 
             $("#sendBtn").on("click", function(e){
+                console.log("뭐가먼저 실행2");
                 var msg = document.getElementById("opinion");
                 // DB 보내기
                 console.log(username + ":" + msg.textContent);
@@ -167,8 +184,9 @@ pageEncoding="UTF-8"%>
                     },
                     type: "POST",
                     success: function(data) {
+                        console.log("뭐가먼저 실행3");
                         if(data === "success"){
-                            // alert("insert 성공!");
+
                         }else{
                             alert("채팅저장 실패!");
                         }
@@ -178,25 +196,23 @@ pageEncoding="UTF-8"%>
                         alert("Ajax 오류! 관리자에게 문의하세요");
                     }
                 });
-                    // DB로 보내기
-
-                stomp.send('/pub/message/'+chatroomNo, {}, JSON.stringify({chatroomNo: chatroomNo, message: msg.textContent, writer: username}));
                 // 추가하기
-                var divElement = document.createElement("div");
-                var liElement = document.createElement("li");
-                var spanElement = document.createElement("span");
-
-                divElement.setAttribute("class", "chatDiv");
-                liElement.setAttribute("class", "other");
-                spanElement.setAttribute("class", "otherTime");
-                var textNode = document.createTextNode(msg.textContent);
-                liElement.appendChild(textNode);
-                var textNode = document.createTextNode(displayCurrentTime());
-                spanElement.appendChild(textNode);
-                divElement.append(liElement);
-                divElement.append(spanElement);
-
-                $("#msgArea").append(divElement);
+                // var divElement = document.createElement("div");
+                // var liElement = document.createElement("li");
+                // var spanElement = document.createElement("span");
+                //
+                // divElement.setAttribute("class", "chatDiv");
+                // liElement.setAttribute("class", "other");
+                // spanElement.setAttribute("class", "otherTime");
+                // var textNode = document.createTextNode(msg.textContent);
+                // liElement.appendChild(textNode);
+                // var textNode = document.createTextNode(displayCurrentTime());
+                // spanElement.appendChild(textNode);
+                // divElement.append(liElement);
+                // divElement.append(spanElement);
+                //
+                // $("#msgArea").append(divElement);
+                stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: msg.textContent, writer: username, userNo: ${user.userNo}}));
 
                 // 추가하기 끝
                 msg.textContent = '';
@@ -223,62 +239,55 @@ pageEncoding="UTF-8"%>
             window.close();
         }
 
-        // document.getElementById("sendBtn").addEventListener("click", function() {
-        //     send();
-        // });
 
         const username = "${name}";
 
-        // const websocket = new WebSocket("ws://localhost:8888/ws/chat");
-        // websocket.onmessage = onMessage;
-        // websocket.onopen = onOpen;
-        // websocket.onclose = onClose;
 
-        let isSeeing = true;
-        document.addEventListener("visibilitychange", function() {
-            console.log(document.visibilityState);
-            if(document.visibilityState == "hidden"){
-                isSeeing = false;
-            }else{
-                isSeeing = true;
-            }
-        });
-
-        var newExcitingAlerts = (function () {
-            var oldTitle = document.title;
-            var msg = "★Message!★";
-            var timeoutId;
-            var blink = function() { document.title = document.title == msg ? ' ' : msg;
-                if(isSeeing == true){
-                    clear();
-                }
-            };
-            var clear = function() {
-                clearInterval(timeoutId);
-                document.title = oldTitle;
-                window.onmousemove = null;
-                timeoutId = null;
-            };
-            return function () {
-                if (!timeoutId) {
-                    timeoutId = setInterval(blink, 1000);
-                }
-            };
-        }());
+        // let isSeeing = true;
+        // document.addEventListener("visibilitychange", function() {
+        //     console.log(document.visibilityState);
+        //     if(document.visibilityState == "hidden"){
+        //         isSeeing = false;
+        //     }else{
+        //         isSeeing = true;
+        //     }
+        // });
+        //
+        // var newExcitingAlerts = (function () {
+        //     var oldTitle = document.title;
+        //     var msg = "★Message!★";
+        //     var timeoutId;
+        //     var blink = function() { document.title = document.title == msg ? ' ' : msg;
+        //         if(isSeeing == true){
+        //             clear();
+        //         }
+        //     };
+        //     var clear = function() {
+        //         clearInterval(timeoutId);
+        //         document.title = oldTitle;
+        //         window.onmousemove = null;
+        //         timeoutId = null;
+        //     };
+        //     return function () {
+        //         if (!timeoutId) {
+        //             timeoutId = setInterval(blink, 1000);
+        //         }
+        //     };
+        // }());
 
         //setInterval(() => console.log(new Date()), 10000); //prevent chrome refresh
 
-        $(document).ready(function(){
-            $(".floating-chat").click();
-
-            $("#disconn").on("click", (e) => {
-                disconnect();
-            })
-
-            $("#button-send").on("click", (e) => {
-                send();
-            });
-        })
+        // $(document).ready(function(){
+        //     $(".floating-chat").click();
+        //
+        //     $("#disconn").on("click", (e) => {
+        //         disconnect();
+        //     })
+        //
+        //     $("#button-send").on("click", (e) => {
+        //         send();
+        //     });
+        // })
 
         function enterkey(){
             if (window.event.keyCode == 13) {
@@ -374,29 +383,6 @@ pageEncoding="UTF-8"%>
                     divElement.append(spanElement);
                     $("#msgArea").append(divElement);
 
-                    <%--if("${uData.user.userNo} ne ${user.userNo}"){--%>
-                    <%--$.ajax({--%>
-                    <%--    url: "/chatting/insert.do",--%>
-                    <%--    data: { divNo: ${uData.divide.divNo}--%>
-                    <%--        , userNo: ${user.userNo}--%>
-                    <%--        , getUserNo: ${getUser.userNo}--%>
-                    <%--        , chatContent: message--%>
-                    <%--        , chatRoomNo: ${cList.get(0).chatRoomNo}--%>
-                    <%--    },--%>
-                    <%--    type: "POST",--%>
-                    <%--    success: function(data) {--%>
-                    <%--        if(data === "success"){--%>
-                    <%--            // alert("insert 성공!");--%>
-                    <%--        }else{--%>
-                    <%--            alert("채팅저장 실패!");--%>
-                    <%--        }--%>
-
-                    <%--    },--%>
-                    <%--    error: function() {--%>
-                    <%--        alert("Ajax 오류! 관리자에게 문의하세요");--%>
-                    <%--    }--%>
-                    <%--});--%>
-
                 }
                 else{
                     divElement.setAttribute("class", "chatDiv");
@@ -415,14 +401,12 @@ pageEncoding="UTF-8"%>
                     }
                 }
             }
-
-            document.getElementById("msgArea").scrollTop = document.getElementById("msgArea").scrollHeight;
         }
     </script>
 </body>
 <style>
-    .text-box div:nth-child(n+1) {
-        display: none;
-    }
+    /*.text-box div:nth-child(n+1) {*/
+    /*    display: none;*/
+    /*}*/
 </style>
 </html>
