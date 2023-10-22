@@ -72,11 +72,4 @@ public class UserStoreLogic implements UserStore{
 		return sqlSession.update("UserMapper.deleteUser", userId);
 	}
 
-	@Override
-	public int insertKakao(Map<String, Object> userInfo) {
-		return sqlSession.insert("UserMapper.insertKakao", userInfo);
-	}
-
-
-
 }

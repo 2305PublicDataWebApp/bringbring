@@ -52,13 +52,19 @@
 		    <groupId>commons-fileupload</groupId>
 		    <artifactId>commons-fileupload</artifactId>
 		    <version>1.3.3</version>
-		<!-- social 로그인 관련 라이브러리 -->
-		<!-- Spring Boot Starter for OAuth2 Client -->
-<!-- 	    <dependency> -->
-<!-- 	        <groupId>org.springframework.boot</groupId> -->
-<!-- 	        <artifactId>spring-boot-starter-oauth2-client</artifactId> -->
-<!-- 	    </dependency> -->
-		</dependency>		
+		</dependency>
+		<!-- Naver 로그인 관련 라이브러리 -->
+		<dependency>
+		    <groupId>com.github.scribejava</groupId>
+		    <artifactId>scribejava-core</artifactId>
+		    <version>2.8.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.github.scribejava</groupId>
+		    <artifactId>scribejava-apis</artifactId>
+		    <version>2.8.1</version>
+		</dependency>	
+			
 	    <dependency>
 	        <groupId>javax.servlet</groupId>
 	        <artifactId>jstl</artifactId>

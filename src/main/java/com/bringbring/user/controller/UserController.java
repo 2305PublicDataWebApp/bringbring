@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.EmailService;
-import com.bringbring.user.service.SocialLoginService;
 import com.bringbring.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,6 @@ public class UserController {
 	private final AdminService adminService;
 	private final UserService userService;
 	private final EmailService emailService;
-	private final SocialLoginService socialLoginService;
 
 	// 로그인 
 	@GetMapping("/login.do")
@@ -75,11 +73,7 @@ public class UserController {
 	@GetMapping("/logout.do")
 	public String userLogout(
 			HttpSession session) throws Exception {
-		String access_token = (String)session.getAttribute("access_token");
 		if(session != null) {
-			if(access_token != null) {				
-				socialLoginService.kakaoLogout(access_token);
-			}
 			session.invalidate();
 		}
 		return "redirect:/";

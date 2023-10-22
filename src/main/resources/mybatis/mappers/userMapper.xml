@@ -48,4 +48,10 @@
 		SELECT * FROM DUAL
 	</insert>
 	
+	<insert id="insertNaver" parameterType="HashMap">
+		INSERT ALL INTO USER_TBL VALUES (SEQ_USER_NO.NEXTVAL, #{userId }, #{userPwd }, #{userName }, #{userPhone }, null, null, null
+									, DEFAULT, #{userProfileName }, #{userProfileRename }, #{userProfilePath }, #{userProfileLength }, DEFAULT)
+					INTO SOCIAL_USER_TBL VALUES (SEQ_SOCIAL_NO.NEXTVAL, #{access_token }, null, 'naver', SEQ_USER_NO.CURRVAL)
+		SELECT * FROM DUAL
+	</insert>
 </mapper>
