@@ -56,7 +56,7 @@ public class DivideServiceImpl implements DivideService{
 	public int getListCount() { return divideStore.getListCount(); }
 
 	@Override
-	public List<ResponseData> selectResPonseDataList(PageInfo pInfo) { return divideStore.selectResPonseDataList(pInfo); }
+	public List<ResponseData> selectResponseDataList(PageInfo pInfo) { return divideStore.selectResponseDataList(pInfo); }
 
 	@Override
 	public int selectMaxNo() { return divideStore.selectMaxNo(); }
@@ -96,6 +96,9 @@ public class DivideServiceImpl implements DivideService{
 
 	@Override
 	public UserData selectUserDataByNo(int divNo) { return divideStore.selectUserDataByNo(divNo); }
+
+	@Override
+	public List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo) { return divideStore.selectLoginResponseDataList(pageInfo, userNo); }
 
 
 	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {

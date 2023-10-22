@@ -1,6 +1,7 @@
 package com.bringbring.chatting.controller;
 
 import com.bringbring.chatting.domain.Chat;
+import com.bringbring.chatting.domain.ChatRoom;
 import com.bringbring.chatting.domain.UserData;
 import com.bringbring.chatting.service.ChatService;
 import com.bringbring.divide.service.DivideService;
@@ -35,54 +36,71 @@ public class ChatController extends Socket {
     public String chattingRoom(@PathVariable String id
             , HttpSession session
             , Model model
-            , int divNo){
+            , int divNo
+            , String getUserId){
 
         UserData userData = divideService.selectUserDataByNo(divNo);
         String userId = (String)session.getAttribute("sessionId");
-        if(id.equals(userId)){
+        Map<String, Object> map;
+        //     작성자랑 채팅시작자가 다를 때
+        if(!id.equals(getUserId)){
             User user = userService.selectOneById(userId);
-            Map<String, Object> map = new HashMap<String, Object>();
-//            작성자랑 채팅시작자가 다를 때
-            map.put("divNo", divNo);
-            map.put("userNo", user.getUserNo());
-            map.put("getUserNo", userData.getUser().getUserNo());
-            List<Chat> chatList = chatService.selectChatListByMap(map);
-            model.addAttribute("name", user.getUserName()).addAttribute("user", user);
-            model.addAttribute("cList", chatList);
+            User getUser = userService.selectOneById(getUserId);
+            // 채팅방이 존재하는 지 확인
+            Map<String, Object> chatRoomMap = new HashMap<String, Object>();
+            chatRoomMap.put("divNo", divNo);
+            chatRoomMap.put("userNo", user.getUserNo());
+            chatRoomMap.put("getUserNo", getUser.getUserNo());
+            ChatRoom chatRoom = chatService.selectChatRoom(chatRoomMap);
+            // 없으면 채팅방 생성
+            if(chatRoom == null){
+                int result = chatService.insertChatRoom(chatRoomMap);
+                chatRoom = chatService.selectChatRoom(chatRoomMap);
+            }
+            map = new HashMap<String, Object>();
 
-        }else if(id.equals("master")){
-            model.addAttribute("name", "master");
-        }else if(id.equals("loose")){
-            model.addAttribute("name", "loose");
+//            map.put("divNo", divNo);
+//            map.put("userNo", user.getUserNo());
+//            map.put("getUserNo", userData.getUser().getUserNo());
+//            List<Chat> chatList = chatService.selectChatListByMap(map);
+//            if(chatList.size() > 0){
+//                model.addAttribute("cList", chatList);
+//            }
+
+            model.addAttribute("name", user.getUserName()).addAttribute("user", user).addAttribute("getUser", getUser);
+            model.addAttribute("room", chatRoom);
+
+        }else if(id.equals("admin@kh.com")){
+            getUserId = "khuser01@kh.com";
+            User user = userService.selectOneById(userId);
+            User getUser = userService.selectOneById(getUserId);
+            // 채팅방이 존재하는 지 확인
+            Map<String, Object> chatRoomMap = new HashMap<String, Object>();
+            chatRoomMap.put("divNo", divNo);
+            chatRoomMap.put("userNo", user.getUserNo());
+            chatRoomMap.put("getUserNo", getUser.getUserNo());
+            ChatRoom chatRoom = chatService.selectChatRoom(chatRoomMap);
+            // 없으면 채팅방 생성
+            if(chatRoom == null){
+                int result = chatService.insertChatRoom(chatRoomMap);
+                chatRoom = chatService.selectChatRoom(chatRoomMap);
+            }
+            map = new HashMap<String, Object>();
+
+//            map.put("divNo", divNo);
+//            map.put("userNo", user.getUserNo());
+//            map.put("getUserNo", userData.getUser().getUserNo());
+//            List<Chat> chatList = chatService.selectChatListByMap(map);
+//            if(chatList.size() > 0){
+//                model.addAttribute("cList", chatList);
+//            }
+            model.addAttribute("name", user.getUserName()).addAttribute("user", user).addAttribute("getUser", getUser);
+            model.addAttribute("room", chatRoom);
         }else{
             return "/";
         }
         model.addAttribute("uData", userData);
         return "chatting/list";
     }
-//    @OnOpen
-//    public void open(Session newUser) {
-//        System.out.println("connected");
-//        session.add(newUser);
-//        System.out.println(newUser.getId());
-//    }
 
-//    @OnMessage
-//    public void getMsg(Session recieveSession, String msg) {
-//        for (int i = 0; i < session.size(); i++) {
-//            if (!recieveSession.getId().equals(session.get(i).getId())) {
-//                try {
-//                    session.get(i).getBasicRemote().sendText("상대 : "+msg);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }else{
-//                try {
-//                    session.get(i).getBasicRemote().sendText("나 : "+msg);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
 }

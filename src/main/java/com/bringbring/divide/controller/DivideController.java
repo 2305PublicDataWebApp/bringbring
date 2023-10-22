@@ -118,14 +118,20 @@ public class DivideController {
 			, HttpSession httpSession) {
 
 		String userId = (String) httpSession.getAttribute("sessionId");
-		if (userId != null && !userId.isEmpty()) {
-			User user = userService.selectOneById(userId);
-			model.addAttribute("cUserNo", user.getUserNo());
-		}
 		int totalCount = divideService.getListCount();
 		PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
-		List<ResponseData> rData = divideService.selectResPonseDataList(pInfo);
-		model.addAttribute("rData", rData).addAttribute("pInfo", pInfo);
+
+		if (userId != null && !userId.isEmpty()) {
+			User user = userService.selectOneById(userId);
+			List<ResponseData> responseData = divideService.selectLoginResponseDataList(pInfo, user.getUserNo());
+			model.addAttribute("cUserNo", user.getUserNo()).addAttribute("rData", responseData);
+		}else{
+			List<ResponseData> responseData = divideService.selectResponseDataList(pInfo);
+			model.addAttribute("rData", responseData);
+		}
+
+
+		model.addAttribute("pInfo", pInfo);
 
 		return "divide/list";
 	}

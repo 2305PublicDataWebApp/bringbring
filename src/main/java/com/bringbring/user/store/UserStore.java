@@ -13,7 +13,7 @@ public interface UserStore {
 	 * @param user
 	 * @return int
 	 */
-	public User selectCheckLogin(User user);
+	User selectCheckLogin(User user);
 
 	/**
 	 * 회원 수 조회 store
@@ -33,21 +33,21 @@ public interface UserStore {
 	 * @param user
 	 * @return int
 	 */
-	public int insertUser(User user);
+	int insertUser(User user);
 
 	/**
 	 * 이름,전화번호로 회원정보 가져오기 store
 	 * @param user
 	 * @return User
 	 */
-	public User selectOneFindEmail(User user);
+	User selectOneFindEmail(User user);
 
   /**
 	 * 아이디로 회원정보 불러오기 store
 	 * @param userId
 	 * @return User
 	 */
-	public User selectOneById(String userId);
+	User selectOneById(String userId);
 
 	/**
 	 * 맥스 시퀀스 조회 store
@@ -61,35 +61,20 @@ public interface UserStore {
 	 * @param user 
 	 * @return int
 	 */
-	public int updateUser(User user);
+	int updateUser(User user);
 
 	/**
 	 * 이름,전화번호, 아이디로 회원정보 가져오기 store
 	 * @param user
 	 * @return User
 	 */
-	public User selectOneFindPwd(User user);
+	User selectOneFindPwd(User user);
 
 	/**
 	 * 회원 탈퇴 store
 	 * @param userId
 	 * @return int
 	 */
-	public int deleteUser(String userId);
-
-	/**
-	 * 카카오로그인 user_tbl 추가 store
-	 * @param userInfo
-	 */
-	public int insertKakao(Map<String, Object> userInfo);
-	
-	/**
-	 * 카카오로그인 social_user_tbl 추가 store
-	 * @param kakaoUser
-	 * @return
-	 */
-//	public int insertkakao1(User kakaoUser);
-
-
+	int deleteUser(String userId);
 
 }

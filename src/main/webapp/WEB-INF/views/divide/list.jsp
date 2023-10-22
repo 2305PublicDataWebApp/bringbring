@@ -127,7 +127,7 @@
                             <c:if test="${sessionId eq null || data.heart.heartUserNo eq 0}">
                                 <i class="bi bi-heart"></i>
                             </c:if>
-                            <c:if test="${cUserNo eq data.heart.userNo && data.heart.heartUserNo ne 0 && sessionId ne null}">
+                            <c:if test="${sessionId ne null && cUserNo eq data.heart.heartUserNo}">
                                 <i class="bi bi-heart-fill"></i>
                             </c:if>
                             ${data.divide.heartCount}

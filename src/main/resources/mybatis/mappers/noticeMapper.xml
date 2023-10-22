@@ -3,37 +3,96 @@
 
 <mapper namespace="NoticeMapper">
 
+<!-- 	<resultMap id="NoticeResultMap" type="com.bringbring.notice.damain.NoticeWriter">
+		<id property="adminNo" column="ADMIN_NO" />
+		<result property="userId" column="USER_ID" />
+		<result property="userNo" column="USER_NO" />
+		<result property="regionName" column="REGION_NAME" />
+	</resultMap> -->
+	
 	<insert id="insertNotice">
 		INSERT INTO NOTICE_TBL VALUES
-		(SEQ_NOTICE_NO.NEXTVAL,#{noticeType},#{noticeTitle},#{noticeContent},#{noticeCreateDate},DEFAULT,DEFAULT,#{preNoticeNo},#{nextNoticeNo},#{adminNo})
+		(SEQ_NOTICE_NO.NEXTVAL,#{noticeType},#{noticeTitle},#{noticeContent},DEFAULT,DEFAULT,DEFAULT,#{preNoticeNo},#{nextNoticeNo},#{userNo})
 	</insert>
+	
+	<update id="updateNotice">
+		UPDATE NOTICE_TBL SET NOTICE_TITLE = #{noticeTitle}, NOTICE_CONTENT = #{noticeContent} WHERE NOTICE_NO = #{noticeNo}
+	</update>
 
  	<select id="selectListCount" resultType="_int">
 		SELECT COUNT(*) FROM
 		NOTICE_TBL WHERE IS_NOTICE_DELETED = 'N'
 	</select>
+ 	<select id="selectServiceCount" resultType="_int">
+		SELECT COUNT(*) FROM
+		NOTICE_TBL WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'service'
+	</select>
+ 	<select id="selectUpdateCount" resultType="_int">
+		SELECT COUNT(*) FROM
+		NOTICE_TBL WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'update'
+	</select>
 
 	<select id="selectNoticeList" resultType="Notice">
-		SELECT * FROM
-		NOTICE_TBL WHERE IS_NOTICE_DELETED = 'N' ORDER BY NOTICE_NO DESC
+		SELECT N.*, REGION_NAME FROM NOTICE_TBL N
+		LEFT JOIN ADMIN_TBL A ON N.USER_NO = A.USER_NO
+		LEFT JOIN REGION_TBL R ON A.REGION_NO = R.REGION_NO 
+		WHERE IS_NOTICE_DELETED = 'N' ORDER BY NOTICE_NO DESC
+	</select>
+	<select id="selectServiceList" resultType="Notice">
+		SELECT N.*, REGION_NAME FROM NOTICE_TBL N
+		LEFT JOIN ADMIN_TBL A ON N.USER_NO = A.USER_NO
+		LEFT JOIN REGION_TBL R ON A.REGION_NO = R.REGION_NO 
+		WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'service' ORDER BY NOTICE_NO DESC
+	</select>
+	<select id="selectUpdateList" resultType="Notice">
+		SELECT N.*, REGION_NAME FROM NOTICE_TBL N
+		LEFT JOIN ADMIN_TBL A ON N.USER_NO = A.USER_NO
+		LEFT JOIN REGION_TBL R ON A.REGION_NO = R.REGION_NO 
+		WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'update' ORDER BY NOTICE_NO DESC
 	</select>
 
 	<select id="selectNoticeByNo" resultType="Notice">
-		SELECT * FROM
-		NOTICE_TBL WHERE NOTICE_NO = #{noticeNo} AND IS_NOTICE_DELETED = 'N'
+		SELECT N.*, REGION_NAME FROM NOTICE_TBL N
+		LEFT JOIN ADMIN_TBL A ON N.USER_NO = A.USER_NO
+		LEFT JOIN REGION_TBL R ON A.REGION_NO = R.REGION_NO 
+		WHERE NOTICE_NO = #{noticeNo} AND IS_NOTICE_DELETED = 'N'
 	</select>
 
-	<update id="updateNotice">
-		UPDATE NOTICE_TBL SET NOTICE_TYPE = #{noticeType},
-		NOTICE_TITLE = #{noticeTitle}, NOTICE_CONTENT = #{noticeContent} WHERE
-		NOTICE_NO = #{noticeNo}
-	</update>
+	
 	<update id="deleteNotice">
 		UPDATE NOTICE_TBL SET IS_NOTICE_DELETED = 'Y' WHERE NOTICE_NO = #{noticeNo }
 	</update>
 	
 	<update id="updateViewCount">
-		UPDATE NOTICE_TBL SET NOTICE_VIEW_COUNT = NOTICE_VIEW_COUNT +1 WHERE NOTICE_No=#{noticeNo }
+		UPDATE NOTICE_TBL SET NOTICE_VIEW_COUNT = NOTICE_VIEW_COUNT +1 WHERE NOTICE_NO=#{noticeNo }
 	</update>
+	
+	<select id="selectListByKeywordCount" resultType="_int">
+		SELECT COUNT(*) FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%'||#{searchKeyword }||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N'
+	</select>
+	
+	<select id="searchNoticeByKeyword" resultType="Notice">
+		SELECT * FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N'
+	</select>
+	
+<select id="selectpreNextInfo" parameterType="Integer" resultType="map">
+     <![CDATA[
+    SELECT 
+        (SELECT NOTICE_NO FROM NOTICE_TBL WHERE NOTICE_NO < #{noticeNo} AND IS_NOTICE_DELETED = 'N' AND ROWNUM = 1 ORDER BY NOTICE_NO DESC) AS preNoticeNo,
+        (SELECT NOTICE_TITLE FROM NOTICE_TBL WHERE NOTICE_NO < #{noticeNo} AND IS_NOTICE_DELETED = 'N' AND ROWNUM = 1 ORDER BY NOTICE_NO DESC) AS preNoticeTitle,
+        (SELECT NOTICE_NO FROM NOTICE_TBL WHERE NOTICE_NO > #{noticeNo} AND IS_NOTICE_DELETED = 'N' AND ROWNUM = 1 ORDER BY NOTICE_NO) AS nextNoticeNo,
+        (SELECT NOTICE_TITLE FROM NOTICE_TBL WHERE NOTICE_NO > #{noticeNo} AND IS_NOTICE_DELETED = 'N' AND ROWNUM = 1 ORDER BY NOTICE_NO) AS nextNoticeTitle
+    ]]> 
+   <!-- 
+    SELECT * FROM (SELECT NOTICE_NO, NOTICE_TITLE, 
+    LAG(NOTICE_NO,1,0) OVER(ORDER BY NOTICE_NO) PRE_NOTICE_NO,
+    LAG(NOTICE_NO,1,'이전글이 없습니다.') OVER(ORDER BY NOTICE_NO) PRE_NOTICE_TITLE,
+    
+    LEAD(NOTICE_NO,1,0) OVER(ORDER BY NOTICE_NO) NEXT_NOTICE_NO,
+    LEAD(NOTICE_NO,1,'다음글이 없습니다.') OVER(ORDER BY NOTICE_NO) NEXT_NOTICE_TITLE,
+    FROM NOTICE_TBL) WHERE NOTICE_NO = #{noticeNo} ORDER BY NOTICE_NO
+     -->
+</select>
+
 	
 </mapper>

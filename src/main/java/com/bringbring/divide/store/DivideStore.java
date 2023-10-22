@@ -20,7 +20,7 @@ public interface DivideStore {
 
 	int getListCount();
 
-	List<ResponseData> selectResPonseDataList(PageInfo pInfo);
+	List<ResponseData> selectResponseDataList(PageInfo pInfo);
 
     Divide selectOneByNo(int divNo);
 
@@ -45,4 +45,6 @@ public interface DivideStore {
     int updateViewCount(Divide divide);
 
 	UserData selectUserDataByNo(int divNo);
+
+    List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo);
 }

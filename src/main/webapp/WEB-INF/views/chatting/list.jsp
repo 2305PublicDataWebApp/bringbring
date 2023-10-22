@@ -6,7 +6,7 @@ pageEncoding="UTF-8"%>
 <html lang="ko" >
 <head>
     <meta charset="UTF-8">
-    <title>${uData.user.userName}님 과의 채팅</title>
+    <title>${getUser.userName}님 과의 채팅</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
 
     <!-- Favicons -->
@@ -60,7 +60,7 @@ pageEncoding="UTF-8"%>
                         <c:if test="${user.userNo eq chat.userNo}">
                             <div class="chatDiv">
                                 <li class='other'>${chat.chatContent}</li>
-                                <span style="float: right;padding: 27px 6px 0px 0px;color: #222;font-size: 13px;">
+                                <span class="otherTime">
                                     <fmt:formatDate value="${parseDateTime}" pattern="HH:mm" />
                                 </span>
                             </div>
@@ -68,7 +68,7 @@ pageEncoding="UTF-8"%>
                         <c:if test="${user.userNo ne chat.userNo}">
                             <div class="chatDiv">
                                 <li class='self'>${chat.chatContent}</li>
-                                <span style="padding: 26px 0px 0px 6px;float:left;color: #222;font-size: 13px;">
+                                <span class="selfTime">
                                     <fmt:formatDate value="${parseDateTime}" pattern="HH:mm" />
                                 </span>
                             </div>
@@ -77,7 +77,7 @@ pageEncoding="UTF-8"%>
                 </ul>
                 <div class="footer">
                     <div id="opinion" class="text-box messageArea" contenteditable="true" disabled="true" onkeyup="enterkey()"></div>
-                    <button id="sendBtn" class="align-self-center" style="background-color: #17594A;padding: 4px 10px 0px 10px;border-top-left-radius: 0px;border-bottom-left-radius: 0px">
+                    <button id="sendBtn" class="align-self-center" style="background-color: #17594A;padding: 2px 10px 0px 10px;border-top-left-radius: 0px;border-bottom-left-radius: 0px">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
                             <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
                         </svg>
@@ -89,35 +89,150 @@ pageEncoding="UTF-8"%>
 <!-- partial -->
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
 <script  src="../resources/assets/js/chatting/script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>\
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
     <script>
-        <%--document.addEventListener('DOMContentLoaded', function() {--%>
-        <%--    const selfMessage = document.querySelector('.floating-chat .chat .messages li.self:before');--%>
-        <%--    let newImageUrl = '';--%>
-        <%--    if("${uData.user.userProfilePath}" !== null){--%>
-        <%--        newImageUrl = '${uData.user.userProfilePath}';--%>
-        <%--    }else{--%>
-        <%--        newImageUrl = '../../img/divide/free-icon-user-847969.png';--%>
-        <%--    }--%>
-        <%--    selfMessage.style.backgroundImage = "url("+newImageUrl+")";--%>
-        <%--    // 새 이미지 URL을 설정합니다.--%>
-        <%--});--%>
+        //테스트
+        $(document).ready(function(){
+
+            var chatroomNo = "${room.chatroomNo}";
+            var username = "${user.userName}";
+
+            console.log(chatroomNo + ", " + username);
+
+            var sockJs = new SockJS("/stomp/chat");
+            //1. SockJS를 내부에 들고있는 stomp를 내어줌
+            var stomp = Stomp.over(sockJs);
+
+            //2. connection이 맺어지면 실행
+            stomp.connect({}, function (){
+                console.log("STOMP Connection")
+
+                //4. subscribe(path, callback)으로 메세지를 받을 수 있음
+                stomp.subscribe("/sub/chatting", function (chat) {
+                    var content = JSON.parse(chat.body);
+                    var chatArray = content.body;
+
+                    for (var i = 0; i < chatArray.length; i++) {
+
+                        var divElement = document.createElement("div");
+                        var liElement = document.createElement("li");
+                        var spanElement = document.createElement("span");
+
+                        if(chatArray[i].userNo === ${user.userNo}){
+
+                            divElement.setAttribute("class", "chatDiv");
+                            liElement.setAttribute("class", "other");
+                            spanElement.setAttribute("class", "otherTime");
+                            var textNode = document.createTextNode(chatArray[i].chatContent);
+                            liElement.appendChild(textNode);
+                            var textNode = document.createTextNode(displayCurrentTime());
+                            spanElement.appendChild(textNode);
+                            divElement.append(liElement);
+                            divElement.append(spanElement);
+                        }
+                        else if(chatArray[i].userNo !== ${user.userNo}){
+                            divElement.setAttribute("class", "chatDiv");
+                            liElement.setAttribute("class", "self");
+                            spanElement.setAttribute("class", "selfTime");
+                            var textNode = document.createTextNode(chatArray[i].chatContent);
+                            liElement.appendChild(textNode);
+                            var textNode = document.createTextNode(displayCurrentTime());
+                            spanElement.appendChild(textNode);
+                            divElement.append(liElement);
+                            divElement.append(spanElement);
+                        }
+                        $("#msgArea").append(divElement);
+                    }
+                    document.getElementById("msgArea").scrollTop = document.getElementById("msgArea").scrollHeight;
+                });
+
+                //3. send(path, header, message)로 메세지를 보낼 수 있음
+                stomp.send('/pub/message/'+chatroomNo, {}, JSON.stringify({chatroomNo: chatroomNo, writer: username}))
+            });
+
+            $("#sendBtn").on("click", function(e){
+                var msg = document.getElementById("opinion");
+                // DB 보내기
+                console.log(username + ":" + msg.textContent);
+                $.ajax({
+                    url: "/chatting/insert.do",
+                    data: { divNo: ${uData.divide.divNo}
+                        , userNo: ${user.userNo}
+                        , getUserNo: ${getUser.userNo}
+                        , chatContent: msg.textContent
+                        , chatRoomNo: chatroomNo
+                    },
+                    type: "POST",
+                    success: function(data) {
+                        if(data === "success"){
+                            // alert("insert 성공!");
+                        }else{
+                            alert("채팅저장 실패!");
+                        }
+
+                    },
+                    error: function() {
+                        alert("Ajax 오류! 관리자에게 문의하세요");
+                    }
+                });
+                    // DB로 보내기
+
+                stomp.send('/pub/message/'+chatroomNo, {}, JSON.stringify({chatroomNo: chatroomNo, message: msg.textContent, writer: username}));
+                // 추가하기
+                var divElement = document.createElement("div");
+                var liElement = document.createElement("li");
+                var spanElement = document.createElement("span");
+
+                divElement.setAttribute("class", "chatDiv");
+                liElement.setAttribute("class", "other");
+                spanElement.setAttribute("class", "otherTime");
+                var textNode = document.createTextNode(msg.textContent);
+                liElement.appendChild(textNode);
+                var textNode = document.createTextNode(displayCurrentTime());
+                spanElement.appendChild(textNode);
+                divElement.append(liElement);
+                divElement.append(spanElement);
+
+                $("#msgArea").append(divElement);
+
+                // 추가하기 끝
+                msg.textContent = '';
+            });
+        });
+        //테스트
+
+        function formatTime(hours, minutes) {
+            return (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+        }
+
+        function displayCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+
+            return formatTime(hours, minutes);
+        }
+
+        // 호출하여 현재 시간 표시
+        console.log(displayCurrentTime());
 
         function closeCurrentWindow(){
             window.close();
         }
 
-        document.getElementById("sendBtn").addEventListener("click", function() {
-            send();
-        });
+        // document.getElementById("sendBtn").addEventListener("click", function() {
+        //     send();
+        // });
 
         const username = "${name}";
 
-        const websocket = new WebSocket("ws://localhost:8888/ws/chat");
-        websocket.onmessage = onMessage;
-        websocket.onopen = onOpen;
-        websocket.onclose = onClose;
+        // const websocket = new WebSocket("ws://localhost:8888/ws/chat");
+        // websocket.onmessage = onMessage;
+        // websocket.onopen = onOpen;
+        // websocket.onclose = onClose;
 
         let isSeeing = true;
         document.addEventListener("visibilitychange", function() {
@@ -151,7 +266,7 @@ pageEncoding="UTF-8"%>
             };
         }());
 
-        setInterval(() => console.log(new Date()), 10000); //prevent chrome refresh
+        //setInterval(() => console.log(new Date()), 10000); //prevent chrome refresh
 
         $(document).ready(function(){
             $(".floating-chat").click();
@@ -170,22 +285,25 @@ pageEncoding="UTF-8"%>
                 send();
             }
         }
-        function send(){
-            console.log(username + ":" + $("#opinion").text());
-            if($("#opinion").text() != ""){
-                websocket.send(username + ":" + $("#opinion").text());
-                $("#opinion").text('');
-            }
-        }
+        // function send(){
+        //     console.log(username + ":" + $("#opinion").text());
+        //     if($("#opinion").text() != ""){
+        //         stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: $("#opinion").text(), writer: username}));
+        //         // websocket.send(username + ":" + $("#opinion").text());
+        //         $("#opinion").text('');
+        //     }
+        // }
 
         function onClose(evt) {
             var str = username + ": 님이 방을 나가셨습니다.";
-            websocket.send(str);
+            stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: str, writer: username}));
+            // websocket.send(str);
         }
 
         function onOpen(evt) {
             var str = username + ": 님이 입장하셨습니다.";
-            websocket.send(str);
+            stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: str, writer: username}));
+            // websocket.send(str);
         }
 
         function onMessage(msg) {
@@ -214,9 +332,11 @@ pageEncoding="UTF-8"%>
 
             var divElement = document.createElement("div");
             var liElement = document.createElement("li");
+            var spanElement = document.createElement("span");
 
             if(message == undefined){
-                message = "채팅이 종료되었습니다.";
+                // message = "채팅이 종료되었습니다.";
+                return false;
             }
             if(message == " 님이 입장하셨습니다."){
                 message = sessionId + "님이 입장하셨습니다.";
@@ -243,64 +363,51 @@ pageEncoding="UTF-8"%>
             }else{
                 if(sessionId == cur_session){
 
-                    // var ulElement = document.getElementById("msgArea");
-                    // // p 요소 생성
-                    // var pElement = document.createElement("p");
-                    // pElement.setAttribute("class", "infoMessageArea");
-                    //
-                    // // span 요소 생성
-                    // var spanElement = document.createElement("span");
-                    // spanElement.setAttribute("class", "infoMessage");
-                    //
-                    // // 텍스트 노드 생성 및 추가
-                    // var textNode = document.createTextNode(message);
-                    //
-                    // // span 요소에 텍스트 노드 추가
-                    // spanElement.appendChild(textNode);
-                    //
-                    // // p 요소에 span 요소 추가
-                    // pElement.appendChild(spanElement);
-                    //
-                    // // ul 요소에 p 요소 추가
-                    // ulElement.appendChild(pElement);
-
                     divElement.setAttribute("class", "chatDiv");
                     liElement.setAttribute("class", "other");
+                    spanElement.setAttribute("class", "otherTime");
                     var textNode = document.createTextNode(message);
                     liElement.appendChild(textNode);
+                    var textNode = document.createTextNode(displayCurrentTime());
+                    spanElement.appendChild(textNode);
                     divElement.append(liElement);
+                    divElement.append(spanElement);
                     $("#msgArea").append(divElement);
 
                     <%--if("${uData.user.userNo} ne ${user.userNo}"){--%>
-                    $.ajax({
-                        url: "/chatting/insert.do",
-                        data: { divNo: ${uData.divide.divNo}
-                            , userNo: ${user.userNo}
-                            , getUserNo: ${uData.user.userNo}
-                            , chatContent: message
-                        },
-                        type: "POST",
-                        success: function(data) {
-                            if(data === "success"){
-                                // alert("insert 성공!");
-                            }else{
-                                alert("채팅저장 실패!");
-                            }
+                    <%--$.ajax({--%>
+                    <%--    url: "/chatting/insert.do",--%>
+                    <%--    data: { divNo: ${uData.divide.divNo}--%>
+                    <%--        , userNo: ${user.userNo}--%>
+                    <%--        , getUserNo: ${getUser.userNo}--%>
+                    <%--        , chatContent: message--%>
+                    <%--        , chatRoomNo: ${cList.get(0).chatRoomNo}--%>
+                    <%--    },--%>
+                    <%--    type: "POST",--%>
+                    <%--    success: function(data) {--%>
+                    <%--        if(data === "success"){--%>
+                    <%--            // alert("insert 성공!");--%>
+                    <%--        }else{--%>
+                    <%--            alert("채팅저장 실패!");--%>
+                    <%--        }--%>
 
-                        },
-                        error: function() {
-                            alert("Ajax 오류! 관리자에게 문의하세요");
-                        }
-                    });
-                    // }
+                    <%--    },--%>
+                    <%--    error: function() {--%>
+                    <%--        alert("Ajax 오류! 관리자에게 문의하세요");--%>
+                    <%--    }--%>
+                    <%--});--%>
 
                 }
                 else{
                     divElement.setAttribute("class", "chatDiv");
                     liElement.setAttribute("class", "self");
+                    spanElement.setAttribute("class", "selfTime");
                     var textNode = document.createTextNode(message);
                     liElement.appendChild(textNode);
+                    var textNode = document.createTextNode(displayCurrentTime());
+                    spanElement.appendChild(textNode);
                     divElement.append(liElement);
+                    divElement.append(spanElement);
                     $("#msgArea").append(divElement);
 
                     if(isSeeing == false){

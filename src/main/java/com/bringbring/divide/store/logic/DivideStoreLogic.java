@@ -42,11 +42,11 @@ public class DivideStoreLogic implements DivideStore{
 	public int getListCount() { return sqlSession.selectOne("DivideMapper.getListCount"); }
 
     @Override
-    public List<ResponseData> selectResPonseDataList(PageInfo pInfo) {
+    public List<ResponseData> selectResponseDataList(PageInfo pInfo) {
 		int limit = pInfo.getRecordCountPerPage();
 		int offset = (pInfo.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return sqlSession.selectList("DivideMapper.selectResPonseDataList", pInfo, rowBounds);
+		return sqlSession.selectList("DivideMapper.selectResponseDataList", pInfo, rowBounds);
 	}
 
 	@Override
@@ -86,5 +86,13 @@ public class DivideStoreLogic implements DivideStore{
 
 	@Override
 	public UserData selectUserDataByNo(int divNo) { return sqlSession.selectOne("DivideMapper.selectUserDataByNo", divNo); }
+
+	@Override
+	public List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo) {
+		int limit = pageInfo.getRecordCountPerPage();
+		int offset = (pageInfo.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return sqlSession.selectList("DivideMapper.selectLoginResponseDataList", userNo, rowBounds);
+	}
 
 }

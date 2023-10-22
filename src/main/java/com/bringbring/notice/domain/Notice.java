@@ -2,6 +2,8 @@ package com.bringbring.notice.domain;
 
 import java.time.LocalDate;
 
+import com.bringbring.admin.domain.AdminDetails;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +26,6 @@ public class Notice {
 	private char isNoticeDeleted;
 	private int preNoticeNo;
 	private int nextNoticeNo;
-	private int adminNo;
-	
+	private int userNo;
+	private String regionName;
 }

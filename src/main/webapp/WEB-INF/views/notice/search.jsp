@@ -55,7 +55,7 @@
   <!-- ======= Header ======= -->
   <jsp:include page="/include/header.jsp"></jsp:include>
   
-  
+   <div style="width: 100%;height: 74px;"></div> 
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
     <div style="width: 1300px;margin: 0 auto;">
@@ -99,13 +99,14 @@
 				</li>
 			</ul>
 
-			<form class="d-flex" action="./search.jsp" method="get">
-				<input class="form-control me-2" type="search" placeholder="Search"
+			<form class="d-flex" action="/notice/search.do" method="get">
+				<input class="form-control me-2" type="text" placeholder="Search"
 					aria-label="Search" name="searchKeyword" value="${searchKeyword}">
 				<button class="btn btn-outline-success" type="submit">검색</button>
 			</form>
 		</div>
 
+		<!-- 테이블 -->
 		<div class="tab-content" id="noticeContent">
 			<div class="tab-pane fade show active" id="pills-all" role="tabpanel"
 				aria-labelledby="all-tab">
@@ -122,13 +123,13 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="notice" items="${noticeList }" varStatus="n">
+							<c:forEach var="notice" items="${searchList }" varStatus="n">
 								<c:if test="${not empty notice.noticeCreateDate}">
 									<c:set var="currentDate"
 										value="<%=java.time.LocalDate.now()%>" />
 									<c:set var="sevenDaysAgo" value="${currentDate.minusDays(7)}" />
 									<tr>
-										<th scope="row">${n.count }</th>
+										<th scope="row">${(totalCount - n.index) - ((pInfo.currentPage - 1) * pInfo.recordCountPerPage)}</th>
 										<td>${notice.noticeType}</td>
 										<td>지역</td>
 										<c:url var="detailUrl" value="/notice/detail.do">
@@ -152,7 +153,7 @@
 					</table>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="pills-service" role="tabpanel"
+ 			<div class="tab-pane fade" id="pills-service" role="tabpanel"
 				aria-labelledby="service-tab">
 				<div class="col-lg-12">
 					<table class="table table-hover text-center">
@@ -167,10 +168,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="notice" items="${noticeList }" varStatus="n">
+							<c:forEach var="notice" items="${searchList }" varStatus="n">
 								<c:if test="${notice.noticeType eq 'service' }">
 									<tr>
-										<th scope="row">${n.count }</th>
+										<th scope="row">${(totalCount - n.index) - ((pInfo.currentPage - 1) * pInfo.recordCountPerPage)}</th>
 										<td>${notice.noticeType}</td>
 										<td>지역</td>
 										<c:url var="detailUrl" value="/notice/detail.do">
@@ -209,10 +210,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="notice" items="${noticeList }" varStatus="n">
+							<c:forEach var="notice" items="${searchList }" varStatus="n">
 								<c:if test="${notice.noticeType eq 'update' }">
 									<tr>
-										<th scope="row">${n.count }</th>
+										<th scope="row">${(totalCount - n.index) - ((pInfo.currentPage - 1) * pInfo.recordCountPerPage)}</th>
 										<td>${notice.noticeType}</td>
 										<td>지역</td>
 										<c:url var="detailUrl" value="/notice/detail.do">
@@ -248,17 +249,18 @@
 			<ul class="pagination">
 				<c:if test="${pInfo.startNavi != 1 }">
 					<li class="page-item">
-								<c:url var="preUrl" value="/notice/list.do">
-				<c:param name="page" value="${pInfo.startNavi-1  }" />
-			</c:url><a class="page-link"
-						href="#" aria-label="Previous">
+					<c:url var="preUrl" value="/notice/search.do">
+						<c:param name="page" value="${pInfo.startNavi-1  }" />
+						<c:param name="searchKeyword" value="${searchKeyword }" />
+					</c:url>
+				<a class="page-link" href="${preUrl }" aria-label="Previous">
 						<span aria-hidden="true">&laquo;</span></a></li>
 				</c:if>
 				
-				<c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }"
-					var="p">
-					<c:url var="pageUrl" value="/notice/list.do">
-						<c:param name="page" value="${p }"></c:param>
+				<c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }" var="p">
+					<c:url var="pageUrl" value="/notice/search.do">
+						<c:param name="page" value="${p }" />
+						<c:param name="searchKeyword" value="${searchKeyword }" />
 					</c:url>
 					<c:choose>
 						<c:when test="${p == pInfo.currentPage}">
@@ -273,30 +275,15 @@
 
 				<c:if test="${pInfo.endNavi != pInfo.naviTotalCount }">
 					<li class="page-item">
-								<c:url var="nextUrl" value="/notice/list.do">
-				<c:param name="page" value="${pInfo.startEndNavi+1  }" />
-			</c:url><a class="page-link"
-						href="#" aria-label="Next"><span aria-hidden="true">다음</span></a></li>
+						<c:url var="nextUrl" value="/notice/search.do">
+							<c:param name="page" value="${pInfo.startEndNavi+1  }" />
+							<c:param name="searchKeyword" value="${searchKeyword }" />
+						</c:url>
+						<a class="page-link"
+						href="${nextUrl }" aria-label="Next"><span aria-hidden="true">다음</span></a></li>
 				</c:if>
 			</ul>
 		</nav>
-
-
-
-		<c:if test="${noticeInfo.noticeStartNavi != 1}">
-			<c:url var="preUrl" value="/notice/list.do">
-				<c:param name="page" value="${noticeInfo.noticeStartNavi-1  }" />
-			</c:url>
-			<a href="${preUrl }">[이전]</a>
-		</c:if>	
-
-		<c:if
-			test="${noticeInfo.noticeEndNavi != noticeInfo.noticeNaviTotalCount}">
-			<c:url var="nextUrl" value="/notice/list.do">
-				<c:param name="page" value="${noticeInfo.noticeStartEndNavi+1  }" />
-			</c:url>
-			<a href="${nextUrl }">[다음]</a>
-		</c:if>
 
 
 	</main>

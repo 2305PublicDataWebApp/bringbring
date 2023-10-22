@@ -54,6 +54,7 @@
 	<!-- 헤더 -->
   	<jsp:include page="/include/header.jsp"></jsp:include>
   
+  	<div style="width: 100%;height: 74px;"></div>
     <!-- ======= Hero Section ======= -->
     <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
         <div style="width: 1300px;margin: 0 auto;">

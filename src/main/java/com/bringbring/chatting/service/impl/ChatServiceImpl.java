@@ -1,6 +1,7 @@
 package com.bringbring.chatting.service.impl;
 
 import com.bringbring.chatting.domain.Chat;
+import com.bringbring.chatting.domain.ChatRoom;
 import com.bringbring.chatting.service.ChatService;
 import com.bringbring.chatting.store.ChatStore;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,21 @@ public class ChatServiceImpl implements ChatService {
     private final ChatStore chatStore;
 
     @Override
-    public int insertChat(Chat chat) { return chatStore.insertChat(chat);  }
+    public int insertChat(Chat chat) {
+        return chatStore.insertChat(chat);
+    }
 
     @Override
-    public List<Chat> selectChatListByMap(Map<String, Object> map) { return chatStore.selectChatListByMap(map); }
+    public List<Chat> selectChatListByMap(Map<String, Object> map) {
+        return chatStore.selectChatListByMap(map);
+    }
+
+    @Override
+    public ChatRoom selectChatRoom(Map<String, Object> chatRoomMap) { return chatStore.selectChatRoom(chatRoomMap); }
+
+    @Override
+    public int insertChatRoom(Map<String, Object> chatRoomMap) { return chatStore.insertChatRoom(chatRoomMap); }
+
+    @Override
+    public List<Chat> selectChatRoomListByNo(int chatroomNo) { return chatStore.selectChatRoomListByNo(chatroomNo); }
 }
