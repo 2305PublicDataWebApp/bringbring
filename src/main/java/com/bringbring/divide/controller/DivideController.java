@@ -93,6 +93,10 @@ public class DivideController {
 			, int divNo) {
 
 		List<WasteCategory> wasteCategories = reservationService.selectWasteCategoryList();
+		List<Image> imageList = divideService.selectImageListByNo(divNo);
+		if(!imageList.isEmpty()){
+			model.addAttribute("iList", imageList);
+		}
 		List<City> cityList = regionService.selectCityList();
 		UpdateData updateData = divideService.selectUpdateDataByNo(divNo);
 
@@ -103,10 +107,17 @@ public class DivideController {
 
 	@PostMapping("/update.do")
 	public String updateDivide(Divide divide
-			, Model model) {
+			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
+			, @RequestParam (value="deletePreImageNo", required = false) int[] deletePreImageNo
+			, HttpServletRequest request) {
 
-		divideService.updateDivide(divide);
-		return "redirect:/divide/detail.do?divNo="+divide.getDivNo();
+		int result = divideService.updateDivide(divide, uploadFiles, deletePreImageNo, request);
+		if(result > 0){
+			return "redirect:/divide/detail.do?divNo="+divide.getDivNo();
+		}else{
+			return "/";
+		}
+
 	}
 
 	@GetMapping("/delete.do")

@@ -95,4 +95,7 @@ public class DivideStoreLogic implements DivideStore{
 		return sqlSession.selectList("DivideMapper.selectLoginResponseDataList", userNo, rowBounds);
 	}
 
+	@Override
+	public int deleteImage(int imageNo) { return sqlSession.delete("DivideMapper.deleteImage", imageNo); }
+
 }

@@ -47,6 +47,7 @@
             top: 0;
             bottom: 0;
             width: 100%;
+            height: 100%;
         }
         main tr{
             border-bottom: 1px solid #d4d0d0;

@@ -38,7 +38,7 @@ public interface DivideService {
 
     UpdateData selectUpdateDataByNo(int divNo);
 
-	int updateDivide(Divide divide);
+	int updateDivide(Divide divide, MultipartFile[] uploadFiles, int[] deletePreImageNo, HttpServletRequest request);
 
 	Divide selectOneByNo(int divNo);
 
