@@ -99,7 +99,7 @@
 		margin: 5px 15px 0px 15px;
 		border-bottom: 0px;
 	}
-	.deleteBtn{
+	.deleteBtn, .realDeleteBtn{
 		border: 1px solid rgb(25, 135, 84);
 		background: rgb(255, 255, 255);
 		color: rgb(25, 135, 84);
@@ -107,7 +107,7 @@
 		width: 120px;
 		border-top-left-radius: 0px;
 		border-top-right-radius: 0px;
-		margin: 0px 15px 0px 15px;
+		margin: 0px 15px 10px 15px;
 	}
 	.sortLeft{
 		float: left;
@@ -142,7 +142,7 @@
 					<li>
 						<div style="font-size: 14px;color: #a6a5a5;margin-left: 150px;display:flex;width: 100%;">
 							<div style="width: 30%;">
-								이미지 개수 <span id="imageCount">0</span> / 10
+								이미지 개수 <span id="imageCount">${iList.size()}</span> / 10
 							</div>
 							<div style="float:right;width: 70%;text-align: right;padding-right: 18px;">
 								#이미지 파일은 1~10개까지 첨부 가능합니다.
@@ -150,7 +150,13 @@
 						</div>
 					</li>
 					<li style="padding: 0px 15px 0px 15px;">
-						<div class="image-list" style="width: 900px;padding-left: 135px;">
+						<div class="image-list" style="width: 900px;padding-left: 150px;">
+							<c:forEach var="image" items="${iList}" varStatus="i">
+								<div class="sortLeft">
+									<div class="imgPreview preImagePreview" style="background-image: url('${image.imagePath}');"></div>
+									<button type="button" onclick="deletePreImage(this);" data-number="${image.imageNo}" class="realDeleteBtn btn btn-success">삭제하기</button>
+								</div>
+							</c:forEach>
 						</div>
 					</li>
 					<li id="regionArea">
@@ -448,7 +454,7 @@
 		const cityNo = form.querySelector("#cityNo").value;
 		const wasteCategoryNo = form.querySelector("#wasteCategoryNo").value;
 		// 파일 input 엘리먼트 가져오기
-		const fileInput = form.querySelector('input[type="file"][name="uploadFiles"]');
+		var imageCountElement = document.querySelector("#imageCount");
 		// 선택된 파일 가져오기
 		// const selectedFile = fileInput.files[0];
 		//
@@ -458,20 +464,18 @@
 		if (divTitle.trim() === "") {
 			alert("제목을 입력해주세요.");
 		}
-		// else if (!selectedFile) {
-		// 	alert("사진은 한 개 이상 둥록해주세요.");
-		// } else if (inputElements.length > 11) {
-		// 	alert("10개까지의 파일만 업로드할 수 있습니다.");insert.jsp
-		// }
-		else if (cityNo === "0") {
+		else if (parseInt(imageCountElement.innerHTML) < 1) {
+			alert("사진은 한 개 이상 등록해주세요.");
+		} else if (cityNo === "0") {
 			alert("지역을 선택해주세요.");
 		} else if (wasteCategoryNo === "0") {
 			alert("종류를 선택해주세요.");
-		} else if (divContent.trim() === "") {
+		} else if (divContent.value === "") {
 			alert("내용을 입력해주세요.");
 		} else {
-			// 폼 제출 (만약 추가 유효성 검사가 필요하다면 여기에 추가)
-			form.submit();
+			if(confirm("수정을 완료하시겠습니까?")){
+				form.submit();
+			}
 		}
 	}
 </script>
@@ -536,15 +540,17 @@
 	var delNumber = 1;
 	const imgUploads = document.querySelectorAll('input[name="uploadFiles"]');
 	var imgPreview = document.querySelector('.image-list');
+	var imageCountElement = document.querySelector("#imageCount");
 
 	function handlerInputChange(e) {
 
-		var imageCountElement = document.querySelector("#imageCount");
 		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+		var preImagePreview = document.getElementsByClassName("preImagePreview");
 		if (parseInt(imageCountElement.innerHTML) > 9) {
 			alert("10장 이상 사진을 추가할 수 없습니다.");
-			imageCountElement.innerHTML = (inputElements.length - 1).toString();
-			return;
+			imageCountElement.innerHTML = (inputElements.length - 1 + preImagePreview.length).toString();
+			e.target.value = '';
+			return false;
 		}
 		const tr = e.target.closest('tr');
 		if (!imgCount[tr]) {
@@ -585,11 +591,12 @@
 	});
 	function getImgs(e) {
 
-		var imageCountElement = document.querySelector("#imageCount");
 		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+		var preImagePreview = document.getElementsByClassName("preImagePreview");
 		if (parseInt(imageCountElement.innerHTML) > 9) {
-			imageCountElement.innerHTML = (inputElements.length - 1).toString();
-			return;
+			imageCountElement.innerHTML = (inputElements.length - 1 + preImagePreview.length).toString();
+			e.target.value = '';
+			return false;
 		}
 
 		const uploadFiles = [];
@@ -658,9 +665,9 @@
 		}
 
 		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
-		var imageCountElement = document.querySelector("#imageCount");
+		var preImagePreview = document.getElementsByClassName("preImagePreview");
 		imageCountElement.innerHTML = '';
-		imageCountElement.innerHTML = (inputElements.length - 1).toString();
+		imageCountElement.innerHTML = (inputElements.length - 1 + preImagePreview.length).toString();
 		// console.log(inputElements.length - 1);
 
 		deleteBtn.addEventListener('click', function(event) {
@@ -685,9 +692,9 @@
 			console.log(imgCount[trClicked]);
 
 			var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
-			var imageCountElement = document.querySelector("#imageCount");
+			var preImagePreview = document.getElementsByClassName("preImagePreview");
 			imageCountElement.innerHTML = '';
-			imageCountElement.innerHTML = (inputElements.length - 1).toString();
+			imageCountElement.innerHTML = (inputElements.length - 1 + preImagePreview.length).toString();
 		});
 
 		return div;
@@ -699,6 +706,23 @@
 		// input.addEventListener('change', handlerInputChange)
 	});
 	document.querySelector('input[name="uploadFiles"]').addEventListener('change', getImgs);
+
+	function deletePreImage(obj) {
+		// 새로운 input 엘리먼트를 생성합니다.
+		const inputElement = document.createElement('input');
+
+		// input의 name 속성을 'deletePreImage'로 설정하고 value를 imageNo로 설정합니다.
+		inputElement.name = 'deletePreImageNo';
+		inputElement.value = obj.getAttribute('data-number');
+		inputElement.style.display = "none";
+		obj.parentElement.parentElement.appendChild(inputElement);
+		obj.parentElement.remove();
+
+		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+		var preImagePreview = document.getElementsByClassName("preImagePreview");
+		imageCountElement.innerHTML = '';
+		imageCountElement.innerHTML = (inputElements.length - 1 + preImagePreview.length).toString();
+	}
 </script>
 </body>
 

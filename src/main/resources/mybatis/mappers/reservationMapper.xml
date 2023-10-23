@@ -204,6 +204,7 @@
                 LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
                 ORDER BY r.RV_NO DESC
     </select>
+  
     <select id="selectImageNo" resultMap="image">
         SELECT IMAGE_NO FROM IMAGE_TBL where IMAGE_RENAME = #{value}
     </select>

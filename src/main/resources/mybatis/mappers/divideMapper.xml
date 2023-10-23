@@ -11,6 +11,7 @@
 		<association property="wasteCategory" resultMap="wasteCategory"/>
 		<association property="user" resultMap="user"/>
 		<association property="heart" resultMap="heart"/>
+		<association property="chatRoom" resultMap="chatRoom"/>
 	</resultMap>
 
 	<resultMap id="updateData" type="com.bringbring.divide.domain.UpdateData">
@@ -49,6 +50,7 @@
 		<result property="divXCoordinate" column="DIV_X_COORDINATE" />
 		<result property="divYCoordinate" column="DIV_Y_COORDINATE" />
 		<result property="heartCount" column="heartCount" />
+		<result property="chatroomCount" column="chatroomCount" />
 	</resultMap>
 
 	<resultMap id="image" type="com.bringbring.image.domain.Image">
@@ -81,6 +83,7 @@
 		<result property="userNo" column="USER_NO" />
 		<result property="divNo" column="DIV_NO" />
 		<result property="heartUserNo" column="heartUserNo" />
+		<result property="heartCount" column="heartCount" />
 	</resultMap>
 
 	<resultMap id="user" type="com.bringbring.user.domain.User">
@@ -100,9 +103,20 @@
 		<result property="isUserDeleted" column="IS_USER_DELETED" />
 	</resultMap>
 
+	<resultMap id="chatRoom" type="com.bringbring.chatting.domain.ChatRoom">
+		<id property="chatroomNo" column="CHATROOM_NO" />
+		<result property="divNo" column="DIV_NO" />
+		<result property="userNo" column="USER_NO" />
+		<result property="getUserNo" column="GET_USER_NO" />
+		<result property="chatroomCreateDate" column="CHATROOM_CREATE_DATE" />
+		<result property="mUserNo" column="mUserNo" />
+		<result property="chatroomCount" column="chatroomCount" />
+	</resultMap>
+
 	<select id="selectDetailDataByNo" resultMap="detailData">
 		SELECT A.*, C.CITY_NAME , D.DISTRICT_NAME, F.WASTE_CATEGORY_NAME, G.*
 			 , (SELECT COUNT(*) FROM HEART_TBL WHERE DIV_NO = #{value}) AS heartCount
+			 , (SELECT COUNT(*) FROM CHATROOM_TBL WHERE DIV_NO = #{value}) AS chatroomCount
 		FROM DIVIDE_TBL A
 			 JOIN CITY_TBL C ON A.CITY_NO = C.CITY_NO
 			 JOIN DISTRICT_TBL D ON A.DISTRICT_NO = D.DISTRICT_NO
@@ -111,30 +125,45 @@
 		WHERE A.DIV_NO = #{value}
 	</select>
 	<select id="selectLoginResponseDataList" resultMap="responseData">
-		SELECT A.*, B.*, C.*, D.*, E.*, F.*, G.USER_NO AS heartUserNo, (SELECT COUNT(*) FROM HEART_TBL H WHERE H.DIV_NO = A.DIV_NO) AS heartCount
+		SELECT A.*, B.*, C.*, D.*, E.*, F.*, G.USER_NO AS heartUserNo
+			   , (SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount
+			   , (SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount
+			   , H.USER_NO AS mUserNo, H.GET_USER_NO
 		FROM DIVIDE_TBL A
-				 JOIN DISTRICT_TBL B ON A.DISTRICT_NO = B.DISTRICT_NO
-				 JOIN CITY_TBL C ON A.CITY_NO = C.CITY_NO
+				 JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+				 JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
 				 JOIN IMAGE_TBL D ON A.DIV_NO = D.IMAGE_GROUP_NO
 				 JOIN USER_TBL E ON A.USER_NO = E.USER_NO
 				 JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
-				 LEFT JOIN HEART_TBL G ON A.DIV_NO = G.DIV_NO
+				 LEFT JOIN (
+			SELECT DIV_NO, COUNT(*) AS heartCount, USER_NO
+			FROM HEART_TBL
+			WHERE USER_NO = #{value}
+			GROUP BY DIV_NO, USER_NO
+		) G ON A.DIV_NO = G.DIV_NO
+				 LEFT JOIN (
+			SELECT DIV_NO, COUNT(*) AS chatroomNo, MIN(USER_NO) AS USER_NO, MIN(GET_USER_NO) AS GET_USER_NO
+			FROM CHATROOM_TBL
+			WHERE USER_NO = #{value} OR GET_USER_NO = #{value}
+			GROUP BY DIV_NO
+		) H ON A.DIV_NO = H.DIV_NO
 		WHERE A.IS_DIV_DELETED = 'N'
 		  AND D.IMAGE_NO = (SELECT MIN(IMAGE_NO) FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = A.DIV_NO)
-		  AND (G.USER_NO = #{value} OR G.USER_NO IS NULL)
-		ORDER BY A.DIV_CREATE_DATE DESC
+		ORDER BY A.DIV_NO DESC
 	</select>
 	<select id="selectResponseDataList" resultMap="responseData">
-		SELECT A.*, B.*, C.*, D.*, E.*, F.*, (SELECT COUNT(*) FROM HEART_TBL H WHERE H.DIV_NO = A.DIV_NO) AS heartCount
+		SELECT A.*, B.*, C.*, D.*, E.*, F.*
+				  , (SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount
+				  , (SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount
 		FROM DIVIDE_TBL A
-				 JOIN DISTRICT_TBL B ON A.DISTRICT_NO = B.DISTRICT_NO
-				 JOIN CITY_TBL C ON A.CITY_NO = C.CITY_NO
+				 JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+				 JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
 				 JOIN IMAGE_TBL D ON A.DIV_NO = D.IMAGE_GROUP_NO
 				 JOIN USER_TBL E ON A.USER_NO = E.USER_NO
 				 JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
 		WHERE A.IS_DIV_DELETED = 'N'
 		  AND D.IMAGE_NO = (SELECT MIN(IMAGE_NO) FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = A.DIV_NO)
-		ORDER BY A.DIV_CREATE_DATE DESC
+		ORDER BY A.DIV_NO DESC
 	</select>
   	<select id="selectMaxNo" resultType="_int">
   		SELECT MAX(DIV_NO) FROM DIVIDE_TBL
@@ -178,7 +207,7 @@
   	<insert id="insertDivide">
   		INSERT INTO DIVIDE_TBL VALUES (
       SEQ_DIV_NO.NEXTVAL , #{userNo}, #{wasteCategoryNo}, #{divTitle}, #{divContent},
-      DEFAULT, DEFAULT, DEFAULT, 0, DEFAULT,
+      DEFAULT, DEFAULT, 0, DEFAULT, DEFAULT,
       #{cityNo}, #{districtNo}, #{divXCoordinate}, #{divYCoordinate}
     	)
   	</insert>
@@ -205,4 +234,7 @@
 	<update id="updateViewCount">
 		UPDATE DIVIDE_TBL SET VIEW_COUNT = #{viewCount} WHERE DIV_NO = #{divNo}
 	</update>
+	<delete id="deleteImage">
+		DELETE FROM IMAGE_TBL WHERE IMAGE_NO = #{value}
+	</delete>
 </mapper>

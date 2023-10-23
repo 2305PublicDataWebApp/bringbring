@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.image.domain.Image;
 import com.bringbring.notice.domain.Notice;
 import com.bringbring.notice.store.NoticeStore;
 
@@ -22,6 +23,9 @@ public class NoticeStoreLogic implements NoticeStore {
 	// 게시글 등록
 	@Override
 	public int insertNotice(Notice notice) {return sqlSession.insert("NoticeMapper.insertNotice", notice);}
+	
+	@Override
+	public void insertImage(Image image) {sqlSession.insert("NoticeMapper.insertImage", image);}
 
 	// 게시글 전체 갯수
 	@Override
@@ -43,16 +47,16 @@ public class NoticeStoreLogic implements NoticeStore {
 		return sqlSession.selectList("NoticeMapper.selectNoticeList", null, rowBounds);}	
 	// 서비스 목록 조회
 	@Override
-	public List<Notice> selectServiceList(PageInfo sInfo) {
-		int limit = sInfo.getRecordCountPerPage();
-		int offset = (sInfo.getCurrentPage() - 1) * limit;
+	public List<Notice> selectServiceList(PageInfo pInfo) {
+		int limit = pInfo.getRecordCountPerPage();
+		int offset = (pInfo.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return sqlSession.selectList("NoticeMapper.selectServiceList", null, rowBounds);}
 	// 업데이트 목록 조회
 	@Override
-	public List<Notice> selectUpdateList(PageInfo uInfo) {
-		int limit = uInfo.getRecordCountPerPage();
-		int offset = (uInfo.getCurrentPage() - 1) * limit;
+	public List<Notice> selectUpdateList(PageInfo pInfo) {
+		int limit = pInfo.getRecordCountPerPage();
+		int offset = (pInfo.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return sqlSession.selectList("NoticeMapper.selectUpdateList", null, rowBounds);}
 
@@ -81,7 +85,11 @@ public class NoticeStoreLogic implements NoticeStore {
 	// 검색 게시글 갯수
 	@Override
 	public int selectListCount(String searchKeyword) {return sqlSession.selectOne("NoticeMapper.selectListByKeywordCount", searchKeyword);}
-
+	@Override
+	public int selectServiceListCount(String searchKeyword) {return sqlSession.selectOne("NoticeMapper.selectServiceListByKeywordCount", searchKeyword);}
+	@Override
+	public int selectUpdateListCount(String searchKeyword) {return sqlSession.selectOne("NoticeMapper.selectUpdateListByKeywordCount", searchKeyword);}
+	
 	// 키워드 검색
 	@Override
 	public List<Notice> searchNoticeByKeyword(PageInfo pInfo, String searchKeyword) {
@@ -90,6 +98,21 @@ public class NoticeStoreLogic implements NoticeStore {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return sqlSession.selectList("NoticeMapper.searchNoticeByKeyword", searchKeyword, rowBounds);
 	}
+	@Override
+	public List<Notice> searchServiceByKeyword(PageInfo pInfo, String searchKeyword) {
+		int limit = pInfo.getRecordCountPerPage();
+		int offset = (pInfo.getCurrentPage()-1)*limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return sqlSession.selectList("NoticeMapper.searchServiceByKeyword", searchKeyword, rowBounds);
+	}
+	@Override
+	public List<Notice> searchUpdateByKeyword(PageInfo pInfo, String searchKeyword) {
+		int limit = pInfo.getRecordCountPerPage();
+		int offset = (pInfo.getCurrentPage()-1)*limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return sqlSession.selectList("NoticeMapper.searchUpdateByKeyword", searchKeyword, rowBounds);
+	}
+
 
 
 

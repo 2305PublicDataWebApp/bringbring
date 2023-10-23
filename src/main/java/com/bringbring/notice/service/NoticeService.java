@@ -21,7 +21,7 @@ public interface NoticeService {
 	 * @return
 	 */
 	int insertNotice(Notice notice);
-
+	void insertImage(Image image);
 	/**
 	 * 게시글 전체 갯수 Service
 	 * 
@@ -41,9 +41,9 @@ public interface NoticeService {
 	 */
 	List<Notice> selectNoticeList(PageInfo pInfo);
 	// 서비스 목록
-	List<Notice> selectServiceList(PageInfo sInfo);
+	List<Notice> selectServiceList(PageInfo pInfo);
 	// 업데이트 목록
-	List<Notice> selectUpdateList(PageInfo uInfo);
+	List<Notice> selectUpdateList(PageInfo pInfo);
 	
 
 	/**
@@ -83,6 +83,8 @@ public interface NoticeService {
 	 * @return
 	 */
 	int getListCount(String searchKeyword);
+	int getServiceListCount(String searchKeyword);
+	int getUpdateListCount(String searchKeyword);
 
 	/**
 	 * 키워드 검색
@@ -91,6 +93,8 @@ public interface NoticeService {
 	 * @return
 	 */
 	List<Notice> searchNoticeByKeyword(PageInfo pInfo, String searchKeyword);
+	List<Notice> searchServiceByKeyword(PageInfo pInfo, String searchKeyword);
+	List<Notice> searchUpdateByKeyword(PageInfo pInfo, String searchKeyword);
 
 
 
