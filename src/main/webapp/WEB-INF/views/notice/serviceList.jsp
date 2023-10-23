@@ -84,19 +84,19 @@
 					<button class="nav-link" id="pills-all-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-all" type="button"
 						role="tab" aria-controls="pills-all" aria-selected="false"
-						value="all" onclick="showAllList()">전체</button>
+						value="전체" onclick="showAllList()">전체</button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link active" id="pills-service-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-service"
 						type="button" role="tab" aria-controls="pills-service"
-						aria-selected="true" value="service" onclick="showServiceList()">서비스</button>
+						aria-selected="true" value="서비스" onclick="showServiceList()">서비스</button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="pills-update-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-update" type="button"
 						role="tab" aria-controls="pills-update" aria-selected="false"
-						value="update" onclick="showUpdateList()">업데이트</button>
+						value="업데이트" onclick="showUpdateList()">업데이트</button>
 				</li>
 			</ul>
 
@@ -133,8 +133,8 @@
 										<th scope="row">${(serviceTotalCount - n.index) - ((pInfo.currentPage - 1) * pInfo.recordCountPerPage)}</th>
 										<td>${notice.noticeType}</td>
 										<td>
-											<c:if test="${notice.noticeType == 'service'}">${notice.regionName }</c:if>
-											<c:if test="${notice.noticeType == 'update'}">전체</c:if>
+											<c:if test="${notice.noticeType == '서비스'}">${notice.regionName }</c:if>
+											<c:if test="${notice.noticeType == '업데이트'}">전체</c:if>
 										</td>
 										<c:url var="detailUrl" value="/notice/detail.do">
 											<c:param name="noticeNo" value="${notice.noticeNo }" />
@@ -169,7 +169,7 @@
 				<c:param name="page" value="${pInfo.startNavi-1  }" />
 			</c:url><a class="page-link"
 						href="#" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span></a></li>
+						<span aria-hidden="true">이전</span></a></li>
 				</c:if>
 				
 				<c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }"

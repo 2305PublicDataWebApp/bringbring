@@ -96,8 +96,8 @@
 						<select name="noticeType" id="noticeType" class="form-select"
 							aria-label="Default select example">
 							<option selected value="choice">선택</option>
-							<option value="service">서비스</option>
-							<option value="update">업데이트</option>
+							<option value="서비스">서비스</option>
+							<option value="업데이트">업데이트</option>
 						</select>
 					</div>
 				</div>
@@ -255,7 +255,7 @@
 			var selectElement = document.getElementById("noticeType");
 			var radioLabelElement = document.querySelector(".from-check label");
 
-			if (selectElement.value === "service") {
+			if (selectElement.value === "서비스") {
 				radioLabelElement.textContent = '${regionName}';
 			} else {
 				radioLabelElement.textContent = "전체";
