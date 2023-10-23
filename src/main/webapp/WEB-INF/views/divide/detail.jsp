@@ -140,7 +140,7 @@
       <!-- 프로필 영역 -->
       <div style="width: 100%;height: 130px;border-bottom: 2px solid #ccc;border-top: 2px solid #ccc;">
         <div style="float: left;">
-          <img style="width: 50px;height: 50px;margin-top: 35px;margin-left: 10px;" src="../../../resources/assets/img/divide/free-icon-user-847969.png" alt="">
+          <img style="width: 50px;height: 50px;margin-top: 35px;margin-left: 10px;" src="../resources/assets/img/divide/free-icon-user-847969.png" alt="">
         </div>
         <div style="float: left;padding: 35px 15px 0px 15px;">
           <h5>${dData.user.userName}</h5>

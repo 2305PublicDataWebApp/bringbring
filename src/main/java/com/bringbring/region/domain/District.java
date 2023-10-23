@@ -15,4 +15,6 @@ public class District {
 	private int districtNo;
 	private String districtName;
 	private int cityNo;
+
+	private int regionNo;
 }

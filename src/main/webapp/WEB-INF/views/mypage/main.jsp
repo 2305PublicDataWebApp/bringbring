@@ -86,7 +86,7 @@
                 <div class="row" style="min-height:750px;">
                     <div class="mypage_sidebar col-3 p-5">
                         <a href="/mypage/enroll.do" class="fs-1">신청 내역</a>
-                        <a href="/mypage/inquire.do" class="fs-1">문의 내역</a>
+                        <a href="/inquire/list.do" class="fs-1">문의 내역</a>
                         <a href="#" class="fs-1">채팅 내역</a>
                     </div>
                     <div class="col-9 ps-5 pt-5">
