@@ -47,6 +47,7 @@ input[type=number] {
     margin-bottom: 20px;
 }
 #category_box button {
+    font-size: 18px;
     width: 100px;
 }
 .fee {

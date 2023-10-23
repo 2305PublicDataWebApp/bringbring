@@ -1,9 +1,11 @@
 package com.bringbring.reservation.service.impl;
 
+import com.bringbring.common.PageInfo;
 import com.bringbring.image.domain.Image;
 import com.bringbring.reservation.domain.*;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.reservation.store.ReservationStore;
+import com.bringbring.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,25 +62,16 @@ public class ReservationServiceImpl implements ReservationService {
         int imageTotal = imageAdd.size();
         System.out.println("imageTotal = " + imageTotal);
 
-
-//
-//
-//        try {
-
             if (reservationUserInfo != null) {
                 reservationResult = reservationStore.insertResertvation(reservationUserInfo);
                 System.out.println("reservationResult = " + reservationResult);
             }
-            // 성공
 
             if (reservationDetail != null  && reservationResult > 0) {
                 int rvNo = reservationUserInfo.getRvNo();
-//                int userNo = reservationUserInfo.getUserNo();
-//                Reservation rvNoSelect = reservationStore.selectReservationNo(userNo);
                 reservationDetail.setRvNo(rvNo);
                 reservationDetailResult = reservationStore.insertReservationDetail(reservationDetail);
 
-//                ReservationDetail rvDetailNoSelect = reservationStore.selectReservationDetailNo(rvNo);
                 rvDetailNo = reservationDetail.getRvDeatilNo();
                 reservationDetail.setRvDeatilNo(rvDetailNo);
                 System.out.println("rvDetailNo = " + rvDetailNo);
@@ -102,12 +95,6 @@ public class ReservationServiceImpl implements ReservationService {
             if (insertTotal != (3 + imageResult)) {
                 throw new RuntimeException("결제가 제대로 처리되지 않습니다.");
             }
-
-//        }catch (Exception ex) {
-//        System.err.println("예외 발생: " + ex.getMessage());
-//        ex.printStackTrace();
-//    }
-
         System.out.println("insertTotal = " + insertTotal);
         return insertTotal;
     }
@@ -121,6 +108,49 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<WasteData> selectpayCompleteWasteDate(String payId) {
         return reservationStore.selectpayCompleteWasteDate(payId);
+    }
+
+    @Override
+    public User selectUserNo(String userId) {
+        return reservationStore.selectUserNo(userId);
+    }
+
+    @Override
+    public int selectReservationListCount(int userNo) {
+        return reservationStore.selectReservationListCount(userNo);
+    }
+
+    @Override
+    public PageInfo getPageInfo(Integer currentPage, int userNo, int totalCount) {
+        PageInfo pi = null;
+        int recordCountPerPage = 10;
+        int naviCountPerPage = 5;
+        int naviTotalCount;
+        int startNavi;
+        int endNavi;
+
+        naviTotalCount = (int)((double) totalCount / recordCountPerPage + 0.9);
+
+        startNavi = (((int) ((double) currentPage / naviCountPerPage + 0.9)) - 1) * naviCountPerPage + 1;
+
+        endNavi = startNavi + naviCountPerPage - 1;
+        if (endNavi > naviTotalCount) {
+            endNavi = naviTotalCount;
+        }
+
+        pi = new PageInfo(currentPage, totalCount, naviTotalCount, recordCountPerPage, naviCountPerPage,
+                startNavi, endNavi);
+        return pi;
+    }
+
+    @Override
+    public List<ReservationComplete> selectReservationList(PageInfo pageInfo, int userNo) {
+        return reservationStore.selectReservationList(pageInfo, userNo);
+    }
+
+    @Override
+    public List<WasteData> AllWasteList() {
+        return reservationStore.selectAllWasteList();
     }
 
 
@@ -169,7 +199,7 @@ public class ReservationServiceImpl implements ReservationService {
                     Map<String, String> imageInfo = new HashMap<>();
                     imageInfo.put("imageName", imageName);
                     imageInfo.put("imageRename", imageRename);
-                    imageInfo.put("savePath", savePath);
+                    imageInfo.put("savePath", dbPath);
                     imageInfo.put("wasteInfoNo", currentWasteInfoNo); // wasteInfoNo를 맵에 추가
                     imagePaths.add(imageInfo);
 
@@ -197,9 +227,6 @@ public class ReservationServiceImpl implements ReservationService {
                 List<Object> valueList = (List<Object>) value;
                 for (int i = 0; i < valueList.size(); i++) {
                     HashMap<String, Object> innerMap = (HashMap<String, Object>) valueList.get(i);
-
-//                    try {
-
 
                         // 여기에서 innerMap을 사용하여 필드 값을 추출하고 처리
                         String imageName = (String) innerMap.get("imageName");
@@ -236,169 +263,11 @@ public class ReservationServiceImpl implements ReservationService {
                             // 이미지 객체 삽입에 실패한 경우의 처리
                             System.out.println("필수 필드가 누락되었거나 데이터 형식이 맞지 않습니다.");
                         }
-
-
-
-
-//                    }catch (Exception ex) {
-//                        System.err.println("예외 발생: " + ex.getMessage());
-//                        ex.printStackTrace();
-//                    }
                 }
-
-
             }
-            }
+        }
         return result;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    private void insertImages(Map<String, Object> imageAdd, int rvDeatilNo) {
-//        int result = 0; // 이미지 삽입 횟수를 초기화
-//
-//        for (Map.Entry<String, Object> entry : imageAdd.entrySet()) {
-//            String key = entry.getKey();
-//            Object value = entry.getValue();
-//        // 이미지 정보 목록을 순환합니다.
-//            if (key.equals("imageName") && value instanceof String) {
-//            String imageName = (String) imageAdd.get("imageName");
-//            String imageRename = (String) imageAdd.get("imageRename");
-//            String savePath = (String) imageAdd.get("savePath");
-//            int wasteInfoNo = (int) imageAdd.get("wasteInfoNo");
-//
-//            // 이미지 객체 생성
-//            Image image = new Image("reservation", rvDeatilNo, imageName, imageRename, savePath);
-//
-//            int insertResult = reservationStore.insertReservationImage(image);
-//
-//            // 이미지 테이블에 삽입한 내용 중 리네임으로 이미지 번호를 가져옵니다.
-////            reservationStore.selectReservationImage(imageRename);
-//            int imageNo = image.getImageNo();
-//
-//                // 가져온 이미지 번호와 imageAdd가 가지고 있는 정보로 연결 테이블에 삽입합니다.
-//            Connection connection = new Connection();
-//            connection.setRvDetailNo(rvDeatilNo);
-//            connection.setWasteInfoNo(wasteInfoNo);
-//            connection.setImageNo(imageNo);
-//
-//            int insertConnection = reservationStore.insertConnection(connection);
-//
-//            if (insertConnection > 0) {
-//                result++; // 이미지 삽입이 성공한 경우에만 결과를 증가시킵니다.
-//            }
-////        }
-//
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @Override
-//    public Integer insertReservation(List<Object> insertInfo) {
-//        System.out.println("insertInfo = " + insertInfo);
-//        List<Integer> selectedItems = null;
-//        List<Map<String, Object>> imageAdd = new ArrayList<>();
-//        Reservation reservationUserInfo = (Reservation) insertInfo.get(2);
-//        ReservationDetail reservationDetail = (ReservationDetail) insertInfo.get(3);
-//        Pay pay = (Pay) insertInfo.get(4);
-//
-////        int rvDeatilNo = 0;
-////        // result 값을 선언
-////        int reservationResult = 0;
-////        int reservationDetailResult = 0;
-////        int payResult = 0;
-////        int imageResult = 0;
-//
-//
-//        // insertInfo에 있는 데이터 다시 새로운 list와 map에 저장하기
-//        for (Object info : insertInfo) {
-//            if (info instanceof List) {
-//                selectedItems = (List<Integer>) info;
-//            } else if (info instanceof Map) {
-//                imageAdd = ( List<Map<String, Object>>) info;
-//            }
-//        }
-//
-//        int imageTotal = imageAdd.size();
-//        System.out.println("imageTotal = " + imageTotal);
-//
-////        if (reservationUserInfo != null) {
-//            // RESERVATION_TBL에 정보 저장하기
-//            int reservationResult = reservationStore.insertResertvation(reservationUserInfo);
-//            System.out.println("reservationResult = " + reservationResult);
-////        }
-////        if (reservationDetail != null) {
-//            // RESERVATION_DETAIL_TBL에 정보 저장하기
-//        int reservationDetailResult = reservationStore.insertReservationDetail(reservationDetail);
-//        int rvDeatilNo = reservationStore.selectRvDetailMaxNo();
-//            System.out.println("rvDeatilNo = " + rvDeatilNo);
-//            System.out.println("reservationDetailResult = " + reservationDetailResult);
-////        }
-////        // 꺼내온 데이터를 다시 꺼내서 select
-////        if (selectedItems != null) {
-////
-////        }
-//
-////        if (imageAdd != null) {
-//            // 이미지 테이블과 연결 테이블에 insert
-//        int imageResult = this.insertImages(imageAdd, rvDeatilNo);
-//            System.out.println("imageResult = " + imageResult);
-////        }
-////        if (pay != null) {
-//            pay.setRvDetailNo(rvDeatilNo);
-//        int payResult = reservationStore.insertPay(pay);
-//            System.out.println("payResult = " + payResult);
-////        }
-//        int insertTotal = reservationResult + reservationDetailResult + payResult + imageResult;
-//        if (insertTotal > 3 + imageTotal && insertTotal < 3 + imageTotal) {
-//            throw new RuntimeException("결제가 제대로 처리되지 않습니다.");
-//        }
-//        // 결과 값은 3 + 이미지 insert 횟수임
-//        System.out.println("insertTotal = " + insertTotal);
-//        return insertTotal;
-//    }
-
-
-
-//    String imageName = (String)imageMap.get("imageName");
-//    String imageRename = (String)imageMap.get("imageRename");
-//    String imagePath = (String)imageMap.get("imagePath");
-//    Image image = new Image("divide" ,imageGroupNo, imageName, imageRename, imagePath);
-//						divideStore.insertImage(image);
-
-
-
-
-
-
-
-
-
-
 
 
 

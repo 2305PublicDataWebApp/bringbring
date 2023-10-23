@@ -1,10 +1,9 @@
 package com.bringbring.reservation.controller;
 
+import com.bringbring.common.PageInfo;
 import com.bringbring.region.domain.City;
 import com.bringbring.region.service.RegionService;
-import com.bringbring.reservation.domain.Reservation;
-import com.bringbring.reservation.domain.ReservationDetail;
-import com.bringbring.reservation.domain.WasteData;
+import com.bringbring.reservation.domain.*;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
@@ -65,14 +64,15 @@ public class ReservationController {
         }
     }
 
-
     @GetMapping("/insertInfo.do")
     public String showInsertInfo(HttpSession session, Model model) {
         String userId = (String) session.getAttribute("sessionId");
         Map<String, Object> imageList = (Map<String, Object>) session.getAttribute("imageAdd");
         List<City> cityList = regionService.selectCityList();
         if (imageList == null || imageList.isEmpty()) {
-            return "redirect:/reservation/imageAddPage";
+            model.addAttribute("msg", "업로드한 이미지 정보가 없습니다.")
+                    .addAttribute("url", "/reservation/addImage.do");
+            return "/common/error";
         }
         if (userId != null && !userId.isEmpty()) {
             User user = userService.selectOneById(userId);
@@ -112,12 +112,13 @@ public class ReservationController {
             model.addAttribute("wasteDataList", wasteDataList)
                     .addAttribute("reservationInfo", reservation)
                     .addAttribute("reservationDetail", reservationDetail);
+            return "/reservation/payment";
         } else  {
             model.addAttribute("msg", "배출 정보가 없습니다.")
                     .addAttribute("url", "/reservation/insertInfo.do");
+            return "/common/error";
         }
-            return "/reservation/payment";
-        }
+    }
 
 
     @GetMapping("/payComplete.do")
@@ -147,11 +148,39 @@ public class ReservationController {
         return "/reservation/payComplete";
     }
 
-    @GetMapping("/modifyInfo.do")
-    public String modifyInfo(HttpSession session, Model model) {
 
-        return "/reservation/modifyInfo";
+    @GetMapping("/list.do")
+    public String showReservationList(HttpSession session, Model model
+            , @RequestParam(value="page", required = false, defaultValue = "1") Integer currentPage) {
+        String userId = (String)session.getAttribute("sessionId");
+        System.out.println("userId = " + userId);
+        User user = reservationService.selectUserNo(userId);
+        int userNo = user.getUserNo();
+        int totalCount = reservationService.selectReservationListCount(userNo);
+        PageInfo pageInfo = reservationService.getPageInfo(currentPage, userNo, totalCount);
+        if(userId != null) {
+            List<ReservationComplete> reservationList = reservationService.selectReservationList(pageInfo, userNo);
+            model.addAttribute("reservationList", reservationList).addAttribute("pageInfo", pageInfo);
+            return "/reservation/list";
+        } else {
+            model.addAttribute("msg", "로그인 정보를 찾을 수 없습니다.")
+                    .addAttribute("url", "/user/login.do");
+            return "/common/error";
+        }
     }
+
+    @GetMapping("/guide.do")
+    public String showReservationGuide(Model model) {
+//        List<WasteData> wasteList = reservationService.AllWasteList();
+//        model.addAttribute("wasteList", wasteList);
+        return "/reservation/guide";
+    }
+
+//    @GetMapping("/modifyInfo.do")
+//    public String modifyInfo(HttpSession session, Model model) {
+//
+//        return "/reservation/modifyInfo";
+//    }
 
 //    @PostMapping("/addImage.do")
 //    public String addImages(ModelAndView mv
