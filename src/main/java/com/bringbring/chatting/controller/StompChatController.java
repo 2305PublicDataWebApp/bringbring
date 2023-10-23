@@ -1,6 +1,8 @@
 package com.bringbring.chatting.controller;
 
 import com.bringbring.chatting.domain.Chat;
+import com.bringbring.chatting.domain.ChatMessageDTO;
+import com.bringbring.chatting.domain.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -16,13 +18,19 @@ public class StompChatController {
     //stompConfig에서 설정한 applicationDestinationPrefixes와 @MessageMapping 경로가 병합됨
     //"/pub/chat/enter"
     @MessageMapping(value = "/chat/enter")
-    public void enter(Chat message){
-        message.setChatContent(message.getUserNo() + "님이 채팅방에 참여하였습니다.");
-        template.convertAndSend("/sub/chat/room/" + message.getChatRoomNo(), message);
+    public void enter(ChatMessageDTO message){
+        message.setMessage("님이 채팅방에 참여하였습니다.");
+        template.convertAndSend("/sub/chatting/" + message.getChatroomNo(), message);
+    }
+
+    @MessageMapping(value = "/chat/close")
+    public void close(ChatMessageDTO message){
+        message.setMessage("님이 채팅방에서 퇴장하였습니다.");
+        template.convertAndSend("/sub/chatting/" + message.getChatroomNo(), message);
     }
 
     @MessageMapping(value = "/chat/message")
-    public void message(Chat message){
-        template.convertAndSend("/sub/chat/room/" + message.getChatRoomNo(), message);
+    public void message(ChatMessageDTO message){
+        template.convertAndSend("/sub/chatting/" + message.getChatroomNo(), message);
     }
 }

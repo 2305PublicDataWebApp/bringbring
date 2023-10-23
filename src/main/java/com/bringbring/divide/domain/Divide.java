@@ -27,6 +27,8 @@ public class Divide {
 	private int districtNo;
 	private String divXCoordinate;
 	private String divYCoordinate;
+
 	private int heartCount;
+	private int chatroomCount;
 
 }

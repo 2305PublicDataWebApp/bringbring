@@ -225,7 +225,7 @@ body {
 }
 .floating-chat .chat .messages li.self:before {
   left: -45px;
-  background-image: url(https://github.com/zorojuno.png);
+  background-image: url(../../img/divide/free-icon-user-847969.png);
 }
 .floating-chat .chat .messages li.self:after {
   border-left: 10px solid transparent;

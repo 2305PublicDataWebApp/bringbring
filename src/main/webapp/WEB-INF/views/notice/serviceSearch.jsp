@@ -80,26 +80,26 @@
 		<div class="head">
 			<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="pills-all-tab"
+					<button class="nav-link" id="pills-all-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-all" type="button"
-						role="tab" aria-controls="pills-all" aria-selected="true"
+						role="tab" aria-controls="pills-all" aria-selected="false"
 						value="all" onclick="showAllSearch()">전체</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="pills-service-tab"
+					<button class="nav-link active" id="pills-service-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-service"
 						type="button" role="tab" aria-controls="pills-service"
-						aria-selected="false" value="service" onclick="showServiceSearch()">서비스</button>
+						aria-selected="true" value="service" onclick="showServiceSearch()">서비스</button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="pills-update-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-update" type="button"
 						role="tab" aria-controls="pills-update" aria-selected="false"
-						value="update" onclick="showUpdateSearch()">업데이트</button>
+						value="update" onclick="showUpdatesSearch()">업데이트</button>
 				</li>
 			</ul>
 
-			<form class="d-flex" action="/notice/search.do" method="get">
+			<form class="d-flex" action="/notice/serviceSearch.do" method="get">
 				<input class="form-control me-2" type="text" placeholder="Search"
 					aria-label="Search" name="searchKeyword" value="${searchKeyword}">
 				<button class="btn btn-outline-success" type="submit">검색</button>
@@ -108,8 +108,9 @@
 
 		<!-- 테이블 -->
 		<div class="tab-content" id="noticeContent">
-			<div class="tab-pane fade show active" id="pills-all" role="tabpanel"
-				aria-labelledby="all-tab">
+
+ 			<div class="tab-pane fade show active" id="pills-service" role="tabpanel"
+				aria-labelledby="service-tab">
 				<div class="col-lg-12">
 					<table class="table table-hover text-center">
 						<thead class="table-light">
@@ -123,9 +124,9 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="notice" items="${searchList }" varStatus="n">
-								<c:if test="${not empty notice.noticeCreateDate}">
-									<c:set var="currentDate"
+							<c:forEach var="notice" items="${searchServiceList }" varStatus="n">
+														<c:if test="${not empty notice.noticeCreateDate}">
+							<c:set var="currentDate"
 										value="<%=java.time.LocalDate.now()%>" />
 									<c:set var="sevenDaysAgo" value="${currentDate.minusDays(7)}" />
 									<tr>
@@ -147,7 +148,7 @@
 										</td>
 										<td>${notice.noticeCreateDate}</td>
 									</tr>
-								</c:if>
+									</c:if>
 							</c:forEach>
 						</tbody>
 					</table>
@@ -165,7 +166,7 @@
 			<ul class="pagination">
 				<c:if test="${pInfo.startNavi != 1 }">
 					<li class="page-item">
-					<c:url var="preUrl" value="/notice/search.do">
+					<c:url var="preUrl" value="/notice/serviceSearch.do">
 						<c:param name="page" value="${pInfo.startNavi-1  }" />
 						<c:param name="searchKeyword" value="${searchKeyword }" />
 					</c:url>
@@ -174,7 +175,7 @@
 				</c:if>
 				
 				<c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }" var="p">
-					<c:url var="pageUrl" value="/notice/search.do">
+					<c:url var="pageUrl" value="/notice/serviceSearch.do">
 						<c:param name="page" value="${p }" />
 						<c:param name="searchKeyword" value="${searchKeyword }" />
 					</c:url>
@@ -191,7 +192,7 @@
 
 				<c:if test="${pInfo.endNavi != pInfo.naviTotalCount }">
 					<li class="page-item">
-						<c:url var="nextUrl" value="/notice/search.do">
+						<c:url var="nextUrl" value="/notice/serviceSearch.do">
 							<c:param name="page" value="${pInfo.startEndNavi+1  }" />
 							<c:param name="searchKeyword" value="${searchKeyword }" />
 						</c:url>
@@ -238,7 +239,7 @@
   <!-- 기능 script -->
 	<script>
 		function showInsertForm() {
-			window.location.href = "/notice/insert.do"
+			window.location.href = "./insert.jsp"
 		}
 		
 		function showAllSearch(){

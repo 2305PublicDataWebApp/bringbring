@@ -1,5 +1,6 @@
 package com.bringbring.divide.domain;
 
+import com.bringbring.chatting.domain.ChatRoom;
 import com.bringbring.image.domain.Image;
 import com.bringbring.region.domain.City;
 import com.bringbring.region.domain.District;
@@ -23,5 +24,6 @@ public class ResponseData {
     private WasteCategory wasteCategory;
     private User user;
     private Heart heart;
+    private ChatRoom chatRoom;
 
 }

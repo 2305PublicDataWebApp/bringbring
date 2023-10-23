@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.image.domain.Image;
 import com.bringbring.notice.domain.Notice;
 
 public interface NoticeStore {
@@ -16,6 +17,7 @@ public interface NoticeStore {
 	 */
 	int insertNotice(Notice notice);
 
+	void insertImage(Image image);
 	/**
 	 * 게시글 전체 갯수 Store
 	 * 
@@ -35,9 +37,9 @@ public interface NoticeStore {
 	 */
 	List<Notice> selectNoticeList(PageInfo pInfo);
 	// 서비스 목록 조회
-	List<Notice> selectServiceList(PageInfo sInfo);
+	List<Notice> selectServiceList(PageInfo pInfo);
 	// 업데이트 목록 조회
-	List<Notice> selectUpdateList(PageInfo uInfo);
+	List<Notice> selectUpdateList(PageInfo pInfo);
 	
 	/**
 	 * 게시글 번호에 맞는 게시글 상세 조회 Store
@@ -77,6 +79,8 @@ public interface NoticeStore {
 	 * @return
 	 */
 	int selectListCount(String searchKeyword);
+	int selectServiceListCount(String searchKeyword);
+	int selectUpdateListCount(String searchKeyword);
 
 	/**
 	 * 키워드 검색
@@ -85,6 +89,9 @@ public interface NoticeStore {
 	 * @return
 	 */
 	List<Notice> searchNoticeByKeyword(PageInfo pInfo, String searchKeyword);
+	List<Notice> searchServiceByKeyword(PageInfo pInfo, String searchKeyword);
+	List<Notice> searchUpdateByKeyword(PageInfo pInfo, String searchKeyword);
+
 
 
 
