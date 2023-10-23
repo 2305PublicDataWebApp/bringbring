@@ -137,7 +137,6 @@
 					</li>
 					<li class="file-li" style="padding-bottom: 10px;">
 						<label>*파일</label>
-						<%--					<i style="font-size: 20px;width: 30px;" class="bi bi-plus-circle-fill" id="addFileInput"></i>--%>
 						<input style="width: 600px;" accept="image/*" name="uploadFiles" id="inputFile1" class="form-control fileLayOut" type="file">
 					</li>
 					<li>
@@ -520,6 +519,7 @@
 		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
 		if (parseInt(imageCountElement.innerHTML) > 9) {
 			imageCountElement.innerHTML = (inputElements.length - 1).toString();
+			e.target.value = '';
 			return;
 		}
 

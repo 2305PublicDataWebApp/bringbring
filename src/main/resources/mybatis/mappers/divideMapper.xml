@@ -99,7 +99,7 @@
 		<result property="userProfileName" column="USER_PROFILE_NAME" />
 		<result property="userProfileRename" column="USER_PROFILE_RENAME" />
 		<result property="userProfilePath" column="USER_PROFILE_PATH" />
-		<result property="userProfileLength" column="USER_PROFILE_LENGTH" />
+<!--		<result property="userProfileLength" column="USER_PROFILE_LENGTH" />-->
 		<result property="isUserDeleted" column="IS_USER_DELETED" />
 	</resultMap>
 
@@ -213,8 +213,7 @@
   	</insert>
   	<insert id="insertImage">
   		INSERT INTO IMAGE_TBL VALUES (
-      SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath}
-    	)
+      SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath})
   	</insert>
 	<insert id="insertHeart">
 		INSERT INTO HEART_TBL VALUES(SEQ_HEART_NO.NEXTVAL, #{userNo}, #{divNo})

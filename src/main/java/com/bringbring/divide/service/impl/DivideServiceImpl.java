@@ -128,6 +128,29 @@ public class DivideServiceImpl implements DivideService{
 	@Override
 	public List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo) { return divideStore.selectLoginResponseDataList(pageInfo, userNo); }
 
+	@Override
+	public PageInfo getPageInfo(Integer currentPage, int totalCount) {
+		PageInfo pi = null;
+		int recordCountPerPage = 10;
+		int naviCountPerPage = 5;
+		int naviTotalCount;
+		int startNavi;
+		int endNavi;
+
+		naviTotalCount = (int)((double) totalCount / recordCountPerPage + 0.9);
+
+		startNavi = (((int) ((double) currentPage / naviCountPerPage + 0.9)) - 1) * naviCountPerPage + 1;
+
+		endNavi = startNavi + naviCountPerPage - 1;
+		if (endNavi > naviTotalCount) {
+			endNavi = naviTotalCount;
+		}
+
+		pi = new PageInfo(currentPage, totalCount, naviTotalCount, recordCountPerPage, naviCountPerPage,
+				startNavi, endNavi);
+		return pi;
+	}
+
 
 	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
 		Map<String, Object> fileInfoMap = new HashMap<String, Object>();
@@ -168,4 +191,5 @@ public class DivideServiceImpl implements DivideService{
 			file.delete();
 		}
 	}
+
 }

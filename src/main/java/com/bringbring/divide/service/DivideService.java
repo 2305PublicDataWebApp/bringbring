@@ -47,4 +47,6 @@ public interface DivideService {
 	UserData selectUserDataByNo(int divNo);
 
     List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo);
+
+    PageInfo getPageInfo(Integer currentPage, int totalCount);
 }

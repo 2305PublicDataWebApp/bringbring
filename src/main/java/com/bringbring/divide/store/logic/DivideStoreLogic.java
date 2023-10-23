@@ -46,7 +46,7 @@ public class DivideStoreLogic implements DivideStore{
 		int limit = pInfo.getRecordCountPerPage();
 		int offset = (pInfo.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return sqlSession.selectList("DivideMapper.selectResponseDataList", pInfo, rowBounds);
+		return sqlSession.selectList("DivideMapper.selectResponseDataList", null, rowBounds);
 	}
 
 	@Override
