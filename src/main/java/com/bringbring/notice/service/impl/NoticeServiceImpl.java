@@ -28,6 +28,7 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public int insertNotice(Notice notice) {return noticeStore.insertNotice(notice);}
 
+	public void insertImage(Image image) {noticeStore.insertImage(image);}
 	// 게시글 전체 갯수
 	@Override
 	public Integer getListCount() {return noticeStore.selectListCount();}
@@ -44,10 +45,10 @@ public class NoticeServiceImpl implements NoticeService {
 	public List<Notice> selectNoticeList(PageInfo pInfo) {return noticeStore.selectNoticeList(pInfo);}
 	// 서비스 목록 조회
 	@Override
-	public List<Notice> selectServiceList(PageInfo sInfo) {return noticeStore.selectServiceList(sInfo);}
+	public List<Notice> selectServiceList(PageInfo pInfo) {return noticeStore.selectServiceList(pInfo);}
 	// 업데이트 목록 조회
 	@Override
-	public List<Notice> selectUpdateList(PageInfo uInfo) {return noticeStore.selectUpdateList(uInfo);}
+	public List<Notice> selectUpdateList(PageInfo pInfo) {return noticeStore.selectUpdateList(pInfo);}
 	
 		
 	// 게시글 번호에 맞는 게시글 상세 조회
@@ -72,10 +73,20 @@ public class NoticeServiceImpl implements NoticeService {
 	// 검색 게시글 갯수
 	@Override
 	public int getListCount(String searchKeyword) {return noticeStore.selectListCount(searchKeyword);}
-
+	@Override
+	public int getServiceListCount(String searchKeyword) {return noticeStore.selectServiceListCount(searchKeyword);}
+	@Override
+	public int getUpdateListCount(String searchKeyword) {return noticeStore.selectUpdateListCount(searchKeyword);}
+	
 	// 키워드 검색
 	@Override
 	public List<Notice> searchNoticeByKeyword(PageInfo pInfo, String searchKeyword) {return noticeStore.searchNoticeByKeyword(pInfo, searchKeyword);}
+
+	@Override
+	public List<Notice> searchServiceByKeyword(PageInfo pInfo, String searchKeyword) {return noticeStore.searchServiceByKeyword(pInfo, searchKeyword);}
+
+	@Override
+	public List<Notice> searchUpdateByKeyword(PageInfo pInfo, String searchKeyword) {return noticeStore.searchUpdateByKeyword(pInfo, searchKeyword);}
 
 
 

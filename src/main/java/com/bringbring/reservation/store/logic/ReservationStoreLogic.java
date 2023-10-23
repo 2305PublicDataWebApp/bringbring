@@ -70,4 +70,24 @@ public class ReservationStoreLogic implements ReservationStore {
         return sqlSession.selectList("ReservationMapper.selectReservationCompleteInfo", payId);
 
     }
+
+    @Override
+    public Image selectImageNo(String imageRename) {
+        return sqlSession.selectOne("ReservationMapper.selectImageNo", imageRename);
+    }
+
+    @Override
+    public Reservation selectReservationNo(int userNo) {
+        return sqlSession.selectOne("ReservationMapper.selectReservationNo");
+    }
+
+    @Override
+    public ReservationDetail selectReservationDetailNo(int rvNo) {
+        return sqlSession.selectOne("ReservationMapper.selectReservationDetailNo", rvNo);
+    }
+
+    @Override
+    public List<WasteData> selectpayCompleteWasteDate(String payId) {
+        return sqlSession.selectList("ReservationMapper.selectpayCompleteWasteDate", payId);
+    }
 }

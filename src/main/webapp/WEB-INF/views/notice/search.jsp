@@ -83,19 +83,19 @@
 					<button class="nav-link active" id="pills-all-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-all" type="button"
 						role="tab" aria-controls="pills-all" aria-selected="true"
-						value="all">전체</button>
+						value="all" onclick="showAllSearch()">전체</button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="pills-service-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-service"
 						type="button" role="tab" aria-controls="pills-service"
-						aria-selected="false" value="service">서비스</button>
+						aria-selected="false" value="service" onclick="showServiceSearch()">서비스</button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="pills-update-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-update" type="button"
 						role="tab" aria-controls="pills-update" aria-selected="false"
-						value="update">업데이트</button>
+						value="update" onclick="showUpdateSearch()">업데이트</button>
 				</li>
 			</ul>
 
@@ -128,90 +128,6 @@
 									<c:set var="currentDate"
 										value="<%=java.time.LocalDate.now()%>" />
 									<c:set var="sevenDaysAgo" value="${currentDate.minusDays(7)}" />
-									<tr>
-										<th scope="row">${(totalCount - n.index) - ((pInfo.currentPage - 1) * pInfo.recordCountPerPage)}</th>
-										<td>${notice.noticeType}</td>
-										<td>지역</td>
-										<c:url var="detailUrl" value="/notice/detail.do">
-											<c:param name="noticeNo" value="${notice.noticeNo }" />
-										</c:url>
-										<td style="width: 641.15px;"><a href="${detailUrl }"
-											onclick="increaseViewCount(${notice.noticeNo});">
-												${notice.noticeTitle } <c:if
-													test="${notice.noticeCreateDate.isAfter(sevenDaysAgo)}">
-													<img src="../resources/assets/img/notice/new_icon.png"
-														style="width: 20px; height: 20px;" />
-												</c:if>
-										</a></td>
-										<td id="noticeViewCount_${notice.noticeNo }">${notice.noticeViewCount }
-										</td>
-										<td>${notice.noticeCreateDate}</td>
-									</tr>
-								</c:if>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-			</div>
- 			<div class="tab-pane fade" id="pills-service" role="tabpanel"
-				aria-labelledby="service-tab">
-				<div class="col-lg-12">
-					<table class="table table-hover text-center">
-						<thead class="table-light">
-							<tr>
-								<th scope="row">No</th>
-								<th scope="row">카테고리</th>
-								<th scope="row">지역</th>
-								<th scope="row">제목</th>
-								<th scope="row">조회수</th>
-								<th scope="row">작성일</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="notice" items="${searchList }" varStatus="n">
-								<c:if test="${notice.noticeType eq 'service' }">
-									<tr>
-										<th scope="row">${(totalCount - n.index) - ((pInfo.currentPage - 1) * pInfo.recordCountPerPage)}</th>
-										<td>${notice.noticeType}</td>
-										<td>지역</td>
-										<c:url var="detailUrl" value="/notice/detail.do">
-											<c:param name="noticeNo" value="${notice.noticeNo }" />
-										</c:url>
-										<td style="width: 641.15px;"><a href="${detailUrl }"
-											onclick="increaseViewCount(${notice.noticeNo});">
-												${notice.noticeTitle } <c:if
-													test="${notice.noticeCreateDate.isAfter(sevenDaysAgo)}">
-													<img src="../resources/assets/img/notice/new_icon.png"
-														style="width: 20px; height: 20px;" />
-												</c:if>
-										</a></td>
-										<td id="noticeViewCount_${notice.noticeNo }">${notice.noticeViewCount }
-										</td>
-										<td>${notice.noticeCreateDate}</td>
-									</tr>
-								</c:if>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="tab-pane fade" id="pills-update" role="tabpanel"
-				aria-labelledby="update-tab">
-				<div class="col-lg-12">
-					<table class="table table-hover text-center">
-						<thead class="table-light">
-							<tr>
-								<th scope="row">No</th>
-								<th scope="row">카테고리</th>
-								<th scope="row">지역</th>
-								<th scope="row">제목</th>
-								<th scope="row">조회수</th>
-								<th scope="row">작성일</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="notice" items="${searchList }" varStatus="n">
-								<c:if test="${notice.noticeType eq 'update' }">
 									<tr>
 										<th scope="row">${(totalCount - n.index) - ((pInfo.currentPage - 1) * pInfo.recordCountPerPage)}</th>
 										<td>${notice.noticeType}</td>
@@ -319,10 +235,22 @@
 
   </script>
   
-  <!-- 버튼 script -->
+  <!-- 기능 script -->
 	<script>
 		function showInsertForm() {
-			window.location.href = "./insert.jsp"
+			window.location.href = "/notice/insert.do"
+		}
+		
+		function showAllSearch(){
+			location.href = "/notice/search.do?keyword="+${searchKeyword}
+		}
+		
+		function showServiceSearch(){
+			location.href = "/notice/serviceSearch.do?keyword="+${searchKeyword}
+		}
+		
+		function showUpdateSearch(){
+			location.href = "/notice/updateList.do?keyword="+${searchKeyword}
 		}
 	</script>
 

@@ -1,6 +1,7 @@
 package com.bringbring.chatting.controller;
 
 import com.bringbring.chatting.domain.Chat;
+import com.bringbring.chatting.domain.ChatMessageDTO;
 import com.bringbring.chatting.service.ChatService;
 import com.bringbring.region.domain.District;
 import com.google.gson.Gson;
@@ -25,16 +26,12 @@ public class RoomController {
     private final ChatService chatService;
 
     //채팅방 개설
-    @MessageMapping("/message")
-    @SendTo("/sub/chatting")
-    public ResponseEntity<List<Chat>> create(
-            @PathVariable int chatroomNo
-    ) {
-
-        List<Chat> chatList = chatService.selectChatRoomListByNo(chatroomNo);
-//        model.addAttribute("cList", chatList);
-//        return "redirect:/chatting?userId="+chatList.get(0).;
-        return ResponseEntity.ok(chatList);
-    }
+//    @MessageMapping("/message")
+//    @SendTo("/sub/chatting")
+//    public ResponseEntity<List<Chat>> create( ChatMessageDTO chatMessageDTO ) {
+//
+//        List<Chat> chatList = chatService.selectChatRoomListByNo(chatMessageDTO.getChatroomNo());
+//        return ResponseEntity.ok(chatList);
+//    }
 
 }

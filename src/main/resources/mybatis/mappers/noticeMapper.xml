@@ -11,10 +11,15 @@
 	</resultMap> -->
 	
 	<insert id="insertNotice">
+		<selectKey resultType="int" keyProperty="noticeNo" order="BEFORE">
+	        SELECT SEQ_NOTICE_NO.NEXTVAL FROM DUAL
+	    </selectKey>
 		INSERT INTO NOTICE_TBL VALUES
-		(SEQ_NOTICE_NO.NEXTVAL,#{noticeType},#{noticeTitle},#{noticeContent},DEFAULT,DEFAULT,DEFAULT,#{preNoticeNo},#{nextNoticeNo},#{userNo})
+		(#{noticeNo},#{noticeType},#{noticeTitle},#{noticeContent},DEFAULT,DEFAULT,DEFAULT,#{preNoticeNo},#{nextNoticeNo},#{userNo})
 	</insert>
-	
+  	<insert id="insertImage">
+  		INSERT INTO IMAGE_TBL VALUES (SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath})
+  	</insert>
 	<update id="updateNotice">
 		UPDATE NOTICE_TBL SET NOTICE_TITLE = #{noticeTitle}, NOTICE_CONTENT = #{noticeContent} WHERE NOTICE_NO = #{noticeNo}
 	</update>
@@ -70,9 +75,22 @@
 	<select id="selectListByKeywordCount" resultType="_int">
 		SELECT COUNT(*) FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%'||#{searchKeyword }||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N'
 	</select>
+	<select id="selectServiceListByKeywordCount" resultType="_int">
+		SELECT COUNT(*) FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%'||#{searchKeyword }||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'service'
+	</select>
+	<select id="selectUpdateListByKeywordCount" resultType="_int">
+		SELECT COUNT(*) FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%'||#{searchKeyword }||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'update'
+	</select>
+
 	
 	<select id="searchNoticeByKeyword" resultType="Notice">
 		SELECT * FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N'
+	</select>
+	<select id="searchServiceByKeyword" resultType="Notice">
+		SELECT * FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'service'
+	</select>
+	<select id="searchUpdateByKeyword" resultType="Notice">
+		SELECT * FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'update'
 	</select>
 	
 <select id="selectpreNextInfo" parameterType="Integer" resultType="map">

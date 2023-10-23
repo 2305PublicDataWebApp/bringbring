@@ -7,8 +7,11 @@ import com.bringbring.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,24 @@ public class RestReservationController {
         }
     }
 
+    @PostMapping("/imageUpload.do")
+    @ResponseBody
+    public String handleFileUpload(@RequestParam("file") MultipartFile[] uploadFiles
+            , @RequestParam("wasteInfoNo") String[] wasteInfoNo
+            , HttpServletRequest request
+            , HttpSession session, Model model) {
+        Map<String, Object> result = reservationService.addImages(wasteInfoNo , uploadFiles, request);
+        if(result != null) {
+            session.setAttribute("imageAdd", result);
+            return "success";
+        } else {
+            model.addAttribute("msg", "사진 업로드에 실패했습니다")
+                    .addAttribute("url", "/reservation/addImage.do");
+            return "/common/error";
+        }
+    }
+
+
     @PostMapping("/select/userInfo.do")
     public ResponseEntity<User> selectUserInfo(@RequestParam String userId) {
         User user = userService.selectOneById(userId);
@@ -56,10 +77,6 @@ public class RestReservationController {
         Map<String, Object> imageAdd = (Map<String, Object>) session.getAttribute("imageAdd");
         Reservation reservationUserInfo = (Reservation) session.getAttribute("reservationUserInfo");
 
-//        Integer result = 0;
-//
-//        try {
-
             List<Object> insertInfo = new ArrayList<>();
             insertInfo.add(selectedItems);
             insertInfo.add(imageAdd);
@@ -74,15 +91,9 @@ public class RestReservationController {
 
             List<ReservationComplete> reservationComplete = reservationService.selectReservationCompleteInfo(payId);
 
-
-            session.setAttribute("reservationComplete", reservationComplete);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println("e.getMessage() = " + e.getMessage());
-//        }
+            session.setAttribute("payId", payId);
 
         if (result >= 4) {
-            session.setAttribute("reservationComplete", reservationComplete);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Failure", HttpStatus.INTERNAL_SERVER_ERROR);

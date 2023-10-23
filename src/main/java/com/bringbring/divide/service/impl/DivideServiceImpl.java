@@ -14,6 +14,7 @@ import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bringbring.divide.service.DivideService;
@@ -31,9 +32,8 @@ public class DivideServiceImpl implements DivideService{
 
 	@Override
 	public int insertDivide(Divide divide, MultipartFile[] uploadFiles, HttpServletRequest request) {
-		int result = 0;
-			// 1. 여행정보 db에 먼저 저장
-			result = divideStore.insertDivide(divide);
+			// 1. db에 먼저 게시글 정보 저장
+			int result = divideStore.insertDivide(divide);
 			// 2. 저장성공시 파일업로드
 			if(result > 0) {
 				int imageGroupNo = divideStore.selectMaxNo();
@@ -86,7 +86,35 @@ public class DivideServiceImpl implements DivideService{
 	public UpdateData selectUpdateDataByNo(int divNo) { return divideStore.selectUpdateDataByNo(divNo); }
 
 	@Override
-	public int updateDivide(Divide divide) { return divideStore.updateDivide(divide); }
+	public int updateDivide(Divide divide
+			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
+			, @RequestParam (value="deletePreImageNo", required = false) int[] deletePreImageNo
+			, HttpServletRequest request) {
+		int result = divideStore.updateDivide(divide);
+		if(result > 0) {
+			if (deletePreImageNo != null) {
+				if(deletePreImageNo.length > 0){
+					for (int j : deletePreImageNo) {
+						divideStore.deleteImage(j);
+					}
+				}
+			}
+			if(uploadFiles.length > 0){
+				for(MultipartFile uploadFile : uploadFiles) {
+					if(uploadFile != null && !uploadFile.isEmpty()) {
+						//파일저장 메소드 호출
+						Map<String, Object> imageMap = this.saveFile(uploadFile, request);
+						String imageName = (String)imageMap.get("imageName");
+						String imageRename = (String)imageMap.get("imageRename");
+						String imagePath = (String)imageMap.get("imagePath");
+						Image image = new Image("divide" ,divide.getDivNo(), imageName, imageRename, imagePath);
+						divideStore.insertImage(image);
+					}
+				}
+			}
+		}
+		return result;
+	}
 
 	@Override
 	public Divide selectOneByNo(int divNo) { return divideStore.selectOneByNo(divNo); }

@@ -43,7 +43,7 @@ input[type=number] {
 #title-flex {
     display: flex;
     justify-content: space-between;
-    align-items: center
+    align-items: flex-end;
 }
 .input-div {
     width: 730px;
@@ -75,4 +75,14 @@ input[type=text], input[type=number] {
 }
 input::placeholder {
     padding: 5px;
+}
+select {
+    margin-bottom: 20px;
+    border-radius: 5px;
+    height: 35px;
+    border: 1px solid #ccc;
+    padding-left: 8px;
+}
+#title-flex > p {
+    margin-bottom: 0px;
 }

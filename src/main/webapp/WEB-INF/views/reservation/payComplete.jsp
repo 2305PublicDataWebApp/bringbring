@@ -105,33 +105,34 @@
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">1234</li>
+            <li class="list-group-item">${wasteData.get(0).reservation.rvDischargeNo}</li>
           </ul>
         </td>
       </tr>
-      <tr>
-        <td>
-          <label>배출 품목</label>
-        </td>
-        <td>
-          <table class="table table-borderless">
-            <c:forEach items="${wasteDataList}" var="item" varStatus="i">
-              <tr>
-                <td class="selectedItems" style="padding-bottom: 20px; padding-top: 20px; border-bottom: 1px solid #ccc;">
-                  <span class="selectSpan">선택 ${i.index + 1}</span><span>${item.wasteCategory.wasteCategoryName} > ${item.wasteType.wasteTypeName} > ${item.wasteInfo.wasteInfoStandard}</span>
-                </td>
-              </tr>
-            </c:forEach>
-          </table>
-        </td>
-      </tr>
+<%--      <tr>--%>
+<%--        <td>--%>
+<%--          <label>배출 품목</label>--%>
+<%--        </td>--%>
+<%--        <td>--%>
+<%--          <table class="table table-borderless">--%>
+<%--            <c:forEach items="${wasteDataList}" var="item" varStatus="i">--%>
+<%--              <tr>--%>
+<%--                <td class="selectedItems" style="padding-bottom: 20px; padding-top: 20px; border-bottom: 1px solid #ccc;">--%>
+<%--                  <span class="selectSpan">선택 ${i.index}</span>--%>
+<%--                  <span>${item.wasteCategory.wasteCategoryName} > ${item.wasteType.wasteTypeName} > ${item.wasteInfo.wasteInfoStandard}</span>--%>
+<%--                </td>--%>
+<%--              </tr>--%>
+<%--            </c:forEach>--%>
+<%--          </table>--%>
+<%--        </td>--%>
+<%--      </tr>--%>
       <tr>
         <td>
           <label>배출 장소</label>
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">서울시 중구</li>
+            <li class="list-group-item">${wasteData.get(0).reservation.rvAddr}</li>
           </ul>
         </td>
       </tr>
@@ -141,7 +142,7 @@
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">2023-10-30</li>
+            <li class="list-group-item">${wasteData.get(0).reservation.rvRvDate}</li>
           </ul>
         </td>
       </tr>
@@ -151,7 +152,7 @@
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">6,000원</li>
+            <li class="list-group-item">${wasteData.get(0).reservationDetail.rvDetailFee}원</li>
           </ul>
         </td>
       </tr>

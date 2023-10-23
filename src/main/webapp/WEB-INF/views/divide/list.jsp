@@ -47,6 +47,7 @@
             top: 0;
             bottom: 0;
             width: 100%;
+            height: 100%;
         }
         main tr{
             border-bottom: 1px solid #d4d0d0;
@@ -122,15 +123,22 @@
                     </td>
                     <td style="width: 100px;position: relative;">
                         <div style="position: absolute;bottom: 10px;">
-                            <i class="bi bi-chat"></i>
-                            2 &nbsp;
+                            <c:if test="${sessionId eq null || data.chatRoom.MUserNo eq 0 || data.chatRoom.getUserNo eq 0}">
+                                <i class="bi bi-chat"></i>
+                            </c:if>
+                            <c:if test="${sessionId ne null}">
+                                <c:if test="${data.chatRoom.MUserNo eq cUserNo || data.chatRoom.getUserNo eq cUserNo}">
+                                    <i class="bi bi-chat-fill"></i>
+                                </c:if>
+                            </c:if>
+                            ${data.chatRoom.chatroomCount} &nbsp;
                             <c:if test="${sessionId eq null || data.heart.heartUserNo eq 0}">
                                 <i class="bi bi-heart"></i>
                             </c:if>
                             <c:if test="${sessionId ne null && cUserNo eq data.heart.heartUserNo}">
                                 <i class="bi bi-heart-fill"></i>
                             </c:if>
-                            ${data.divide.heartCount}
+                            ${data.heart.heartCount}
                         </div>
                     </td>
                 </tr>
