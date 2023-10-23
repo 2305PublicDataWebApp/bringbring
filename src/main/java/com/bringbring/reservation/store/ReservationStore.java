@@ -1,7 +1,9 @@
 package com.bringbring.reservation.store;
 
+import com.bringbring.common.PageInfo;
 import com.bringbring.image.domain.Image;
 import com.bringbring.reservation.domain.*;
+import com.bringbring.user.domain.User;
 
 import java.util.List;
 
@@ -36,4 +38,11 @@ public interface ReservationStore {
 
     List<WasteData> selectpayCompleteWasteDate(String payId);
 
+    User selectUserNo(String userId);
+
+    int selectReservationListCount(int userNo);
+
+    List<ReservationComplete> selectReservationList(PageInfo pageInfo, int userNo);
+
+    List<WasteData> selectAllWasteList();
 }

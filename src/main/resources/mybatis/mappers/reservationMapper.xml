@@ -100,6 +100,23 @@
         <association property="city" resultMap="city"/>
         <association property="district" resultMap="district"/>
     </resultMap>
+    <resultMap id="User" type="com.bringbring.user.domain.User">
+        <id property="userNo" column="USER_NO" />
+        <result property="userId" column="USER_ID" />
+        <result property="userPwd" column="USER_PWD" />
+        <result property="userName" column="USER_NAME" />
+        <result property="userPhone" column="USER_PHONE" />
+        <result property="userPostCode" column="USER_POSTCODE" />
+        <result property="userAddress" column="USER_ADDRESS" />
+        <result property="userAddressDetail" column="USER_ADDRESS_DETAIL" />
+        <result property="userCreateDate" column="USER_CREATE_DATE" />
+        <result property="userProfileName" column="USER_PROFILE_NAME" />
+        <result property="userProfileRename" column="USER_PROFILE_RENAME" />
+        <result property="userProfilePath" column="USER_PROFILE_PATH" />
+        <result property="userProfileLength" column="USER_PROFILE_LENGTH" />
+        <result property="isUserDeleted" column="IS_USER_DELETED" />
+    </resultMap>
+
 
     <insert id="insertResertvation" parameterType="com.bringbring.reservation.domain.Reservation" >
         <selectKey keyProperty="rvNo" order="AFTER" resultType="int">
@@ -136,12 +153,6 @@
                                        SEQ_PAY_NO.NEXTVAL, #{rvDetailNo}, #{userId}, #{payId}, #{payMethod}, #{payAmount}, #{payCurrency}, SYSDATE, DEFAULT, DEFAULT
                                    )
     </insert>
-
-    <!--    <insert id="insertReservationDetail">-->
-    <!--        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, )-->
-    <!--    </insert>-->
-
-
     <select id="selectWasteList" resultMap="wasteDataResultMap">
         select * from WASTE_CATEGORY_TBL
                           JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
@@ -228,5 +239,37 @@
               join RESERVATION_TBL using (RV_NO)
               join PAY_TBL using (RV_DETAIL_NO)
         where PAY_ID = #{payId}
+    </select>
+    <select id="selectUserNo" resultType="User">
+        select USER_NO
+            from USER_TBL
+            where USER_ID = #{userId, jdbcType=VARCHAR}
+    </select>
+    <select id="selectReservationListCount" resultType="_int">
+        select COUNT(*)
+            from RESERVATION_TBL
+            where USER_NO = #{userNo}
+    </select>
+    <select id="selectMyReservationList" resultMap="reservationComplete">
+        SELECT
+            DISTINCT RV_NO, RV_APPLICATION_DATE, RV_RV_DATE, RV_DETAIL_TOTAL, RV_DETAIL_FEE, RV_DISCHARGE_NO,
+                     MIN(WASTE_TYPE_NAME) as WASTE_TYPE_NAME, MIN(RV_CONNECTION_NO) as RV_CONNECTION_NO,
+                     IS_RV_COMPLETION, IS_RV_CANCEL
+        FROM WASTE_CATEGORY_TBL
+                 JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
+                 JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
+                 JOIN RV_CONNECTION_TBL USING (WASTE_INFO_NO)
+                 JOIN IMAGE_TBL USING (IMAGE_NO)
+                 JOIN RESERVATION_DETAIL_TBL USING (RV_DETAIL_NO)
+                 JOIN RESERVATION_TBL USING (RV_NO)
+                 JOIN PAY_TBL USING (RV_DETAIL_NO)
+        WHERE USER_NO = #{userNo}
+        GROUP BY RV_NO, RV_APPLICATION_DATE, RV_RV_DATE, RV_DETAIL_TOTAL, RV_DETAIL_FEE, RV_DISCHARGE_NO, IS_RV_COMPLETION, IS_RV_CANCEL
+        ORDER BY RV_NO ASC
+    </select>
+    <select id="selectAllWasteList" resultMap="wasteDataResultMap">
+        select * from WASTE_CATEGORY_TBL
+                          JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
+                          JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
     </select>
 </mapper>

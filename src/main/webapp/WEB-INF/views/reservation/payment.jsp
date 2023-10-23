@@ -141,8 +141,8 @@
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">${reservationDetail.rvDetailFee}원</li>
-            <input type="hidden" id="rvDetailFee" name="rvDetailFee" value="${reservationDetail.rvDetailFee}원">
+            <li class="list-group-item" style="border: none">${reservationDetail.rvDetailFee}원</li>
+            <input type="hidden" id="rvDetailFee" name="rvDetailFee" value="${reservationDetail.rvDetailFee}">
           </ul>
         </td>
       </tr>
@@ -207,8 +207,8 @@
   function requestPay() {
     let uidDate = new dayjs().format("YYYYMMDDTHHmmss");
     const rvDetailTotal = ${reservationDetail.rvDetailTotal};
-    // const Fee = document.querySelector('#rvDetailFee').value;
-    const Fee = 100;
+    const Fee = document.querySelector('#rvDetailFee').value;
+    // const Fee = 100;
     const userEmail = '${sessionScope.sessionId}';
     const userName = '${sessionScope.sessionName}';
 
@@ -269,6 +269,7 @@
         }
       });
     }
+
 </script>
 
 <script>
