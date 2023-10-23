@@ -2,13 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="NoticeMapper">
-
-<!-- 	<resultMap id="NoticeResultMap" type="com.bringbring.notice.damain.NoticeWriter">
-		<id property="adminNo" column="ADMIN_NO" />
-		<result property="userId" column="USER_ID" />
-		<result property="userNo" column="USER_NO" />
-		<result property="regionName" column="REGION_NAME" />
-	</resultMap> -->
 	
 	<insert id="insertNotice">
 		<selectKey resultType="int" keyProperty="noticeNo" order="BEFORE">
@@ -30,11 +23,11 @@
 	</select>
  	<select id="selectServiceCount" resultType="_int">
 		SELECT COUNT(*) FROM
-		NOTICE_TBL WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'service'
+		NOTICE_TBL WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = '서비스'
 	</select>
  	<select id="selectUpdateCount" resultType="_int">
 		SELECT COUNT(*) FROM
-		NOTICE_TBL WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'update'
+		NOTICE_TBL WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = '업데이트'
 	</select>
 
 	<select id="selectNoticeList" resultType="Notice">
@@ -47,13 +40,13 @@
 		SELECT N.*, REGION_NAME FROM NOTICE_TBL N
 		LEFT JOIN ADMIN_TBL A ON N.USER_NO = A.USER_NO
 		LEFT JOIN REGION_TBL R ON A.REGION_NO = R.REGION_NO 
-		WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'service' ORDER BY NOTICE_NO DESC
+		WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = '서비스' ORDER BY NOTICE_NO DESC
 	</select>
 	<select id="selectUpdateList" resultType="Notice">
 		SELECT N.*, REGION_NAME FROM NOTICE_TBL N
 		LEFT JOIN ADMIN_TBL A ON N.USER_NO = A.USER_NO
 		LEFT JOIN REGION_TBL R ON A.REGION_NO = R.REGION_NO 
-		WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'update' ORDER BY NOTICE_NO DESC
+		WHERE IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = '업데이트' ORDER BY NOTICE_NO DESC
 	</select>
 
 	<select id="selectNoticeByNo" resultType="Notice">
@@ -76,21 +69,30 @@
 		SELECT COUNT(*) FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%'||#{searchKeyword }||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N'
 	</select>
 	<select id="selectServiceListByKeywordCount" resultType="_int">
-		SELECT COUNT(*) FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%'||#{searchKeyword }||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'service'
+		SELECT COUNT(*) FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%'||#{searchKeyword }||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = '서비스'
 	</select>
 	<select id="selectUpdateListByKeywordCount" resultType="_int">
-		SELECT COUNT(*) FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%'||#{searchKeyword }||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'update'
+		SELECT COUNT(*) FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%'||#{searchKeyword }||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = '업데이트'
 	</select>
 
 	
 	<select id="searchNoticeByKeyword" resultType="Notice">
-		SELECT * FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N'
+		SELECT N.*, REGION_NAME FROM NOTICE_TBL N
+		LEFT JOIN ADMIN_TBL A ON N.USER_NO = A.USER_NO
+		LEFT JOIN REGION_TBL R ON A.REGION_NO = R.REGION_NO 
+		WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' ORDER BY NOTICE_NO DESC
 	</select>
 	<select id="searchServiceByKeyword" resultType="Notice">
-		SELECT * FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'service'
+		SELECT N.*, REGION_NAME FROM NOTICE_TBL N
+		LEFT JOIN ADMIN_TBL A ON N.USER_NO = A.USER_NO
+		LEFT JOIN REGION_TBL R ON A.REGION_NO = R.REGION_NO
+		WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = '서비스' ORDER BY NOTICE_NO DESC
 	</select>
 	<select id="searchUpdateByKeyword" resultType="Notice">
-		SELECT * FROM NOTICE_TBL WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%' AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = 'update'
+		SELECT N.*, REGION_NAME FROM NOTICE_TBL N
+		LEFT JOIN ADMIN_TBL A ON N.USER_NO = A.USER_NO
+		LEFT JOIN REGION_TBL R ON A.REGION_NO = R.REGION_NO 
+		WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%'  AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = '업데이트' ORDER BY NOTICE_NO DESC
 	</select>
 	
 <select id="selectpreNextInfo" parameterType="Integer" resultType="map">

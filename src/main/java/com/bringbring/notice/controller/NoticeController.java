@@ -230,7 +230,6 @@ public class NoticeController {
 		// 파일 정보 리턴
 		imgMap.put("imageName", imageName);
 		imgMap.put("imageRename", imageRename);
-		
 		imgMap.put("imagePath", "../resources/assets/img/nUploadFiles/"+imageRename+"."+extension);
 		
 		return imgMap;

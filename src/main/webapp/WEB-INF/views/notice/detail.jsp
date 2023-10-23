@@ -80,8 +80,8 @@
 		<div class="head">
 			<div class="notice-title">
 				<h2>						
-					<c:if test="${notice.noticeType == 'service'}">[ ${notice.regionName}]</c:if>
-					<c:if test="${notice.noticeType == 'update'}">[ 전체 ]</c:if> 
+					<c:if test="${notice.noticeType == '서비스'}">[ ${notice.regionName}]</c:if>
+					<c:if test="${notice.noticeType == '업데이트'}">[ 전체 ]</c:if> 
 					${notice.noticeTitle }</h2>
 			</div>
 			<div class="notice-subtitle">
