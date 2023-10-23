@@ -81,10 +81,26 @@ public class InquireController {
 
 	@GetMapping("/detail.do")
 	public String showInquireDetail(Model model
-			, int inqNo){
+			, int inqNo
+			, HttpSession httpSession){
 
+		if((int)httpSession.getAttribute("sessionUserGrade") >= 2){
+
+		}
 		InquireDetail inquireDetail = inquireService.selectInquireDetailByNo(inqNo);
 		List<Image> imageList = inquireService.selectImageList(inqNo);
+		if (inquireDetail != null && "delivery".equals(inquireDetail.getInquire().getInqCategory())) {
+			inquireDetail.getInquire().setInqCategory("배송 연착, 배송 환불 관련 문의사항");
+		}else if (inquireDetail != null && "divide".equals(inquireDetail.getInquire().getInqCategory())) {
+			inquireDetail.getInquire().setInqCategory("나눔 게시판 관련 문의사항");
+		}else if (inquireDetail != null && "chatting".equals(inquireDetail.getInquire().getInqCategory())) {
+			inquireDetail.getInquire().setInqCategory("채팅 관련 문의사항");
+		}else if (inquireDetail != null && "improvement".equals(inquireDetail.getInquire().getInqCategory())) {
+			inquireDetail.getInquire().setInqCategory("개선하면 좋을 점");
+		}else if (inquireDetail != null && "etc".equals(inquireDetail.getInquire().getInqCategory())) {
+			inquireDetail.getInquire().setInqCategory("기타");
+		}
+
 		model.addAttribute("inqDetail", inquireDetail).addAttribute("iList", imageList);
 		return "inquire/detail";
 	}

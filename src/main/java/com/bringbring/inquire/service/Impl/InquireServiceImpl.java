@@ -117,7 +117,7 @@ public class InquireServiceImpl implements InquireService {
         try {
             //업로드 저장 경로생성
             String root = request.getSession().getServletContext().getRealPath("resources");
-            String saveFolder = root + "\\assets\\img\\dUploadFiles";
+            String saveFolder = root + "\\assets\\img\\iUploadFiles";
             File folder = new File(saveFolder);
             if(!folder.exists()) folder.mkdir();
 
@@ -130,7 +130,7 @@ public class InquireServiceImpl implements InquireService {
             //파일 객체 생성 후 실제파일저장
             File file = new File(savePath);
             uploadFile.transferTo(file);
-            String dbPath = "../resources/assets/img/dUploadFiles/" + imageRename;
+            String dbPath = "../resources/assets/img/iUploadFiles/" + imageRename;
             //Map 저장
             fileInfoMap.put("imageName", imageName);
             fileInfoMap.put("imageRename", imageRename);
@@ -145,7 +145,7 @@ public class InquireServiceImpl implements InquireService {
 
     private void deleteFile(HttpServletRequest request, String imageRename) {
         String root = request.getSession().getServletContext().getRealPath("resources");
-        String delImagepath = root+"\\dUploadFiles\\"+imageRename;
+        String delImagepath = root+"\\iUploadFiles\\"+imageRename;
         File file = new File(delImagepath);
         if(file.exists()) {
             file.delete();

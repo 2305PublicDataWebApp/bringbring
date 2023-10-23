@@ -176,7 +176,7 @@
 			WHERE A.IS_INQ_DELETED = 'N' AND A.INQ_NO = #{value}
 	</select>
 	<select id="selectImageList" resultType="Image">
-		SELECT * FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = #{value}
+		SELECT * FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = #{value} AND TABLE_NAME = 'inquire'
 	</select>
 	<insert id="insertInquire">
 		INSERT INTO  INQUIRE_TBL VALUES (SEQ_INQ_NO.NEXTVAL, #{inqTitle}, #{userNo}, #{inqContent}
