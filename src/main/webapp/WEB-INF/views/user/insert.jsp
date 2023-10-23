@@ -263,6 +263,7 @@
     	// 입력된 이메일 값 가져오기
     	var userId = $('#floatingEmail').val();
     	var userIdCheck_div = $('#user_Email_check_error');
+    	var submitButton = $('#register_btn');
     	
     	// 서버로 이메일 중복 확인 요청
     	$.ajax({
@@ -280,9 +281,11 @@
 	    			if(response.unavailable != null) {
 	    				userIdCheck_div.html(response.unavailable);
 	    				userIdCheck_div.css('color', 'red');
+	    				submitButton.prop('disabled', true);
 	    			}else if(response.available != null) {
 	    				userIdCheck_div.html(response.available);
 	    				userIdCheck_div.css('color','green')
+	    				submitButton.prop('disabled', false);
 	    			}
     			}else if(userId === ""){
     				userIdCheck_div.text("이메일을 입력해주세요.");
