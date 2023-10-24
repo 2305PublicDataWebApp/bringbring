@@ -2,13 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="NoticeMapper">
+
+	<resultMap id="image" type="com.bringbring.image.domain.Image">
+		<id property="imageNo" column="IMAGE_NO" />
+		<result property="tableName" column="TABLE_NAME" />
+		<result property="imageGroupNo" column="IMAGE_GROUP_NO" />
+		<result property="imageName" column="IMAGE_NAME" />
+		<result property="imageRename" column="IMAGE_RENAME" />
+		<result property="imagePath" column="IMAGE_PATH" />
+	</resultMap>
+	
 	
 	<insert id="insertNotice">
 		<selectKey resultType="int" keyProperty="noticeNo" order="BEFORE">
 	        SELECT SEQ_NOTICE_NO.NEXTVAL FROM DUAL
 	    </selectKey>
 		INSERT INTO NOTICE_TBL VALUES
-		(#{noticeNo},#{noticeType},#{noticeTitle},#{noticeContent},DEFAULT,DEFAULT,DEFAULT,#{preNoticeNo},#{nextNoticeNo},#{userNo})
+		(#{noticeNo},#{noticeType},#{noticeTitle},#{noticeContent},DEFAULT,DEFAULT,DEFAULT,#{userNo})
 	</insert>
   	<insert id="insertImage">
   		INSERT INTO IMAGE_TBL VALUES (SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath})
@@ -94,25 +104,10 @@
 		LEFT JOIN REGION_TBL R ON A.REGION_NO = R.REGION_NO 
 		WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%'  AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = '업데이트' ORDER BY NOTICE_NO DESC
 	</select>
-	
-<select id="selectpreNextInfo" parameterType="Integer" resultType="map">
-     <![CDATA[
-    SELECT 
-        (SELECT NOTICE_NO FROM NOTICE_TBL WHERE NOTICE_NO < #{noticeNo} AND IS_NOTICE_DELETED = 'N' AND ROWNUM = 1 ORDER BY NOTICE_NO DESC) AS preNoticeNo,
-        (SELECT NOTICE_TITLE FROM NOTICE_TBL WHERE NOTICE_NO < #{noticeNo} AND IS_NOTICE_DELETED = 'N' AND ROWNUM = 1 ORDER BY NOTICE_NO DESC) AS preNoticeTitle,
-        (SELECT NOTICE_NO FROM NOTICE_TBL WHERE NOTICE_NO > #{noticeNo} AND IS_NOTICE_DELETED = 'N' AND ROWNUM = 1 ORDER BY NOTICE_NO) AS nextNoticeNo,
-        (SELECT NOTICE_TITLE FROM NOTICE_TBL WHERE NOTICE_NO > #{noticeNo} AND IS_NOTICE_DELETED = 'N' AND ROWNUM = 1 ORDER BY NOTICE_NO) AS nextNoticeTitle
-    ]]> 
-   <!-- 
-    SELECT * FROM (SELECT NOTICE_NO, NOTICE_TITLE, 
-    LAG(NOTICE_NO,1,0) OVER(ORDER BY NOTICE_NO) PRE_NOTICE_NO,
-    LAG(NOTICE_NO,1,'이전글이 없습니다.') OVER(ORDER BY NOTICE_NO) PRE_NOTICE_TITLE,
-    
-    LEAD(NOTICE_NO,1,0) OVER(ORDER BY NOTICE_NO) NEXT_NOTICE_NO,
-    LEAD(NOTICE_NO,1,'다음글이 없습니다.') OVER(ORDER BY NOTICE_NO) NEXT_NOTICE_TITLE,
-    FROM NOTICE_TBL) WHERE NOTICE_NO = #{noticeNo} ORDER BY NOTICE_NO
-     -->
-</select>
+
+	<select id="selectImageByNo" resultType="Image">
+		SELECT * FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = #{noticeNo} AND TABLE_NAME = 'notice'
+	</select>
 
 	
 </mapper>

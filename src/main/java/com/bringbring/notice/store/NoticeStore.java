@@ -92,6 +92,10 @@ public interface NoticeStore {
 	List<Notice> searchServiceByKeyword(PageInfo pInfo, String searchKeyword);
 	List<Notice> searchUpdateByKeyword(PageInfo pInfo, String searchKeyword);
 
+	Image selectImageByNo(Integer noticeNo);
+
+
+
 
 
 

@@ -3,10 +3,6 @@ package com.bringbring.notice.service;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.web.multipart.MultipartFile;
-
 import com.bringbring.common.PageInfo;
 import com.bringbring.image.domain.Image;
 import com.bringbring.notice.domain.Notice;
@@ -95,6 +91,12 @@ public interface NoticeService {
 	List<Notice> searchNoticeByKeyword(PageInfo pInfo, String searchKeyword);
 	List<Notice> searchServiceByKeyword(PageInfo pInfo, String searchKeyword);
 	List<Notice> searchUpdateByKeyword(PageInfo pInfo, String searchKeyword);
+	
+	Image selectImageByNo(Integer noticeNo);
+	
+	
+	
+	
 
 
 

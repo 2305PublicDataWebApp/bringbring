@@ -83,25 +83,25 @@
 					<button class="nav-link active" id="pills-all-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-all" type="button"
 						role="tab" aria-controls="pills-all" aria-selected="true"
-						value="전체">전체</button>
+						value="전체" onclick="showAllList()">전체</button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="pills-service-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-service"
 						type="button" role="tab" aria-controls="pills-service"
-						aria-selected="false" value="서비스">서비스</button>
+						aria-selected="false" value="서비스" onclick="showServiceList()">서비스</button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="pills-update-tab"
 						data-bs-toggle="pill" data-bs-target="#pills-update" type="button"
 						role="tab" aria-controls="pills-update" aria-selected="false"
-						value="업데이트">업데이트</button>
+						value="업데이트" onclick="showUpdateList()">업데이트</button>
 				</li>
 			</ul>
 
 			<form class="d-flex" action="/notice/search.do" method="get">
 				<input class="form-control me-2" type="text" placeholder="Search"
-					aria-label="Search" name="searchKeyword" value="${searchKeyword}">
+					aria-label="Search" name="searchKeyword" value="${searchKeyword}" id="searchInput">
 				<button class="btn btn-outline-success" type="submit">검색</button>
 			</form>
 		</div>
@@ -205,200 +205,6 @@
 			</ul>
 		</nav>
 					</div>
-									<!-- 서비스 -->
-			<div class="tab-pane fade" id="pills-all" role="tabpanel"
-				aria-labelledby="all-tab">
-				<div class="col-lg-12">
-					<table class="table table-hover text-center">
-						<thead class="table-light">
-							<tr>
-								<th scope="row">No</th>
-								<th scope="row">카테고리</th>
-								<th scope="row">지역</th>
-								<th scope="row">제목</th>
-								<th scope="row">조회수</th>
-								<th scope="row">작성일</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="notice" items="${searchServiceList }" varStatus="n">
-								<c:if test="${not empty notice.noticeCreateDate}">
-									<c:set var="currentDate"
-										value="<%=java.time.LocalDate.now()%>" />
-									<c:set var="sevenDaysAgo" value="${currentDate.minusDays(7)}" />
-									<tr>
-										<th scope="row">${(serviceTotalCount - n.index) - ((pInfo.currentPage - 1) * pInfo.recordCountPerPage)}</th>
-										<td>${notice.noticeType}</td>
-										<td>
-											<c:if test="${notice.noticeType == '서비스'}">${notice.regionName }</c:if>
-											<c:if test="${notice.noticeType == '업데이트'}">전체</c:if>
-										</td>
-										<c:url var="detailUrl" value="/notice/detail.do">
-											<c:param name="noticeNo" value="${notice.noticeNo }" />
-										</c:url>
-										<td style="width: 641.15px;"><a href="${detailUrl }"
-											onclick="increaseViewCount(${notice.noticeNo});">
-												${notice.noticeTitle } <c:if
-													test="${notice.noticeCreateDate.isAfter(sevenDaysAgo)}">
-													<img src="../resources/assets/img/notice/new_icon.png"
-														style="width: 20px; height: 20px;" />
-												</c:if>
-										</a></td>
-										<td id="noticeViewCount_${notice.noticeNo }">${notice.noticeViewCount }
-										</td>
-										<td>${notice.noticeCreateDate}</td>
-									</tr>
-								</c:if>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-
-		<!-- 글쓰기버튼 관리자만 보임 -->
-		<c:if test="${sessionScope.sessionUserGrade >=2 }">
-			<button type="button" class="btn btn-success"
-				onclick="showNoticeInsert()">글쓰기</button>
-		</c:if>
-
-		<!-- 페이징 -->
-		<nav aria-label="Page navigation example">
-			<ul class="pagination">
-				<c:if test="${pInfo.startNavi != 1 }">
-					<li class="page-item">
-					<c:url var="preUrl" value="/notice/search.do">
-						<c:param name="page" value="${pInfo.startNavi-1  }" />
-						<c:param name="searchKeyword" value="${searchKeyword }" />
-					</c:url>
-				<a class="page-link" href="${preUrl }" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span></a></li>
-				</c:if>
-				
-				<c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }" var="p">
-					<c:url var="pageUrl" value="/notice/search.do">
-						<c:param name="page" value="${p }" />
-						<c:param name="searchKeyword" value="${searchKeyword }" />
-					</c:url>
-					<c:choose>
-						<c:when test="${p == pInfo.currentPage}">
-							<li class="page-item active"><a href="${pageUrl}"
-								class="page-link" style="background-color: #00AD7C">${p}</a></li>
-						</c:when>
-						<c:otherwise>
-							<li class="page-item"><a href="${pageUrl}" class="page-link">${p}</a></li>
-						</c:otherwise>
-					</c:choose>
-				</c:forEach>
-
-				<c:if test="${pInfo.endNavi != pInfo.naviTotalCount }">
-					<li class="page-item">
-						<c:url var="nextUrl" value="/notice/search.do">
-							<c:param name="page" value="${pInfo.startEndNavi+1  }" />
-							<c:param name="searchKeyword" value="${searchKeyword }" />
-						</c:url>
-						<a class="page-link"
-						href="${nextUrl }" aria-label="Next"><span aria-hidden="true">다음</span></a></li>
-				</c:if>
-			</ul>
-		</nav>
-					</div>
-					
-							<!-- 업데이트 -->
-								<div class="tab-pane fade" id="pills-update" role="tabpanel"
-				aria-labelledby="update-tab">
-				<div class="col-lg-12">
-					<table class="table table-hover text-center">
-						<thead class="table-light">
-							<tr>
-								<th scope="row">No</th>
-								<th scope="row">카테고리</th>
-								<th scope="row">지역</th>
-								<th scope="row">제목</th>
-								<th scope="row">조회수</th>
-								<th scope="row">작성일</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="notice" items="${searchUpdateList }" varStatus="n">
-							<c:if test="${not empty notice.noticeCreateDate}">
-							<c:set var="currentDate"
-										value="<%=java.time.LocalDate.now()%>" />
-									<c:set var="sevenDaysAgo" value="${currentDate.minusDays(7)}" />
-									<tr>
-										<th scope="row">${(updateTotalCount - n.index) - ((pInfo.currentPage - 1) * pInfo.recordCountPerPage)}</th>
-										<td>${notice.noticeType}</td>
-										<td>
-											<c:if test="${notice.noticeType == '서비스'}">${notice.regionName }</c:if>
-											<c:if test="${notice.noticeType == '업데이트'}">전체</c:if>
-										</td>
-										<c:url var="detailUrl" value="/notice/detail.do">
-											<c:param name="noticeNo" value="${notice.noticeNo }" />
-										</c:url>
-										<td style="width: 641.15px;"><a href="${detailUrl }"
-											onclick="increaseViewCount(${notice.noticeNo});">
-												${notice.noticeTitle } <c:if
-													test="${notice.noticeCreateDate.isAfter(sevenDaysAgo)}">
-													<img src="../resources/assets/img/notice/new_icon.png"
-														style="width: 20px; height: 20px;" />
-												</c:if>
-										</a></td>
-										<td id="noticeViewCount_${notice.noticeNo }">${notice.noticeViewCount }
-										</td>
-										<td>${notice.noticeCreateDate}</td>
-									</tr>
-									</c:if>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-
-		<!-- 글쓰기버튼 관리자만 보임 -->
-		<c:if test="${sessionScope.sessionUserGrade >=2 }">
-			<button type="button" class="btn btn-success"
-				onclick="showNoticeInsert()">글쓰기</button>
-		</c:if>
-
-		<!-- 페이징 -->
-		<nav aria-label="Page navigation example">
-			<ul class="pagination">
-				<c:if test="${pInfo.startNavi != 1 }">
-					<li class="page-item">
-					<c:url var="preUrl" value="/notice/updateSearch.do">
-						<c:param name="page" value="${pInfo.startNavi-1  }" />
-						<c:param name="searchKeyword" value="${searchKeyword }" />
-					</c:url>
-				<a class="page-link" href="${preUrl }" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span></a></li>
-				</c:if>
-				
-				<c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }" var="p">
-					<c:url var="pageUrl" value="/notice/updateSearch.do">
-						<c:param name="page" value="${p }" />
-						<c:param name="searchKeyword" value="${searchKeyword }" />
-					</c:url>
-					<c:choose>
-						<c:when test="${p == pInfo.currentPage}">
-							<li class="page-item active"><a href="${pageUrl}"
-								class="page-link" style="background-color: #00AD7C">${p}</a></li>
-						</c:when>
-						<c:otherwise>
-							<li class="page-item"><a href="${pageUrl}" class="page-link">${p}</a></li>
-						</c:otherwise>
-					</c:choose>
-				</c:forEach>
-
-				<c:if test="${pInfo.endNavi != pInfo.naviTotalCount }">
-					<li class="page-item">
-						<c:url var="nextUrl" value="/notice/updateSearch.do">
-							<c:param name="page" value="${pInfo.startEndNavi+1  }" />
-							<c:param name="searchKeyword" value="${searchKeyword }" />
-						</c:url>
-						<a class="page-link"
-						href="${nextUrl }" aria-label="Next"><span aria-hidden="true">다음</span></a></li>
-				</c:if>
-			</ul>
-		</nav>
-			</div>
-		</div>
 		</div>
 
 
@@ -440,7 +246,18 @@
 		function showInsertForm() {
 			window.location.href = "/notice/insert.do"
 		}
-
+		
+		function showAllList(){
+			location.href = "/notice/list.do"
+		}
+		
+		function showServiceList(){
+			location.href = "/notice/serviceList.do"
+		}
+		
+		function showUpdateList(){
+			location.href = "/notice/updateList.do"
+		}
 	</script>
 
 

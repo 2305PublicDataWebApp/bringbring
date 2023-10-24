@@ -1,20 +1,15 @@
 package com.bringbring.notice.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bringbring.admin.domain.Admin;
 import com.bringbring.admin.domain.AdminDetails;
-import com.bringbring.admin.domain.Role;
 import com.bringbring.admin.service.AdminService;
 import com.bringbring.common.PageInfo;
 import com.bringbring.image.domain.Image;
@@ -35,7 +28,6 @@ import com.bringbring.notice.domain.Notice;
 import com.bringbring.notice.service.NoticeService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
-import com.google.gson.JsonObject;
 
 import lombok.RequiredArgsConstructor;
 
@@ -112,12 +104,12 @@ public class NoticeController {
 			if(result > 0) {
 				if(uploadFile != null && !uploadFile.getOriginalFilename().equals("")) {
 					Image image = new Image();
-					Map<String, Object> noticeMap = this.saveFile(request, uploadFile);
+					Map<String, Object> imgMap = this.saveFile(request, uploadFile);
 					image.setTableName("notice");
 					image.setImageGroupNo(notice.getNoticeNo());
-					image.setImageName((String)noticeMap.get("imageName"));
-					image.setImageRename((String)noticeMap.get("imageRename"));
-					image.setImagePath((String)noticeMap.get("imagePath"));
+					image.setImageName((String)imgMap.get("imageName"));
+					image.setImageRename((String)imgMap.get("imageRename"));
+					image.setImagePath((String)imgMap.get("imagePath"));
 					noticeService.insertImage(image);
 				}
 				return "redirect:/notice/list.do";
@@ -149,12 +141,12 @@ public class NoticeController {
 				if(imageRename != null) {
 					this.deleteFile(imageRename, request);
 				}
-				Map<String,Object> noticeMap = this.saveFile(request, uploadFile);
+				Map<String,Object> imgMap = this.saveFile(request, uploadFile);
 				image.setTableName("notice");
 				image.setImageGroupNo(notice.getNoticeNo());
-				image.setImageName((String)noticeMap.get("imageName"));
-				image.setImageRename((String)noticeMap.get("imageRename"));
-				image.setImagePath((String)noticeMap.get("imagePath"));
+				image.setImageName((String)imgMap.get("imageName"));
+				image.setImageRename((String)imgMap.get("imageRename"));
+				image.setImagePath((String)imgMap.get("imagePath"));
 				noticeService.insertImage(image);
 			}
 			int result = noticeService.updateNotice(notice);
@@ -171,7 +163,15 @@ public class NoticeController {
 			return "common/error";
 		}
 	}
-
+	
+	private void deleteFile(String imageRename, HttpServletRequest request) {
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		String delImgpath = root + "\\nUploadFiles\\" + imageRename;
+		File delFile = new File(delImgpath);
+		if (delFile.exists()) {
+			delFile.delete();
+		}
+	}
 
 	@GetMapping("/update.do")
 	public String showNoticeUpdate(@RequestParam("noticeNo") Integer noticeNo,
@@ -193,16 +193,6 @@ public class NoticeController {
 			model.addAttribute("msg", "본인 글만 수정 가능!");
 			model.addAttribute("url","/notice/detail.do?noticeNo=" + notice.getNoticeNo());
 			return "common/error";
-		}
-	}
-	
-
-	private void deleteFile(String imageRename, HttpServletRequest request) {
-		String root = request.getSession().getServletContext().getRealPath("resources");
-		String delImgpath = root + "\\nUploadFiles\\" + imageRename;
-		File delFile = new File(delImgpath);
-		if (delFile.exists()) {
-			delFile.delete();
 		}
 	}
 	
@@ -238,6 +228,11 @@ public class NoticeController {
 	@GetMapping("/detail.do") 
 	public String showNoticeDetail(@RequestParam("noticeNo") Integer noticeNo, Model model) {
 		Notice selectOne = noticeService.selectNoticeByNo(noticeNo);
+	    // 이미지가 하나인 경우에만 이미지 정보를 가져옴
+	    if (selectOne != null) {
+	        Image image = noticeService.selectImageByNo(noticeNo);
+	        model.addAttribute("image", image);
+	    }
 		model.addAttribute("notice", selectOne);
 		return "notice/detail";
 	}

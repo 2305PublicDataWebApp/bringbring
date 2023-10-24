@@ -3,11 +3,8 @@ package com.bringbring.notice.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.bringbring.common.PageInfo;
 import com.bringbring.image.domain.Image;
@@ -87,6 +84,14 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	public List<Notice> searchUpdateByKeyword(PageInfo pInfo, String searchKeyword) {return noticeStore.searchUpdateByKeyword(pInfo, searchKeyword);}
+
+	@Override
+	public Image selectImageByNo(Integer noticeNo) {
+		return noticeStore.selectImageByNo(noticeNo);
+	}
+
+
+
 
 
 

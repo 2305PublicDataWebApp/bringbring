@@ -24,8 +24,6 @@ public class Notice {
 	private LocalDate noticeCreateDate;
 	private int noticeViewCount;
 	private char isNoticeDeleted;
-	private int preNoticeNo;
-	private int nextNoticeNo;
 	private int userNo;
 	private String regionName;
 }
