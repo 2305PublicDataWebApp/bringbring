@@ -223,8 +223,8 @@ public class UserController {
 		String userId = (String)session.getAttribute("sessionId");
 		User userOne = userService.selectOneById(userId);
 		if(userOne != null) {
+			session.setAttribute("sessionName", userOne.getUserName());
 			model.addAttribute("userOne", userOne);
-			
 			return "user/update";
 		}else {
 			//실패하면 에러페이지로 이동
