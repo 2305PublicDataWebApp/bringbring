@@ -76,6 +76,7 @@
         <result property="rvDetailNo" column="RV_DETAIL_NO" />
         <result property="wasteInfoNo" column="WASTE_INFO_NO" />
         <result property="imageNo" column="IMAGE_NO" />
+        <result property="imageIndexNo" column="IMAGE_INDEX_NO" />
     </resultMap>
     <resultMap id="image" type="com.bringbring.image.domain.Image">
         <id property="imageNo" column="IMAGE_NO" />
@@ -164,7 +165,7 @@
     </insert>
     <insert id="insertConnection">
         insert into RV_CONNECTION_TBL values (
-             SEQ_RV_CONNECTION_NO.NEXTVAL, #{rvDetailNo}, #{wasteInfoNo}, #{imageNo}
+             SEQ_RV_CONNECTION_NO.NEXTVAL, #{rvDetailNo}, #{wasteInfoNo}, #{imageNo}, #{imageIndexNo}
                                              )
     </insert>
     <insert id="insertPay">
@@ -406,19 +407,59 @@
     </select>
     <select id="selectMyReservationList" resultMap="reservationComplete">
         SELECT
-            DISTINCT RV_NO, RV_APPLICATION_DATE, RV_RV_DATE, RV_DETAIL_TOTAL, RV_DETAIL_FEE, RV_DISCHARGE_NO,
-                     MIN(WASTE_TYPE_NAME) as WASTE_TYPE_NAME, MIN(RV_CONNECTION_NO) as RV_CONNECTION_NO,
-                     IS_RV_COMPLETION, IS_RV_CANCEL
-        FROM WASTE_CATEGORY_TBL
-                 JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
-                 JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
-                 JOIN RV_CONNECTION_TBL USING (WASTE_INFO_NO)
-                 JOIN IMAGE_TBL USING (IMAGE_NO)
-                 JOIN RESERVATION_DETAIL_TBL USING (RV_DETAIL_NO)
-                 JOIN RESERVATION_TBL USING (RV_NO)
-                 JOIN PAY_TBL USING (RV_DETAIL_NO)
-        WHERE USER_NO = #{userNo}
-        ORDER BY RV_NO DESC
+            g.RV_DISCHARGE_NO,
+            MIN(a.WASTE_CATEGORY_NO) as WASTE_CATEGORY_NO,
+            MIN(a.WASTE_CATEGORY_NAME) as WASTE_CATEGORY_NAME,
+            MIN(b.WASTE_TYPE_NO) as WASTE_TYPE_NO,
+            MIN(b.WASTE_TYPE_NAME) as WASTE_TYPE_NAME,
+            MIN(c.WASTE_INFO_NO) as WASTE_INFO_NO,
+            MIN(c.WASTE_INFO_STANDARD) as WASTE_INFO_STANDARD,
+            MIN(c.WASTE_INFO_FEE) as WASTE_INFO_FEE,
+            MIN(g.RV_NO) as RV_NO,
+            MIN(g.USER_NO) as USER_NO,
+            MIN(g.CITY_NO) as CITY_NO,
+            MIN(g.DISTRICT_NO) as DISTRICT_NO,
+            MIN(g.RV_ADDR) as RV_ADDR,
+            MIN(g.RV_PHONE) as RV_PHONE,
+            MIN(g.RV_REQUEST) as RV_REQUEST,
+            MIN(g.RV_NAME) as RV_NAME,
+            MIN(g.RV_ADDR_DETAIL) as RV_ADDR_DETAIL,
+            MIN(g.RV_APPLICATION_DATE) as RV_APPLICATION_DATE,
+            MIN(g.RV_RV_DATE) as RV_RV_DATE,
+            MIN(g.IS_RV_COMPLETION) as IS_RV_COMPLETION,
+            MIN(g.IS_RV_CANCEL) as IS_RV_CANCEL,
+            MIN(d.RV_DETAIL_NO) as RV_DETAIL_NO,
+            MIN(f.RV_DETAIL_TOTAL) as RV_DETAIL_TOTAL,
+            MIN(f.RV_DETAIL_FEE) as RV_DETAIL_FEE,
+            MIN(d.RV_CONNECTION_NO) as RV_CONNECTION_NO,
+            MIN(d.WASTE_INFO_NO) as WASTE_INFO_NO,
+            MIN(e.IMAGE_NO) as IMAGE_NO,
+            MIN(d.IMAGE_INDEX_NO) as IMAGE_INDEX_NO,
+            MIN(h.PAY_NO) as PAY_NO,
+            MIN(h.USER_ID) as USER_ID,
+            MIN(h.PAY_ID) as PAY_ID,
+            MIN(h.PAY_METHOD) as PAY_METHOD,
+            MIN(h.PAY_AMOUNT) as PAY_AMOUNT,
+            MIN(h.PAY_CURRENCY) as PAY_CURRENCY,
+            MIN(h.PAY_DATE) as PAY_DATE,
+            MIN(h.IS_PAY_STATUS) as IS_PAY_STATUS,
+            MIN(h.IS_PAY_CANCEL) as IS_PAY_CANCEL,
+            MIN(e.IMAGE_NO) as IMAGE_NO,
+            MIN(e.IMAGE_GROUP_NO) as IMAGE_GROUP_NO,
+            MIN(e.IMAGE_NAME) as IMAGE_NAME,
+            MIN(e.IMAGE_RENAME) as IMAGE_RENAME,
+            MIN(e.IMAGE_PATH) as IMAGE_PATH
+        FROM WASTE_CATEGORY_TBL a
+                 JOIN WASTE_TYPE_TBL b ON a.WASTE_CATEGORY_NO = b.WASTE_CATEGORY_NO
+                 JOIN WASTE_INFO_TBL c ON b.WASTE_TYPE_NO = c.WASTE_TYPE_NO
+                 JOIN RV_CONNECTION_TBL d ON c.WASTE_INFO_NO = d.WASTE_INFO_NO
+                 JOIN IMAGE_TBL e ON d.IMAGE_NO = e.IMAGE_NO
+                 JOIN RESERVATION_DETAIL_TBL f ON d.RV_DETAIL_NO = f.RV_DETAIL_NO
+                 JOIN RESERVATION_TBL g ON f.RV_NO = g.RV_NO
+                 JOIN PAY_TBL h ON f.RV_DETAIL_NO = h.RV_DETAIL_NO
+        WHERE g.USER_NO = #{userNo}
+        GROUP BY g.RV_DISCHARGE_NO, e.IMAGE_GROUP_NO
+        ORDER BY g.RV_DISCHARGE_NO DESC
     </select>
     <select id="selectAllWasteList" resultMap="wasteDataResultMap">
         select * from WASTE_CATEGORY_TBL
@@ -455,6 +496,16 @@
                                join PAY_TBL USING (RV_DETAIL_NO)
         where RV_DISCHARGE_NO = #{dischargeNo}
     </select>
+    <select id="selectMyReservationDetailList" resultMap="reservationComplete">
+        select * from WASTE_CATEGORY_TBL
+                          join WASTE_TYPE_TBL using (WASTE_CATEGORY_NO)
+                          join WASTE_INFO_TBL using (WASTE_TYPE_NO)
+                          join RV_CONNECTION_TBL using (WASTE_INFO_NO)
+                          join IMAGE_TBL using (IMAGE_NO)
+                          join RESERVATION_DETAIL_TBL using (RV_DETAIL_NO)
+                          join RESERVATION_TBL using (RV_NO)
+                          join PAY_TBL using (RV_DETAIL_NO)
+        where RV_NO = #{rvNo}
     <select id="searchResLocalByKeyword" resultMap="reservationAdmin">
         SELECT r.RV_NO, r.RV_NAME, r.RV_ADDR, d.DISTRICT_NAME, r.RV_APPLICATION_DATE, r.RV_RV_DATE, p.IS_PAY_STATUS, r.IS_RV_COMPLETION, re.REGION_NO
         FROM
