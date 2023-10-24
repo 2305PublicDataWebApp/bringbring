@@ -54,15 +54,17 @@ public class UserController {
 		if(userOne != null) {
 
 			// 권한 체크
-			Admin admin = adminService.selectAdminByNo(userOne.getUserNo());
 			Role role = adminService.selectRoleByNo(userOne.getUserNo());
 			session.setAttribute("sessionId", userOne.getUserId());
 			session.setAttribute("sessionName", userOne.getUserName());
-			session.setAttribute("sessionRegionNo", admin.getRegionNo());
 			session.setAttribute("sessionUserGrade", role.getUserGrade());
 			session.setAttribute("sessionRoleNo", role.getRoleNo());
+			if(role.getUserGrade()>=2){
+				Admin admin = adminService.selectAdminByNo(userOne.getUserNo());
+				session.setAttribute("sessionRegionNo", admin.getRegionNo());
+				System.out.print("리전번호 : " + admin.getRegionNo());
+			}
 			//성공하면 메인화면
-			System.out.print("리전번호 : " + admin.getRegionNo());
 			return "redirect:/";
 		} else {
 			//실패하면 에러페이지로 이동
