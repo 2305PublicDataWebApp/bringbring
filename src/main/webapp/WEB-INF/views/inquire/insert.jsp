@@ -170,8 +170,11 @@
               <label for="inqCategory">*유형</label>
               <select name="inqCategory" id="inqCategory" style="width: 600px;margin-right: 15px;">
                 <option value="selectInquire">문의 유형을 선택해주세요</option>
-                <option value="falsehood">허위 나눔을 홍보하는 게시글입니다.</option>
-                <option value="abuse">욕설, 비방 등 불쾌감을 주는 단어가 포함되어 있습니다.</option>
+                <option value="delivery">배송 연착, 배송 환불 관련 문의사항</option>
+                <option value="divide">나눔 게시판 관련 문의사항</option>
+                <option value="chatting">채팅 관련 문의사항</option>
+                <option value="improvement">개선하면 좋을 점</option>
+                <option value="etc">기타</option>
               </select>
             </li>
             <li>
