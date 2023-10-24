@@ -1,6 +1,9 @@
 package com.bringbring.mypage.controller;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.divide.domain.DivideData;
+import com.bringbring.divide.domain.HeartData;
+import com.bringbring.divide.service.DivideService;
 import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.service.InquireService;
 import com.bringbring.mypage.service.MypageService;
@@ -28,6 +31,7 @@ public class MypageController {
 	private final InquireService inquireService;
 	private final UserService userService;
 	private final MypageService mypageService;
+	private final DivideService divideService;
 	private final ReservationService reservationService;
 	
 	// 마이페이지 메인
@@ -91,5 +95,37 @@ public class MypageController {
 			
 			return "mypage/inquire";
 		}
+
+	@GetMapping("/heart.do")
+	public String showMypageHeart(Model model
+			, @RequestParam(value= "page", required = false, defaultValue="1") Integer currentPage
+			, HttpSession httpSession){
+
+		User user = userService.selectOneById((String)httpSession.getAttribute("sessionId"));
+		int totalCount = mypageService.getHeartListCountByNo(user.getUserNo());
+		PageInfo pInfo = mypageService.getPageInfo(currentPage, totalCount);
+		List<HeartData> heartData = mypageService.selectHeartList(pInfo, user.getUserNo());
+		if(!heartData.isEmpty()){
+			model.addAttribute("hData", heartData);
+		}
+		model.addAttribute("pInfo", pInfo).addAttribute("user", user);
+		return "mypage/heart";
+	}
+
+	@GetMapping("/divide.do")
+	public String showMypageDivide(Model model
+			, @RequestParam(value= "page", required = false, defaultValue="1") Integer currentPage
+			, HttpSession httpSession){
+
+		User user = userService.selectOneById((String)httpSession.getAttribute("sessionId"));
+		int totalCount = mypageService.getDivideListCountByNo(user.getUserNo());
+		PageInfo pInfo = mypageService.getPageInfo(currentPage, totalCount);
+		List<DivideData> divideData = mypageService.selectMypageDivideList(pInfo, user.getUserNo());
+		if(!divideData.isEmpty()){
+			model.addAttribute("dData", divideData);
+		}
+		model.addAttribute("pInfo", pInfo);
+		return "mypage/divide";
+	}
 	
 }

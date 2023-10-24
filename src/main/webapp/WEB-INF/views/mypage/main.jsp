@@ -87,7 +87,9 @@
                     <div class="mypage_sidebar col-3 p-5">
                         <a href="/mypage/enroll.do" class="fs-1">신청 내역</a>
                         <a href="/inquire/list.do" class="fs-1">문의 내역</a>
-                        <a href="#" class="fs-1">채팅 내역</a>
+                        <a href="/mypage/divide.do" class="fs-1">나눔 내역</a>
+                        <a href="/mypage/chatting.do" class="fs-1">채팅방 목록</a>
+                        <a href="/mypage/heart.do" class="fs-1">찜한 게시물</a>
                     </div>
                     <div class="col-9 ps-5 pt-5">
                         <div class="mb-5">

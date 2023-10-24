@@ -55,4 +55,5 @@ public interface DivideService {
     List<ResponseData> selectResponseDataSearchList(PageInfo pInfo, Map<String, Object> map);
 
 	int getSearchListCount(Map<String, Object> map);
+
 }

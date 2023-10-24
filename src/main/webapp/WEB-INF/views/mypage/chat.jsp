@@ -71,7 +71,7 @@
     <main>
         <div class="mypage_top m-auto rounded">
             <div class="mypage_top_div ps-5 pb-3 mt-3" style="height:75px;">
-                <h1 class="d-inline">일용자님</h1>
+                <h1 class="d-inline">${user.userName}님</h1>
                 <div class="d-inline">
                     <a href="#">
                         <img src="../../assets/img/mypage/mypage_gear.png" class="h-100 pb-3">
@@ -82,10 +82,11 @@
             <div class="container">
                 <div class="row" style="min-height:750px;">
                     <div class="mypage_sidebar col-3 p-5">
-                        <a href="#" class="fs-1">신청 내역</a>
-                        <a href="#" class="fs-1">문의 내역</a>
-                        <a href="#" class="fs-1">채팅 내역</a>
-                        <a href="#" class="fs-1">찜 내역</a>
+                        <a href="/mypage/enroll.do" class="fs-1">신청 내역</a>
+                        <a href="/inquire/list.do" class="fs-1">문의 내역</a>
+                        <a href="/mypage/divide.do" class="fs-1">나눔 내역</a>
+                        <a href="/mypage/chatting.do" class="fs-1">채팅방 목록</a>
+                        <a href="/mypage/heart.do" class="fs-1">찜한 게시물</a>
                     </div>
                     <div class="col-9 ps-5 pt-5">
                         
@@ -139,13 +140,30 @@
                         <div style="width: 100%;margin: 0 auto;margin-top: 60px;">
                             <nav aria-label="Page navigation example" style="display: flex;">
                                 <ul class="pagination" style="margin: 0 auto;">
-                                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                    <c:if test="${pInfo.startNavi ne 1}">
+                                        <c:url var="bPageUrl" value="/mypage/chatting.do">
+                                            <c:param name="page" value="${pInfo.startNavi-1}"></c:param>
+                                        </c:url>
+                                        <li class="page-item">
+                                            <a style="color: black;" class="page-link" href="${bPageUrl}">Previous</a>
+                                        </li>
+                                    </c:if>
+                                    <c:forEach begin="${pInfo.startNavi}" end="${pInfo.endNavi}" var="p">
+                                        <c:url var="pageUrl" value="/mypage/chatting.do">
+                                            <c:param name="page" value="${p}"></c:param>
+                                        </c:url>
+                                        <li class="page-item">
+                                            <a style="color: black;" class="page-link" href="${pageUrl}">${p}</a>
+                                        </li>
+                                    </c:forEach>
+                                    <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount}">
+                                        <c:url var="nPageUrl" value="/mypage/chatting.do">
+                                            <c:param name="page" value="${pInfo.endNavi+1}"></c:param>
+                                        </c:url>
+                                        <li class="page-item">
+                                            <a style="color: black;" class="page-link" href="${nPageUrl}">Next</a>
+                                        </li>
+                                    </c:if>
                                 </ul>
                             </nav>
                         </div>

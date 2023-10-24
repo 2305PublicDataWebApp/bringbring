@@ -82,7 +82,7 @@ body {
 }
 .chatDiv{
   width: 100%;
-  height: 64px;
+  height: 79px;
 }
 .floating-chat .chat {
   display: flex;
@@ -164,6 +164,7 @@ body {
   /*background-color: #1f7a66;*/
   word-wrap: break-word;
   max-width: 60%;
+  line-height: 22px;
 }
 .floating-chat .chat .messages li:before {
   position: absolute;
