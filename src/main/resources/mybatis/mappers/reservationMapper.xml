@@ -322,18 +322,14 @@
                 JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
                 LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
                 LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
-        <if test="searchCondition == 'all'">
-            WHERE r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%' OR d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%' OR r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%'
-            OR r.RV_RV_DATE LIKE '%'||#{searchKeyword}||'%' OR r.IS_RV_COMPLETION LIKE '%'||#{searchKeyword}||'%'
-        </if>
         <if test="searchCondition == 'district'">
             WHERE d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
         </if>
         <if test="searchCondition == 'applicationDate'">
-            WHERE r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%'
+            WHERE TRUNC(r.RV_APPLICATION_DATE) = TO_DATE(#{searchKeyword}, 'YYYY-MM-DD')
         </if>
         <if test="searchCondition == 'reservationDate'">
-            WHERE r.RV_RV_DATE LIKE '%'||#{searchKeyword}||'%'
+            WHERE TRUNC(r.RV_RV_DATE) = TO_DATE(#{searchKeyword}, 'YYYY-MM-DD')
         </if>
         <if test="searchCondition == 'completion'">
             WHERE r.IS_RV_COMPLETION LIKE '%'||#{searchKeyword}||'%'
@@ -348,18 +344,14 @@
         JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
         LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
         LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
-        <if test="searchCondition == 'all'">
-            WHERE r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%' OR d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%' OR r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%'
-            OR r.RV_RV_DATE LIKE '%'||#{searchKeyword}||'%' OR r.IS_RV_COMPLETION LIKE '%'||#{searchKeyword}||'%'
-        </if>
         <if test="searchCondition == 'district'">
             WHERE d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
         </if>
         <if test="searchCondition == 'applicationDate'">
-            WHERE r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%'
+            WHERE TRUNC(r.RV_APPLICATION_DATE) = TO_DATE(#{searchKeyword}, 'YYYY-MM-DD')
         </if>
         <if test="searchCondition == 'reservationDate'">
-            WHERE r.RV_RV_DATE LIKE '%'||#{searchKeyword}||'%'
+            WHERE TRUNC(r.RV_RV_DATE) = TO_DATE(#{searchKeyword}, 'YYYY-MM-DD')
         </if>
         <if test="searchCondition == 'completion'">
             WHERE r.IS_RV_COMPLETION LIKE '%'||#{searchKeyword}||'%'
@@ -462,6 +454,49 @@
                                join RESERVATION_DETAIL_TBL USING (RV_NO)
                                join PAY_TBL USING (RV_DETAIL_NO)
         where RV_DISCHARGE_NO = #{dischargeNo}
+    </select>
+    <select id="searchResLocalByKeyword" resultMap="reservationAdmin">
+        SELECT r.RV_NO, r.RV_NAME, r.RV_ADDR, d.DISTRICT_NAME, r.RV_APPLICATION_DATE, r.RV_RV_DATE, p.IS_PAY_STATUS, r.IS_RV_COMPLETION, re.REGION_NO
+        FROM
+        RESERVATION_TBL r
+        JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
+        JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
+        LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+        LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
+        <if test="searchCondition == 'name'">
+            WHERE re.REGION_NO = #{regionNo} AND r.RV_NAME LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        <if test="searchCondition == 'applicationDate'">
+            WHERE re.REGION_NO = #{regionNo} AND TRUNC(r.RV_APPLICATION_DATE) = TO_DATE(#{searchKeyword}, 'YYYY-MM-DD')
+        </if>
+        <if test="searchCondition == 'reservationDate'">
+            WHERE re.REGION_NO = #{regionNo} AND TRUNC(r.RV_RV_DATE) = TO_DATE(#{searchKeyword}, 'YYYY-MM-DD')
+        </if>
+        <if test="searchCondition == 'completion'">
+            WHERE re.REGION_NO = #{regionNo} AND r.IS_RV_COMPLETION LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        ORDER BY r.RV_NO DESC
+    </select>
 
+    <select id="searchResLocalListCount" resultType="_int">
+        SELECT COUNT(*) FROM
+        RESERVATION_TBL r
+        JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
+        JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
+        LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+        LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
+        <if test="searchCondition == 'name'">
+            WHERE re.REGION_NO = #{regionNo} AND r.RV_NAME LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        <if test="searchCondition == 'applicationDate'">
+            WHERE re.REGION_NO = #{regionNo} AND TRUNC(r.RV_APPLICATION_DATE) = TO_DATE(#{searchKeyword}, 'YYYY-MM-DD')
+        </if>
+        <if test="searchCondition == 'reservationDate'">
+            WHERE re.REGION_NO = #{regionNo} AND TRUNC(r.RV_RV_DATE) = TO_DATE(#{searchKeyword}, 'YYYY-MM-DD')
+        </if>
+        <if test="searchCondition == 'completion'">
+            WHERE re.REGION_NO = #{regionNo} AND r.IS_RV_COMPLETION LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        ORDER BY r.RV_NO DESC
     </select>
 </mapper>

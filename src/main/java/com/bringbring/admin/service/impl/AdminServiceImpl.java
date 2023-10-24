@@ -152,5 +152,11 @@ public class AdminServiceImpl implements AdminService  {
     @Override
     public List<ReservationAdmin> searchResByKeyword(PageInfo pInfo, Map<String, String> paramMap) { return adminStore.searchResByKeyword(pInfo,paramMap); }
 
+    @Override
+    public int searchResLocalListCount(Map<String, String> paramMap) { return adminStore.searchResLocalListCount(paramMap); }
+
+    @Override
+    public List<ReservationAdmin> searchResLocalByKeyword(PageInfo pInfo, Map<String, String> paramMap) { return adminStore.searchResLocalByKeyword(pInfo,paramMap); }
+
 
 }

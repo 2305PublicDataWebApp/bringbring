@@ -214,4 +214,19 @@ public interface AdminStore {
      * @return
      */
     List<ReservationAdmin> searchResByKeyword(PageInfo pInfo, Map<String, String> paramMap);
+
+    /**
+     * 지역별 검색된 예약 갯수 조회 store
+     * @param paramMap
+     * @return
+     */
+    int searchResLocalListCount(Map<String, String> paramMap);
+
+    /**
+     * 지역별 검색된 예약 리스트 조회 store
+     * @param pInfo
+     * @param paramMap
+     * @return
+     */
+    List<ReservationAdmin> searchResLocalByKeyword(PageInfo pInfo, Map<String, String> paramMap);
 }

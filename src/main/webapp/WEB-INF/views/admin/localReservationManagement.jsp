@@ -45,6 +45,38 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <!--  달력-->
+  <!--  <link rel="stylesheet" href="../../../resources/assets/css/reservation/bootstrap-material-datetimepicker.css" />-->
+  <!--  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+  <%--  얘 지우면 작동은 되는데 뭔가 이상한 오류가 뜸--%>
+  <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <!--  <link rel="stylesheet" href="/css/jquery-ui.min.css">-->
+  <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>-->
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+  <%--  얘 지우면 작동 안됨--%>
+  <script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
+  <%--  <script type='text/javascript' src='../../../resources/assets/js/reservation/jquery-1.8.3.js'></script>--%>
+
+
+  <!-- 얘 지우면 오류도 안 나고 작동도 안됨 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker3.min.css">
+  <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
+
+
+  <%--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>--%>
+  <%--  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>--%>
+
+
+
+  <!-- 달력 한글로 출력 js 파일-->
+  <script src="../../../resources/assets/js/reservation/bootstrap-datepicker.kr.js" charset="UTF-8"></script>
+
+
+
+  <%--  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepickr/1.9.0/js/bootstrap-datepicker.min.js">--%>
+
+  <%--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker3.min.css">--%>
 </head>
 
 <body>
@@ -99,18 +131,30 @@
           <h2>예약 내역</h2>
         </div>
         <div class="input-group" style="width: 400px; height: 30px;">
-          <select class="form-select" aria-label=".form-select-lg example" style="width: 20%;">
-            <option selected>배출지역</option>
-            <option value="1">신청일</option>
-            <option value="2">주소</option>
+          <select class="form-select"  name="searchCondition" aria-label=".form-select-lg example" style="width: 20%;" id="searchCriteria">
+            <option value="name">신청자</option>
+            <option value="applicationDate">신청일</option>
+            <option value="reservationDate">예약일</option>
+            <option value="completion">상태</option>
           </select>
-          <input type="search" class="form-control" placeholder="검색" aria-label="Search" aria-describedby="search-addon" style="width: 50%;" />
-          <button type="button" class="btn btn-outline-success" id="user-serch-btn">검색</button>
+          <input type="text" id="datepicker" class="form-control" placeholder="검색" aria-label="Search" aria-describedby="search-addon" name="searchKeyword" style="width: 50%;" />
+          <button type="button" class="btn btn-outline-success" id="user-search-btn">검색</button>
         </div>
+        <input type="hidden" name="pageName" value="${pInfo.currentPage}" />
+        <input type="hidden" id="regionNo" value="${sessionScope.sessionRegionNo}" />
       </div>
       <br/>
       <div class="table-responsive">
-        <table class="table align-middle text-center">
+        <table id="reservationTable" class="table align-middle text-center">
+          <colgroup>
+            <col width="10%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+          </colgroup>
           <thead class="table-success align-middle">
           <tr>
             <th>예약 번호</th>
@@ -245,6 +289,164 @@
     var url = '/admin/reservationDetail.do?rvNo=' + rvNo;
     window.location.href = url;
   }
+  $(function() {
+    var datePicker = $("#datepicker").datepicker({
+      language: "kr",
+      calendarWeeks: false,
+      todayHighlight: true,
+      autoclose: true,
+      startDate: '-1m',
+      endDate: '+1m',
+      daysOfWeekDisabled: [0, 6],
+      format: "yyyy-mm-dd",
+      autoHide: true
+    });
+
+    $("#searchCriteria").change(function() {
+      var selectedValue = $(this).val();
+      var title = "";
+      if (selectedValue === "applicationDate" || selectedValue === "reservationDate") {
+        title = selectedValue === "applicationDate" ? "선택일" : "예약일";
+        datePicker.datepicker("setDate", new Date());
+        $("#datepicker").datepicker("show");
+      } else if (selectedValue === "completion") {
+        title = "예약 상태";
+        datePicker.datepicker("hide");
+        var status = prompt("예약 상태를 선택하세요. (Y 또는 N) / Y=예약완료, N=에약접수)", "N");
+        if (status !== null && (status === 'Y' || status === 'N')) {
+          performSearch(selectedValue, status);
+        } else if (status !== null) {
+          alert("올바른 예약 상태를 입력하세요. (Y 또는 N)");
+        }
+      } else {
+        title = selectedValue === "district" ? "배출지역" : "";
+        datePicker.datepicker("hide");
+      }
+      $("#datepickerTitle").text(title);
+    });
+
+
+    $("#datepicker").focus(function() {
+      datePicker.datepicker("hide");
+    });
+
+    // $("#user-search-btn").click(function() {
+    //   var selectedCriteria = $("#searchCriteria").val();
+    //   if (selectedCriteria === "completion") {
+    //     var status = prompt("예약 상태를 선택하세요. (Y 또는 N) / Y=예약완료, N=에약접수)", "N");
+    //     if (status !== null && (status === 'Y' || status === 'N')) {
+    //       performSearch(selectedCriteria, status);
+    //     } else if (status !== null) {
+    //       alert("올바른 예약 상태를 입력하세요. (Y 또는 N)");
+    //     }
+    //   } else {
+    //     performSearch(selectedCriteria, $("#datepicker").val());
+    //   }
+    // });
+
+    // 검색을 수행하는 함수
+    function performSearch(criteria, status) {
+      console.log("검색 기준:", criteria);
+      console.log("선택한 상태:", status);
+
+      // 검색어를 검색 input에 설정
+      var searchInput = status; // 여기에 검색 로직을 추가하여 검색어를 가져오세요.
+      $("#datepicker").val(searchInput); // 선택한 상태를 검색 input에 설정
+    }
+  });
+
+  // 검색을 수행하는 함수
+  function performSearch(pageNumber) {
+    var searchCondition = $('select[name="searchCondition"]').val();
+    var searchKeyword = $('input[name="searchKeyword"]').val();
+    var regionNo = $('#regionNo').val(); // 리전 번호를 가져옵니다.
+
+    // AJAX 요청
+    $.ajax({
+      type: 'POST',
+      url: '/admin/resLocalSearch.do?page=' + pageNumber + '&regionNo=' + regionNo, // 리전 번호를 요청에 추가합니다.
+      data: {
+        searchCondition: searchCondition,
+        searchKeyword: searchKeyword
+      },
+      dataType: 'json',
+      async: false,
+      success: function (searchData) {
+        var reservationList = searchData.reservationList;
+        var pageInfo = searchData.pInfo;
+        console.log(reservationList);
+        // 테이블 바디를 찾습니다
+        var tbody = $('#reservationTable tbody');
+        tbody.empty(); // 기존 tbody 내용을 지웁니다.
+
+        // 서버에서 받은 JSON 데이터를 사용하여 새로운 행을 생성하고 테이블에 추가합니다
+        for (var i = 0; i < reservationList.length; i++) {
+          var res = reservationList[i];
+          var row = "<tr>" +
+                  "<td>" + res.reservation.rvNo + "</td>" +
+                  "<td>" + res.reservation.rvName + "</td>" +
+                  "<td>" + res.district.districtName + "</td>" +
+                  "<td>" + res.reservation.rvApplicationDate + "</td>" +
+                  "<td>" + res.reservation.rvRvDate + "</td>" +
+                  "<td>" + res.pay.isPayStatus + "</td>" +
+                  "<td>";
+          if (res.reservation.isRvCompletion.toString() === 'Y') {
+            row += "<button type='button' class='btn btn-light' onclick='redirectToReservationDetail(" + res.reservation.rvNo + ")'>예약완료</button>";
+          } else {
+            row += "<button type='button' class='btn btn-success' onclick='redirectToReservationDetail(" + res.reservation.rvNo + ")'>예약접수</button>";
+          }
+          row += "</td></tr>";
+
+          tbody.append(row);
+        }
+
+        var paginationContainer = $('.pagination');
+        paginationContainer.empty(); // 기존 페이징 UI를 비웁니다.
+
+        if (pageInfo.startNavi !== 1) {
+          paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
+        }
+
+        for (var i = pageInfo.startNavi; i <= pageInfo.endNavi; i++) {
+          if (i === pageInfo.currentPage) {
+            paginationContainer.append('<li class="page-item active"><a class="page-link" href="#" data-page="' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
+          } else {
+            paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
+          }
+        }
+
+        if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
+          paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
+        }
+
+        // 페이지 번호 클릭 이벤트 핸들러 등록
+        paginationContainer.find('.page-link').on('click', function(event) {
+          event.preventDefault();
+          var pageNumber = $(this).data('page');
+          performSearch(pageNumber); // 검색 함수 호출
+        });
+      },
+      error: function (error) {
+        alert("검색 에이잭스 오류");
+        console.error('Error:', error);
+      }
+    });
+  }
+
+  // 검색 버튼 클릭 이벤트 핸들러
+  $('#user-search-btn').on('click', function(event) {
+    event.preventDefault();
+    var pageNumber = 1; // 검색 시 페이지 번호를 1로 초기화
+    performSearch(pageNumber); // 검색 함수 호출
+  });
+
+  // 페이지 로드 시 기본 검색 실행
+  $(document).ready(function () {
+    var pageNumber = 1; // 페이지 번호를 1로 초기화
+    performSearch(pageNumber); // 검색 함수 호출
+  });
+
+
 </script>
 
 

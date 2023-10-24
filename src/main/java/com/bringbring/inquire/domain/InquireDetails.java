@@ -23,4 +23,5 @@ public class InquireDetails {
     private int districtNo;
     private String inqCategory;
     private String cityName;
+    private String districtName;
 }

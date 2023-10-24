@@ -136,9 +136,38 @@ public class RestAdminController {
             int totalCount = adminService.searchResListCount(paramMap);
             PageInfo pInfo = adminController.getPageInfo(currentPage, totalCount);
             List<ReservationAdmin> reservationList = adminService.searchResByKeyword(pInfo, paramMap);
-
             response.put("searchCondition", searchCondition);
             response.put("searchKeyword", searchKeyword);
+            response.put("pInfo", pInfo);
+            response.put("reservationList", reservationList);
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("error", "권한이 없습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+    }
+
+    //관할 지역 예약 검색
+    @PostMapping("/resLocalSearch.do")
+    public ResponseEntity<Map<String, Object>> searchReservationListByLocal(@RequestParam("searchCondition") String searchCondition
+            , @RequestParam("searchKeyword") String searchKeyword
+            , @RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
+            , @RequestParam("regionNo") Integer regionNo
+            , HttpSession session){
+        int checkAdmin = (int) session.getAttribute("sessionUserGrade");
+        Map<String, Object> response = new HashMap<>();
+        if (checkAdmin >= 2) {
+            Map<String, String> paramMap = new HashMap<>();
+            paramMap.put("searchCondition", searchCondition);
+            paramMap.put("searchKeyword", searchKeyword);
+            paramMap.put("regionNo", String.valueOf(regionNo));
+
+            int totalCount = adminService.searchResLocalListCount(paramMap);
+            PageInfo pInfo = adminController.getPageInfo(currentPage, totalCount);
+            List<ReservationAdmin> reservationList = adminService.searchResLocalByKeyword(pInfo, paramMap);
+            response.put("searchCondition", searchCondition);
+            response.put("searchKeyword", searchKeyword);
+            response.put("regionNo", regionNo);
             response.put("pInfo", pInfo);
             response.put("reservationList", reservationList);
             return ResponseEntity.ok(response);

@@ -103,18 +103,20 @@
               <div class="table-responsive">
                 <table id="inquireTable" class="table align-middle text-center">
                     <colgroup>
+                        <col width="5%"/>
+                        <col width="10%"/>
+                        <col width="40%"/>
                         <col width="10%"/>
                         <col width="10%"/>
-                        <col width="45%"/>
                         <col width="10%"/>
-                        <col width="15%"/>
                         <col width="15%"/>
                     </colgroup>
                     <thead class="table-success align-middle">
                         <tr>
-                            <th>글 번호</th>
+                            <th>글번호</th>
                             <th>작성자</th>
                             <th>제목</th>
+                            <th>지역</th>
                             <th>문의유형</th>
                             <th>작성일</th>
                             <th>답변여부</th>
@@ -129,6 +131,7 @@
                                 <c:param name="inqNo" value="${inq.inqNo}"></c:param>
                             </c:url>
                             <td><a href="${detailUrl}">${inq.inqTitle}</a></td>
+                            <td>${inq.districtName}</td>
                             <td>${inq.inqCategory}</td>
                             <fmt:parseDate value="${inq.inqCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime" type="both" />
                             <td><fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" /></td>
@@ -252,6 +255,7 @@
                     row += '<td>' + inq.inqNo + '</td>';
                     row += '<td>' + inq.userId + '</td>';
                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                    row += '<td>' + inq.districtName + '</td>';
                     row += '<td>' + inq.inqCategory + '</td>';
 
                     // 날짜 포맷에 따라서 수정
@@ -312,6 +316,7 @@
                                     row += '<td>' + inq.inqNo + '</td>';
                                     row += '<td>' + inq.userId + '</td>';
                                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                                    row += '<td>' + inq.districtName + '</td>';
                                     row += '<td>' + inq.inqCategory + '</td>';
 
                                     // 날짜 포맷에 따라서 수정
@@ -392,6 +397,7 @@
                     row += '<td>' + inq.inqNo + '</td>';
                     row += '<td>' + inq.userId + '</td>';
                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                    row += '<td>' + inq.districtName + '</td>';
                     row += '<td>' + inq.inqCategory + '</td>';
 
                     // 날짜 포맷에 따라서 수정
@@ -452,6 +458,7 @@
                                     row += '<td>' + inq.inqNo + '</td>';
                                     row += '<td>' + inq.userId + '</td>';
                                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                                    row += '<td>' + inq.districtName + '</td>';
                                     row += '<td>' + inq.inqCategory + '</td>';
 
                                     // 날짜 포맷에 따라서 수정
@@ -535,6 +542,7 @@
                     row += '<td>' + inq.inqNo + '</td>';
                     row += '<td>' + inq.userId + '</td>';
                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                    row += '<td>' + inq.districtName + '</td>';
                     row += '<td>' + inq.inqCategory + '</td>';
 
                     // 날짜 포맷에 따라서 수정
@@ -595,6 +603,7 @@
                                     row += '<td>' + inq.inqNo + '</td>';
                                     row += '<td>' + inq.userId + '</td>';
                                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                                    row += '<td>' + inq.districtName + '</td>';
                                     row += '<td>' + inq.inqCategory + '</td>';
 
                                     // 날짜 포맷에 따라서 수정
@@ -681,6 +690,7 @@
                         row += '<td>' + inq.inqNo + '</td>';
                         row += '<td>' + inq.userId + '</td>';
                         row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                        row += '<td>' + inq.districtName + '</td>';
                         row += '<td>' + inq.inqCategory + '</td>';
 
                         // 날짜 포맷에 따라서 수정

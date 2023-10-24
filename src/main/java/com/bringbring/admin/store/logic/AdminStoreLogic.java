@@ -167,4 +167,15 @@ public class AdminStoreLogic implements AdminStore {
         return sqlSession.selectList("ReservationMapper.searchResByKeyword", paramMap, rowBounds);
     }
 
+    @Override
+    public int searchResLocalListCount(Map<String, String> paramMap) { return sqlSession.selectOne("ReservationMapper.searchResLocalListCount", paramMap); }
+
+    @Override
+    public List<ReservationAdmin> searchResLocalByKeyword(PageInfo pInfo, Map<String, String> paramMap) {
+        int limit = pInfo.getRecordCountPerPage();
+        int offset = (pInfo.getCurrentPage() - 1) * limit;
+        RowBounds rowBounds = new RowBounds(offset, limit);
+        return sqlSession.selectList("ReservationMapper.searchResLocalByKeyword", paramMap, rowBounds);
+    }
+
 }
