@@ -8,6 +8,11 @@
 		<association property="answer" resultMap="answer"/>
 		<association property="user" resultMap="user"/>
 	</resultMap>
+	<resultMap id="inquireUpdate" type="com.bringbring.inquire.domain.InquireUpdate">
+		<association property="inquire" resultMap="inquire"/>
+		<association property="city" resultMap="city"/>
+		<association property="district" resultMap="district"/>
+	</resultMap>
 
 	<resultMap id="user" type="com.bringbring.user.domain.User">
 		<id property="userNo" column="USER_NO" />
@@ -183,10 +188,16 @@
 					 JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
 					 LEFT JOIN ANSWER_TBL D ON A.INQ_NO = D.INQ_NO
 					 JOIN USER_TBL E ON A.USER_NO = E.USER_NO
-			WHERE A.IS_INQ_DELETED = 'N' AND A.INQ_NO = #{value}
+			WHERE A.INQ_NO = #{value}
 	</select>
 	<select id="selectImageList" resultType="Image">
 		SELECT * FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = #{value} AND TABLE_NAME = 'inquire'
+	</select>
+	<select id="selectInquireUpdate" resultMap="inquireUpdate">
+		SELECT * FROM INQUIRE_TBL A
+						  JOIN CITY_TBL B ON B.CITY_NO = A.CITY_NO
+						  JOIN DISTRICT_TBL C ON C.DISTRICT_NO = A.DISTRICT_NO
+		WHERE A.IS_INQ_DELETED = 'N' AND A.INQ_NO = #{value}
 	</select>
 	<insert id="insertInquire">
 		INSERT INTO  INQUIRE_TBL VALUES (SEQ_INQ_NO.NEXTVAL, #{inqTitle}, #{userNo}, #{inqContent}
@@ -196,4 +207,14 @@
 		INSERT INTO IMAGE_TBL VALUES (
 		SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath})
 	</insert>
+	<update id="updateInquire">
+		UPDATE INQUIRE_TBL SET INQ_TITLE = #{inqTitle}, INQ_CONTENT = #{inqContent}, INQ_UPDATE_DATE = DEFAULT
+ 		, INQ_CATEGORY = #{inqCategory}, CITY_NO = #{cityNo}, DISTRICT_NO = #{districtNo} WHERE INQ_NO = #{inqNo}
+	</update>
+	<update id="deleteInquire">
+		UPDATE INQUIRE_TBL SET IS_INQ_DELETED = 'Y' WHERE INQ_NO = #{value}
+	</update>
+	<delete id="deleteImage">
+		DELETE FROM IMAGE_TBL WHERE IMAGE_NO = #{value}
+	</delete>
 </mapper>

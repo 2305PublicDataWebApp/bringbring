@@ -1,10 +1,9 @@
 package com.bringbring.inquire.service.Impl;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.divide.domain.Divide;
 import com.bringbring.image.domain.Image;
-import com.bringbring.inquire.domain.Inquire;
-import com.bringbring.inquire.domain.InquireDetail;
-import com.bringbring.inquire.domain.InquireDetails;
+import com.bringbring.inquire.domain.*;
 import com.bringbring.inquire.store.InquireStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.service.InquireService;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -128,6 +128,43 @@ public class InquireServiceImpl implements InquireService {
         }
         return inquireDetail;
     }
+
+    @Override
+    public InquireUpdate selectInquireUpdate(int inqNo) { return inquireStore.selectInquireUpdate(inqNo); }
+
+    @Override
+    public int updateInquire(Inquire inquire
+            , @RequestParam(value="uploadFiles", required = false) MultipartFile[] uploadFiles
+            , @RequestParam (value="deletePreImageNo", required = false) int[] deletePreImageNo
+            , HttpServletRequest request) {
+        int result = inquireStore.updateInquire(inquire);
+        if(result > 0) {
+            if (deletePreImageNo != null) {
+                if(deletePreImageNo.length > 0){
+                    for (int j : deletePreImageNo) {
+                        inquireStore.deleteImage(j);
+                    }
+                }
+            }
+            if(uploadFiles.length > 0){
+                for(MultipartFile uploadFile : uploadFiles) {
+                    if(uploadFile != null && !uploadFile.isEmpty()) {
+                        //파일저장 메소드 호출
+                        Map<String, Object> imageMap = this.saveFile(uploadFile, request);
+                        String imageName = (String)imageMap.get("imageName");
+                        String imageRename = (String)imageMap.get("imageRename");
+                        String imagePath = (String)imageMap.get("imagePath");
+                        Image image = new Image("inquire" ,inquire.getInqNo(), imageName, imageRename, imagePath);
+                        inquireStore.insertImage(image);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public int deleteInquire(int inqNo) { return inquireStore.deleteInquire(inqNo); }
 
     private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
         Map<String, Object> fileInfoMap = new HashMap<String, Object>();

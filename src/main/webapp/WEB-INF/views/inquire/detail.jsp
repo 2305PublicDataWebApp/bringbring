@@ -64,7 +64,7 @@
         <div style="display: flex;float: right;height: 100%;flex-direction: column;justify-content: space-evenly;">
           <c:if test="${sessionId eq inqDetail.user.userId}">
             <button onclick="goUpdate();" type="button" class="btn btn-success">글 수정</button>
-            <button type="button" class="btn btn-success">글 삭제</button>
+            <button onclick="goDelete();" type="button" class="btn btn-success">글 삭제</button>
           </c:if>
         </div>
       </div>
@@ -83,13 +83,13 @@
       <div data-aos="fade-up" style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;background-color: #eee;">
         <div style="padding: 35px">
           <div style="border: none; outline: none; width: 780px;padding: 10px;background-color: white;" readonly>
+            <div style="width: 100%;height: 150px;display: flex;margin-bottom: 20px;">
               <c:forEach var="image" items="${iList}">
-                <div style="width: 100%;height: 150px;display: flex;margin-bottom: 20px;">
                   <a href="${image.imagePath}" download>
                     <img src="${image.imagePath}" style="width: 200px; height: 150px; border: 1px solid #ccc; border-radius: 10px; margin-right: 10px;">
                   </a>
-                </div>
               </c:forEach>
+            </div>
             ${inqDetail.inquire.inqContent}
           </div>
         </div>
@@ -104,28 +104,49 @@
         <div id="btnArea" style="display: flex;float: right;height: 100%;flex-direction: column;justify-content: center;">
           <c:if test="${inqDetail.district.regionNo eq sessionScope.sessionRegionNo}">
             <c:if test="${inqDetail.answer.ansContent eq null}">
-              <button type="button" onclick="showInsertAnswer(this);" class="btn btn-success">글 등록</button>
+              <button type="button" onclick="showInsertAnswer(this);" class="btn btn-success">답변 추가</button>
             </c:if>
             <c:if test="${inqDetail.answer.ansContent ne null}">
-              <button type="button" class="btn btn-success">글 수정</button>
+              <button type="button" class="btn btn-success">답변 수정</button>
             </c:if>
           </c:if>
         </div>
       </div>
-  
-      <div style="width: 850px;margin: 0 auto;">
-        <div style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;background-color: #eee;">
-          <div id="ansContentArea" style="padding: 35px;display:none;">
-            <textarea name="ansContent" cols="86" rows="15" style="resize: none; border: none; outline: none; width: 100%;padding: 10px;" placeholder="답변을 입력해주세요"></textarea>
-            <c:if test="${inqDetail.answer.ansContent ne null}">
-              <div style="border: none; outline: none; width: 780px;height: 380px;padding: 10px;background-color: white;" readonly>${inqDetail.answer.ansContent}</div>
+<%--      답변이 안달렸을 떄--%>
+      <c:if test="${inqDetail.answer.ansContent eq null}">
+        <form name="insertForm" action="/answer/insert.do" method="post">
+            <c:if test="${admin.userNo ne null && admin.userNo ne 0}">
+              <input type="hidden" name="userNo" value="${admin.userNo}">
             </c:if>
+            <input type="hidden" name="inqNo" value="${inqDetail.inquire.inqNo}">
+            <input type="hidden" name="inqNo" value="${inqDetail.inquire.inqNo}">
+            <div style="width: 850px;margin: 0 auto;">
+              <div style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;background-color: #eee;">
+                <div id="ansContentArea" style="padding: 35px;display:none;">
+                  <textarea name="ansContent" cols="86" rows="15" style="resize: none; border: none; outline: none; width: 100%;padding: 10px;" placeholder="답변을 입력해주세요"></textarea>
+                </div>
+              </div>
+                <p id="ansContentMessage" style="padding: 30px 10px;">아직 답변이 등록되지 않았습니다.</p>
+            </div>
+        </form>
+      </c:if>
+<%--      답변이 안달렸을 때--%>
+      <%--      답변이 달렸을 때--%>
+      <c:if test="${inqDetail.answer.ansContent ne null}">
+        <form name="updateForm" action="/answer/update.do" method="post">
+          <div style="width: 850px;margin: 0 auto;">
+            <div style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;background-color: #eee;">
+              <div id="ansContentAreaUpdate" style="padding: 35px;display:none;">
+                  <div style="border: none; outline: none; width: 780px;height: 380px;padding: 10px;background-color: white;" name="ansContent" readonly>${inqDetail.answer.ansContent}</div>
+              </div>
+            </div>
           </div>
-        </div>
-        <c:if test="${inqDetail.answer.ansContent eq null}">
-          <p id="ansContentMessage" style="padding: 30px 10px;">아직 답변이 등록되지 않았습니다.</p>
-        </c:if>
-      </div>
+        </form>
+      </c:if>
+      <%--      답변이 달렸을 때--%>
+    </div>
+    <div style="margin: 0 auto;text-align: center;margin-top: 100px;" data-aos="fade-up">
+      <button type="button" class="btn btn-success btn-lg" onclick="goList();">목록으로</button>
     </div>
   </main>
   <!-- 메인 -->
@@ -173,7 +194,7 @@
       var insertButton = document.createElement('button');
       insertButton.type = 'button';
       insertButton.className = 'btn btn-success';
-      insertButton.innerText = '글 등록';
+      insertButton.innerText = '답변 등록';
       insertButton.addEventListener('click', function() {
         insertAnswer();
       });
@@ -197,7 +218,7 @@
     var createButton = document.createElement('button');
     createButton.type = 'button';
     createButton.className = 'btn btn-success';
-    createButton.innerText = '글 등록';
+    createButton.innerText = '답변 추가';
     createButton.addEventListener('click', function() {
       showInsertAnswer(this);
     });
@@ -205,7 +226,15 @@
   }
 
     function goUpdate() {
-      location.href = "/inquire/update.do";
+      location.href = "/inquire/update.do?inqNo=${inqDetail.inquire.inqNo}";
+    }
+    function goDelete() {
+      if(confirm("문의 글을 삭제하시겠습니까?")){
+        location.href = "/inquire/delete.do?inqNo=${inqDetail.inquire.inqNo}";
+      }
+    }
+    function goList() {
+      location.href = "/inquire/list.do";
     }
   </script>
   <!-- 채널톡 api -->

@@ -5,6 +5,7 @@ import com.bringbring.image.domain.Image;
 import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.domain.InquireDetail;
 import com.bringbring.inquire.domain.InquireDetails;
+import com.bringbring.inquire.domain.InquireUpdate;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -92,5 +93,19 @@ public class InquireStoreLogic implements InquireStore{
 
     @Override
     public List<Image> selectImageList(int inqNo) { return sqlSession.selectList("InquireMapper.selectImageList", inqNo); }
+
+    @Override
+    public InquireUpdate selectInquireUpdate(int inqNo) { return sqlSession.selectOne("InquireMapper.selectInquireUpdate", inqNo); }
+
+    @Override
+    public int updateInquire(Inquire inquire) {
+        return sqlSession.update("InquireMapper.updateInquire", inquire);
+    }
+
+    @Override
+    public int deleteImage(int imageNo) { return sqlSession.delete("InquireMapper.deleteImage", imageNo); }
+
+    @Override
+    public int deleteInquire(int inqNo) { return sqlSession.update("InquireMapper.deleteInquire", inqNo); }
 
 }
