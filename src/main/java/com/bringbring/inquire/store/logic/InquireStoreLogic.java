@@ -1,7 +1,9 @@
 package com.bringbring.inquire.store.logic;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.image.domain.Image;
 import com.bringbring.inquire.domain.Inquire;
+import com.bringbring.inquire.domain.InquireDetail;
 import com.bringbring.inquire.domain.InquireDetails;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
@@ -62,5 +64,33 @@ public class InquireStoreLogic implements InquireStore{
 
    	@Override
 	  public List<Inquire> selectInquireListByUserNo(int userNo) { return sqlSession.selectList("InquireMapper.selectInquireListByUserNo",userNo); }
+
+    @Override
+    public int getListCountByNo(int userNo) {
+        return sqlSession.selectOne("InquireMapper.getListCountByNo", userNo);
+    }
+
+    @Override
+    public List<Inquire> selectPageInquireListByNo(PageInfo pInfo, int userNo) {
+        int limit = pInfo.getRecordCountPerPage();
+        int offset = (pInfo.getCurrentPage() - 1) * limit;
+        RowBounds rowBounds = new RowBounds(offset, limit);
+        return sqlSession.selectList("InquireMapper.selectPageInquireListByNo", userNo, rowBounds);
+    }
+
+    @Override
+    public int insertInquire(Inquire inquire) { return sqlSession.insert("InquireMapper.insertInquire", inquire); }
+
+    @Override
+    public int selectMaxNo() { return sqlSession.selectOne("InquireMapper.selectMaxNo"); }
+
+    @Override
+    public int insertImage(Image image) { return sqlSession.insert("InquireMapper.insertImage", image); }
+
+    @Override
+    public InquireDetail selectInquireDetailByNo(int inqNo) { return sqlSession.selectOne("InquireMapper.selectInquireDetailByNo", inqNo); }
+
+    @Override
+    public List<Image> selectImageList(int inqNo) { return sqlSession.selectList("InquireMapper.selectImageList", inqNo); }
 
 }

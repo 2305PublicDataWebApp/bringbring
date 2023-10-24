@@ -95,8 +95,8 @@
 					<div class="col-sm-3">
 						<select name="noticeType" id="noticeType" class="form-select"
 							aria-label="Default select example" onFocus="this.initialSelect = this.selectedIndex;" onChange="this.selectedIndex = this.initialSelect;">
-								<option value="service" <c:if test="${notice.noticeType =='service' }">selected</c:if>>서비스</option>
-								<option value="update" <c:if test="${notice.noticeType == 'update' }">selected</c:if>>업데이트</option>
+								<option value="서비스" <c:if test="${notice.noticeType =='서비스' }">selected</c:if>>서비스</option>
+								<option value="업데이트" <c:if test="${notice.noticeType == '업데이트' }">selected</c:if>>업데이트</option>
 						</select>
 					</div>
 				</div>
@@ -108,8 +108,8 @@
 						<div class="from-check">
 							<input class="from-check-input" type="radio" name="gridRadios"
 								id="gridRadios1" value="option1" checked>
-								<c:if test="${notice.noticeType == 'service' }"><label class="from-check-label" for="gridRadios1">${notice.regionName }</label></c:if>
-								<c:if test="${notice.noticeType == 'update' }"><label class="from-check-label" for="gridRadios1">전체</label></c:if>
+								<c:if test="${notice.noticeType == '서비스' }"><label class="from-check-label" for="gridRadios1">${notice.regionName }</label></c:if>
+								<c:if test="${notice.noticeType == '업데이트' }"><label class="from-check-label" for="gridRadios1">전체</label></c:if>
 						</div>
 					</div>
 				</div>
