@@ -52,7 +52,6 @@ public class UserController {
 			, HttpSession session) {
 		User userOne = userService.selectCheckLogin(user);
 		if(userOne != null) {
-
 			// 권한 체크
 			Role role = adminService.selectRoleByNo(userOne.getUserNo());
 			session.setAttribute("sessionId", userOne.getUserId());
@@ -62,7 +61,7 @@ public class UserController {
 			if(role.getUserGrade()>=2){
 				Admin admin = adminService.selectAdminByNo(userOne.getUserNo());
 				session.setAttribute("sessionRegionNo", admin.getRegionNo());
-				System.out.print("리전번호 : " + admin.getRegionNo());
+				System.out.println("리전번호 : " + admin.getRegionNo());
 			}
 			//성공하면 메인화면
 			return "redirect:/";
