@@ -62,8 +62,10 @@
           <p>${inqDetail.city.cityName} ${inqDetail.district.districtName}</p>
         </div>
         <div style="display: flex;float: right;height: 100%;flex-direction: column;justify-content: space-evenly;">
-          <button type="button" class="btn btn-success">글 수정</button>
-          <button type="button" class="btn btn-success">글 삭제</button>
+          <c:if test="${sessionId eq inqDetail.user.userId}">
+            <button onclick="goUpdate();" type="button" class="btn btn-success">글 수정</button>
+            <button type="button" class="btn btn-success">글 삭제</button>
+          </c:if>
         </div>
       </div>
       <!-- 제목 영역 -->
@@ -80,7 +82,16 @@
       <!-- 내용 영역 -->
       <div data-aos="fade-up" style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;background-color: #eee;">
         <div style="padding: 35px">
-          <div style="border: none; outline: none; width: 780px;height: 380px;padding: 10px;background-color: white;" readonly>${inqDetail.inquire.inqContent}</div>
+          <div style="border: none; outline: none; width: 780px;padding: 10px;background-color: white;" readonly>
+              <c:forEach var="image" items="${iList}">
+                <div style="width: 100%;height: 150px;display: flex;margin-bottom: 20px;">
+                  <a href="${image.imagePath}" download>
+                    <img src="${image.imagePath}" style="width: 200px; height: 150px; border: 1px solid #ccc; border-radius: 10px; margin-right: 10px;">
+                  </a>
+                </div>
+              </c:forEach>
+            ${inqDetail.inquire.inqContent}
+          </div>
         </div>
       </div>      
     </div>
@@ -91,11 +102,13 @@
           <p>${inqDetail.city.cityName} ${inqDetail.district.districtName} 관리자</p>
         </div>
         <div id="btnArea" style="display: flex;float: right;height: 100%;flex-direction: column;justify-content: center;">
-          <c:if test="${inqDetail.answer.ansContent eq null}">
-            <button type="button" onclick="showInsertAnswer(this);" class="btn btn-success">글 등록</button>
-          </c:if>
-          <c:if test="${inqDetail.answer.ansContent ne null}">
-            <button type="button" class="btn btn-success">글 수정</button>
+          <c:if test="${inqDetail.district.regionNo eq sessionScope.sessionRegionNo}">
+            <c:if test="${inqDetail.answer.ansContent eq null}">
+              <button type="button" onclick="showInsertAnswer(this);" class="btn btn-success">글 등록</button>
+            </c:if>
+            <c:if test="${inqDetail.answer.ansContent ne null}">
+              <button type="button" class="btn btn-success">글 수정</button>
+            </c:if>
           </c:if>
         </div>
       </div>
@@ -109,7 +122,9 @@
             </c:if>
           </div>
         </div>
-        <p id="ansContentMessage" style="padding: 30px 10px;">아직 답변이 등록되지 않았습니다.</p>
+        <c:if test="${inqDetail.answer.ansContent eq null}">
+          <p id="ansContentMessage" style="padding: 30px 10px;">아직 답변이 등록되지 않았습니다.</p>
+        </c:if>
       </div>
     </div>
   </main>
@@ -188,6 +203,10 @@
     });
     document.getElementById("btnArea").appendChild(createButton);
   }
+
+    function goUpdate() {
+      location.href = "/inquire/update.do";
+    }
   </script>
   <!-- 채널톡 api -->
 

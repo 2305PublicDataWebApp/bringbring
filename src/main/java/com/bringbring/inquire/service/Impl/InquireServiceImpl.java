@@ -112,12 +112,29 @@ public class InquireServiceImpl implements InquireService {
     @Override
     public List<Image> selectImageList(int inqNo) { return inquireStore.selectImageList(inqNo); }
 
+    @Override
+    public InquireDetail encodingDetail(InquireDetail inquireDetail) {
+
+        if (inquireDetail != null && "delivery".equals(inquireDetail.getInquire().getInqCategory())) {
+            inquireDetail.getInquire().setInqCategory("배송 연착, 배송 환불 관련 문의사항");
+        }else if (inquireDetail != null && "divide".equals(inquireDetail.getInquire().getInqCategory())) {
+            inquireDetail.getInquire().setInqCategory("나눔 게시판 관련 문의사항");
+        }else if (inquireDetail != null && "chatting".equals(inquireDetail.getInquire().getInqCategory())) {
+            inquireDetail.getInquire().setInqCategory("채팅 관련 문의사항");
+        }else if (inquireDetail != null && "improvement".equals(inquireDetail.getInquire().getInqCategory())) {
+            inquireDetail.getInquire().setInqCategory("개선하면 좋을 점");
+        }else if (inquireDetail != null && "etc".equals(inquireDetail.getInquire().getInqCategory())) {
+            inquireDetail.getInquire().setInqCategory("기타");
+        }
+        return inquireDetail;
+    }
+
     private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
         Map<String, Object> fileInfoMap = new HashMap<String, Object>();
         try {
             //업로드 저장 경로생성
             String root = request.getSession().getServletContext().getRealPath("resources");
-            String saveFolder = root + "\\assets\\img\\dUploadFiles";
+            String saveFolder = root + "\\assets\\img\\iUploadFiles";
             File folder = new File(saveFolder);
             if(!folder.exists()) folder.mkdir();
 
@@ -130,7 +147,7 @@ public class InquireServiceImpl implements InquireService {
             //파일 객체 생성 후 실제파일저장
             File file = new File(savePath);
             uploadFile.transferTo(file);
-            String dbPath = "../resources/assets/img/dUploadFiles/" + imageRename;
+            String dbPath = "../resources/assets/img/iUploadFiles/" + imageRename;
             //Map 저장
             fileInfoMap.put("imageName", imageName);
             fileInfoMap.put("imageRename", imageRename);
@@ -145,7 +162,7 @@ public class InquireServiceImpl implements InquireService {
 
     private void deleteFile(HttpServletRequest request, String imageRename) {
         String root = request.getSession().getServletContext().getRealPath("resources");
-        String delImagepath = root+"\\dUploadFiles\\"+imageRename;
+        String delImagepath = root+"\\iUploadFiles\\"+imageRename;
         File file = new File(delImagepath);
         if(file.exists()) {
             file.delete();

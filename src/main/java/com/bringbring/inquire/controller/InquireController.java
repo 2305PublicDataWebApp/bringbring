@@ -90,9 +90,16 @@ public class InquireController {
 			, int inqNo){
 
 		InquireDetail inquireDetail = inquireService.selectInquireDetailByNo(inqNo);
+		InquireDetail encodingDetail = inquireService.encodingDetail(inquireDetail);
 		List<Image> imageList = inquireService.selectImageList(inqNo);
-		model.addAttribute("inqDetail", inquireDetail).addAttribute("iList", imageList);
+
+		model.addAttribute("inqDetail", encodingDetail).addAttribute("iList", imageList);
 		return "inquire/detail";
+	}
+
+	@GetMapping("/update.do")
+	public String showInquireUpdate() {
+		return "inquire/update";
 	}
 
 
