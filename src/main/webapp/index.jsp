@@ -541,14 +541,15 @@
   <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
-  <script>
-    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
+<%--  <script>--%>
+<%--    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();--%>
 
-    ChannelIO('boot', {
-      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    });
+<%--    ChannelIO('boot', {--%>
+<%--      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"--%>
+<%--    });--%>
 
-  </script>
+<%--  </script>--%>
+  <jsp:include page="/include/chatBot.jsp"></jsp:include>
   <script>
     document.querySelector('.filter-button.all').addEventListener('click', function() {
         var sliderWrapper = document.querySelector('.swiper-wrapper');
@@ -799,7 +800,6 @@
         ForecastGribURL += "&base_date=" + year + month + day;
         ForecastGribURL += "&base_time=" + baseTime   ;
         ForecastGribURL += "&nx=" + nx + "&ny=" + ny;
-        console.log(baseTime);
         $.ajax({
           url: ForecastGribURL,
           type: 'GET',
@@ -863,21 +863,22 @@
               ment = "수거지연";
               mentIcon = 'bi-sign-stop';
             } else if (ptyValue === 3) {
-              ment = "픽업 지연";
+              ment = "수거지연";
               mentIcon = 'bi-sign-stop';
             }
             console.log(ment);
 
 
 // 날씨 정보를 캐러셀에 추가하는 로직
+            var textColor = (ment === "수거가능") ? '#0d6efd' : 'orange';
             var weatherInfo = '<div class="col-md-2">' +
-                    '<div class=icon-box>' +
-                    '<div class="icon"><i class="bi ' + iconClass + '"></i></div>' +
-                    '<h5 class="text-center"><a href=#>' + regionName + '</a></h5>' +
-                    '<p class="text-center">' + temp + ' ℃</p>' +
+                    '<div class=icon-box style="margin: 0">' +
+                    '<div class="icon" style="margin: 5"><i class="bi ' + iconClass + '"></i></div>' +
+                    '<h5 class="text-center" style="margin:2; color: #00AD7C;">' + regionName + '</h5>' +
+                    '<p class="text-center" style="margin:0;">기온:' + temp + ' ℃</p>' +
                     // '<p class="text-center">강수량: ' + rainAmount + ' </p>' +
-                    '<p class="text-center">강수확률: ' + rainProbability + ' %</p>' +
-                    '<p class="text-center"><h5>'+ ment + '</h5></p>' +
+                    '<p class="text-center" style="margin:0;">강수확률: ' + rainProbability + ' %</p>' +
+                    '<p class="text-center" ><h6 style="color: ' + textColor + ';">' + ment + '</h6></p>' +
                     // '<div class="icon"><i class="bi ' + mentIcon + '"></i></div>' +
                     '</div>';
 
@@ -899,7 +900,6 @@
               $('#weatherCarousel .carousel-inner .carousel-item:last-child .row').append(weatherInfo);
             }
 
-            console.log(index);
 
               // $('#weatherCarousel .carousel-inner .carousel-item:last-child .row').append(weatherInfo);
 
