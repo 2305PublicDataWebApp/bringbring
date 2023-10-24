@@ -745,19 +745,19 @@
       var hours = today.getHours()
 
       var baseTime;
-      if (hours >= 23 || hours < 2) {
+      if (hours >= 23 || hours < 5) {
         baseTime = "0200";
-      } else if (hours < 5) {
-        baseTime = "0500";
       } else if (hours < 8) {
-        baseTime = "0800";
+        baseTime = "0500";
       } else if (hours < 11) {
-        baseTime = "1100";
+        baseTime = "0800";
       } else if (hours < 14) {
-        baseTime = "1400";
+        baseTime = "1100";
       } else if (hours < 17) {
-        baseTime = "1700";
+        baseTime = "1400";
       } else if (hours < 20) {
+        baseTime = "1700";
+      } else if (hours < 23) {
         baseTime = "2000";
       } else {
         baseTime = "2300";
@@ -799,7 +799,7 @@
         ForecastGribURL += "&base_date=" + year + month + day;
         ForecastGribURL += "&base_time=" + baseTime   ;
         ForecastGribURL += "&nx=" + nx + "&ny=" + ny;
-
+        console.log(baseTime);
         $.ajax({
           url: ForecastGribURL,
           type: 'GET',
@@ -857,10 +857,10 @@
             var ment = "";
             var mentIcon = '';
             if (ptyValue === 0 && skyValue !==null) {
-              ment = "픽업 가능 ";
+              ment = "수거가능";
               mentIcon = 'bi-truck';
             } else if (ptyValue === 1 || ptyValue === 2) {
-              ment = "픽업 지연";
+              ment = "수거지연";
               mentIcon = 'bi-sign-stop';
             } else if (ptyValue === 3) {
               ment = "픽업 지연";
@@ -874,11 +874,11 @@
                     '<div class=icon-box>' +
                     '<div class="icon"><i class="bi ' + iconClass + '"></i></div>' +
                     '<h5 class="text-center"><a href=#>' + regionName + '</a></h5>' +
-                    '<p class="text-center">기온: ' + temp + ' ℃</p>' +
-                    '<p class="text-center">강수량: ' + rainAmount + ' </p>' +
+                    '<p class="text-center">' + temp + ' ℃</p>' +
+                    // '<p class="text-center">강수량: ' + rainAmount + ' </p>' +
                     '<p class="text-center">강수확률: ' + rainProbability + ' %</p>' +
-                    '<p class="text-center">'+ ment + '</p>' +
-                    '<div class="icon"><i class="bi ' + mentIcon + '"></i></div>' +
+                    '<p class="text-center"><h5>'+ ment + '</h5></p>' +
+                    // '<div class="icon"><i class="bi ' + mentIcon + '"></i></div>' +
                     '</div>';
 
             if (index % 6 === 0) {

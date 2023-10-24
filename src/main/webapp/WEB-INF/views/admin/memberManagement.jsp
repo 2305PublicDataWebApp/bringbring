@@ -144,7 +144,7 @@
                           </button>
                         </c:if>
                         <c:if test="${user.userNo eq 1}">
-                          <p>최고 관리자</p>
+                          최고 관리자
                         </c:if>
                         <c:if test="${user.isUserDeleted.toString() eq 'Y'}">
                           <button type="button" class="btn btn-success" onclick="confirmUserRemoval(${user.userNo})">

@@ -169,6 +169,9 @@
                 $(this).addClass('was-validated');
             });
         });
+        function showLoginForm() {
+        	location.href = "/user/login.do";
+        }
     </script>
     <!-- 채널톡 api -->
     <script>

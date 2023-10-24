@@ -3,7 +3,10 @@ package com.bringbring.reservation.controller;
 import com.bringbring.common.PageInfo;
 import com.bringbring.region.domain.City;
 import com.bringbring.region.service.RegionService;
-import com.bringbring.reservation.domain.*;
+import com.bringbring.reservation.domain.Reservation;
+import com.bringbring.reservation.domain.ReservationComplete;
+import com.bringbring.reservation.domain.ReservationDetail;
+import com.bringbring.reservation.domain.WasteData;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
@@ -159,7 +162,7 @@ public class ReservationController {
         int totalCount = reservationService.selectReservationListCount(userNo);
         PageInfo pageInfo = reservationService.getPageInfo(currentPage, userNo, totalCount);
         if(userId != null) {
-            List<ReservationComplete> reservationList = reservationService.selectReservationList(pageInfo, userNo);
+            List<ReservationComplete> reservationList = reservationService.selectMyReservationList(pageInfo, userNo);
             model.addAttribute("reservationList", reservationList).addAttribute("pageInfo", pageInfo);
             return "/reservation/list";
         } else {
@@ -176,29 +179,5 @@ public class ReservationController {
         return "/reservation/guide";
     }
 
-//    @GetMapping("/modifyInfo.do")
-//    public String modifyInfo(HttpSession session, Model model) {
-//
-//        return "/reservation/modifyInfo";
-//    }
-
-//    @PostMapping("/addImage.do")
-//    public String addImages(ModelAndView mv
-//            , @RequestParam(value="wasteInfoNo", required = false) String[] wasteInfoNo
-//            , @ModelAttribute MultipartFile[] uploadFiles
-//            , HttpServletRequest request
-//            , HttpSession session
-//            , Model model) {
-//
-//        Map<String, Object> result = reservationService.addImages(wasteInfoNo , uploadFiles, request);
-//        if(result != null) {
-//            session.setAttribute("imageAdd", result);
-//        } else {
-//            model.addAttribute("msg", "사진 업로드에 실패했습니다")
-//                    .addAttribute("url", "/reservation/addImage.do");
-//            return "/common/error";
-//        }
-//        return "redirect:/reservation/insertInfo.do";
-//    }
 
 }

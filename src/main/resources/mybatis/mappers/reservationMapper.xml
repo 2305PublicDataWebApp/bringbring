@@ -17,6 +17,11 @@
         <association property="connection" resultMap="connection"/>
         <association property="image" resultMap="image"/>
     </resultMap>
+    <resultMap id="cancelRequest" type="com.bringbring.reservation.domain.CancelRequest">
+        <association property="reservation" resultMap="reservation"/>
+        <association property="reservationDetail" resultMap="reservationDetail"/>
+        <association property="pay" resultMap="pay"/>
+    </resultMap>
     <resultMap id="wasteCategory" type="com.bringbring.reservation.domain.WasteCategory">
         <id property="wasteCategoryNo" column="WASTE_CATEGORY_NO" />
         <result property="wasteCategoryName" column="WASTE_CATEGORY_NAME" />
@@ -88,6 +93,16 @@
         <id property="districtNo" column="DISTRICT_NO" />
         <result property="districtName" column="DISTRICT_NAME"/>
     </resultMap>
+    <resultMap id="user" type="com.bringbring.user.domain.User">
+        <id property="userNo" column="USER_NO" />
+        <result property="userId" column="USER_ID" />
+    </resultMap>
+    <resultMap id="region" type="com.bringbring.region.domain.Region">
+        <id property="regionNo" column="REGION_NO" />
+        <result property="regionName" column="REGION_NAME" />
+        <result property="cityNo" column="CITY_NO" />
+        <result property="districtNo" column="DISTRICT_NO" />
+    </resultMap>
     <resultMap id="reservationAdmin" type="com.bringbring.reservation.domain.ReservationAdmin">
         <association property="wasteCategory" resultMap="wasteCategory"/>
         <association property="wasteType" resultMap="wasteType"/>
@@ -99,6 +114,8 @@
         <association property="image" resultMap="image"/>
         <association property="city" resultMap="city"/>
         <association property="district" resultMap="district"/>
+        <association property="user" resultMap="user"/>
+        <association property="region" resultMap="region"/>
     </resultMap>
     <resultMap id="User" type="com.bringbring.user.domain.User">
         <id property="userNo" column="USER_NO" />
@@ -132,7 +149,9 @@
         <selectKey keyProperty="rvDeatilNo" order="AFTER" resultType="int">
             SELECT SEQ_RV_DETAIL_NO.CURRVAL AS rvNo FROM DUAL
         </selectKey>
-        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, #{rvNo}, #{rvDetailTotal}, #{rvDetailFee})
+        insert into RESERVATION_DETAIL_TBL values (
+            SEQ_RV_DETAIL_NO.NEXTVAL, #{rvNo}, #{rvDetailTotal}, #{rvDetailFee}
+                                               )
     </insert>
 
     <insert id="insertReservationImage" parameterType="com.bringbring.image.domain.Image">
@@ -140,19 +159,43 @@
             SELECT SEQ_IMAGE_NO.CURRVAL AS rvNo FROM DUAL
         </selectKey>
         insert into IMAGE_TBL values (
-        SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath}
+            SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath}
         )
     </insert>
     <insert id="insertConnection">
         insert into RV_CONNECTION_TBL values (
-                                                 SEQ_RV_CONNECTION_NO.NEXTVAL, #{rvDetailNo}, #{wasteInfoNo}, #{imageNo}
+             SEQ_RV_CONNECTION_NO.NEXTVAL, #{rvDetailNo}, #{wasteInfoNo}, #{imageNo}
                                              )
     </insert>
     <insert id="insertPay">
         insert into PAY_TBL values (
-                                       SEQ_PAY_NO.NEXTVAL, #{rvDetailNo}, #{userId}, #{payId}, #{payMethod}, #{payAmount}, #{payCurrency}, SYSDATE, DEFAULT, DEFAULT
+           SEQ_PAY_NO.NEXTVAL, #{rvDetailNo}, #{userId}, #{payId}, #{payMethod}, #{payAmount}, #{payCurrency}, SYSDATE, DEFAULT, DEFAULT
                                    )
     </insert>
+    <update id="updateReservation">
+        UPDATE RESERVATION_TBL SET IS_RV_COMPLETION = 'Y' WHERE RV_NO = #{rvNo}
+    </update>
+    <!--    <insert id="insertReservationDetail">-->
+    <!--        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, )-->
+    <!--    </insert>-->
+
+    <insert id="insertPayCancel">
+        insert into PAY_CANCEL_TBL values (
+              SEQ_P_CANCEL_NO.NEXTVAL, #{payNo}, SYSDATE, #{cancelAmount}
+        )
+    </insert>
+
+    <update id="updateReservationIsCancel">
+        update RESERVATION_TBL
+            set IS_RV_CANCEL = 'Y'
+            where RV_NO = #{rvNo}
+    </update>
+    <update id="updatePayIsCancel">
+        update PAY_TBL
+            set IS_PAY_CANCEL = 'Y'
+            where RV_DETAIL_NO = #{rvDeatilNo}
+    </update>
+
     <select id="selectWasteList" resultMap="wasteDataResultMap">
         select * from WASTE_CATEGORY_TBL
                           JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
@@ -196,15 +239,133 @@
     </select>
 
     <select id="selectReservationList" resultMap="reservationAdmin">
-        SELECT r.RV_NO, r.RV_NAME, r.RV_ADDR, d.DISTRICT_NAME, r.RV_APPLICATION_DATE, r.RV_RV_DATE, p.IS_PAY_STATUS, r.IS_RV_COMPLETION
+        SELECT r.RV_NO, r.RV_NAME, r.RV_ADDR, d.DISTRICT_NAME, r.RV_APPLICATION_DATE, r.RV_RV_DATE, p.IS_PAY_STATUS, r.IS_RV_COMPLETION, re.REGION_NO
         FROM
             RESERVATION_TBL r
                 JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
                 JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
                 LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+                LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
                 ORDER BY r.RV_NO DESC
     </select>
-  
+
+    <select id="selectListResCount" resultType="_int">
+        SELECT COUNT(*) FROM RESERVATION_TBL
+    </select>
+
+    <select id="selectReservationDetail" resultMap="reservationAdmin">
+        SELECT r.RV_NO, r.RV_DISCHARGE_NO, r.RV_NAME, r.RV_ADDR, u.USER_ID, d.DISTRICT_NAME, r.RV_RV_DATE
+             , p.IS_PAY_STATUS, p.PAY_AMOUNT, r.RV_REQUEST, r.RV_ADDR_DETAIL, r.RV_APPLICATION_DATE, r.IS_RV_COMPLETION
+             , wt.WASTE_TYPE_NAME, wc.WASTE_CATEGORY_NAME, wi.WASTE_INFO_STANDARD, wi.WASTE_INFO_FEE, r.RV_PHONE
+        FROM RESERVATION_TBL r
+                 JOIN USER_TBL u ON r.USER_NO = u.USER_NO
+                 JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
+                 JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
+                 LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+                 LEFT JOIN RV_CONNECTION_TBL c ON rd.RV_DETAIL_NO = c.RV_DETAIL_NO
+                 LEFT JOIN WASTE_INFO_TBL wi ON c.WASTE_INFO_NO = wi.WASTE_INFO_NO
+                 LEFT JOIN WASTE_TYPE_TBL wt ON wi.WASTE_TYPE_NO = wt.WASTE_TYPE_NO
+                 LEFT JOIN WASTE_CATEGORY_TBL wc ON wt.WASTE_CATEGORY_NO = wc.WASTE_CATEGORY_NO
+        WHERE r.RV_NO = #{rvNo}
+    </select>
+
+    <select id="selectReservationListByNo" resultMap="reservationAdmin">
+        SELECT r.RV_NO, r.RV_NAME, r.RV_ADDR, d.DISTRICT_NAME, r.RV_APPLICATION_DATE, r.RV_RV_DATE, p.IS_PAY_STATUS, r.IS_RV_COMPLETION, re.REGION_NO
+        FROM
+            RESERVATION_TBL r
+                JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
+                JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
+                LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+                LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
+        WHERE re.REGION_NO = #{regionNo}
+        ORDER BY r.RV_NO DESC
+    </select>
+
+    <select id="selectListResCountByNo" resultType="_int">
+        SELECT COUNT(*)
+        FROM
+            RESERVATION_TBL r
+                JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
+                JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
+                LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+                LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
+        WHERE re.REGION_NO = #{regionNo}
+    </select>
+
+    <select id="selectListCountByCompletionYByNo" resultType="_int">
+        SELECT COUNT(*)
+        FROM
+            RESERVATION_TBL r
+                JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
+                JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
+                LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+                LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
+        WHERE r.IS_RV_COMPLETION = 'Y' AND re.REGION_NO = #{regionNo}
+    </select>
+
+    <select id="selectListCountByCompletionNByNo" resultType="_int">
+        SELECT COUNT(*)
+        FROM
+            RESERVATION_TBL r
+                JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
+                JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
+                LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+                LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
+        WHERE r.IS_RV_COMPLETION = 'N' AND re.REGION_NO = #{regionNo}
+    </select>
+
+    <select id="searchResByKeyword" resultMap="reservationAdmin">
+        SELECT r.RV_NO, r.RV_NAME, r.RV_ADDR, d.DISTRICT_NAME, r.RV_APPLICATION_DATE, r.RV_RV_DATE, p.IS_PAY_STATUS, r.IS_RV_COMPLETION, re.REGION_NO
+        FROM
+            RESERVATION_TBL r
+                JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
+                JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
+                LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+                LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
+        <if test="searchCondition == 'all'">
+            WHERE r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%' OR d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%' OR r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%'
+            OR r.RV_RV_DATE LIKE '%'||#{searchKeyword}||'%' OR r.IS_RV_COMPLETION LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        <if test="searchCondition == 'district'">
+            WHERE d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        <if test="searchCondition == 'applicationDate'">
+            WHERE r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        <if test="searchCondition == 'reservationDate'">
+            WHERE r.RV_RV_DATE LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        <if test="searchCondition == 'completion'">
+            WHERE r.IS_RV_COMPLETION LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        ORDER BY r.RV_NO DESC
+    </select>
+
+    <select id="searchResListCount" resultType="_int">
+        SELECT COUNT(*) FROM
+        RESERVATION_TBL r
+        JOIN DISTRICT_TBL d ON r.DISTRICT_NO = d.DISTRICT_NO
+        JOIN RESERVATION_DETAIL_TBL rd ON r.RV_NO = rd.RV_NO
+        LEFT JOIN PAY_TBL p ON rd.RV_DETAIL_NO = p.RV_DETAIL_NO
+        LEFT JOIN REGION_TBL re ON r.DISTRICT_NO = re.DISTRICT_NO
+        <if test="searchCondition == 'all'">
+            WHERE r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%' OR d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%' OR r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%'
+            OR r.RV_RV_DATE LIKE '%'||#{searchKeyword}||'%' OR r.IS_RV_COMPLETION LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        <if test="searchCondition == 'district'">
+            WHERE d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        <if test="searchCondition == 'applicationDate'">
+            WHERE r.RV_APPLICATION_DATE LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        <if test="searchCondition == 'reservationDate'">
+            WHERE r.RV_RV_DATE LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        <if test="searchCondition == 'completion'">
+            WHERE r.IS_RV_COMPLETION LIKE '%'||#{searchKeyword}||'%'
+        </if>
+        ORDER BY r.RV_NO DESC
+
     <select id="selectImageNo" resultMap="image">
         SELECT IMAGE_NO FROM IMAGE_TBL where IMAGE_RENAME = #{value}
     </select>
@@ -265,8 +426,7 @@
                  JOIN RESERVATION_TBL USING (RV_NO)
                  JOIN PAY_TBL USING (RV_DETAIL_NO)
         WHERE USER_NO = #{userNo}
-        GROUP BY RV_NO, RV_APPLICATION_DATE, RV_RV_DATE, RV_DETAIL_TOTAL, RV_DETAIL_FEE, RV_DISCHARGE_NO, IS_RV_COMPLETION, IS_RV_CANCEL
-        ORDER BY RV_NO ASC
+        ORDER BY RV_NO DESC
     </select>
     <select id="selectAllWasteList" resultMap="wasteDataResultMap">
         select * from WASTE_CATEGORY_TBL
@@ -284,5 +444,24 @@
                           join PAY_TBL using (RV_DETAIL_NO)
         WHERE USER_NO = #{userNo}
         ORDER BY RV_NO DESC
+    </select>
+    <select id="selectPayInfoByPayId" resultMap="pay">
+        select * from PAY_TBL
+            where PAY_ID = #{value}
+    </select>
+    <select id="selectReservationNoByRvNo" resultMap="reservation">
+        select * from RESERVATION_TBL
+            where RV_NO = #{rvNo}
+    </select>
+    <select id="selectReservationDetailByDetailNo" resultMap="reservationDetail">
+        select * from RESERVATION_DETAIL_TBL
+            where RV_DETAIL_NO = #{RvDetailNo}
+    </select>
+    <select id="selectPayIdByDischargeNo" resultMap="cancelRequest">
+        select PAY_ID from RESERVATION_TBL
+                               join RESERVATION_DETAIL_TBL USING (RV_NO)
+                               join PAY_TBL USING (RV_DETAIL_NO)
+        where RV_DISCHARGE_NO = #{dischargeNo}
+
     </select>
 </mapper>

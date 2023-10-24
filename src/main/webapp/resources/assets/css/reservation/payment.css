@@ -11,13 +11,13 @@
         width: 80%;
     }
 }
-#payment-card {
+.payment {
     width: 150px;
 }
 #card-form {
     display: flex;
 }
-#flexRadioDefault1 {
+.flexRadio {
     margin-top: 68px;
 }
 #card-img {

@@ -1,6 +1,7 @@
 package com.bringbring.reservation.controller;
 
 import com.bringbring.reservation.domain.*;
+import com.bringbring.reservation.service.PayService;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.ProtocolException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ public class RestReservationController {
 
     private final ReservationService reservationService;
     private final UserService userService;
+    private final PayService payService;
 
     @GetMapping("/selectItem.do")
     public ResponseEntity<List<WasteData>> selectWasteList(@RequestParam String selectItem) {
@@ -97,6 +100,32 @@ public class RestReservationController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Failure", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/cancel.do")
+    public ResponseEntity<Pay> cancelRequest(@RequestBody Map<String, String> request) throws ProtocolException {
+//        String payId = pay.getPayId();
+        CancelRequest cancelRequest = reservationService.selectPayIdByDischargeNo(request.get("dischargeNo"));
+        String payId = cancelRequest.getPay().getPayId();
+        String cancel_request_amount = request.get("cancel_request_amount");
+        String reason = request.get("reason");
+        Pay payResult = reservationService.selectPayInfoByPayId(payId);
+        String token = payService.getToken();
+        payService.cancelRequest(request, token);
+        System.out.println("payResult = " + payResult);
+        boolean cancelSuccess = payService.cancelRequest(request, token);
+        boolean dbUpdate = false;
+        if(cancelSuccess) {
+            dbUpdate = payService.cancelPayInfo(payId);
+        }
+
+        if (cancelSuccess && dbUpdate) {
+            System.out.println("취소 성공");
+            return ResponseEntity.ok(payResult);
+        } else {
+            // 취소 요청이 실패한 경우 400 Bad Request 또는 다른 적절한 상태 코드 반환
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 

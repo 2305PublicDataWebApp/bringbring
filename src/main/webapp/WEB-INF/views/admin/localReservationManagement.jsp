@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -55,7 +57,7 @@
   <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
     <div style="width: 1300px;margin: 0 auto;">
       <div style="float: left;margin-top: 60px;">
-        <h1>배출 관리 - 동대문구</h1>
+        <h1>관할지역 수거 관리</h1>
         <div style="width: 100%;height: 30px;"></div>
         <h4 style="color: rgb(189, 245, 229);">회원들이 예약한 배출 정보를 관리할 수 있습니다.</h4>
       </div>
@@ -71,17 +73,17 @@
       <div class="row">
         <div class="four col-md-3">
           <div class="counter-box colored">
-            <h4>배출예약 건수 : 100</h4>
+            <h4>누적신청수  : ${resCount}</h4>
           </div>
         </div>
         <div class="col-md-3">
           <div class="counter-box colored">
-              <h4>접수된 건수 : 50</h4>
+            <h4>신청접수 : ${resCountX}</h4>
           </div>
         </div>
         <div class="col-md-3">
           <div class="counter-box colored">
-              <h4>완료된 건수 : 50</h4>
+            <h4>예약완료 : ${resCountY}</h4>
           </div>
         </div>
         <div class="col-md-3">
@@ -108,100 +110,145 @@
       </div>
       <br/>
       <div class="table-responsive">
-        <table class="table align-middle text-center table-hover">
-            <thead class="table-light align-middle">
-                <tr>
-                    <th>예약 번호</th>
-                    <th>이름</th>
-                    <th>주소</th>
-                    <th>배출지역</th>
-                    <th>신청일</th>
-                    <th>예약일</th>
-                    <th>결제여부</th>
-                    <th>상태</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr onclick="location.href='../admin/reservationDetail.html'" style="cursor:pointer;">
-                  <td>1</td>
-                  <td>정수댕</td>
-                  <td>서울시 동대문구 전농동</td>
-                  <td>전농동</td>
-                  <td>2023-10-01</td>
-                  <td>2023-10-03</td>
-                  <td>O</td>
-                  <td>예약 완료</td>
-                </tr>
-            </tbody>
+        <table class="table align-middle text-center">
+          <thead class="table-success align-middle">
+          <tr>
+            <th>예약 번호</th>
+            <th>신청자</th>
+            <th>배출지역</th>
+            <th>신청일</th>
+            <th>예약일</th>
+            <th>결제여부</th>
+            <th>상태</th>
+          </tr>
+          </thead>
+          <tbody>
+          <c:forEach var="res" items="${resList}" varStatus="r">
+            <tr>
+              <td>${res.reservation.rvNo}</td>
+              <td>${res.reservation.rvName}</td>
+              <td>${res.district.districtName}</td>
+              <td>${res.reservation.rvApplicationDate}</td>
+              <td>${res.reservation.rvRvDate}</td>
+              <td>${res.pay.isPayStatus}</td>
+              <td>
+                <c:if test="${sessionScope.sessionRegionNo eq res.region.regionNo}">
+                  <c:if test="${res.reservation.isRvCompletion.toString() eq 'Y'}">
+                    <button type="button" class="btn btn-light" onclick="redirectToReservationDetail(${res.reservation.rvNo})">
+                      예약완료
+                    </button>
+                  </c:if>
+                  <c:if test="${res.reservation.isRvCompletion.toString() eq 'N'}">
+                    <button type="button" class="btn btn-success" onclick="redirectToReservationDetail(${res.reservation.rvNo})">
+                      예약접수
+                    </button>
+                  </c:if>
+                </c:if>
+                <c:if test="${sessionScope.sessionRegionNo ne res.region.regionNo}">
+                  타 지역 접수건
+                </c:if>
+              </td>
+            </tr>
+          </c:forEach>
+          </tbody>
         </table>
-    </div>
+        <div class="mt-5 d-flex justify-content-center">
+          <nav aria-label="Page navigation exampler">
+            <ul class="pagination">
+              <c:if test="${pInfo.startNavi ne '1' }">
+                <li class="page-item"><a class="page-link" href="/admin/localRvList.do?page=${pInfo.startNavi-1}&regionNo=${sessionScope.sessionRegionNo}" class="first"><i class="bi bi-chevron-left"></i></a></li>
+              </c:if>
+              <c:forEach begin="${pInfo.startNavi }" end="${pInfo.endNavi }" var="p">
+                <c:url var="pageUrl" value="/admin/localRvList.do?regionNo=${sessionScope.sessionRegionNo}">
+                  <c:param name="page" value="${p}"></c:param>
+                </c:url>
+                <c:choose>
+                  <c:when test="${p == pInfo.currentPage}">
+                    <li class="page-item active" ><a href="${pageUrl}" class="page-link" style="background-color:#00AD7C; border-color: #00AD7C">${p}</a></li>
+                  </c:when>
+                  <c:otherwise>
+                    <li class="page-item"><a href="${pageUrl}" class="page-link">${p}</a></li>
+                  </c:otherwise>
+                </c:choose>
+              </c:forEach>
+              <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount }">
+                <li class="page-item"><a class="page-link" href="/admin/localRvList.do?page=${pInfo.startNavi-1}&regionNo=${sessionScope.sessionRegionNo}" class="last"><i class="bi bi-chevron-right"></i></a></li>
+              </c:if>
+            </ul>
+          </nav>
+        </div>
+      </div>
     </section>
 
   </main>
 <!-- End #main -->
 
-  <!-- ======= Footer ======= -->
-  <!-- 푸터 -->
-  <jsp:include page="/include/footer.jsp"></jsp:include>  nd Footer -->
+<!-- 푸터 -->
+<jsp:include page="/include/footer.jsp"></jsp:include>nd Footer -->
 
-  <div id="preloader"></div>
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-      class="bi bi-arrow-up-short"></i></a>
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="../resources/assets/vendor/aos/aos.js"></script>
-  <script src="../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="../resources/assets/vendor/php-email-form/validate.js"></script>
-  <script src="../resources/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+<!-- Vendor JS Files -->
+<script src="../resources/assets/vendor/aos/aos.js"></script>
+<script src="../resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../resources/assets/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="../resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="../resources/assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="../resources/assets/vendor/waypoints/noframework.waypoints.js"></script>
+<script src="../resources/assets/vendor/php-email-form/validate.js"></script>
+<script src="../resources/assets/vendor/purecounter/purecounter_vanilla.js"></script>
 
 
-  <!-- Template Main JS File -->
-  <script src="../resources/assets/js/main.js"></script>
+<!-- Template Main JS File -->
+<script src="../resources/assets/js/main.js"></script>
 
-  <!-- 채널톡 api -->
-  <script>
-    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
+<!-- 채널톡 api -->
+<script>
+  (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
 
-    ChannelIO('boot', {
-      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    });
+  ChannelIO('boot', {
+    "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
+  });
 
-    $(document).ready(function () {
-      var trigger = $('.hamburger'),
-          overlay = $('.overlay'),
-          isClosed = false;
-    
-        trigger.click(function () {
-          hamburger_cross();      
-        });
-    
-        function hamburger_cross() {
-    
-          if (isClosed == true) {          
-            overlay.hide();
-            trigger.removeClass('is-open');
-            trigger.addClass('is-closed');
+  $(document).ready(function () {
+    var trigger = $('.hamburger'),
+            overlay = $('.overlay'),
             isClosed = false;
-          } else {   
-            overlay.show();
-            trigger.removeClass('is-closed');
-            trigger.addClass('is-open');
-            isClosed = true;
-          }
-      }
-      
-      $('[data-toggle="offcanvas"]').click(function () {
-            $('#wrapper').toggleClass('toggled');
-      });  
+
+    trigger.click(function () {
+      hamburger_cross();
     });
 
-  </script>
-  
-  
+    function hamburger_cross() {
+
+      if (isClosed == true) {
+        overlay.hide();
+        trigger.removeClass('is-open');
+        trigger.addClass('is-closed');
+        isClosed = false;
+      } else {
+        overlay.show();
+        trigger.removeClass('is-closed');
+        trigger.addClass('is-open');
+        isClosed = true;
+      }
+    }
+
+    $('[data-toggle="offcanvas"]').click(function () {
+      $('#wrapper').toggleClass('toggled');
+    });
+  });
+
+  function redirectToReservationDetail(rvNo) {
+    var url = '/admin/reservationDetail.do?rvNo=' + rvNo;
+    window.location.href = url;
+  }
+</script>
+
+
+
 </body>
 
 </html>

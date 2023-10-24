@@ -42,7 +42,21 @@ public interface ReservationStore {
 
     int selectReservationListCount(int userNo);
 
-    List<ReservationComplete> selectReservationList(PageInfo pageInfo, int userNo);
+    List<ReservationComplete> selectMyReservationList(PageInfo pageInfo, int userNo);
 
     List<WasteData> selectAllWasteList();
+
+    Pay selectPayInfoByPayId(String payId);
+
+    Reservation selectReservationNoByRvNo(int rvNo);
+
+    int updateReservationIsCancel(int rvNo);
+
+    int updatePayIsCancel(int rvDeatilNo);
+
+    int insertPayCancel(PayCancel payCancel);
+
+    ReservationDetail selectReservationDetailByDetailNo(int rvDetailNo);
+
+    CancelRequest selectPayIdByDischargeNo(String dischargeNo);
 }

@@ -65,12 +65,6 @@ public class AdminController {
 		}
 	}
 
-	// 관할지역 예약조회
-	@GetMapping("/localM.do")
-	public String showLocalReservationManagement(Model model) {
-		return "admin/localReservationManagement";
-	}
-
 // 회원 관리
 
 	//회원 리스트
@@ -92,7 +86,6 @@ public class AdminController {
 					.addAttribute("adminCount", adminCount)
 					.addAttribute("cList", cList)
 					.addAttribute("deletedUser", deleteUserCount);
-
 			return "/admin/memberManagement";
 		} else {
 			model.addAttribute("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
@@ -399,15 +392,75 @@ public class AdminController {
 			model.addAttribute("resCount", resCount).addAttribute("resCountY", resCountByCompletionY).addAttribute("resCountX", resCountByCompletionN);
 			return "admin/reservationManagement";
 		} else {
-			model.addAttribute("msg", "최고 관리자만 조회 가능한 페이지 입니다.")
+			model.addAttribute("msg", "관리자만 조회 가능한 페이지 입니다.")
 					.addAttribute("url", "/index.jsp");
 			return "common/error";
 		}
 	}
 
-	@GetMapping("/test.do")
-	public String test(Model model) {
-		return "admin/test";
+	//예약 상세
+	@GetMapping("/reservationDetail.do")
+	public String showReservationDeatil(Model model
+			, @RequestParam("rvNo") Integer rvNo
+			, HttpSession session) {
+		int checkAdmin = (int)session.getAttribute("sessionUserGrade");
+		if(checkAdmin >= 2) {
+			List<ReservationAdmin> reservationDetail = adminService.selectReservationDetail(rvNo);
+			if(reservationDetail!=null){
+				model.addAttribute("rdList", reservationDetail);
+				return "admin/reservationDetail";
+			} else {
+				return "admin/reservationManagement";
+			}
+		} else {
+			model.addAttribute("msg", "관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
+		}
+	}
+
+	//예약 처리
+	@GetMapping("/reservationUpdate.do")
+	public String updateReservation(Model model
+			, @RequestParam("rvNo") Integer rvNo
+			, HttpSession session) {
+		int checkAdmin = (int)session.getAttribute("sessionUserGrade");
+		if(checkAdmin >= 2) {
+			int result = adminService.updateReservation(rvNo);
+			if(result>0) {
+				return "redirect:/admin/reservationList.do";
+			} else {
+				return "admin/reservationDetail";
+			}
+		} else {
+			model.addAttribute("msg", "관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
+		}
+	}
+
+	// 관할지역 예약조회
+	@GetMapping("/localRvList.do")
+	public String showLocalReservation(Model model
+			,@RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
+			,@RequestParam("regionNo") Integer regionNo
+			,HttpSession session) {
+		int checkAdmin = (int)session.getAttribute("sessionUserGrade");
+		System.out.print(regionNo);
+		if(checkAdmin >= 2) {
+			int resCount= adminService.selectListResCountByNo(regionNo);
+			int resCountByCompletionY = adminService.selectListCountByCompletionYByNo(regionNo);
+			int resCountByCompletionN = adminService.selectListCountByCompletionNByNo(regionNo);
+			PageInfo pInfo = this.getPageInfo(currentPage, resCount);
+			List<ReservationAdmin> reservationList = adminService.selectReservationListByNo(regionNo, pInfo);
+			model.addAttribute("resList", reservationList).addAttribute("pInfo", pInfo);
+			model.addAttribute("resCount", resCount).addAttribute("resCountY", resCountByCompletionY).addAttribute("resCountX", resCountByCompletionN);
+			return "admin/localReservationManagement";
+		} else {
+			model.addAttribute("msg", "관리자만 조회 가능한 페이지 입니다.")
+					.addAttribute("url", "/index.jsp");
+			return "common/error";
+		}
 	}
 
 	public PageInfo getPageInfo(Integer currentPage, Integer totalCount) {

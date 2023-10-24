@@ -145,4 +145,7 @@
 		</if>
 	</select>
 
+	<select id="selectAdminByNo" resultType="Admin">
+		SELECT * FROM ADMIN_TBL WHERE USER_NO = ${userNO}
+	</select>
 </mapper>

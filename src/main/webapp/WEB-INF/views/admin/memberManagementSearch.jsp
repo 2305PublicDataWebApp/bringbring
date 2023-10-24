@@ -138,6 +138,15 @@
                         ${user.isUserDeleted}
                       </td>
                       <td>
+                        <c:if test="${user.userNo ne 1}">
+                          <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                  data-bs-target="#adminModal"  data-user-no="${user.userNo}">
+                            관리자 임명
+                          </button>
+                        </c:if>
+                        <c:if test="${user.userNo eq 1}">
+                          최고 관리자
+                        </c:if>
                         <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                 data-bs-target="#adminModal" data-user-no="${user.userNo}">
                           관리자 임명
