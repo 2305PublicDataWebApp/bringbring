@@ -150,4 +150,68 @@ public interface AdminStore {
      * @return
      */
     List<ReservationAdmin> selectReservationList(PageInfo pInfo);
+
+    /**
+     * 예약 상세조회 store
+     * @param rvNo
+     * @return
+     */
+    List<ReservationAdmin> selectReservationDetail(Integer rvNo);
+
+    /**
+     * 예약 처리 store
+     * @param rvNo
+     * @return int
+     */
+    int updateReservation(Integer rvNo);
+
+    /**
+     * 유저 번호로 관리자 조회 store
+     * @param userNo
+     * @return
+     */
+    Admin selectAdminByNo(int userNo);
+
+    /**
+     * 관핧 지역 예약 조회 store
+     * @param pInfo
+     * @return
+     */
+    List<ReservationAdmin> selectReservationListByNo(Integer regionNo, PageInfo pInfo);
+
+    /**
+     * 관할 지역 예약 수 조회 store
+     * @param regionNo
+     * @return
+     */
+    int selectListResCountByNo(Integer regionNo);
+
+    /**
+     * 관할 지역 예약 완료 수 조회 store
+     * @param regionNo
+     * @return
+     */
+    int selectListCountByCompletionYByNo(Integer regionNo);
+
+    /**
+     * 관할 지역 신청 접수 수 조회 store
+     * @param regionNo
+     * @return
+     */
+    int selectListCountByCompletionNByNo(Integer regionNo);
+
+    /**
+     * 검색된 예약 갯수 조회 Store
+     * @param paramMap
+     * @return
+     */
+    int searchResListCount(Map<String, String> paramMap);
+
+    /**
+     * 검색된 예약 리스트 조회 Store
+     * @param pInfo
+     * @param paramMap
+     * @return
+     */
+    List<ReservationAdmin> searchResByKeyword(PageInfo pInfo, Map<String, String> paramMap);
 }
