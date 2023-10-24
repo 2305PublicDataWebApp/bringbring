@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.bringbring.admin.domain.Admin;
 import com.bringbring.admin.domain.Role;
 import com.bringbring.admin.service.AdminService;
 import org.springframework.stereotype.Controller;
@@ -55,12 +56,15 @@ public class UserController {
 		if(userOne != null) {
 
 			// 권한 체크
+			Admin admin = adminService.selectAdminByNo(userOne.getUserNo());
 			Role role = adminService.selectRoleByNo(userOne.getUserNo());
 			session.setAttribute("sessionId", userOne.getUserId());
 			session.setAttribute("sessionName", userOne.getUserName());
+			session.setAttribute("sessionRegionNo", admin.getRegionNo());
 			session.setAttribute("sessionUserGrade", role.getUserGrade());
 			session.setAttribute("sessionRoleNo", role.getRoleNo());
 			//성공하면 메인화면
+			System.out.print("리전번호 : " + admin.getRegionNo());
 			return "redirect:/";
 		} else {
 			//실패하면 에러페이지로 이동

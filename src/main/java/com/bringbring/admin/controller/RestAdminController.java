@@ -1,16 +1,23 @@
 package com.bringbring.admin.controller;
 
+import com.bringbring.admin.domain.Admin;
+import com.bringbring.admin.service.AdminService;
 import com.bringbring.common.PageInfo;
 import com.bringbring.inquire.domain.InquireDetails;
 import com.bringbring.inquire.service.InquireService;
+import com.bringbring.region.domain.District;
 import com.bringbring.report.domain.ReportDetails;
 import com.bringbring.report.service.ReportService;
+import com.bringbring.reservation.domain.ReservationAdmin;
+import com.bringbring.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +31,8 @@ public class RestAdminController {
     private final InquireService inquireService;
     private final AdminController adminController;
     private final ReportService reportService;
+    private final AdminService adminService;
 
-    private static final String API_KEY = "uy3jYbeNo9pdYLz%2FbZXRO%2F3tFw9FcY6FjN1mlzXiPnfDm4yy4z4ceuYU2ValrUULBJVlrX6JBznSjobmLH1A7w%3D%3D";
-    private static final String API_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
     //문의글 답변 유무에 따른 리스트
     @PostMapping("/inquireAnswer.do")
     public ResponseEntity<Map<String, Object>> selectInquiriesByAnswer(@ModelAttribute InquireDetails inquireDetails
@@ -97,13 +103,6 @@ public class RestAdminController {
         }
     }
 
-    @GetMapping("/weather.do")
-    public String getWeather(){
-        // API 응답을 그대로 클라이언트로 반환
-        return API_URL + "?ServiceKey=" + API_KEY;
-    }
-
-
     //신고글 조회
     @GetMapping("/reportListDetail.do")
     public ResponseEntity<List<ReportDetails>> getReportDetails(@RequestParam("divNo") int divNo) {
@@ -122,5 +121,30 @@ public class RestAdminController {
         return ResponseEntity.ok(reportDetailsList);
     }
 
+    //예약 검색
+    @PostMapping("/reservationSearch.do")
+    public ResponseEntity<Map<String, Object>> searchReservationList(@RequestParam("searchCondition") String searchCondition
+            , @RequestParam("searchKeyword") String searchKeyword
+            , @RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
+            , HttpSession session){
+        int checkAdmin = (int) session.getAttribute("sessionUserGrade");
+        Map<String, Object> response = new HashMap<>();
+        if (checkAdmin >= 2) {
+            Map<String, String> paramMap = new HashMap<>();
+            paramMap.put("searchCondition", searchCondition);
+            paramMap.put("searchKeyword", searchKeyword);
+            int totalCount = adminService.searchResListCount(paramMap);
+            PageInfo pInfo = adminController.getPageInfo(currentPage, totalCount);
+            List<ReservationAdmin> reservationList = adminService.searchResByKeyword(pInfo, paramMap);
 
+            response.put("searchCondition", searchCondition);
+            response.put("searchKeyword", searchKeyword);
+            response.put("pInfo", pInfo);
+            response.put("reservationList", reservationList);
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("error", "권한이 없습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+    }
 }

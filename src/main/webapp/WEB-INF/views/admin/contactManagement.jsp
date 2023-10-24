@@ -83,7 +83,7 @@
               <option value="category">문의유형</option>
           </select>
           <input type="search" class="form-control" placeholder="검색" aria-label="Search" name="searchKeyword" aria-describedby="search-addon" style="width: 50%;" />
-          <button type="button" class="btn btn-outline-success" id="user-serch-btn">검색</button>
+          <button type="button" class="btn btn-outline-success" id="user-search-btn">검색</button>
         </div>
           <input type="hidden" name="pageName" value="${pInfo.currentPage}" />
       </div>
@@ -286,7 +286,7 @@
                 if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
                     paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
                 }
-                $('#user-serch-btn').on('click', function(event) {
+                $('#user-search-btn').on('click', function(event) {
                     var searchCondition = $('select[name="searchCondition"]').val();
                     var searchKeyword = $('input[name="searchKeyword"]').val();
                     event.preventDefault();
@@ -426,7 +426,7 @@
                 if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
                     paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
                 }
-                $('#user-serch-btn').on('click', function(event) {
+                $('#user-search-btn').on('click', function(event) {
                     var searchCondition = $('select[name="searchCondition"]').val();
                     var searchKeyword = $('input[name="searchKeyword"]').val();
                     event.preventDefault();
@@ -569,7 +569,7 @@
                 if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
                     paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
                 }
-                $('#user-serch-btn').on('click', function(event) {
+                $('#user-search-btn').on('click', function(event) {
                     var searchCondition = $('select[name="searchCondition"]').val();
                     var searchKeyword = $('input[name="searchKeyword"]').val();
                     event.preventDefault();
@@ -654,7 +654,7 @@
         });
     }
 
-    $('#user-serch-btn').on('click', function(event) {
+    $('#user-search-btn').on('click', function(event) {
         var searchCondition = $('select[name="searchCondition"]').val();
         var searchKeyword = $('input[name="searchKeyword"]').val();
         var pageNumber = $('input[name="pageName"]').val();

@@ -3,6 +3,8 @@ package com.bringbring.reservation.domain;
 import com.bringbring.image.domain.Image;
 import com.bringbring.region.domain.City;
 import com.bringbring.region.domain.District;
+import com.bringbring.region.domain.Region;
+import com.bringbring.user.domain.User;
 import lombok.*;
 
 import java.sql.Date;
@@ -23,4 +25,6 @@ public class ReservationAdmin {
     private Image image;
     private City city;
     private District district;
+    private User user;
+    private Region region;
 }
