@@ -94,6 +94,7 @@
 				</c:url>
 				<c:url var="modiUrl" value="/notice/update.do">
 					<c:param name="noticeNo" value="${notice.noticeNo }" />
+					<c:param name="userNo" value="${notice.userNo }" />
 				</c:url>
 					<!-- 관리자만 보이는 버튼 -->
 			<c:if test="${sessionScope.sessionUserGrade >=2 }">
@@ -117,45 +118,9 @@
 		<hr>
 		<div class="content">
 			${notice.noticeContent }
-				<img src=${image.imagePath }>
+				<img width="800px" src="${image.imagePath }">
 		</div>
 		<hr>
-		<!-- 이전글/다음글 -->
-		<div class="otherdetail">
-        <table id="nextBoard">
-            <tr>
-                <td style="width:70px;">이전</td>
-                <td>
-                	<c:choose>
-                		<c:when test="${notice.preNoticeNo == 0 }">
-                			<span style="coloc:gray;">이전글이 없습니다.</span>
-                		</c:when>
-                		<c:otherwise>
-                			<span class="preNoticeTitle">
-                				<a href="/notice/detail?noticeNo=${notice.preNoticeNo}"></a>
-                			</span>
-                		</c:otherwise>
-                	</c:choose>
-                </td>
-            </tr>
-
-            <tr style="border-top: 1px solid #dbdbdb;">
-                <td>다음</td>
-                <td>
-                	<c:choose>
-                		<c:when test="${notice.nextNoticeNo == 0 }">
-                			<span style="coloc:gray;">다음글이 없습니다.</span>
-                		</c:when>
-                		<c:otherwise>
-                			<span class="nextNoticeTitle">
-                				<a href="/notice/detail?noticeNo=${notice.nextNoticeNo}"></a>
-                			</span>
-                		</c:otherwise>
-                	</c:choose>
-                </td>
-            </tr>
-        </table>
-		</div>
 
 		<button class="btn btn-success" onclick="goList()">목록으로</button>
 	</main>
@@ -182,14 +147,7 @@
   <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
-  <script>
-    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-    ChannelIO('boot', {
-      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    });
-
-  </script>
+  <jsp:include page="/include/chatBot.jsp"></jsp:include>
 
   <!-- 기능 script -->
 	<script>

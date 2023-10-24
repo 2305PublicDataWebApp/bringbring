@@ -83,7 +83,7 @@
               <option value="category">문의유형</option>
           </select>
           <input type="search" class="form-control" placeholder="검색" aria-label="Search" name="searchKeyword" aria-describedby="search-addon" style="width: 50%;" />
-          <button type="button" class="btn btn-outline-success" id="user-serch-btn">검색</button>
+          <button type="button" class="btn btn-outline-success" id="user-search-btn">검색</button>
         </div>
           <input type="hidden" name="pageName" value="${pInfo.currentPage}" />
       </div>
@@ -103,18 +103,20 @@
               <div class="table-responsive">
                 <table id="inquireTable" class="table align-middle text-center">
                     <colgroup>
+                        <col width="5%"/>
+                        <col width="10%"/>
+                        <col width="40%"/>
                         <col width="10%"/>
                         <col width="10%"/>
-                        <col width="45%"/>
                         <col width="10%"/>
-                        <col width="15%"/>
                         <col width="15%"/>
                     </colgroup>
                     <thead class="table-success align-middle">
                         <tr>
-                            <th>글 번호</th>
+                            <th>글번호</th>
                             <th>작성자</th>
                             <th>제목</th>
+                            <th>지역</th>
                             <th>문의유형</th>
                             <th>작성일</th>
                             <th>답변여부</th>
@@ -129,6 +131,7 @@
                                 <c:param name="inqNo" value="${inq.inqNo}"></c:param>
                             </c:url>
                             <td><a href="${detailUrl}">${inq.inqTitle}</a></td>
+                            <td>${inq.districtName}</td>
                             <td>${inq.inqCategory}</td>
                             <fmt:parseDate value="${inq.inqCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime" type="both" />
                             <td><fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" /></td>
@@ -193,12 +196,8 @@
   <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
+<jsp:include page="/include/chatBot.jsp"></jsp:include>
   <script>
-    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-    ChannelIO('boot', {
-      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    });
 
     $(document).ready(function () {
       var trigger = $('.hamburger'),
@@ -252,6 +251,7 @@
                     row += '<td>' + inq.inqNo + '</td>';
                     row += '<td>' + inq.userId + '</td>';
                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                    row += '<td>' + inq.districtName + '</td>';
                     row += '<td>' + inq.inqCategory + '</td>';
 
                     // 날짜 포맷에 따라서 수정
@@ -286,7 +286,7 @@
                 if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
                     paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
                 }
-                $('#user-serch-btn').on('click', function(event) {
+                $('#user-search-btn').on('click', function(event) {
                     var searchCondition = $('select[name="searchCondition"]').val();
                     var searchKeyword = $('input[name="searchKeyword"]').val();
                     event.preventDefault();
@@ -312,6 +312,7 @@
                                     row += '<td>' + inq.inqNo + '</td>';
                                     row += '<td>' + inq.userId + '</td>';
                                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                                    row += '<td>' + inq.districtName + '</td>';
                                     row += '<td>' + inq.inqCategory + '</td>';
 
                                     // 날짜 포맷에 따라서 수정
@@ -392,6 +393,7 @@
                     row += '<td>' + inq.inqNo + '</td>';
                     row += '<td>' + inq.userId + '</td>';
                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                    row += '<td>' + inq.districtName + '</td>';
                     row += '<td>' + inq.inqCategory + '</td>';
 
                     // 날짜 포맷에 따라서 수정
@@ -426,7 +428,7 @@
                 if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
                     paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
                 }
-                $('#user-serch-btn').on('click', function(event) {
+                $('#user-search-btn').on('click', function(event) {
                     var searchCondition = $('select[name="searchCondition"]').val();
                     var searchKeyword = $('input[name="searchKeyword"]').val();
                     event.preventDefault();
@@ -452,6 +454,7 @@
                                     row += '<td>' + inq.inqNo + '</td>';
                                     row += '<td>' + inq.userId + '</td>';
                                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                                    row += '<td>' + inq.districtName + '</td>';
                                     row += '<td>' + inq.inqCategory + '</td>';
 
                                     // 날짜 포맷에 따라서 수정
@@ -535,6 +538,7 @@
                     row += '<td>' + inq.inqNo + '</td>';
                     row += '<td>' + inq.userId + '</td>';
                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                    row += '<td>' + inq.districtName + '</td>';
                     row += '<td>' + inq.inqCategory + '</td>';
 
                     // 날짜 포맷에 따라서 수정
@@ -569,7 +573,7 @@
                 if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
                     paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
                 }
-                $('#user-serch-btn').on('click', function(event) {
+                $('#user-search-btn').on('click', function(event) {
                     var searchCondition = $('select[name="searchCondition"]').val();
                     var searchKeyword = $('input[name="searchKeyword"]').val();
                     event.preventDefault();
@@ -595,6 +599,7 @@
                                     row += '<td>' + inq.inqNo + '</td>';
                                     row += '<td>' + inq.userId + '</td>';
                                     row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                                    row += '<td>' + inq.districtName + '</td>';
                                     row += '<td>' + inq.inqCategory + '</td>';
 
                                     // 날짜 포맷에 따라서 수정
@@ -654,7 +659,7 @@
         });
     }
 
-    $('#user-serch-btn').on('click', function(event) {
+    $('#user-search-btn').on('click', function(event) {
         var searchCondition = $('select[name="searchCondition"]').val();
         var searchKeyword = $('input[name="searchKeyword"]').val();
         var pageNumber = $('input[name="pageName"]').val();
@@ -681,6 +686,7 @@
                         row += '<td>' + inq.inqNo + '</td>';
                         row += '<td>' + inq.userId + '</td>';
                         row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
+                        row += '<td>' + inq.districtName + '</td>';
                         row += '<td>' + inq.inqCategory + '</td>';
 
                         // 날짜 포맷에 따라서 수정

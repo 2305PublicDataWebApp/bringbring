@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -59,58 +61,79 @@
   <main>
     <section>
       <div style="display: flex; flex-direction: column; justify-content: space-between">
-        <div style="margin: 0 auto; margin-top: 40px;">
+        <div style="margin: 0 auto; margin-top: 30px;">
           <h2>예약 상세 내역</h2>
         </div>
         <div>
-          <div class="card" style="width: 500px; margin: 0 auto; border: none;">
+          <div class="card" style="width: 600px; margin: 0 auto; border: none;">
             <div class="card-body">
+                <c:forEach var="rdList" items="${rdList}">
               <table class="table align-middle text-center">
+                  <colgroup>
+                      <col width="20%">
+                      <col width="25%">
+                      <col width="20%">
+                      <col width="35%">
+                  </colgroup>
                   <tr>
-                    <td>예약 번호</td>
-                    <td>1</td>
+                    <td class="trHead">예약 번호</td>
+                    <td>${rdList.reservation.rvNo}</td>
+                      <td class="trHead">예약 상세번호</td>
+                      <td>${rdList.reservation.rvDischargeNo}</td>
                   </tr>
                   <tr>
-                    <td>예약자 이름</td>
-                    <td>정수댕</td>
+                    <td class="trHead">예약자 이름</td>
+                    <td>${rdList.reservation.rvName}</td>
+                    <td class="trHead">아이디</td>
+                    <td>${rdList.user.userId}</td>
                   </tr>
                   <tr>
-                    <td>이메일</td>
-                    <td>johndoe@example.com</td>
+                    <td class="trHead"> 신청 주소</td>
+                    <td colspan="3">${rdList.reservation.rvAddr}</td>
                   </tr>
                   <tr>
-                    <td>주소</td>
-                    <td>123 Main St, City</td>
+                      <td class="trHead">상세 주소</td>
+                      <td>${rdList.reservation.rvAddrDetail}</td>
+                    <td class="trHead">배출지역</td>
+                    <td>${rdList.district.districtName}</td>
                   </tr>
                   <tr>
-                    <td>배출지역</td>
-                    <td>전농동</td>
+                    <td class="trHead">신청일</td>
+                    <td colspan="3">${rdList.reservation.rvApplicationDate}</td>
                   </tr>
                   <tr>
-                    <td>신청일</td>
-                    <td>2023-10-03</td>
+                    <td class="trHead">수거 예약일 </td>
+                    <td colspan="3">${rdList.reservation.rvRvDate}</td>
                   </tr>
                   <tr>
-                    <td>배출 희망일</td>
-                    <td>2023-10-05</td>
+                      <td class="trHead">종류</td>
+                      <td>${rdList.wasteCategory.wasteCategoryName}</td>
+                    <td class="trHead">수거 물품</td>
+                    <td>${rdList.wasteType.wasteTypeName}</td>
                   </tr>
                   <tr>
-                    <td>배출 물품</td>
-                    <td>세탁기</td>
+                    <td class="trHead">결제 금액</td>
+                    <td colspan="3">${rdList.pay.payAmount}원</td>
                   </tr>
                   <tr>
-                    <td>결제 금액</td>
-                    <td>3000</td>
-                  </tr>
-                  <tr>
-                    <td>상태</td>
-                    <td>신청완료</td>
+                    <td class="trHead">상태</td>
+                      <c:if test="${rdList.reservation.isRvCompletion.toString() eq 'Y'}">
+                          <td colspan="3">예약접수 완료</td>
+                      </c:if>
+                      <c:if test="${rdList.reservation.isRvCompletion.toString() eq 'N'}">
+                          <td colspan="3">신청상태</td>
+                      </c:if>
                   </tr>           
               </table>
-              <div style="display: flex; justify-content: space-around;">
-                <button class="btn btn-success" style="width: 150px;">접수처리</button>
-                <button class="btn btn-success"  style="width: 150px;" onclick="location.href='../admin/localReservationManageMent.html'">목록으로</button>
-              </div>
+                </c:forEach>
+                <div style="display: flex; justify-content: space-around;">
+                    <c:choose>
+                        <c:when test="${not empty rdList and rdList[0].reservation.isRvCompletion.toString() eq 'N'}">
+                            <button class="btn btn-success" style="width: 150px; height: 50px" onclick="submitReservation(${rdList[0].reservation.rvNo})">접수처리</button>
+                        </c:when>
+                    </c:choose>
+                    <button class="btn btn-success" style="width: 150px;" onclick="goBack()">목록으로</button>
+                </div>
             </div>
           </div>
         </div>
@@ -144,12 +167,8 @@
   <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
+  <jsp:include page="/include/chatBot.jsp"></jsp:include>
   <script>
-    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-    ChannelIO('boot', {
-      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    });
 
     $(document).ready(function () {
       var trigger = $('.hamburger'),
@@ -179,6 +198,15 @@
             $('#wrapper').toggleClass('toggled');
       });  
     });
+
+    function submitReservation(rvNo){
+        window.location.href = '/admin/reservationUpdate.do?rvNo=' + rvNo;
+        alert("예약접수 완료 : 수거업체에 예약정보를 전달하였습니다.");
+    }
+
+    function goBack() {
+        window.history.back();
+    }
 
   </script>
   

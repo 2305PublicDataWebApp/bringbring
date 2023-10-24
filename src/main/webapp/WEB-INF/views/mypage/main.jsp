@@ -113,12 +113,9 @@
 	                                    <img src="${resInfo.image.imagePath }" class="rounded">
 	                                </div>
 	                                <div class="col-6 mt-5">
-	                                	<!-- <c:if test="${resInfo.reservationDetail.rvDetailTotal >= 2 }"> -->
-	                                    	<h2>${resInfo.wasteType.wasteTypeName }</h2>
-	                                    <!-- </c:if> -->
 	                                    <h2>${resInfo.wasteType.wasteTypeName }</h2>
 	                                    <p class="fs-4">예약 번호 ${resInfo.reservation.rvDischargeNo }</p>
-	                                    <p class="fs-4">결제 금액 ${resInfo.pay.payCurrency }${resInfo.pay.payAmount }</p>
+	                                    <p class="fs-4">결제 금액 ${resInfo.pay.payAmount}원</p>
 	                                </div>
 	                                <div class="col-3 text-end">
 	                                    <!-- 상세보기 모달 -->
@@ -261,7 +258,7 @@
 	    }
 	    console.log(matchedReservations);
 	    console.log(images);
-
+	    
 	    if (matchedReservations.length > 0) {
 	        // 모달을 열고 matchedReservation을 사용하여 모달 내용을 업데이트
 	        const modalBody = document.getElementById("modal_body_content");
@@ -277,24 +274,33 @@
 		        modalContent += '<p>연락처 : ' + matchedReservations[0].reservation.rvPhone + '</p>';
 		        modalContent += '<p>요청사항 : ' + matchedReservations[0].reservation.rvRequest + '</p>';
 
+		        var printedWasteTypeNos = []; // 중복 방지를 위한 배열
+		        
 	        // matchedReservations 배열에 대한 forEach 루프
 	        for (let i = 0; i < matchedReservations.length; i++) {
-	            modalContent += '<div class="row mb-2">';
-	            modalContent += '<div class="col-4 text-center">';
-	            modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded popup-image" onclick="openImagePopup(\''+ matchedReservations[i].image.imagePath +'\')">';
-	            modalContent += '</div>';
-	            modalContent += '<div class="col-8 row">';
-	            modalContent += '<div class="col-10 pt-4">';
-	            modalContent += '<h3>' + matchedReservations[i].wasteType.wasteTypeName + '</h3>';
-	            modalContent += '</div>';
-	            modalContent += '<div class="col-6">';
-	            modalContent += '<p>수량 :  1개</p>';
-	            modalContent += '</div>';
-	            modalContent += '<div class="col-6 text-end">';
-	            modalContent += '<p>' + matchedReservations[i].wasteInfo.wasteInfoFee + '</p>';
-	            modalContent += '</div>';
-	            modalContent += '</div>';
-	            modalContent += '</div>';
+	        	// 이미지 리스트 중복 제거위한 코드
+	        	const wasteTypeNo = matchedReservations[i].wasteType.wasteTypeNo;
+
+	            if (!printedWasteTypeNos.includes(wasteTypeNo)) {
+		            modalContent += '<div class="row mb-2">';
+		            modalContent += '<div class="col-4 text-center">';
+		            modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded popup-image" onclick="openImagePopup(\''+ matchedReservations[i].image.imagePath +'\')">';
+		            modalContent += '</div>';
+		            modalContent += '<div class="col-8 row">';
+		            modalContent += '<div class="col-10 pt-4">';
+		            modalContent += '<h3>' + matchedReservations[i].wasteType.wasteTypeName + '</h3>';
+		            modalContent += '</div>';
+		            modalContent += '<div class="col-6">';
+		            modalContent += '<p>수량 :  1개</p>';
+		            modalContent += '</div>';
+		            modalContent += '<div class="col-6 text-end">';
+		            modalContent += '<p>' + matchedReservations[i].wasteInfo.wasteInfoFee + '원</p>';
+		            modalContent += '</div>';
+		            modalContent += '</div>';
+		            modalContent += '</div>';
+		            
+		            printedWasteTypeNos.push(wasteTypeNo); // 중복 방지 배열에 추가
+	            }
 	        }
 
 	        modalContent += '</div>';
@@ -304,7 +310,7 @@
 	        modalContent += '<p class="fs-4 m-0">총 결제 금액</p>';
 	        modalContent += '</div>';
 	        modalContent += '<div class="col">';
-	        modalContent += '<p class="fs-4 m-0 text-end">' + matchedReservations[0].reservationDetail.rvDetailFee + '</p>';
+	        modalContent += '<p class="fs-4 m-0 text-end">' + matchedReservations[0].reservationDetail.rvDetailFee + '원</p>';
 	        modalContent += '</div>';
 	        modalContent += '</div>';
 	        modalContent += '</div>';
@@ -330,36 +336,30 @@
             var imageItem = document.createElement("img");
             imageItem.src = images[i];
             imageItem.classList.add("popup-thumbnail");
-            imageItem.onclick = function () {
-                changeImage(images.indexOf(this.src));
-            };
+            
+         // 이미지 목록에서 이미지를 클릭했을 때 해당 이미지를 보여주는 이벤트 핸들러 설정
+            (function (index) {
+            	imageItem.onclick = function () {
+                	changeImage(index);
+            	};
+        	})(i);
+         
             imageList.appendChild(imageItem);
         }
 
 	    // 이미지 팝업 모달 열기
 	    $('#imagePopup').modal('show');
 	}
-	function changeImage(offset) {
-        currentImageIndex += offset;
-        if (currentImageIndex < 0) {
-            currentImageIndex = images.length - 1;
-        } else if (currentImageIndex >= images.length) {
-            currentImageIndex = 0;
-        }
-        var popupImage = document.getElementById("popupImage");
-        popupImage.src = images[currentImageIndex];
-    }
+	function changeImage(index) {
+		currentImageIndex = index;
+	    var popupImage = document.getElementById("popupImage");
+	    popupImage.src = images[currentImageIndex];
+	}
 	</script>
+	
 
     <!-- 채널톡 api -->
-    <script>
-        (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-        ChannelIO('boot', {
-            "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-        });
-
-    </script>
+    <jsp:include page="/include/chatBot.jsp"></jsp:include>
 
 
 </body>

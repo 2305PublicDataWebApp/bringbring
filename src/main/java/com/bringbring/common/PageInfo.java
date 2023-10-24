@@ -25,5 +25,7 @@ public class PageInfo {
         this.naviCountPerPage = naviCountPerPage;
         this.startNavi = startNavi;
         this.endNavi = endNavi;
+
     }
+
 }

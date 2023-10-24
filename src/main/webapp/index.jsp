@@ -541,14 +541,15 @@
   <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
-  <script>
-    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
+<%--  <script>--%>
+<%--    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();--%>
 
-    ChannelIO('boot', {
-      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    });
+<%--    ChannelIO('boot', {--%>
+<%--      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"--%>
+<%--    });--%>
 
-  </script>
+<%--  </script>--%>
+  <jsp:include page="/include/chatBot.jsp"></jsp:include>
   <script>
     document.querySelector('.filter-button.all').addEventListener('click', function() {
         var sliderWrapper = document.querySelector('.swiper-wrapper');
@@ -745,19 +746,19 @@
       var hours = today.getHours()
 
       var baseTime;
-      if (hours >= 23 || hours < 2) {
+      if (hours >= 23 || hours < 5) {
         baseTime = "0200";
-      } else if (hours < 5) {
-        baseTime = "0500";
       } else if (hours < 8) {
-        baseTime = "0800";
+        baseTime = "0500";
       } else if (hours < 11) {
-        baseTime = "1100";
+        baseTime = "0800";
       } else if (hours < 14) {
-        baseTime = "1400";
+        baseTime = "1100";
       } else if (hours < 17) {
-        baseTime = "1700";
+        baseTime = "1400";
       } else if (hours < 20) {
+        baseTime = "1700";
+      } else if (hours < 23) {
         baseTime = "2000";
       } else {
         baseTime = "2300";
@@ -799,7 +800,6 @@
         ForecastGribURL += "&base_date=" + year + month + day;
         ForecastGribURL += "&base_time=" + baseTime   ;
         ForecastGribURL += "&nx=" + nx + "&ny=" + ny;
-
         $.ajax({
           url: ForecastGribURL,
           type: 'GET',
@@ -857,28 +857,29 @@
             var ment = "";
             var mentIcon = '';
             if (ptyValue === 0 && skyValue !==null) {
-              ment = "픽업 가능 ";
+              ment = "수거가능";
               mentIcon = 'bi-truck';
             } else if (ptyValue === 1 || ptyValue === 2) {
-              ment = "픽업 지연";
+              ment = "수거지연";
               mentIcon = 'bi-sign-stop';
             } else if (ptyValue === 3) {
-              ment = "픽업 지연";
+              ment = "수거지연";
               mentIcon = 'bi-sign-stop';
             }
             console.log(ment);
 
 
 // 날씨 정보를 캐러셀에 추가하는 로직
+            var textColor = (ment === "수거가능") ? '#0d6efd' : 'orange';
             var weatherInfo = '<div class="col-md-2">' +
-                    '<div class=icon-box>' +
-                    '<div class="icon"><i class="bi ' + iconClass + '"></i></div>' +
-                    '<h5 class="text-center"><a href=#>' + regionName + '</a></h5>' +
-                    '<p class="text-center">기온: ' + temp + ' ℃</p>' +
-                    '<p class="text-center">강수량: ' + rainAmount + ' </p>' +
-                    '<p class="text-center">강수확률: ' + rainProbability + ' %</p>' +
-                    '<p class="text-center">'+ ment + '</p>' +
-                    '<div class="icon"><i class="bi ' + mentIcon + '"></i></div>' +
+                    '<div class=icon-box style="margin: 0">' +
+                    '<div class="icon" style="margin: 5"><i class="bi ' + iconClass + '"></i></div>' +
+                    '<h5 class="text-center" style="margin:2; color: #00AD7C;">' + regionName + '</h5>' +
+                    '<p class="text-center" style="margin:0;">기온:' + temp + ' ℃</p>' +
+                    // '<p class="text-center">강수량: ' + rainAmount + ' </p>' +
+                    '<p class="text-center" style="margin:0;">강수확률: ' + rainProbability + ' %</p>' +
+                    '<p class="text-center" ><h6 style="color: ' + textColor + ';">' + ment + '</h6></p>' +
+                    // '<div class="icon"><i class="bi ' + mentIcon + '"></i></div>' +
                     '</div>';
 
             if (index % 6 === 0) {
@@ -899,7 +900,6 @@
               $('#weatherCarousel .carousel-inner .carousel-item:last-child .row').append(weatherInfo);
             }
 
-            console.log(index);
 
               // $('#weatherCarousel .carousel-inner .carousel-item:last-child .row').append(weatherInfo);
 

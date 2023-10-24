@@ -130,4 +130,52 @@ public class AdminStoreLogic implements AdminStore {
         return sqlSession.selectList("ReservationMapper.selectReservationList", null, rowBounds);
     }
 
+    @Override
+    public List<ReservationAdmin> selectReservationDetail(Integer rvNo) { return sqlSession.selectList("ReservationMapper.selectReservationDetail", rvNo); }
+
+    @Override
+    public int updateReservation(Integer rvNo) { return sqlSession.update("ReservationMapper.updateReservation", rvNo); }
+
+    @Override
+    public Admin selectAdminByNo(int userNo) { return sqlSession.selectOne("AdminMapper.selectAdminByNo", userNo); }
+
+    @Override
+    public List<ReservationAdmin> selectReservationListByNo(Integer regionNo, PageInfo pInfo) {
+        int limit = pInfo.getRecordCountPerPage();
+        int offset = (pInfo.getCurrentPage() - 1) * limit;
+        RowBounds rowBounds = new RowBounds(offset, limit);
+        return sqlSession.selectList("ReservationMapper.selectReservationListByNo", regionNo, rowBounds);
+    }
+
+    @Override
+    public int selectListResCountByNo(Integer regionNo) { return sqlSession.selectOne("ReservationMapper.selectListResCountByNo", regionNo); }
+
+    @Override
+    public int selectListCountByCompletionYByNo(Integer regionNo) { return sqlSession.selectOne("ReservationMapper.selectListCountByCompletionYByNo", regionNo); }
+
+    @Override
+    public int selectListCountByCompletionNByNo(Integer regionNo) { return sqlSession.selectOne("ReservationMapper.selectListCountByCompletionNByNo", regionNo); }
+
+    @Override
+    public int searchResListCount(Map<String, String> paramMap) { return sqlSession.selectOne("ReservationMapper.searchResListCount", paramMap);}
+
+    @Override
+    public List<ReservationAdmin> searchResByKeyword(PageInfo pInfo, Map<String, String> paramMap) {
+        int limit = pInfo.getRecordCountPerPage();
+        int offset = (pInfo.getCurrentPage() - 1) * limit;
+        RowBounds rowBounds = new RowBounds(offset, limit);
+        return sqlSession.selectList("ReservationMapper.searchResByKeyword", paramMap, rowBounds);
+    }
+
+    @Override
+    public int searchResLocalListCount(Map<String, String> paramMap) { return sqlSession.selectOne("ReservationMapper.searchResLocalListCount", paramMap); }
+
+    @Override
+    public List<ReservationAdmin> searchResLocalByKeyword(PageInfo pInfo, Map<String, String> paramMap) {
+        int limit = pInfo.getRecordCountPerPage();
+        int offset = (pInfo.getCurrentPage() - 1) * limit;
+        RowBounds rowBounds = new RowBounds(offset, limit);
+        return sqlSession.selectList("ReservationMapper.searchResLocalByKeyword", paramMap, rowBounds);
+    }
+
 }

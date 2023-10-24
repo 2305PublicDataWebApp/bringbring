@@ -5,6 +5,7 @@ import com.bringbring.image.domain.Image;
 import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.domain.InquireDetail;
 import com.bringbring.inquire.domain.InquireDetails;
+import com.bringbring.inquire.domain.InquireUpdate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -127,10 +128,36 @@ public interface InquireService {
     InquireDetail selectInquireDetailByNo(int inqNo);
 
     /**
-     * 한 문의글 당 사진 리스트 불러오기
+     * 한 문의글 당 사진 리스트 불러오기 service
      * @param inqNo
      * @return
      */
     List<Image> selectImageList(int inqNo);
+
+    InquireDetail encodingDetail(InquireDetail inquireDetail);
+
+    /**
+     * 문의 상세정보 불러오기(수정용) service
+     * @param inqNo
+     * @return
+     */
+    InquireUpdate selectInquireUpdate(int inqNo);
+
+    /**
+     * 문의 글 수정 service
+     * @param inquire
+     * @param uploadFiles
+     * @param deletePreImageNo
+     * @param request
+     * @return
+     */
+    int updateInquire(Inquire inquire, MultipartFile[] uploadFiles, int[] deletePreImageNo, HttpServletRequest request);
+
+    /**
+     * 문의글 삭제
+     * @param inqNo
+     * @return
+     */
+    int deleteInquire(int inqNo);
 }
 

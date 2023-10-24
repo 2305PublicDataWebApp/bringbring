@@ -87,6 +87,11 @@
 	<main id="main" class="main">
 		<form class="notice-form" action="/notice/update.do" method="post"
 			enctype="multipart/form-data">
+			<input type="hidden" name="userNo" value="${notice.userNo }">
+			<input type="hidden" name="noticeNo" value="${notice.noticeNo }">
+			<input type="hidden" name="imageName" value="${image.imageName }">
+			<input type="hidden" name="imageRename" value="${image.imageRename }">
+			<input type="hidden" name="imagePath" value="${image.imagePath }">
 			<h2>공지사항 수정</h2>
 			<hr>
 			<div class="container">
@@ -122,25 +127,29 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
-					<label for="inputNumber" class="col-sm-1 col-form-label">첨부파일</label>
-					<div class="col-sm-6">
-						<input class="form-control" type="file" id="formFile"
-							name="uploadFile">
-					</div>
-				</div>
+<div class="row mb-3">
+    <label for="inputNumber" class="col-sm-1 col-form-label">첨부파일</label>
+    <div class="col-sm-6">
+        <input class="form-control" type="file" id="formFile" name="uploadFile">
+        <c:choose>
+            <c:when test="${not empty image.imagePath}">
+                <a href="../resources/assets/nUploadFiles/img/${image.imageRename}">${image.imagePath}</a>
+            </c:when>
+        </c:choose>
+    </div>
+</div>
 
 				<div class="row mb-3">
 					<label for="summernote" class="col-sm-1 col-form-label">내용</label>
 					<div class="col-sm-10">
-						<textarea id="summernote" name="noticeContent"></textarea>
+						<textarea id="summernote" name="noticeContent">${notice.noticeContent}</textarea>
 					</div>
 				</div>
 			</div>
 			<hr>
 			<!-- <div class="col-sm-10"> -->
 			<button type="submit" class="btn btn-primary"
-				onclick="notice_check(event)">수정하기</button>
+				onclick="return notice_check();">수정하기</button>
 		</form>
 	</main>
 	<!-- End #main -->
@@ -166,44 +175,23 @@
   <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
-  <script>
-    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-    ChannelIO('boot', {
-      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    });
-  </script>
+ <jsp:include page="/include/chatBot.jsp"></jsp:include>
 
   <!-- summernote api -->
    <script src="../resources/assets/js/summernote/summernote-lite.js"></script>
   <script src="../resources/assets/js/summernote/lang/summernote-ko-KR.js"></script>
 	<script>
  	<!-- 써머노트 스크립트 -->
-	$(document).ready(function(){
-		$('#summernote').summernote({
-			height: 400,                 // 에디터 높이
-			minHeight: null,             // 최소 높이
-			maxHeight: 800,             // 최대 높이
-			focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-			lang: "ko-KR",					// 한글 설정
-			toolbar: [
-			    ['style', ['style']],
-			    ['font', ['bold', 'italic', 'underline', 'clear']],
-			    ['fontname', ['fontname']],
-			    ['color', ['color']],
-			    ['para', ['ul', 'ol', 'paragraph']],
-			    ['height', ['height']],
-			    ['table', ['table']],
-			    ['insert', ['link', 'picture', 'hr']],
-			    ['view', ['codeview']],
-			    ['help', ['help']]
-			  ],
-			placeholder: '내용을 작성하세요'	//placeholder 설정
-		});
-		// 저장한 HTML 내용을 여기에 추가
-		var savedHtmlContent = "<p>${notice.noticeContent}</p>";
-		$('#summernote').summernote('code', savedHtmlContent);
-	});
+ 	$(document).ready(function () {
+ 	    $('#summernote').summernote({
+ 	        placeholder: '내용을 작성하세요',
+ 	        height: 400,
+ 	        maxHeight: 800
+ 	    });
+
+ 	});
+	
+	
 
 	</script>
 

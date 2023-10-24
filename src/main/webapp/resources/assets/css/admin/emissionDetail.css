@@ -1,3 +1,7 @@
 table td{
-    border: 1px solid #ccc;
+    border: 1px solid #4a5464;
+}
+
+table .trHead {
+    background-color: #ccc;
 }

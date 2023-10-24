@@ -1,6 +1,8 @@
 package com.bringbring.inquire.controller;
 
 
+import com.bringbring.divide.domain.Divide;
+import com.bringbring.inquire.domain.InquireUpdate;
 import com.bringbring.inquire.service.InquireService;
 import com.bringbring.user.service.UserService;
 import com.bringbring.common.PageInfo;
@@ -87,12 +89,54 @@ public class InquireController {
 
 	@GetMapping("/detail.do")
 	public String showInquireDetail(Model model
-			, int inqNo){
+			, int inqNo
+			, HttpSession httpSession){
 
+		if((int)httpSession.getAttribute("sessionUserGrade") > 2){
+			User admin = userService.selectOneById((String)httpSession.getAttribute("sessionId"));
+			model.addAttribute("admin", admin);
+		}
 		InquireDetail inquireDetail = inquireService.selectInquireDetailByNo(inqNo);
+		InquireDetail encodingDetail = inquireService.encodingDetail(inquireDetail);
 		List<Image> imageList = inquireService.selectImageList(inqNo);
-		model.addAttribute("inqDetail", inquireDetail).addAttribute("iList", imageList);
+
+		model.addAttribute("inqDetail", encodingDetail).addAttribute("iList", imageList);
 		return "inquire/detail";
+	}
+
+	@GetMapping("/update.do")
+	public String showInquireUpdate(Model model,
+			int inqNo) {
+
+		List<Image> imageList = inquireService.selectImageList(inqNo);
+		if(!imageList.isEmpty()){
+			model.addAttribute("iList", imageList);
+		}
+		InquireUpdate inquireUpdate = inquireService.selectInquireUpdate(inqNo);
+		List<City> cityList = regionService.selectCityList();
+		model.addAttribute("cList", cityList).addAttribute("iData", inquireUpdate);
+
+		return "inquire/update";
+	}
+
+	@PostMapping("/update.do")
+	public String updateInquire(Inquire inquire
+			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
+			, @RequestParam (value="deletePreImageNo", required = false) int[] deletePreImageNo
+			, HttpServletRequest request) {
+
+		int result = inquireService.updateInquire(inquire, uploadFiles, deletePreImageNo, request);
+		if(result > 0){
+			return "redirect:/inquire/detail.do?inqNo="+inquire.getInqNo();
+		}else{
+			return "/";
+		}
+	}
+
+	@GetMapping("/delete.do")
+	public String deleteInquire(int inqNo) {
+		inquireService.deleteInquire(inqNo);
+		return "redirect:/inquire/list.do";
 	}
 
 

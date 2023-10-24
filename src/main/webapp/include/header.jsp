@@ -33,7 +33,7 @@
 	          
 	          <c:if test="${sessionScope.sessionId eq null}">
 				<li>
-					<button onclick="login();" class="getstarted scrollto">로그인</button>
+					<button type="button" onclick="login();" class="getstarted scrollto">로그인</button>
 				</li>
 			</c:if>
 			<c:if test="${sessionScope.sessionId ne null}">
@@ -46,13 +46,13 @@
 								<li><a href="/admin/reportList.do">신고 관리</a></li>
 							</c:if>
 							<li><a href="/admin/contactList.do">문의 관리</a></li>
-							<li><a href="/admin/reservationList.do">배출 관리</a></li>
+							<li><a href="/admin/reservationList.do">수거 관리</a></li>
 						</ul>
 					</li>
 				</c:if>
 				<li><a class="nav-link scrollto" href="/mypage/main.do">${sessionScope.sessionName }님</a></li>
 			    <li>
-			    	<button onclick="logout();" class="getstarted scrollto">로그아웃</button>
+			    	<button type="button" onclick="logout();" class="getstarted scrollto">로그아웃</button>
 			    </li>
 			</c:if>
 	        </ul>
@@ -61,9 +61,9 @@
 	
 	    </div>
 	  	</header><!-- End Header -->
-<%--	  	<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>--%>
+	  	<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 	  	<script>
-<%--	  		<jsp:include page="/include/loginJs.jsp"></jsp:include>--%>
+	  		<jsp:include page="/include/loginJs.jsp"></jsp:include>
 		</script>
 	</body>
 </html>

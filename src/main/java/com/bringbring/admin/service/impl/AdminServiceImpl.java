@@ -125,5 +125,38 @@ public class AdminServiceImpl implements AdminService  {
     @Override
     public List<ReservationAdmin> selectReservationList(PageInfo pInfo) { return adminStore.selectReservationList(pInfo); }
 
+    @Override
+    public List<ReservationAdmin> selectReservationDetail(Integer rvNo) {return adminStore.selectReservationDetail(rvNo);}
+
+    @Override
+    public int updateReservation(Integer rvNo) { return adminStore.updateReservation(rvNo);}
+
+    @Override
+    public Admin selectAdminByNo(int userNo) { return adminStore.selectAdminByNo(userNo); }
+
+    @Override
+    public List<ReservationAdmin> selectReservationListByNo(Integer regionNo, PageInfo pInfo) { return adminStore.selectReservationListByNo(regionNo, pInfo); }
+
+    @Override
+    public int selectListResCountByNo(Integer regionNo) { return adminStore.selectListResCountByNo(regionNo); }
+
+    @Override
+    public int selectListCountByCompletionYByNo(Integer regionNo) { return adminStore.selectListCountByCompletionYByNo(regionNo); }
+
+    @Override
+    public int selectListCountByCompletionNByNo(Integer regionNo) { return adminStore.selectListCountByCompletionNByNo(regionNo); }
+
+    @Override
+    public int searchResListCount(Map<String, String> paramMap) { return adminStore.searchResListCount(paramMap); }
+
+    @Override
+    public List<ReservationAdmin> searchResByKeyword(PageInfo pInfo, Map<String, String> paramMap) { return adminStore.searchResByKeyword(pInfo,paramMap); }
+
+    @Override
+    public int searchResLocalListCount(Map<String, String> paramMap) { return adminStore.searchResLocalListCount(paramMap); }
+
+    @Override
+    public List<ReservationAdmin> searchResLocalByKeyword(PageInfo pInfo, Map<String, String> paramMap) { return adminStore.searchResLocalByKeyword(pInfo,paramMap); }
+
 
 }

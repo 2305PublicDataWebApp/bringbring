@@ -5,6 +5,7 @@ import com.bringbring.image.domain.Image;
 import com.bringbring.inquire.domain.Inquire;
 import com.bringbring.inquire.domain.InquireDetail;
 import com.bringbring.inquire.domain.InquireDetails;
+import com.bringbring.inquire.domain.InquireUpdate;
 
 import java.util.List;
 import java.util.Map;
@@ -114,4 +115,32 @@ public interface InquireStore {
      * @return
      */
     List<Image> selectImageList(int inqNo);
+
+    /**
+     * 문의글 상세정보 불러오기(수정용) store
+     * @param inqNo
+     * @return
+     */
+    InquireUpdate selectInquireUpdate(int inqNo);
+
+    /**
+     * 문의글 상세정보 수정 store
+     * @param inquire
+     * @return
+     */
+    int updateInquire(Inquire inquire);
+
+    /**
+     * 문의글 기존 사진 삭제 store
+     * @param imageNo
+     * @return
+     */
+    int deleteImage(int imageNo);
+
+    /**
+     * 문의글 삭제 store
+     * @param inqNo
+     * @return
+     */
+    int deleteInquire(int inqNo);
 }

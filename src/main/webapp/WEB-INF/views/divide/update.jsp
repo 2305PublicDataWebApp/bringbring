@@ -625,11 +625,6 @@
 
 		let tr = e.target;
 
-		// for (let i = 0; i < tr.length; i++) {
-		// 	let cellValue = tr[i].innerHTML; // or cells[i].textContent.
-		// 	console.log(cellValue);
-		// }
-
 		console.log("number : "+number);
 		const li = document.createElement('li');
 		const div = document.createElement('div');
