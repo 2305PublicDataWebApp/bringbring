@@ -30,7 +30,13 @@ public interface ReservationService {
 
     PageInfo getPageInfo(Integer currentPage, int userNo, int totalCount);
 
-    List<ReservationComplete> selectReservationList(PageInfo pageInfo, int userNo);
+//    List<ReservationComplete> selectReservationList(PageInfo pageInfo, int userNo);
 
     List<WasteData> AllWasteList();
+
+    Pay selectPayInfoByPayId(String payId);
+
+    CancelRequest selectPayIdByDischargeNo(String dischargeNo);
+
+    List<ReservationComplete> selectMyReservationList(PageInfo pageInfo, int userNo);
 }

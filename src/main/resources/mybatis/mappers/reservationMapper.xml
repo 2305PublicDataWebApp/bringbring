@@ -17,6 +17,11 @@
         <association property="connection" resultMap="connection"/>
         <association property="image" resultMap="image"/>
     </resultMap>
+    <resultMap id="cancelRequest" type="com.bringbring.reservation.domain.CancelRequest">
+        <association property="reservation" resultMap="reservation"/>
+        <association property="reservationDetail" resultMap="reservationDetail"/>
+        <association property="pay" resultMap="pay"/>
+    </resultMap>
     <resultMap id="wasteCategory" type="com.bringbring.reservation.domain.WasteCategory">
         <id property="wasteCategoryNo" column="WASTE_CATEGORY_NO" />
         <result property="wasteCategoryName" column="WASTE_CATEGORY_NAME" />
@@ -132,7 +137,9 @@
         <selectKey keyProperty="rvDeatilNo" order="AFTER" resultType="int">
             SELECT SEQ_RV_DETAIL_NO.CURRVAL AS rvNo FROM DUAL
         </selectKey>
-        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, #{rvNo}, #{rvDetailTotal}, #{rvDetailFee})
+        insert into RESERVATION_DETAIL_TBL values (
+            SEQ_RV_DETAIL_NO.NEXTVAL, #{rvNo}, #{rvDetailTotal}, #{rvDetailFee}
+                                               )
     </insert>
 
     <insert id="insertReservationImage" parameterType="com.bringbring.image.domain.Image">
@@ -140,19 +147,38 @@
             SELECT SEQ_IMAGE_NO.CURRVAL AS rvNo FROM DUAL
         </selectKey>
         insert into IMAGE_TBL values (
-        SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath}
+            SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath}
         )
     </insert>
     <insert id="insertConnection">
         insert into RV_CONNECTION_TBL values (
-                                                 SEQ_RV_CONNECTION_NO.NEXTVAL, #{rvDetailNo}, #{wasteInfoNo}, #{imageNo}
+             SEQ_RV_CONNECTION_NO.NEXTVAL, #{rvDetailNo}, #{wasteInfoNo}, #{imageNo}
                                              )
     </insert>
     <insert id="insertPay">
         insert into PAY_TBL values (
-                                       SEQ_PAY_NO.NEXTVAL, #{rvDetailNo}, #{userId}, #{payId}, #{payMethod}, #{payAmount}, #{payCurrency}, SYSDATE, DEFAULT, DEFAULT
+           SEQ_PAY_NO.NEXTVAL, #{rvDetailNo}, #{userId}, #{payId}, #{payMethod}, #{payAmount}, #{payCurrency}, SYSDATE, DEFAULT, DEFAULT
                                    )
     </insert>
+    <insert id="insertPayCancel">
+        insert into PAY_CANCEL_TBL values (
+              SEQ_P_CANCEL_NO.NEXTVAL, #{payNo}, SYSDATE, #{cancelAmount}
+        )
+    </insert>
+
+    <update id="updateReservationIsCancel">
+        update RESERVATION_TBL
+            set IS_RV_CANCEL = 'Y'
+            where RV_NO = #{rvNo}
+    </update>
+    <update id="updatePayIsCancel">
+        update PAY_TBL
+            set IS_PAY_CANCEL = 'Y'
+            where RV_DETAIL_NO = #{rvDeatilNo}
+    </update>
+
+
+
     <select id="selectWasteList" resultMap="wasteDataResultMap">
         select * from WASTE_CATEGORY_TBL
                           JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
@@ -264,12 +290,42 @@
                  JOIN RESERVATION_TBL USING (RV_NO)
                  JOIN PAY_TBL USING (RV_DETAIL_NO)
         WHERE USER_NO = #{userNo}
-        GROUP BY RV_NO, RV_APPLICATION_DATE, RV_RV_DATE, RV_DETAIL_TOTAL, RV_DETAIL_FEE, RV_DISCHARGE_NO, IS_RV_COMPLETION, IS_RV_CANCEL
-        ORDER BY RV_NO ASC
+        ORDER BY RV_NO DESC
     </select>
     <select id="selectAllWasteList" resultMap="wasteDataResultMap">
         select * from WASTE_CATEGORY_TBL
                           JOIN WASTE_TYPE_TBL USING (WASTE_CATEGORY_NO)
                           JOIN WASTE_INFO_TBL USING (WASTE_TYPE_NO)
+    </select>
+    <select id="selectReservationByuserNo" resultMap="reservationComplete">
+        SELECT * FROM WASTE_CATEGORY_TBL
+                          join WASTE_TYPE_TBL using (WASTE_CATEGORY_NO)
+                          join WASTE_INFO_TBL using (WASTE_TYPE_NO)
+                          join RV_CONNECTION_TBL using (WASTE_INFO_NO)
+                          join IMAGE_TBL using (IMAGE_NO)
+                          join RESERVATION_DETAIL_TBL using (RV_DETAIL_NO)
+                          join RESERVATION_TBL using (RV_NO)
+                          join PAY_TBL using (RV_DETAIL_NO)
+        WHERE USER_NO = #{userNo}
+        ORDER BY RV_NO DESC
+    </select>
+    <select id="selectPayInfoByPayId" resultMap="pay">
+        select * from PAY_TBL
+            where PAY_ID = #{value}
+    </select>
+    <select id="selectReservationNoByRvNo" resultMap="reservation">
+        select * from RESERVATION_TBL
+            where RV_NO = #{rvNo}
+    </select>
+    <select id="selectReservationDetailByDetailNo" resultMap="reservationDetail">
+        select * from RESERVATION_DETAIL_TBL
+            where RV_DETAIL_NO = #{RvDetailNo}
+    </select>
+    <select id="selectPayIdByDischargeNo" resultMap="cancelRequest">
+        select PAY_ID from RESERVATION_TBL
+                               join RESERVATION_DETAIL_TBL USING (RV_NO)
+                               join PAY_TBL USING (RV_DETAIL_NO)
+        where RV_DISCHARGE_NO = #{dischargeNo}
+
     </select>
 </mapper>

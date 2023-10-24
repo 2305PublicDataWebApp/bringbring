@@ -144,13 +144,23 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<ReservationComplete> selectReservationList(PageInfo pageInfo, int userNo) {
-        return reservationStore.selectReservationList(pageInfo, userNo);
+    public List<ReservationComplete> selectMyReservationList(PageInfo pageInfo, int userNo) {
+        return reservationStore.selectMyReservationList(pageInfo, userNo);
     }
 
     @Override
     public List<WasteData> AllWasteList() {
         return reservationStore.selectAllWasteList();
+    }
+
+    @Override
+    public Pay selectPayInfoByPayId(String payId) {
+        return reservationStore.selectPayInfoByPayId(payId);
+    }
+
+    @Override
+    public CancelRequest selectPayIdByDischargeNo(String dischargeNo) {
+        return reservationStore.selectPayIdByDischargeNo(dischargeNo);
     }
 
 
