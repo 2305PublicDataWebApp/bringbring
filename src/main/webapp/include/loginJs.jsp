@@ -11,6 +11,12 @@
         location.href = "/user/login.do";
         }
      function logout(){
-    	Kakao.Auth.logout()
+    	// Kakao.Auth.logout()
      	location.href = "/user/logout.do";
      }
+
+function loginCheck(){
+    if(confirm("로그인 후 사용가능한 기능입니다. 로그인 페이지로 이동하시겠습니까?")){
+        location.href="/user.login.do";
+    }
+}

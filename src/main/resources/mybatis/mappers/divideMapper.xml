@@ -173,7 +173,7 @@
 			WHERE IMAGE_GROUP_NO = A.DIV_NO
 			  AND TABLE_NAME = 'divide'  -- This condition checks for TABLE_NAME
 		)
-		ORDER BY A.DIV_NO DESC;
+		ORDER BY A.DIV_NO DESC
 	</select>
   	<select id="selectMaxNo" resultType="_int">
   		SELECT MAX(DIV_NO) FROM DIVIDE_TBL

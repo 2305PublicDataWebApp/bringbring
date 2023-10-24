@@ -101,7 +101,7 @@
       margin: 5px 15px 0px 15px;
       border-bottom: 0px;
     }
-    .deleteBtn{
+    .deleteBtn, .realDeleteBtn{
       border: 1px solid rgb(25, 135, 84);
       background: rgb(255, 255, 255);
       color: rgb(25, 135, 84);
@@ -127,15 +127,15 @@
   <main style="width: 100%;margin: 0 auto;padding-top: 50px;">
     <!-- 글쓰기 텍스트 영역 -->
     <div style="margin: 0 auto;text-align: center;margin: 30px 0px 70px 0px;">
-      <h2>문의 글 작성</h2>
+      <h2>문의 글 수정</h2>
     </div>
     <div style="width: 1000px; margin: 0 auto; border: 2px solid #ccc;padding: 20px 0px;">
-      <form name="insertForm" action="/inquire/update.do" method="post" enctype="multipart/form-data">
+      <form name="updateForm" action="/inquire/update.do" method="post" enctype="multipart/form-data">
         <div style="margin: 0 auto;width: 800px;">
           <ul class="divide-insert-menu" style="padding: 0px;">
             <li>
               <label for="inqTitle">*제목</label>
-              <input name="inqTitle" type="text" id="inqTitle">
+              <input name="inqTitle" type="text" id="inqTitle" value="${iData.inquire.inqTitle}">
             </li>
             <li class="file-li" style="padding-bottom: 10px;">
               <label>*사진</label>
@@ -144,7 +144,7 @@
             <li>
               <div style="font-size: 14px;color: #a6a5a5;margin-left: 150px;display:flex;width: 100%;">
                 <div style="width: 30%;">
-                  이미지 개수 <span id="imageCount">0</span> / 5
+                  이미지 개수 <span id="imageCount">${iList.size()}</span> / 5
                 </div>
                 <div style="float:right;width: 70%;text-align: right;padding-right: 18px;">
                   #이미지 파일은 1~5개까지 첨부 가능합니다.
@@ -153,14 +153,24 @@
             </li>
             <li style="padding: 0px 15px 0px 15px;">
               <div class="image-list" style="width: 900px;padding-left: 150px;">
+                <c:forEach var="image" items="${iList}" varStatus="i">
+                  <div class="sortLeft">
+                    <div class="imgPreview preImagePreview" style="background-image: url('${image.imagePath}');"></div>
+                    <button type="button" onclick="deletePreImage(this);" data-number="${image.imageNo}" class="realDeleteBtn btn btn-success">삭제하기</button>
+                  </div>
+                </c:forEach>
               </div>
             </li>
-            <li>
-              <label for="cityNo">*지역</label>
-  <%--            ${cList}--%>
+            <li id="regionArea">
+              <label for="cityNo">지역</label>
               <select name="cityNo" id="cityNo" onchange="citySelect();" style="width: 100px;margin-right: 15px;">
                 <c:forEach var="city" items="${cList}" >
-                  <option value="${city.cityNo}">${city.cityName}</option>
+                  <c:if test="${city.cityNo eq  iData.inquire.cityNo}">
+                    <option value="${city.cityNo}" selected>${city.cityName}</option>
+                  </c:if>
+                  <c:if test="${city.cityNo ne  iData.inquire.cityNo}">
+                    <option value="${city.cityNo}">${city.cityName}</option>
+                  </c:if>
                 </c:forEach>
               </select>
               <select name="districtNo" id="districtNo" style="width: 150px;">
@@ -170,17 +180,18 @@
               <label for="inqCategory">*유형</label>
               <select name="inqCategory" id="inqCategory" style="width: 600px;margin-right: 15px;">
                 <option value="selectInquire">문의 유형을 선택해주세요</option>
-                <option value="delivery">배송 연착, 배송 환불 관련 문의사항</option>
-                <option value="divide">나눔 게시판 관련 문의사항</option>
-                <option value="chatting">채팅 관련 문의사항</option>
-                <option value="improvement">개선하면 좋을 점</option>
-                <option value="etc">기타</option>
+                <option value="delivery" <c:if test="${iData.inquire.inqCategory eq 'delivery'}">selected</c:if>>배송 연착, 배송 환불 관련 문의사항</option>
+                <option value="divide" <c:if test="${iData.inquire.inqCategory eq 'divide'}">selected</c:if>>나눔 게시판 관련 문의사항</option>
+                <option value="chatting" <c:if test="${iData.inquire.inqCategory eq 'chatting'}">selected</c:if>>채팅 관련 문의사항</option>
+                <option value="improvement" <c:if test="${iData.inquire.inqCategory eq 'improvement'}">selected</c:if>>개선하면 좋을 점</option>
+                <option value="etc" <c:if test="${iData.inquire.inqCategory eq 'etc'}">selected</c:if>>기타</option>
               </select>
             </li>
             <li>
               <label for="summernote">*내용</label>
               <div id="" class="d-flex justify-content-center flex-column" style="width: 600px;">
-                <textarea name="inqContent" id="summernote" spellcheck="false" required></textarea>
+                <textarea name="inqContent" id="summernote" spellcheck="false" required>${iData.inquire.inqContent}</textarea>
+                <input name="inqNo" type="hidden" value="${iData.inquire.inqNo}">
               </div>
             </li>
           </ul>
@@ -273,7 +284,7 @@
     $(document).ready(function() {
       $.ajax({
         url: "/divide/selectDistrict.do",
-        data: { cityNo: 1 },
+        data: { cityNo: ${iData.inquire.cityNo} },
         type: "POST",
         success: function(data) {
           var districtNo = document.getElementById("districtNo");
@@ -282,6 +293,9 @@
             var option = document.createElement("option");
             option.value = data[i].districtNo;
             option.text = data[i].districtName;
+            if(data[i].districtNo === ${iData.inquire.districtNo}) {
+              option.selected = true;
+            }
             districtNo.appendChild(option);
           }
         },
@@ -294,7 +308,7 @@
     });
     function citySelect() {
       var cityNo = document.getElementById("cityNo").value;
-      var districtNo = document.getElementById("districtNo");
+      var districtNo = document.querySelector("#districtNo");
       districtNo.innerHTML = "";
       if(cityNo !== "0"){
         $.ajax({
@@ -320,7 +334,7 @@
 
   </script>
   <script>
-    const form = document.forms.insertForm;
+    const form = document.forms.updateForm;
     function checkSubmit(){
         // event.preventDefault();
         const inqTitle = form.querySelector("#inqTitle").value;
@@ -329,6 +343,7 @@
         const inqCategory = form.querySelector("#inqCategory").value;
         // 파일 input 엘리먼트 가져오기
         const fileInput = form.querySelector('input[type="file"][name="uploadFiles"]');
+        var imageCountElement = document.querySelector("#imageCount");
         // 선택된 파일 가져오기
         const selectedFile = fileInput.files[0];
 
@@ -337,10 +352,8 @@
         // 유효성 검사
         if (inqTitle.trim() === "") {
         alert("제목을 입력해주세요.");
-        } else if (!selectedFile) {
-        alert("사진은 한 개 이상 등록해주세요.");
-        } else if (inputElements.length > 6) {
-        alert("5개까지의 파일만 업로드할 수 있습니다.");
+        }else if (parseInt(imageCountElement.innerHTML) < 1) {
+          alert("사진은 한 개 이상 등록해주세요.");
         }else if (cityNo === "0") {
         alert("지역을 선택해주세요.");
         } else if (inqCategory === "selectInquire") {
@@ -354,32 +367,24 @@
     }
   </script>
   <script>
-    const imgCount = {};
+    <!-- 로그인, 로그아웃 -->
 
     var number = 1;
     var delNumber = 1;
     const imgUploads = document.querySelectorAll('input[name="uploadFiles"]');
     var imgPreview = document.querySelector('.image-list');
+    var imageCountElement = document.querySelector("#imageCount");
 
     function handlerInputChange(e) {
 
-      var imageCountElement = document.querySelector("#imageCount");
       var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+      var preImagePreview = document.getElementsByClassName("preImagePreview");
       if (parseInt(imageCountElement.innerHTML) > 4) {
         alert("5장 이상 사진을 추가할 수 없습니다.");
-        imageCountElement.innerHTML = (inputElements.length - 1).toString();
-        return;
+        imageCountElement.innerHTML = (inputElements.length - 1 + preImagePreview.length).toString();
+        e.target.value = '';
+        return false;
       }
-      const tr = e.target.closest('tr');
-      if (!imgCount[tr]) {
-        imgCount[tr] = 0;
-      }
-
-      imgCount[tr]++;
-
-      // console.log('뭔데?????' + imgCount[tr]);
-
-
 
       // input file추가
       const newInput = document.createElement('input');
@@ -409,10 +414,10 @@
     });
     function getImgs(e) {
 
-      var imageCountElement = document.querySelector("#imageCount");
       var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+      var preImagePreview = document.getElementsByClassName("preImagePreview");
       if (parseInt(imageCountElement.innerHTML) > 4) {
-        imageCountElement.innerHTML = (inputElements.length - 1).toString();
+        imageCountElement.innerHTML = (inputElements.length - 1 + preImagePreview.length).toString();
         e.target.value = '';
         return false;
       }
@@ -443,11 +448,6 @@
 
       let tr = e.target;
 
-      // for (let i = 0; i < tr.length; i++) {
-      // 	let cellValue = tr[i].innerHTML; // or cells[i].textContent.
-      // 	console.log(cellValue);
-      // }
-
       console.log("number : "+number);
       const li = document.createElement('li');
       const div = document.createElement('div');
@@ -472,8 +472,6 @@
       delNumber++;
 
 
-      console.log(imgCount);
-
       function deleteImage(obj) {
         const parentElement = obj.parentElement;
         console.log(parentElement);
@@ -483,9 +481,10 @@
       }
 
       var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
-      var imageCountElement = document.querySelector("#imageCount");
+      var preImagePreview = document.getElementsByClassName("preImagePreview");
       imageCountElement.innerHTML = '';
-      imageCountElement.innerHTML = (inputElements.length - 1).toString();
+      imageCountElement.innerHTML = (inputElements.length - 1 + preImagePreview.length).toString();
+      // console.log(inputElements.length - 1);
 
       deleteBtn.addEventListener('click', function(event) {
         // 클릭한 deleteBtn에 접근하기 위해 event.target을 사용합니다.
@@ -495,23 +494,11 @@
         // btnNumber를 사용하여 해당 id를 가진 요소를 선택하고 제거합니다.
         document.querySelector("#inputFile" + btnNumber).remove();
 
-        let trClicked = e.target;
-
-        while (trClicked && trClicked.tagName !== 'TR') {
-          trClicked = trClicked.parentElement;
-        }
-
-        if (trClicked) {
-          imgCount[trClicked]--; // trClicked 엘리먼트가 존재하면 imgCount[trClicked]를 감소
-        }
-
-        console.log('이미지' + imgCount);
-        console.log(imgCount[trClicked]);
 
         var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
-        var imageCountElement = document.querySelector("#imageCount");
+        var preImagePreview = document.getElementsByClassName("preImagePreview");
         imageCountElement.innerHTML = '';
-        imageCountElement.innerHTML = (inputElements.length - 1).toString();
+        imageCountElement.innerHTML = (inputElements.length - 1 + preImagePreview.length).toString();
       });
 
       return div;
@@ -523,6 +510,23 @@
       // input.addEventListener('change', handlerInputChange)
     });
     document.querySelector('input[name="uploadFiles"]').addEventListener('change', getImgs);
+
+    function deletePreImage(obj) {
+      // 새로운 input 엘리먼트를 생성합니다.
+      const inputElement = document.createElement('input');
+
+      // input의 name 속성을 'deletePreImage'로 설정하고 value를 imageNo로 설정합니다.
+      inputElement.name = 'deletePreImageNo';
+      inputElement.value = obj.getAttribute('data-number');
+      inputElement.style.display = "none";
+      obj.parentElement.parentElement.appendChild(inputElement);
+      obj.parentElement.remove();
+
+      var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
+      var preImagePreview = document.getElementsByClassName("preImagePreview");
+      imageCountElement.innerHTML = '';
+      imageCountElement.innerHTML = (inputElements.length - 1 + preImagePreview.length).toString();
+    }
   </script>
   
 </body>
