@@ -73,6 +73,7 @@
 		<result property="districtNo" column="DISTRICT_NO" />
 		<result property="inqCategory" column="INQ_CATEGORY" />
 		<result property="cityName" column="CITY_NAME" />
+		<result property="districtName" column="DISTRICT_NAME" />
 	</resultMap>
 
 	<select id="selectInqListCount" resultType="_int">
@@ -80,22 +81,27 @@
 	</select>
 
 	<select id="selectInquireList" resultMap="InquireDetailsResultMap">
-		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY
+		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN,
+			   d.DISTRICT_NAME, i.INQ_CATEGORY
 		FROM INQUIRE_TBL i
-		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+				 JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+				 JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
 	</select>
 
+
 	<select id="selectInquiriesByAnswer" resultMap="InquireDetailsResultMap">
-		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY
+		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY, d.DISTRICT_NAME
 		FROM INQUIRE_TBL i
 		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+		JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
 		WHERE i.ANSWER_YN = #{answerYn}
 	</select>
 
 	<select id="selectInquireByCityNo" resultMap="InquireDetailsResultMap">
-		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY
+		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY, d.DISTRICT_NAME
 		FROM INQUIRE_TBL i
 				 JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+				 JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
 		WHERE i.CITY_NO = #{cityNo}
 	</select>
 
@@ -118,12 +124,12 @@
 		SELECT COUNT(*)
 		FROM INQUIRE_TBL i
 		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
-		JOIN CITY_TBL c ON i.CITY_NO = c.CITY_NO
+		JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
 		<if test="searchCondition == 'all'">
-			WHERE c.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR u.USER_ID LIKE '%'||#{searchKeyword}||'%' OR i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
+			WHERE d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%' OR u.USER_ID LIKE '%'||#{searchKeyword}||'%' OR i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
 		</if>
 		<if test="searchCondition == 'city'">
-			WHERE c.CITY_NAME LIKE '%'||#{searchKeyword}||'%'
+			WHERE d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
 		</if>
 		<if test="searchCondition == 'id'">
 			WHERE u.USER_ID LIKE '%'||#{searchKeyword}||'%'
@@ -134,15 +140,15 @@
 	</select>
 
 	<select id="searchInquireByKeyword" resultMap="InquireDetailsResultMap">
-		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY
+		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY, d.DISTRICT_NAME
 		FROM INQUIRE_TBL i
 		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
-		JOIN CITY_TBL c ON i.CITY_NO = c.CITY_NO
+		JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
 		<if test="searchCondition == 'all'">
-			WHERE c.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR u.USER_ID LIKE '%'||#{searchKeyword}||'%' OR i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
+			WHERE d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%' OR u.USER_ID LIKE '%'||#{searchKeyword}||'%' OR i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
 		</if>
 		<if test="searchCondition == 'city'">
-			WHERE c.CITY_NAME LIKE '%'||#{searchKeyword}||'%'
+			WHERE d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
 		</if>
 		<if test="searchCondition == 'id'">
 			WHERE u.USER_ID LIKE '%'||#{searchKeyword}||'%'

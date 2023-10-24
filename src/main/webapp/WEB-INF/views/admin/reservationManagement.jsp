@@ -132,7 +132,6 @@
         </div>
         <div class="input-group" style="width: 400px; height: 30px;">
           <select class="form-select"  name="searchCondition" aria-label=".form-select-lg example" style="width: 20%;" id="searchCriteria">
-            <option value="all">전체</option>
             <option value="district">배출지역</option>
             <option value="applicationDate">신청일</option>
             <option value="reservationDate">예약일</option>
@@ -146,6 +145,15 @@
       <br/>
       <div class="table-responsive">
         <table id="reservationTable" class="table align-middle text-center">
+          <colgroup>
+            <col width="10%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+          </colgroup>
             <thead class="table-success align-middle">
                 <tr>
                     <th>예약 번호</th>
@@ -348,82 +356,90 @@
       }
     });
 
-
-    $('#user-search-btn').on('click', function(event) {
+    function performSearch(pageNumber) {
       var searchCondition = $('select[name="searchCondition"]').val();
       var searchKeyword = $('input[name="searchKeyword"]').val();
-      var pageNumber = $('input[name="pageName"]').val();
-      event.preventDefault();
-      if (searchCondition !== null && searchCondition !== '') {
-        $.ajax({
-          type: 'POST',
-          url: '/admin/reservationSearch.do?page=' + pageNumber,
-          data: {searchCondition: searchCondition, searchKeyword: searchKeyword},
-          dataType: 'json',
-          async: false,
-          success: function (searchData) {
-            var reservationList = searchData.reservationList; // searchData에서 데이터를 가져와야 합니다.
-            var pageInfo = searchData.pInfo; // searchData에서 데이터를 가져와야 합니다.
-          console.log(searchData);
-            // 테이블 바디를 찾습니다
-            var tbody = $('#reservationTable tbody');
-            tbody.empty(); // 기존 tbody 내용을 지웁니다.
 
-            // 서버에서 받은 JSON 데이터를 사용하여 새로운 행을 생성하고 테이블에 추가합니다
-            for (var i = 0; i < reservationList.length; i++) {
-              var res = reservationList[i];
-              var row = "<tr>" +
-                      "<td>" + res.reservation.rvNo + "</td>" +
-                      "<td>" + res.reservation.rvName + "</td>" +
-                      "<td>" + res.district.districtName + "</td>" +
-                      "<td>" + res.reservation.rvApplicationDate + "</td>" +
-                      "<td>" + res.reservation.rvRvDate + "</td>" +
-                      "<td>" + res.pay.isPayStatus + "</td>" +
-                      "<td>";
-              if (res.reservation.isRvCompletion.toString() === 'Y') {
-                row += "<button type='button' class='btn btn-light' onclick='redirectToReservationDetail(" + res.reservation.rvNo + ")'>예약완료</button>";
-              } else {
-                row += "<button type='button' class='btn btn-success' onclick='redirectToReservationDetail(" + res.reservation.rvNo + ")'>예약접수</button>";
-              }
-              row += "</td></tr>";
+      // AJAX 요청
+      $.ajax({
+        type: 'POST',
+        url: '/admin/reservationSearch.do?page=' + pageNumber,
+        data: {searchCondition: searchCondition, searchKeyword: searchKeyword},
+        dataType: 'json',
+        async: false,
+        success: function (searchData) {
+          var reservationList = searchData.reservationList;
+          var pageInfo = searchData.pInfo;
 
-              tbody.append(row);
+          // 테이블 바디를 찾습니다
+          var tbody = $('#reservationTable tbody');
+          tbody.empty(); // 기존 tbody 내용을 지웁니다.
+
+          // 서버에서 받은 JSON 데이터를 사용하여 새로운 행을 생성하고 테이블에 추가합니다
+          for (var i = 0; i < reservationList.length; i++) {
+            var res = reservationList[i];
+            var row = "<tr>" +
+                    "<td>" + res.reservation.rvNo + "</td>" +
+                    "<td>" + res.reservation.rvName + "</td>" +
+                    "<td>" + res.district.districtName + "</td>" +
+                    "<td>" + res.reservation.rvApplicationDate + "</td>" +
+                    "<td>" + res.reservation.rvRvDate + "</td>" +
+                    "<td>" + res.pay.isPayStatus + "</td>" +
+                    "<td>";
+            if (res.reservation.isRvCompletion.toString() === 'Y') {
+              row += "<button type='button' class='btn btn-light' onclick='redirectToReservationDetail(" + res.reservation.rvNo + ")'>예약완료</button>";
+            } else {
+              row += "<button type='button' class='btn btn-success' onclick='redirectToReservationDetail(" + res.reservation.rvNo + ")'>예약접수</button>";
             }
+            row += "</td></tr>";
 
-            var paginationContainer = $('.pagination');
-            paginationContainer.empty(); // 기존 페이징 UI를 비웁니다.
-
-            if (pageInfo.startNavi !== 1) {
-              paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
-            }
-
-            for (var i = pageInfo.startNavi; i <= pageInfo.endNavi; i++) {
-              if (i === pageInfo.currentPage) {
-                paginationContainer.append('<li class="page-item active"><a class="page-link" href="/admin/contactList.do?page=' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
-              } else {
-                paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + i + '">' + i + '</a></li>');
-              }
-            }
-
-            if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
-              paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
-            }
-          },
-
-          error: function (error) {
-            alert("검색 에이잭스 오류");
-            console.error('Error:', error);
+            tbody.append(row);
           }
-        });
-      }
+
+          var paginationContainer = $('.pagination');
+          paginationContainer.empty(); // 기존 페이징 UI를 비웁니다.
+
+          if (pageInfo.startNavi !== 1) {
+            paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
+          }
+
+          for (var i = pageInfo.startNavi; i <= pageInfo.endNavi; i++) {
+            if (i === pageInfo.currentPage) {
+              paginationContainer.append('<li class="page-item active"><a class="page-link" href="#" data-page="' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
+            } else {
+              paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
+            }
+          }
+
+          if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
+            paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
+          }
+
+          // 페이지 번호 클릭 이벤트 핸들러 등록
+          paginationContainer.find('.page-link').on('click', function(event) {
+            event.preventDefault();
+            var pageNumber = $(this).data('page');
+            performSearch(pageNumber); // 검색 함수 호출
+          });
+        },
+        error: function (error) {
+          alert("검색 에이잭스 오류");
+          console.error('Error:', error);
+        }
+      });
+    }
+
+    // 검색 버튼 클릭 이벤트 핸들러
+    $('#user-search-btn').on('click', function(event) {
+      event.preventDefault();
+      var pageNumber = 1; // 검색 시 페이지 번호를 1로 초기화
+      performSearch(pageNumber); // 검색 함수 호출
     });
 
+    // 페이지 로드 시 기본 검색 실행
     $(document).ready(function () {
-      $('.pagination').on('click', '.page-link', function (event) {
-        event.preventDefault();
-        var pageNumber = $(this).attr('href').split('=')[1]; // 페이지 번호 추출
-        handleCityChange(pageNumber);
-      });
+      var pageNumber = 1; // 페이지 번호를 1로 초기화
+      performSearch(pageNumber); // 검색 함수 호출
     });
 
 

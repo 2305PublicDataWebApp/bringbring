@@ -126,21 +126,14 @@
                   </tr>           
               </table>
                 </c:forEach>
-                <div style="display: flex; justify-content: space-around;;">
-                    <c:forEach var="rdList" items="${rdList}" varStatus="status">
-                        <c:choose>
-                            <c:when test="${rdList.reservation.isRvCompletion.toString() eq 'Y'}">
-                                <!-- 'Y'일 때는 버튼을 표시하지 않음 -->
-                            </c:when>
-                            <c:otherwise>
-                                <button class="btn btn-success" style="width: 150px; height: 50px" onclick="submitReservation(${rdList.reservation.rvNo})">접수처리</button>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-
-<%--                <button class="btn btn-success" style="width: 150px; height: 50px"  onclick="submitReservation(${rvNo})">접수처리</button>--%>
-                <button class="btn btn-success"  style="width: 150px;" onclick="goBack()">목록으로</button>
-              </div>
+                <div style="display: flex; justify-content: space-around;">
+                    <c:choose>
+                        <c:when test="${not empty rdList and rdList[0].reservation.isRvCompletion.toString() eq 'N'}">
+                            <button class="btn btn-success" style="width: 150px; height: 50px" onclick="submitReservation(${rdList[0].reservation.rvNo})">접수처리</button>
+                        </c:when>
+                    </c:choose>
+                    <button class="btn btn-success" style="width: 150px;" onclick="goBack()">목록으로</button>
+                </div>
             </div>
           </div>
         </div>
