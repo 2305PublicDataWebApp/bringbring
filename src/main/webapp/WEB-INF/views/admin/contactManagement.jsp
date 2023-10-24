@@ -133,10 +133,18 @@
                             <td><a href="${detailUrl}">${inq.inqTitle}</a></td>
                             <td>${inq.districtName}</td>
                             <td>${inq.inqCategory}</td>
-                            <fmt:parseDate value="${inq.inqCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime" type="both" />
-                            <td><fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" /></td>
+<%--                            <fmt:parseDate value="${inq.inqCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime" type="both" />--%>
+<%--                            <td><fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" /></td>--%>
+                            <td id="inqCreateDate${i.index}"></td>
                             <td>${inq.answerYn}</td>
                         </tr>
+                        <script>
+                            var inqCreateDate${i.index} = new Date('${inq.inqCreateDate}'); // 날짜를 자바스크립트 Date 객체로 변환합니다.
+                            var formattedDate${i.index} = inqCreateDate${i.index}.getFullYear() + '-' +
+                                ('0' + (inqCreateDate${i.index}.getMonth() + 1)).slice(-2) + '-' +
+                                ('0' + inqCreateDate${i.index}.getDate()).slice(-2);
+                            document.getElementById('inqCreateDate${i.index}').textContent = formattedDate${i.index}; // 날짜를 표시합니다.
+                        </script>
                     </c:forEach>
                     </tbody>
                 </table>
