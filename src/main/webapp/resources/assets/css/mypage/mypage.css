@@ -72,3 +72,7 @@ main #popupImage {
 	width: 100%;
     height: 450px;
 }
+main #imageList img{
+	width: 115px;
+    height: 115px;
+}
