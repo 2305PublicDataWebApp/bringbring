@@ -62,8 +62,10 @@
           <p>${inqDetail.city.cityName} ${inqDetail.district.districtName}</p>
         </div>
         <div style="display: flex;float: right;height: 100%;flex-direction: column;justify-content: space-evenly;">
-          <button type="button" class="btn btn-success">글 수정</button>
-          <button type="button" class="btn btn-success">글 삭제</button>
+          <c:if test="${sessionId eq inqDetail.user.userId}">
+            <button onclick="goUpdate();" type="button" class="btn btn-success">글 수정</button>
+            <button type="button" class="btn btn-success">글 삭제</button>
+          </c:if>
         </div>
       </div>
       <!-- 제목 영역 -->
@@ -100,11 +102,13 @@
           <p>${inqDetail.city.cityName} ${inqDetail.district.districtName} 관리자</p>
         </div>
         <div id="btnArea" style="display: flex;float: right;height: 100%;flex-direction: column;justify-content: center;">
-          <c:if test="${inqDetail.answer.ansContent eq null}">
-            <button type="button" onclick="showInsertAnswer(this);" class="btn btn-success">글 등록</button>
-          </c:if>
-          <c:if test="${inqDetail.answer.ansContent ne null}">
-            <button type="button" class="btn btn-success">글 수정</button>
+          <c:if test="${inqDetail.district.regionNo eq sessionScope.sessionRegionNo}">
+            <c:if test="${inqDetail.answer.ansContent eq null}">
+              <button type="button" onclick="showInsertAnswer(this);" class="btn btn-success">글 등록</button>
+            </c:if>
+            <c:if test="${inqDetail.answer.ansContent ne null}">
+              <button type="button" class="btn btn-success">글 수정</button>
+            </c:if>
           </c:if>
         </div>
       </div>
@@ -199,6 +203,10 @@
     });
     document.getElementById("btnArea").appendChild(createButton);
   }
+
+    function goUpdate() {
+      location.href = "/inquire/update.do";
+    }
   </script>
   <!-- 채널톡 api -->
 

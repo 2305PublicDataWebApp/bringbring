@@ -132,5 +132,7 @@ public interface InquireService {
      * @return
      */
     List<Image> selectImageList(int inqNo);
+
+    InquireDetail encodingDetail(InquireDetail inquireDetail);
 }
 

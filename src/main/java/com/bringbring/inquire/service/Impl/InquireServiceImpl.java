@@ -112,6 +112,23 @@ public class InquireServiceImpl implements InquireService {
     @Override
     public List<Image> selectImageList(int inqNo) { return inquireStore.selectImageList(inqNo); }
 
+    @Override
+    public InquireDetail encodingDetail(InquireDetail inquireDetail) {
+
+        if (inquireDetail != null && "delivery".equals(inquireDetail.getInquire().getInqCategory())) {
+            inquireDetail.getInquire().setInqCategory("배송 연착, 배송 환불 관련 문의사항");
+        }else if (inquireDetail != null && "divide".equals(inquireDetail.getInquire().getInqCategory())) {
+            inquireDetail.getInquire().setInqCategory("나눔 게시판 관련 문의사항");
+        }else if (inquireDetail != null && "chatting".equals(inquireDetail.getInquire().getInqCategory())) {
+            inquireDetail.getInquire().setInqCategory("채팅 관련 문의사항");
+        }else if (inquireDetail != null && "improvement".equals(inquireDetail.getInquire().getInqCategory())) {
+            inquireDetail.getInquire().setInqCategory("개선하면 좋을 점");
+        }else if (inquireDetail != null && "etc".equals(inquireDetail.getInquire().getInqCategory())) {
+            inquireDetail.getInquire().setInqCategory("기타");
+        }
+        return inquireDetail;
+    }
+
     private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
         Map<String, Object> fileInfoMap = new HashMap<String, Object>();
         try {
