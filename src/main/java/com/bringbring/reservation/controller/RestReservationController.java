@@ -1,15 +1,20 @@
 package com.bringbring.reservation.controller;
 
 import com.bringbring.reservation.domain.*;
+import com.bringbring.reservation.service.PayService;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.ProtocolException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +26,7 @@ public class RestReservationController {
 
     private final ReservationService reservationService;
     private final UserService userService;
+    private final PayService payService;
 
     @GetMapping("/selectItem.do")
     public ResponseEntity<List<WasteData>> selectWasteList(@RequestParam String selectItem) {
@@ -35,6 +41,24 @@ public class RestReservationController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/imageUpload.do")
+    @ResponseBody
+    public String handleFileUpload(@RequestParam("file") MultipartFile[] uploadFiles
+            , @RequestParam("wasteInfoNo") String[] wasteInfoNo
+            , HttpServletRequest request
+            , HttpSession session, Model model) {
+        Map<String, Object> result = reservationService.addImages(wasteInfoNo , uploadFiles, request);
+        if(result != null) {
+            session.setAttribute("imageAdd", result);
+            return "success";
+        } else {
+            model.addAttribute("msg", "사진 업로드에 실패했습니다")
+                    .addAttribute("url", "/reservation/addImage.do");
+            return "/common/error";
+        }
+    }
+
 
     @PostMapping("/select/userInfo.do")
     public ResponseEntity<User> selectUserInfo(@RequestParam String userId) {
@@ -56,10 +80,6 @@ public class RestReservationController {
         Map<String, Object> imageAdd = (Map<String, Object>) session.getAttribute("imageAdd");
         Reservation reservationUserInfo = (Reservation) session.getAttribute("reservationUserInfo");
 
-//        Integer result = 0;
-//
-//        try {
-
             List<Object> insertInfo = new ArrayList<>();
             insertInfo.add(selectedItems);
             insertInfo.add(imageAdd);
@@ -74,18 +94,38 @@ public class RestReservationController {
 
             List<ReservationComplete> reservationComplete = reservationService.selectReservationCompleteInfo(payId);
 
-
-            session.setAttribute("reservationComplete", reservationComplete);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println("e.getMessage() = " + e.getMessage());
-//        }
+            session.setAttribute("payId", payId);
 
         if (result >= 4) {
-            session.setAttribute("reservationComplete", reservationComplete);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Failure", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/cancel.do")
+    public ResponseEntity<Pay> cancelRequest(@RequestBody Map<String, String> request) throws ProtocolException {
+//        String payId = pay.getPayId();
+        CancelRequest cancelRequest = reservationService.selectPayIdByDischargeNo(request.get("dischargeNo"));
+        String payId = cancelRequest.getPay().getPayId();
+        String cancel_request_amount = request.get("cancel_request_amount");
+        String reason = request.get("reason");
+        Pay payResult = reservationService.selectPayInfoByPayId(payId);
+        String token = payService.getToken();
+        payService.cancelRequest(request, token);
+        System.out.println("payResult = " + payResult);
+        boolean cancelSuccess = payService.cancelRequest(request, token);
+        boolean dbUpdate = false;
+        if(cancelSuccess) {
+            dbUpdate = payService.cancelPayInfo(payId);
+        }
+
+        if (cancelSuccess && dbUpdate) {
+            System.out.println("취소 성공");
+            return ResponseEntity.ok(payResult);
+        } else {
+            // 취소 요청이 실패한 경우 400 Bad Request 또는 다른 적절한 상태 코드 반환
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 

@@ -1,6 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="InquireMapper">
+	<resultMap id="inquireDetail" type="com.bringbring.inquire.domain.InquireDetail">
+		<association property="inquire" resultMap="inquire"/>
+		<association property="city" resultMap="city"/>
+		<association property="district" resultMap="district"/>
+		<association property="answer" resultMap="answer"/>
+		<association property="user" resultMap="user"/>
+	</resultMap>
+
+	<resultMap id="user" type="com.bringbring.user.domain.User">
+		<id property="userNo" column="USER_NO" />
+		<result property="userId" column="USER_ID" />
+		<result property="userPwd" column="USER_PWD" />
+		<result property="userName" column="USER_NAME" />
+		<result property="userPhone" column="USER_PHONE" />
+		<result property="userPostCode" column="USER_POSTCODE" />
+		<result property="userAddress" column="USER_ADDRESS" />
+		<result property="userAddressDetail" column="USER_ADDRESS_DETAIL" />
+		<result property="userCreateDate" column="USER_CREATE_DATE" />
+		<result property="userProfileName" column="USER_PROFILE_NAME" />
+		<result property="userProfileRename" column="USER_PROFILE_RENAME" />
+		<result property="userProfilePath" column="USER_PROFILE_PATH" />
+		<!--		<result property="userProfileLength" column="USER_PROFILE_LENGTH" />-->
+		<result property="isUserDeleted" column="IS_USER_DELETED" />
+	</resultMap>
+
+	<resultMap id="inquire" type="com.bringbring.inquire.domain.Inquire">
+		<id property="inqNo" column="INQ_NO" />
+		<result property="userNo" column="USER_NO" />
+		<result property="inqTitle" column="INQ_TITLE" />
+		<result property="inqContent" column="INQ_CONTENT" />
+		<result property="inqCreateDate" column="INQ_CREATE_DATE" />
+		<result property="inqUpdateDate" column="INQ_UPDATE_DATE" />
+		<result property="answerYn" column="ANSWER_YN" />
+		<result property="isInqDeleted" column="IS_INQ_DELETED" />
+		<result property="inqCategory" column="INQ_CATEGORY" />
+		<result property="cityNo" column="CITY_NO" />
+		<result property="districtNo" column="DISTRICT_NO" />
+	</resultMap>
+
+	<resultMap id="city" type="com.bringbring.region.domain.City">
+		<id property="cityNo" column="CITY_NO" />
+		<result property="cityName" column="CITY_NAME" />
+	</resultMap>
+
+	<resultMap id="district" type="com.bringbring.region.domain.District">
+		<id property="districtNo" column="DISTRICT_NO" />
+		<result property="districtName" column="DISTRICT_NAME" />
+		<result property="cityNo" column="CITY_NO" />
+		<result property="regionNo" column="regionNo" />
+	</resultMap>
+
+	<resultMap id="answer" type="com.bringbring.inquire.domain.Answer">
+		<id property="ansNo" column="ANS_NO" />
+		<result property="inqNo" column="INQ_NO" />
+		<result property="ansContent" column="ANS_CONTENT" />
+		<result property="ansCreateDate" column="ANS_CREATE_DATE" />
+		<result property="ansUpdateDate" column="ANS_UPDATE_DATE" />
+		<result property="adminNo" column="ADMIN_NO" />
+	</resultMap>
+
 	<resultMap id="InquireDetailsResultMap" type="com.bringbring.inquire.domain.InquireDetails">
 		<id property="inqNo" column="INQ_NO"/>
 		<result property="userNo" column="USER_NO"/>
@@ -91,8 +151,39 @@
 			WHERE i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
 		</if>
 	</select>
-  
+
   <select id="selectInquireListByUserNo" resultType="Inquire">
 		SELECT * FROM INQUIRE_TBL WHERE USER_NO = #{userNo } AND IS_INQ_DELETED = 'N' ORDER BY INQ_NO DESC
   </select>
+
+	<select id="getListCountByNo" resultType="_int">
+		SELECT COUNT(*) FROM INQUIRE_TBL WHERE USER_NO = #{value} AND IS_INQ_DELETED = 'N'
+	</select>
+	<select id="selectPageInquireListByNo" resultType="Inquire">
+		SELECT * FROM INQUIRE_TBL WHERE USER_NO = #{value} AND IS_INQ_DELETED = 'N' ORDER BY INQ_CREATE_DATE DESC
+	</select>
+	<select id="selectMaxNo" resultType="_int">
+		SELECT MAX(INQ_NO) FROM INQUIRE_TBL
+	</select>
+	<select id="selectInquireDetailByNo" resultMap="inquireDetail">
+		SELECT A.*, B.*, C.*, D.*, E.*
+			 ,(SELECT REGION_NO FROM REGION_TBL F WHERE F.DISTRICT_NO = A.DISTRICT_NO  AND F.CITY_NO = A.CITY_NO) AS regionNo
+			FROM INQUIRE_TBL A
+					 JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+					 JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
+					 LEFT JOIN ANSWER_TBL D ON A.INQ_NO = D.INQ_NO
+					 JOIN USER_TBL E ON A.USER_NO = E.USER_NO
+			WHERE A.IS_INQ_DELETED = 'N' AND A.INQ_NO = #{value}
+	</select>
+	<select id="selectImageList" resultType="Image">
+		SELECT * FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = #{value}
+	</select>
+	<insert id="insertInquire">
+		INSERT INTO  INQUIRE_TBL VALUES (SEQ_INQ_NO.NEXTVAL, #{inqTitle}, #{userNo}, #{inqContent}
+		, DEFAULT, DEFAULT, DEFAULT, DEFAULT, #{inqCategory}, #{cityNo}, #{districtNo})
+	</insert>
+	<insert id="insertImage">
+		INSERT INTO IMAGE_TBL VALUES (
+		SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath})
+	</insert>
 </mapper>

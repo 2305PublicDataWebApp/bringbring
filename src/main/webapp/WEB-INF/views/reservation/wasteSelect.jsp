@@ -72,7 +72,7 @@
 </section>
 <div style="width: 100%;">
 
-  <main>1
+  <main>
     <h2 class="subject">대형 폐기물 수거 신청</h2>
     <div>
       <div class="progress-bar out-progress-bar">

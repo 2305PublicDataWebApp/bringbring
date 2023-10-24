@@ -82,7 +82,7 @@
                             <input type="email" id="floatingEmail" name="userId" class="form-control" placeholder="Email" required>
                             <label for="floatingEmail">아이디(이메일)</label>
                             <div class="invalid-feedback">
-                                이메일 주소를 입력해주세요.
+                                이메일 인증을 해주세요.
                             </div>
                         </div>
                         <div class="col-2 pe-0">
@@ -114,7 +114,7 @@
                         </div>
                         <div class="modal-footer">
 <!--                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> -->
-                            <button type="button" class="btn btn-primary findPwd_login_btn">로그인</button>
+                            <button type="button" onclick="showLoginForm();" class="btn btn-primary findPwd_login_btn">로그인</button>
                         </div>
                     </div>
                 </div>
@@ -171,7 +171,7 @@
 	                        // 서버에서 받은 데이터를 모달로 표시
 	                        if(emailChkData == $('#floatingEmailCode').val()){
 		                        $('#modal_body_result').html("비밀번호 : " + response.userPwd);                    	
-	                        }else {
+	                        }else if(response.error != null){
 	                        	$('#modal_body_result').html(response.error); 
 	                        }
 	
@@ -220,23 +220,32 @@
 		// 이메일 인증번호
     	function certification_code_btn() {
 			var userId = $('#floatingEmail').val();
-    	   $.ajax({
-    	      type : "POST",
-    	      url : "/user/mailConfirm",
-    	      data : {
-    	         "email" : userId
-    	      },
-    	      success : function(data){
-    	    	  emailChkData = data;
-    	         alert("해당 이메일로 인증번호 발송이 완료되었습니다. \n 확인부탁드립니다.")
-    	         console.log("data : "+data);
-    	         chkEmailConfirm(data);
-    	      },
-    	      error: function () {
-                  // Ajax 요청 실패 시 실행할 코드
-                  alert('Ajax 오류! 관리자에게 문의하세요.');
-              }
-    	   })
+			var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    	  	if(userId && userId.trim() !== "") {    	 
+    	  		if (emailPattern.test(userId)) {
+		    	   $.ajax({
+		    	      type : "POST",
+		    	      url : "/user/mailConfirm",
+		    	      data : {
+		    	         "email" : userId
+		    	      },
+		    	      success : function(data){
+		    	    	  emailChkData = data;
+		    	         	alert("해당 이메일로 인증번호 발송이 완료되었습니다. \n 확인부탁드립니다.");
+		    	         console.log("data : "+data);
+		    	         chkEmailConfirm(data);
+		    	      },
+		    	      error: function () {
+		                  // Ajax 요청 실패 시 실행할 코드
+		                  alert('Ajax 오류! 관리자에게 문의하세요.');
+		              }
+		    	   })
+    	  		} else {
+    	            alert("올바른 이메일 주소를 입력해주세요.");
+    	        }
+			}else {
+				alert("아이디(이메일)을 입력해주세요.");
+ 	  		}
     	};
    		// 이메일 인증번호 체크 함수
 		function chkEmailConfirm(data){
@@ -265,6 +274,9 @@
 		        }
 			})
 		}
+		function showLoginForm() {
+        	location.href = "/user/login.do";
+        }
     </script>
     <!-- 채널톡 api -->
     <script>

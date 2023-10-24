@@ -107,7 +107,7 @@
 			width: 120px;
 			border-top-left-radius: 0px;
 			border-top-right-radius: 0px;
-			margin: 0px 15px 0px 15px;
+			margin: 0px 15px 10px 15px;
 		}
 		.sortLeft{
 			float: left;
@@ -132,12 +132,11 @@
 			<div style="margin: 0 auto;width: 800px;">
 				<ul class="divide-insert-menu" style="padding: 0px;">
 					<li>
-						<label for="divTitle">제목</label>
+						<label for="divTitle">*제목</label>
 						<input name="divTitle" id="divTitle" type="text" id="title">
 					</li>
 					<li class="file-li" style="padding-bottom: 10px;">
-						<label>파일</label>
-						<%--					<i style="font-size: 20px;width: 30px;" class="bi bi-plus-circle-fill" id="addFileInput"></i>--%>
+						<label>*파일</label>
 						<input style="width: 600px;" accept="image/*" name="uploadFiles" id="inputFile1" class="form-control fileLayOut" type="file">
 					</li>
 					<li>
@@ -151,11 +150,11 @@
 						</div>
 					</li>
 					<li style="padding: 0px 15px 0px 15px;">
-						<div class="image-list" style="width: 900px;padding-left: 135px;">
+						<div class="image-list" style="width: 900px;padding-left: 150px;">
 						</div>
 					</li>
 					<li id="regionArea">
-						<label for="cityNo">지역</label>
+						<label for="cityNo">*지역</label>
 						<select name="cityNo" id="cityNo" onchange="citySelect();" style="width: 100px;margin-right: 15px;">
 							<c:forEach var="city" items="${cList}" >
 								<option value="${city.cityNo}">${city.cityName}</option>
@@ -165,7 +164,7 @@
 						</select>
 					</li>
 					<li>
-						<label for="wasteCategoryNo">종류</label>
+						<label for="wasteCategoryNo">*종류</label>
 						<select name="wasteCategoryNo" id="wasteCategoryNo" style="width: 176px;margin-right: 15px;">
 							<option value="0">종류 선택</option>
 							<c:forEach var="wCategory" items="${wList}" >
@@ -174,7 +173,7 @@
 						</select>
 					</li>
 					<li>
-						<label for="summernote">내용</label>
+						<label for="summernote">*내용</label>
 						<div id="" class="d-flex justify-content-center flex-column" style="width: 600px;">
 							<textarea name="divContent" id="summernote" spellcheck="false" required></textarea>
 						</div>
@@ -187,7 +186,7 @@
 						<input name="divYCoordinate" type="hidden" id="coordinateY">
 					</li>
 					<li>
-						<label>지도 미리보기</label>
+						<label>지도 미리보기<br>(마우스 클릭으로 <br> 상세위치 설정)</label>
 						<div id="map" style="height: 300px;width: 600px;border: 1px solid rgba(133, 133, 133, 0.5);border-radius: 5px;"></div>
 					</li>
 				</ul>
@@ -394,7 +393,7 @@
 		if (divTitle.trim() === "") {
 			alert("제목을 입력해주세요.");
 		} else if (!selectedFile) {
-			alert("사진은 한 개 이상 둥록해주세요.");
+			alert("사진은 한 개 이상 등록해주세요.");
 		} else if (inputElements.length > 11) {
 			alert("10개까지의 파일만 업로드할 수 있습니다.");
 		}else if (cityNo === "0") {
@@ -520,6 +519,7 @@
 		var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
 		if (parseInt(imageCountElement.innerHTML) > 9) {
 			imageCountElement.innerHTML = (inputElements.length - 1).toString();
+			e.target.value = '';
 			return;
 		}
 

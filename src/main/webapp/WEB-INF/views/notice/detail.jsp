@@ -80,8 +80,8 @@
 		<div class="head">
 			<div class="notice-title">
 				<h2>						
-					<c:if test="${notice.noticeType == 'service'}">[ ${notice.regionName}]</c:if>
-					<c:if test="${notice.noticeType == 'update'}">[ 전체 ]</c:if> 
+					<c:if test="${notice.noticeType == '서비스'}">[ ${notice.regionName}]</c:if>
+					<c:if test="${notice.noticeType == '업데이트'}">[ 전체 ]</c:if> 
 					${notice.noticeTitle }</h2>
 			</div>
 			<div class="notice-subtitle">
@@ -104,7 +104,6 @@
 				</div>
 			</div>
 			<div class="icon">
-				<!-- 푸터에 트위터, 페북, 인스타가 있어서 이렇게 했는데 카카오 로그인이 가능하니 하나를 빼고 카카오톡을 넣는게 나을지 고민중임 -->
 				<li><i class="material-symbols-outlined" onclick="copyURL()">share</i>
 				</li>
 				<li><i class="fi fi-brands-twitter" onclick="shareTwitter()"></i>
@@ -116,9 +115,10 @@
 			</div>
 		</div>
 		<hr>
-		<div class="content">${notice.noticeContent }
-
-</div>
+		<div class="content">
+			${notice.noticeContent }
+				<img src=${image.imagePath }>
+		</div>
 		<hr>
 		<!-- 이전글/다음글 -->
 		<div class="otherdetail">

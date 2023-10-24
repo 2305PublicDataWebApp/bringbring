@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -36,6 +38,7 @@
     <link href="../resources/assets/css/style.css" rel="stylesheet">
     <link href="../resources/assets/css/common.css" rel="stylesheet">
     <link href="../resources/assets/css/mypage/mypage.css" rel="stylesheet">
+    <link href="../resources/assets/css/mypage/enroll.css" rel="stylesheet">
 
     <!-- =======================================================
   * Template Name: Arsha
@@ -52,6 +55,7 @@
 	<!-- 헤더 -->
  	 <jsp:include page="/include/header.jsp"></jsp:include>
  	 
+ 	 <div style="width: 100%;height: 74px;"></div>
     <!-- ======= Hero Section ======= -->
     <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
         <div style="width: 1300px;margin: 0 auto;">
@@ -71,7 +75,7 @@
     <main>
         <div class="mypage_top m-auto rounded">
             <div class="mypage_top_div ps-5 pb-3 mt-3" style="height:75px;">
-                <h1 class="d-inline">일용자님</h1>
+                <h1 class="d-inline">${userOne.userName }</h1>
                 <div class="d-inline">
                     <a href="/user/update.do">
                         <img src="../resources/assets/img/mypage/mypage_gear.png" class="h-100 pb-3">
@@ -89,62 +93,81 @@
                     <div class="col-9 ps-5 pt-5">
                         
                         <h1 class="mt-3">신청 내역</h1>
-                        <div class="container enroll_list">
-                            <div class="row p-3 border rounded">
-                                <div class="col-3">
-                                    <p>2023-10-01</p>
-                                    <img src="../resources/assets/img/mypage/Test_img.jpg" class="rounded">
-                                </div>
-                                <div class="col-6 mt-5">
-                                    <h2>책상</h2>
-                                    <p class="fs-4">예약 번호 1234-1234</p>
-                                    <p class="fs-4">결재 금액 5,000원</p>
-                                </div>
-                                <div class="col-3 text-end">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#enroll_modal">상세보기 >></a>
-                                    <p class="fw-1 fs-1 pt-5">신청 완료</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="container enroll_list">
-                            <div class="row p-3 border rounded">
-                                <div class="col-3">
-                                    <p>2023-10-01</p>
-                                    <img src="../resources/assets/img/mypage/Test_img.jpg" class="rounded">
-                                </div>
-                                <div class="col-6 mt-5">
-                                    <h2>책상</h2>
-                                    <p class="fs-4">예약 번호 1234-1234</p>
-                                    <p class="fs-4">결재 금액 5,000원</p>
-                                </div>
-                                <div class="col-3 text-end">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#enroll_modal">상세보기 >></a>
-                                    <p class="fw-1 fs-1 pt-5">신청 취소</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="container enroll_list">
-                            <div class="row p-3 border rounded">
-                                <div class="col-3">
-                                    <p>2023-10-01</p>
-                                    <img src="../resources/assets/img/mypage/Test_img.jpg" class="rounded">
-                                </div>
-                                <div class="col-6 mt-5">
-                                    <h2>책상</h2>
-                                    <p class="fs-4">예약 번호 1234-1234</p>
-                                    <p class="fs-4">결재 금액 5,000원</p>
-                                </div>
-                                <div class="col-3 text-end">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#enroll_modal">상세보기 >></a>
-                                    <p class="fw-1 fs-1 pt-5">처리 완료</p>
-                                </div>
-                            </div>
-                        </div>
-                        
+                       	<c:set var="printedImageGroupNos" value="" />
+                        <c:forEach var="resInfo" items="${reservationInfo }">
+                        	<c:set var="imageGroupNo" value="${resInfo.image.imageGroupNo}" />
+                        	<c:choose>
+                			<c:when test="${!fn:contains(pageScope.printedImageGroupNos, imageGroupNo)}">
+	                        <div id="imageGroup${resInfo.image.imageGroupNo}" class="container enroll_list">
+	                            <div class="row p-3 border rounded">
+	                                <div class="col-3">
+	                                    <p>${resInfo.reservation.rvApplicationDate }</p>
+	                                    <img src="${resInfo.image.imagePath }" class="rounded">
+	                                </div>
+	                                <div class="col-6 mt-5">
+	                                    <h2>책상</h2>
+	                                    <p class="fs-4">예약 번호 ${resInfo.reservation.rvDischargeNo }</p>
+	                                    <p class="fs-4">결제 금액 ${resInfo.reservationDetail.rvDetailFee }원</p>
+	                                </div>
+	                                <div class="col-3 text-end">
+	                                    <a href="javascript:void(0)" onclick="openModal(${resInfo.reservation.rvNo})">상세보기 >></a>
+	                                    <p class="fw-1 fs-1 pt-5">
+                                            <c:choose>
+                                                <c:when test="${fn:contains(resInfo.reservation.isRvCancel, 'Y')}">
+                                                    신청 취소
+                                                </c:when>
+                                                <c:when test="${fn:contains(resInfo.reservation.isRvCompletion, 'N')}">
+                                                    신청 완료
+                                                </c:when>
+                                                <c:when test="${fn:contains(resInfo.reservation.isRvCompletion, 'Y')}">
+                                                    처리 완료
+                                                </c:when>
+                                            </c:choose>
+										</p>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <c:set var="printedImageGroupNos" value="${printedImageGroupNos},${imageGroupNo}" scope="page" />
+			                </c:when>
+			                <c:otherwise>
+			                    <!-- 이미 출력된 값이라면 아무 작업도 하지 않음 -->
+			                </c:otherwise>
+			            </c:choose>
+						</c:forEach>
+						
                     </div>
+
                 </div>
+            </div>
+            <div style="width: 1000px;margin: 0 auto;margin-top: 60px;">
+                <nav aria-label="Page navigation example" style="display: flex;">
+                    <ul class="pagination" style="margin: 0 auto;">
+                        <c:if test="${pageInfo.startNavi ne 1}">
+                            <c:url var="bPageUrl" value="/mypage/enroll.do">
+                                <c:param name="page" value="${pageInfo.startNavi-1}"></c:param>
+                            </c:url>
+                            <li class="page-item">
+                                <a style="color: black;" class="page-link" href="${bPageUrl}"><</a>
+                            </li>
+                        </c:if>
+                        <c:forEach begin="${pageInfo.startNavi}" end="${pageInfo.endNavi}" var="p">
+                            <c:url var="pageUrl" value="/mypage/enroll.do">
+                                <c:param name="page" value="${p}"></c:param>
+                            </c:url>
+                            <li class="page-item">
+                                <a style="color: black;" class="page-link" href="${pageUrl}">${p}</a>
+                            </li>
+                        </c:forEach>
+                        <c:if test="${pageInfo.endNavi ne pageInfo.naviTotalCount}">
+                            <c:url var="nPageUrl" value="/mypage/enroll.do">
+                                <c:param name="page" value="${pageInfo.endNavi+1}"></c:param>
+                            </c:url>
+                            <li class="page-item">
+                                <a style="color: black;" class="page-link" href="${nPageUrl}">>/a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </nav>
             </div>
         </div>
 
@@ -157,44 +180,11 @@
                         <h5 class="modal-title" id="enroll_modal_Label">상세 내역</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body container">
-                        <div class="modal_border_bottom p-3">
-                            <p>예약 번호 : 1234-1234</p>
-                            <p class="m-0">예약 날짜 : 2023-10-01</p>
-                        </div>
-                        <div class="modal_border_bottom p-3">
-                            <p class="fs-5">장소 : 서울특별시 중구 남대문로 120 그레이즈 청계</p>
-                            <div class="row">
-                                <div class="col-4 text-center">
-                                    <img src="../resources/assets/img/mypage/Test_img.jpg" class="rounded">
-                                </div>
-                                <div class="col-8 row">
-                                    <div class="col-10 pt-4">
-                                        <h3>책상</h3>
-                                    </div>
-                                    <div class="col-6">
-                                        <p>수량 :  1개</p>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <p>5,000원</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="row p-3 pb-0">
-                                <div class="col">
-                                    <p class="fs-4 m-0">총 결제 금액</p>
-                                </div>
-                                <div class="col">
-                                    <p class="fs-4 m-0 text-end">5,000원</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="modal_body_content" class="modal-body container">
                     </div>
                     <div class="modal-footer">
-                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> -->
-                        <input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소">
+                        <input type="submit" id="rvUpdate" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="정보 수정">
+                        <input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소" onclick="cancelPay()">
                     </div>
                 </div>
             </div>
@@ -221,6 +211,152 @@
     <!-- Template Main JS File -->
     <script src="../resources/assets/js/main.js"></script>
 
+	<script>
+	function openModal(rvNo) {
+	    // JavaScript에서 reservationInfo 리스트와 rvNo 값을 비교하여 일치하는 항목 찾기
+	    let matchedReservations = [];
+	    const list = ${reservationInfoAsJson};
+	    for (let i = 0; i < list.length; i++) {
+	        if (list[i].reservation.rvNo === rvNo) {
+	        	matchedReservations.push(list[i]);
+	        }
+	    }
+// 	    const matchRvJson = JSON.stringify(matchedReservations);
+	    console.log(matchedReservations);
+
+	    if (matchedReservations.length > 0) {
+	        // 모달을 열고 matchedReservation을 사용하여 모달 내용을 업데이트
+	        const modalBody = document.getElementById("modal_body_content");
+
+	        // 모달 내용을 채워넣기
+	        let modalContent = '<div class="modal_border_bottom p-3">';
+		        modalContent += '<p id="rvDischargeNo">예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
+                <%--modalContent += '<input type="hidden" id="modalPayId" name="modalPayId" value="' + ${reservationInfo.get(0).pay.payId} + '">';--%>
+            modalContent += '<input type="hidden" id="modalPayId" name="modalPayId" value="${reservationInfo.get(0).pay.payId}">';
+
+            modalContent += '<p class="m-0">예약 날짜 : ' + matchedReservations[0].reservation.rvRvDate + '</p>';
+		        modalContent += '</div>';
+		        modalContent += '<div class="modal_border_bottom p-3">';
+		        modalContent += '<p class="fs-5">장소 : ' + matchedReservations[0].reservation.rvAddr + matchedReservations[0].reservation.rvAddrDetail + '</p>';
+		        modalContent += '<p>요청사항 : ' + matchedReservations[0].reservation.rvRequest + '</p>';
+
+	        // matchedReservations 배열에 대한 forEach 루프
+	        for (let i = 0; i < matchedReservations.length; i++) {
+	            modalContent += '<div class="row mb-2">';
+	            modalContent += '<div class="col-4 text-center">';
+	            modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded">';
+	            modalContent += '</div>';
+	            modalContent += '<div class="col-8 row">';
+	            modalContent += '<div class="col-10 pt-4">';
+	            modalContent += '<h3>' + matchedReservations[i].wasteType.wasteTypeName + '</h3>';
+	            modalContent += '</div>';
+	            modalContent += '<div class="col-6">';
+	            modalContent += '<p>수량 :  1개</p>';
+	            modalContent += '</div>';
+	            modalContent += '<div class="col-6 text-end">';
+	            modalContent += '<p>' + matchedReservations[i].wasteInfo.wasteInfoFee + '원</p>';
+	            modalContent += '</div>';
+	            modalContent += '</div>';
+	            modalContent += '</div>';
+	        }
+
+	        modalContent += '</div>';
+	        modalContent += '<div class="">';
+	        modalContent += '<div class="row p-3 pb-0">';
+	        modalContent += '<div class="col">';
+	        modalContent += '<p class="fs-4 m-0">총 결제 금액</p>';
+	        modalContent += '</div>';
+	        modalContent += '<div class="col">';
+	        modalContent += '<p class="fs-4 m-0 text-end" id="rvDetailFee">' + matchedReservations[0].reservationDetail.rvDetailFee + '원</p>';
+	        modalContent += '</div>';
+	        modalContent += '</div>';
+	        modalContent += '</div>';
+	           
+	        modalBody.innerHTML = modalContent;
+
+            const modalFooter = document.querySelector('.modal-footer');
+
+            // 모달 푸터 내용 초기화
+            modalFooter.innerHTML = '';
+
+            if (matchedReservations[0].reservation.isRvCancel === 'N') {
+                if (matchedReservations[0].reservation.isRvCompletion === 'N') {
+                    // 수거가 완료되지 않았을 때
+                    modalFooter.innerHTML =
+                        // '<input type="submit" id="rvUpdate" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="정보 수정">' +
+                        '<input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소" onclick="confirmCancel()">';
+                } else {
+                    // 수거가 완료되었을 때
+                    modalFooter.innerHTML = '<p>수거가 완료되었습니다</p>';
+                }
+            } else if (matchedReservations[0].reservation.isRvCancel === 'Y') {
+                // 예약이 취소된 경우
+                modalFooter.innerHTML = '<p>예약 취소되었습니다</p>';
+            }
+
+            // const isRvComplete = matchedReservations[0].
+
+            const modal = document.getElementById("enroll_modal");
+            modal.dataset.matchedReservations = JSON.stringify(matchedReservations);
+
+            console.log("modal", modal);
+
+
+	    	// 모달을 열기
+	        $('#enroll_modal').modal('show');
+            // updateModalFooter(matchedReservations);
+	    } else {
+	        // 일치하는 예약을 찾지 못한 경우 처리
+	        alert("일치하는 예약을 찾지 못했습니다.");
+	    }
+	}
+
+	</script>
+    <script>
+        function confirmCancel() {
+            // 모달에서 matchedReservations 데이터를 읽어옴
+            const modal = document.getElementById("enroll_modal");
+            const matchedReservations = JSON.parse(modal.dataset.matchedReservations);
+            console.log(matchedReservations)
+            const isConfirm = confirm("예약을 취소하시겠습니까? 확인 후 복구할 수 없습니다.")
+            if (isConfirm) {
+                cancelPay(matchedReservations);
+            }
+        }
+
+        function cancelPay() {
+            // const modal = document.getElementById("enroll_modal");
+            // const matchedReservations = JSON.parse(modal.dataset.matchedReservations);
+
+            const dischaegeNoStr = document.querySelector("#rvDischargeNo").textContent;
+            const dischargeNo = dischaegeNoStr.substring(dischaegeNoStr.length - 17);
+            const cancel_request_amount = document.querySelector("#rvDetailFee").textContent;
+            const payId = document.querySelector("#modalPayId").value;
+            console.log(dischargeNo);
+            console.log(cancel_request_amount)
+            console.log(payId);
+
+            $.ajax({
+                url: "/reservation/cancel.do",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    dischargeNo : dischargeNo,
+                    merchant_uid: payId, // 예: ORD20180131-0000011
+                    cancel_request_amount: cancel_request_amount, // 환불금액
+                    reason: "결제 취소 요청" // 환불사유
+                }),
+                success: function (data) {
+                    console.log("data", data);
+                    alert("예약 취소 요청이 성공했습니다.")
+                    $('#enroll_modal').modal('hide');
+                },
+                error: function () {
+                    alert("예약 취소 요청이 실패했습니다 관리자에게 문의하세요");
+                }
+            });
+        }
+    </script>
     <!-- 채널톡 api -->
     <script>
         (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();

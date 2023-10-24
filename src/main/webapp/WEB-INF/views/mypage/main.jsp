@@ -54,6 +54,7 @@
 	<!-- 헤더 -->
   	<jsp:include page="/include/header.jsp"></jsp:include>
   
+  	<div style="width: 100%;height: 74px;"></div>
     <!-- ======= Hero Section ======= -->
     <section id="hero" class="d-flex align-items-center" style="width: 100%;margin: 0 auto;">
         <div style="width: 1300px;margin: 0 auto;">
@@ -85,7 +86,7 @@
                 <div class="row" style="min-height:750px;">
                     <div class="mypage_sidebar col-3 p-5">
                         <a href="/mypage/enroll.do" class="fs-1">신청 내역</a>
-                        <a href="/mypage/inquire.do" class="fs-1">문의 내역</a>
+                        <a href="/inquire/list.do" class="fs-1">문의 내역</a>
                         <a href="#" class="fs-1">채팅 내역</a>
                     </div>
                     <div class="col-9 ps-5 pt-5">
@@ -100,24 +101,43 @@
                         </div>
 
                         <h3>최근 신청 내역</h3>
-                        <div class="container recent_enroll_list">
-                            <div class="row p-3 border rounded">
-                                <div class="col-3">
-                                    <p>2023-10-01</p>
-                                    <img src="../resources/assets/img/mypage/Test_img.jpg" class="rounded">
-                                </div>
-                                <div class="col-6 mt-5">
-                                    <h2>책상</h2>
-                                    <p class="fs-4">예약 번호 1234-1234</p>
-                                    <p class="fs-4">결재 금액 5,000원</p>
-                                </div>
-                                <div class="col-3 text-end">
-                                    <!-- 상세보기 모달 -->
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#enroll_modal">상세보기 >></a>
-                                    <p class="fw-1 fs-1 pt-5">신청 완료</p>
-                                </div>
-                            </div>
-                        </div>
+                        <c:if test="${empty reservationInfo}">
+                        	<p class="mb-3">최근 신청한 내역이 없습니다.</p>
+                        </c:if>
+                        <c:if test="${!empty reservationInfo }">
+                        <c:set var="resInfo" value="${reservationInfo[0] }"  />
+	                        <div class="container recent_enroll_list">
+	                            <div class="row p-3 border rounded">
+	                                <div class="col-3">
+	                                    <p>${resInfo.reservation.rvApplicationDate }</p>
+	                                    <img src="${resInfo.image.imagePath }" class="rounded">
+	                                </div>
+	                                <div class="col-6 mt-5">
+	                                	<!-- <c:if test="${resInfo.reservationDetail.rvDetailTotal >= 2 }"> -->
+	                                    	<h2>${resInfo.wasteType.wasteTypeName }</h2>
+	                                    <!-- </c:if> -->
+	                                    <h2>${resInfo.wasteType.wasteTypeName }</h2>
+	                                    <p class="fs-4">예약 번호 ${resInfo.reservation.rvDischargeNo }</p>
+	                                    <p class="fs-4">결제 금액 ${resInfo.pay.payCurrency }${resInfo.pay.payAmount }</p>
+	                                </div>
+	                                <div class="col-3 text-end">
+	                                    <!-- 상세보기 모달 -->
+	                                    <a href="javascript:void(0)" onclick="openModal(${resInfo.reservation.rvNo})">상세보기 >></a>
+	                                    <p class="fw-1 fs-1 pt-5">
+		                                    <c:if test="${fn:contains(resInfo.reservation.isRvCompletion, 'N')}">
+		 	                                   신청 완료
+		                                    </c:if>
+		                                    <c:if test="${fn:contains(resInfo.reservation.isRvCancel, 'Y')}">
+		 	                                   신청 취소
+		                                    </c:if>
+		                                    <c:if test="${fn:contains(resInfo.reservation.isRvCompletion, 'Y')}">
+		 	                                   처리 완료
+		                                    </c:if>
+	                                    </p>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </c:if>
 
                         <div class="container mt-5 p-0">
                             <h3>최근 문의 내역</h3>
@@ -178,40 +198,7 @@
                         <h5 class="modal-title" id="enroll_modal_Label">상세 내역</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body container">
-                        <div class="modal_border_bottom p-3">
-                            <p>예약 번호 : 1234-1234</p>
-                            <p class="m-0">예약 날짜 : 2023-10-01</p>
-                        </div>
-                        <div class="modal_border_bottom p-3">
-                            <p class="fs-5">장소 : 서울특별시 중구 남대문로 120 그레이즈 청계</p>
-                            <div class="row">
-                                <div class="col-4 text-center">
-                                    <img src="../resources/assets/img/mypage/Test_img.jpg" class="rounded">
-                                </div>
-                                <div class="col-8 row">
-                                    <div class="col-10 pt-4">
-                                        <h3>책상</h3>
-                                    </div>
-                                    <div class="col-6">
-                                        <p>수량 :  1개</p>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <p>5,000원</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="row p-3 pb-0">
-                                <div class="col">
-                                    <p class="fs-4 m-0">총 결제 금액</p>
-                                </div>
-                                <div class="col">
-                                    <p class="fs-4 m-0 text-end">5,000원</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="modal_body_content" class="modal-body container">
                     </div>
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> -->
@@ -220,6 +207,21 @@
                 </div>
             </div>
         </div>
+        <!-- 이미지 팝업 모달 -->
+		<div id="imagePopup" class="modal fade">
+		    <div class="modal-dialog modal-dialog-centered">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="imagePopupLabel">이미지 상세보기</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body">
+		                <img id="popupImage" class="popup-content">
+		                <div id="imageList" class="mt-3"></div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
     </main>
     <!-- End #main -->
 
@@ -241,6 +243,113 @@
 
     <!-- Template Main JS File -->
     <script src="../resources/assets/js/main.js"></script>
+	<script>
+    
+	let images = []; 
+    var currentImageIndex = 0;
+	function openModal(rvNo) {
+	    let matchedReservations = [];
+	    images = [];
+	    const list = ${reservationInfoAsJson};
+	    // JavaScript에서 reservationInfo 리스트와 rvNo 값을 비교하여 일치하는 항목 찾기
+	    for (let i = 0; i < list.length; i++) {
+	        if (list[i].reservation.rvNo === rvNo) {
+	        	matchedReservations.push(list[i]);
+	        	images.push(list[i].image.imagePath);
+	        	console.log(images);
+	        }
+	    }
+	    console.log(matchedReservations);
+	    console.log(images);
+
+	    if (matchedReservations.length > 0) {
+	        // 모달을 열고 matchedReservation을 사용하여 모달 내용을 업데이트
+	        const modalBody = document.getElementById("modal_body_content");
+
+	        // 모달 내용을 채워넣기
+	        let modalContent = '<div class="modal_border_bottom p-3">';
+		        modalContent += '<p>예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
+		        modalContent += '<p class="m-0">예약 날짜 : ' + matchedReservations[0].reservation.rvRvDate + '</p>';
+		        modalContent += '</div>';
+		        modalContent += '<div class="modal_border_bottom p-3">';
+		        modalContent += '<p class="fs-5">장소 : ' + matchedReservations[0].reservation.rvAddr + matchedReservations[0].reservation.rvAddrDetail + '</p>';
+		        modalContent += '<p>신청자 : ' + matchedReservations[0].reservation.rvName + '</p>';
+		        modalContent += '<p>연락처 : ' + matchedReservations[0].reservation.rvPhone + '</p>';
+		        modalContent += '<p>요청사항 : ' + matchedReservations[0].reservation.rvRequest + '</p>';
+
+	        // matchedReservations 배열에 대한 forEach 루프
+	        for (let i = 0; i < matchedReservations.length; i++) {
+	            modalContent += '<div class="row mb-2">';
+	            modalContent += '<div class="col-4 text-center">';
+	            modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded popup-image" onclick="openImagePopup(\''+ matchedReservations[i].image.imagePath +'\')">';
+	            modalContent += '</div>';
+	            modalContent += '<div class="col-8 row">';
+	            modalContent += '<div class="col-10 pt-4">';
+	            modalContent += '<h3>' + matchedReservations[i].wasteType.wasteTypeName + '</h3>';
+	            modalContent += '</div>';
+	            modalContent += '<div class="col-6">';
+	            modalContent += '<p>수량 :  1개</p>';
+	            modalContent += '</div>';
+	            modalContent += '<div class="col-6 text-end">';
+	            modalContent += '<p>' + matchedReservations[i].wasteInfo.wasteInfoFee + '</p>';
+	            modalContent += '</div>';
+	            modalContent += '</div>';
+	            modalContent += '</div>';
+	        }
+
+	        modalContent += '</div>';
+	        modalContent += '<div class="">';
+	        modalContent += '<div class="row p-3 pb-0">';
+	        modalContent += '<div class="col">';
+	        modalContent += '<p class="fs-4 m-0">총 결제 금액</p>';
+	        modalContent += '</div>';
+	        modalContent += '<div class="col">';
+	        modalContent += '<p class="fs-4 m-0 text-end">' + matchedReservations[0].reservationDetail.rvDetailFee + '</p>';
+	        modalContent += '</div>';
+	        modalContent += '</div>';
+	        modalContent += '</div>';
+	           
+	        modalBody.innerHTML = modalContent;
+	    	// 모달을 열기
+	        $('#enroll_modal').modal('show');
+	    } else {
+	        // 일치하는 예약을 찾지 못한 경우 처리
+	        alert("일치하는 예약을 찾지 못했습니다.");
+	    }
+	}
+	function openImagePopup(imagePath) {
+	    var popupImage = document.getElementById("popupImage");
+	    popupImage.src = imagePath;
+
+	 // 이미지 목록 생성
+        var imageList = document.getElementById("imageList");
+        imageList.innerHTML = ""; // 이미지 목록 초기화
+
+        console.log(images);
+        for (var i = 0; i < images.length; i++) {
+            var imageItem = document.createElement("img");
+            imageItem.src = images[i];
+            imageItem.classList.add("popup-thumbnail");
+            imageItem.onclick = function () {
+                changeImage(images.indexOf(this.src));
+            };
+            imageList.appendChild(imageItem);
+        }
+
+	    // 이미지 팝업 모달 열기
+	    $('#imagePopup').modal('show');
+	}
+	function changeImage(offset) {
+        currentImageIndex += offset;
+        if (currentImageIndex < 0) {
+            currentImageIndex = images.length - 1;
+        } else if (currentImageIndex >= images.length) {
+            currentImageIndex = 0;
+        }
+        var popupImage = document.getElementById("popupImage");
+        popupImage.src = images[currentImageIndex];
+    }
+	</script>
 
     <!-- 채널톡 api -->
     <script>

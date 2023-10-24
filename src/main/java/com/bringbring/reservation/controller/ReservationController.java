@@ -1,5 +1,6 @@
 package com.bringbring.reservation.controller;
 
+import com.bringbring.common.PageInfo;
 import com.bringbring.region.domain.City;
 import com.bringbring.region.service.RegionService;
 import com.bringbring.reservation.domain.Reservation;
@@ -13,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -33,8 +31,15 @@ public class ReservationController {
     private final RegionService regionService;
     // 페이지 이동
     @GetMapping("/select.do")
-    public String showWasteSelect() {
-        return "/reservation/wasteSelect";
+    public String showWasteSelect(HttpSession session, Model model) {
+        String userId = (String)session.getAttribute("sessionId");
+        if(userId != null) {
+            return "/reservation/wasteSelect";
+        } else {
+            model.addAttribute("msg", "로그인 후 이용할 수 있습니다.")
+                    .addAttribute("url", "/user/login.do");
+            return "/common/error";
+        }
     }
 
     @PostMapping("/select/insert.do")
@@ -61,29 +66,17 @@ public class ReservationController {
             return "/common/error";
         }
     }
-    @PostMapping("/addImage.do")
-    public String addImages(ModelAndView mv
-            , @RequestParam(value="wasteInfoNo", required = false) String[] wasteInfoNo
-            , @ModelAttribute MultipartFile[] uploadFiles
-            , HttpServletRequest request
-            , HttpSession session
-            , Model model) {
 
-        Map<String, Object> result = reservationService.addImages(wasteInfoNo , uploadFiles, request);
-        if(result != null) {
-            session.setAttribute("imageAdd", result);
-        } else {
-            model.addAttribute("msg", "사진 업로드에 실패했습니다")
+    @GetMapping("/insertInfo.do")
+    public String showInsertInfo(HttpSession session, Model model) {
+        String userId = (String) session.getAttribute("sessionId");
+        Map<String, Object> imageList = (Map<String, Object>) session.getAttribute("imageAdd");
+        List<City> cityList = regionService.selectCityList();
+        if (imageList == null || imageList.isEmpty()) {
+            model.addAttribute("msg", "업로드한 이미지 정보가 없습니다.")
                     .addAttribute("url", "/reservation/addImage.do");
             return "/common/error";
         }
-        return "redirect:/reservation/insertInfo.do";
-    }
-
-    @GetMapping("/insertInfo.do")
-    public String showInsertInfo(HttpSession httpSession, Model model) {
-        String userId = (String) httpSession.getAttribute("sessionId");
-        List<City> cityList = regionService.selectCityList();
         if (userId != null && !userId.isEmpty()) {
             User user = userService.selectOneById(userId);
             model.addAttribute("userInfo", user)
@@ -122,20 +115,69 @@ public class ReservationController {
             model.addAttribute("wasteDataList", wasteDataList)
                     .addAttribute("reservationInfo", reservation)
                     .addAttribute("reservationDetail", reservationDetail);
-        }
             return "/reservation/payment";
+        } else  {
+            model.addAttribute("msg", "배출 정보가 없습니다.")
+                    .addAttribute("url", "/reservation/insertInfo.do");
+            return "/common/error";
         }
+    }
 
 
     @GetMapping("/payComplete.do")
     public String payComplete(HttpSession session, Model model) {
-        // 세션의 데이터들 저장하면서 insert 후 성공 시 완료 페이지로 이동하기
-        // 실패 시 결제 실패 창
-        List<ReservationComplete> reservationComplete = (List<ReservationComplete>) session.getAttribute("reservationComplete");
-        model.addAttribute("reservationComplete", reservationComplete);
+        String payId = (String) session.getAttribute("payId");
+        List<Integer> selectedItems = (List<Integer>) session.getAttribute("selectedItems");
+            List<WasteData> wasteDataList = new ArrayList<>();
+        if (!selectedItems.isEmpty()){
+            for (Integer wasteInfoNo : selectedItems) {
+                // 리스트에 대형폐기물 정보 저장
+                WasteData wasteData = reservationService.selectInfoNoData(wasteInfoNo);
+                // no로 총 배출품목 갯수
+                wasteDataList.add(wasteData);
+            }
+        }
+        if (payId == null || payId.isEmpty()) {
+            model.addAttribute("msg", "결제 내역을 찾을 수 없습니다.")
+                    .addAttribute("url", "/reservation/payment.do");
+            return "/common/error";
+        }
+        List<WasteData> wasteData = reservationService.selectpayCompleteWasteDate(payId);
+        model.addAttribute("wasteData", wasteData).addAttribute("wasteDataList", wasteDataList);
+        System.out.println("wasteDataList = " + wasteDataList.get(0).getWasteCategory().getWasteCategoryName());
+        System.out.println("wasteDataList size: " + wasteDataList.size());
+
+
         return "/reservation/payComplete";
     }
 
+
+    @GetMapping("/list.do")
+    public String showReservationList(HttpSession session, Model model
+            , @RequestParam(value="page", required = false, defaultValue = "1") Integer currentPage) {
+        String userId = (String)session.getAttribute("sessionId");
+        System.out.println("userId = " + userId);
+        User user = reservationService.selectUserNo(userId);
+        int userNo = user.getUserNo();
+        int totalCount = reservationService.selectReservationListCount(userNo);
+        PageInfo pageInfo = reservationService.getPageInfo(currentPage, userNo, totalCount);
+        if(userId != null) {
+            List<ReservationComplete> reservationList = reservationService.selectMyReservationList(pageInfo, userNo);
+            model.addAttribute("reservationList", reservationList).addAttribute("pageInfo", pageInfo);
+            return "/reservation/list";
+        } else {
+            model.addAttribute("msg", "로그인 정보를 찾을 수 없습니다.")
+                    .addAttribute("url", "/user/login.do");
+            return "/common/error";
+        }
+    }
+
+    @GetMapping("/guide.do")
+    public String showReservationGuide(Model model) {
+//        List<WasteData> wasteList = reservationService.AllWasteList();
+//        model.addAttribute("wasteList", wasteList);
+        return "/reservation/guide";
+    }
 
 
 }

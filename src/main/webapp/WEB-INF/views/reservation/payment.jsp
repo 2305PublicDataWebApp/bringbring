@@ -141,8 +141,8 @@
         </td>
         <td>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">${reservationDetail.rvDetailFee}원</li>
-            <input type="hidden" id="rvDetailFee" name="rvDetailFee" value="${reservationDetail.rvDetailFee}원">
+            <li class="list-group-item" style="border: none">${reservationDetail.rvDetailFee}원</li>
+            <input type="hidden" id="rvDetailFee" name="rvDetailFee" value="${reservationDetail.rvDetailFee}">
           </ul>
         </td>
       </tr>
@@ -154,19 +154,31 @@
     <div>
       <div class="form-check" id="card-form">
         <div>
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="card">
         </div>
-        <div id="card-div">
-          <label class="form-check-label" for="flexRadioDefault1" id="card-img">
-            <img src="../../../resources/assets/img/reservation/card.png" id="payment-card">
+        <div class="payment-div">
+          <label class="form-check-label flexRadio" for="card" id="card-img">
+            <img src="../../../resources/assets/img/reservation/card.png" class="payment">
             <p>신용카드</p>
           </label>
+        </div>
+      </div>
+      <div class="form-check" id="kakao-form">
+        <div>
+          <input class="form-check-input flexRadio" type="radio" name="flexRadioDefault" id="kakao">
+        </div>
+          <div id="kakao-div">
+            <label class="form-check-label" for="kakao" id="kakao-img">
+              <img src="../../../resources/assets/img/reservation/kakaoPay.png" id="payment-kakao" class="payment">
+              <p>카카오페이</p>
+            </label>
         </div>
       </div>
     </div>
   </div>
   <div id="submit_btn_box">
-    <button class="btn btn-success" id="submitBtn" type="button" onclick="requestPay()">결제하기</button>
+    <button class="btn btn-success" id="submitBtn" type="button" onclick="handlePayment()">결제하기</button>
+<%--    <button class="btn btn-success" id="kakaoPayBtn" type="button" onclick="kakaoRequestPay()">카카오 페이 결제하기</button>--%>
   </div>
 </main>
 </div><!-- End Hero -->
@@ -203,12 +215,35 @@
     "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
   });
 
+  let selectedPaymentMethod = "card"; // 초기 선택: 신용카드
+
+  // 라벨 클릭 이벤트 핸들러
+  document.getElementById("card").addEventListener("click", function() {
+    selectedPaymentMethod = "card"; // 신용카드 선택
+  });
+
+  document.getElementById("kakao").addEventListener("click", function() {
+    selectedPaymentMethod = "kakao"; // 카카오페이 선택
+  });
+
+  // 버튼 클릭 이벤트 핸들러
+  function handlePayment() {
+    if (selectedPaymentMethod === "card") {
+      // 신용카드 선택 시 실행할 함수 호출
+      requestPay();
+    } else if (selectedPaymentMethod === "kakao") {
+      // 카카오페이 선택 시 실행할 함수 호출
+      kakaoRequestPay();
+    }
+  }
+
+
 
   function requestPay() {
     let uidDate = new dayjs().format("YYYYMMDDTHHmmss");
     const rvDetailTotal = ${reservationDetail.rvDetailTotal};
-    // const Fee = document.querySelector('#rvDetailFee').value;
-    const Fee = 100;
+    const Fee = document.querySelector('#rvDetailFee').value;
+    // const Fee = 100;
     const userEmail = '${sessionScope.sessionId}';
     const userName = '${sessionScope.sessionName}';
 
@@ -217,58 +252,125 @@
     console.log("뭐야")
     var IMP = window.IMP;
     IMP.init("imp44058332"); // 예: imp00000000
-      // IMP.request_pay(param, callback) 결제창 호출
-      IMP.request_pay({ // param
-        pg: "html5_inicis",
-        pay_method: "card",
-        pay_currency: "₩",
-        merchant_uid: "BRING"+ uidDate,
-        name: "브링브링",
-        amount: Fee,
-        buyer_email: userEmail,
-        buyer_name: userName
-        // buyer_tel: "010-4242-4242",
-        // buyer_addr: "서울특별시 강남구 신사동",
-        // buyer_postcode: "01181"
-      }, function (rsp) { // callback
-          console.log(rsp);
-        if (rsp.success) {
-          // 결제 성공 시 로직
-          let msg = '결제가 완료되었습니다.';
-          let date = dayjs();
-          let format = "YYYY-MM-DD HH:mm:s";
-          let nowDate = date.format(format);
-          console.log(msg);
+    // IMP.request_pay(param, callback) 결제창 호출
+    IMP.request_pay({ // param
+      pg: "html5_inicis",
+      pay_method: "card",
+      pay_currency: "₩",
+      merchant_uid: "BRING"+ uidDate,
+      name: "브링브링",
+      amount: Fee,
+      buyer_email: userEmail,
+      buyer_name: userName
+      // buyer_tel: "010-4242-4242",
+      // buyer_addr: "서울특별시 강남구 신사동",
+      // buyer_postcode: "01181"
+    }, function (rsp) { // callback
+      console.log(rsp);
+      if (rsp.success) {
+        // 결제 성공 시 로직
+        let msg = '결제가 완료되었습니다.';
+        let date = dayjs();
+        let format = "YYYY-MM-DD HH:mm:s";
+        let nowDate = date.format(format);
+        console.log(msg);
 
-          $.ajax({
-            type: "GET",
-            url: '/reservation/pay.do',
-            data: {
-              userId : userEmail,
-              rvDetailTotal: rvDetailTotal,
-              rvDetailFee: Fee,
-              payAmount: Fee,
-              payMethod: "card",
-              payCurrency: "₩",
-              // payDate: nowDate,
-              // imp_uid: rsp.imp_uid,
-              payId: rsp.merchant_uid
-            },
-            success: function () {
-              location.href="/reservation/payComplete.do";
-            },
-            error: function () {
-              alert("Ajax 오류! 관리자에게 문의하세요");
-            }
-          });
+        $.ajax({
+          type: "GET",
+          url: '/reservation/pay.do',
+          data: {
+            userId : userEmail,
+            rvDetailTotal: rvDetailTotal,
+            rvDetailFee: Fee,
+            payAmount: Fee,
+            payMethod: "card",
+            payCurrency: "₩",
+            // payDate: nowDate,
+            // imp_uid: rsp.imp_uid,
+            payId: rsp.merchant_uid
+          },
+          success: function () {
+            location.href="/reservation/payComplete.do";
+          },
+          error: function () {
+            alert("Ajax 오류! 관리자에게 문의하세요");
+          }
+        });
 
-        } else {
-          // 결제 실패 시 로직
-          var msg = '결제에 실패하였습니다. 관리자에게 문의하세요';
-          alert(msg += '에러내용 : ' + rsp.error_msg);
-        }
-      });
-    }
+      } else {
+        // 결제 실패 시 로직
+        var msg = '결제에 실패하였습니다. 관리자에게 문의하세요';
+        alert(msg += '에러내용 : ' + rsp.error_msg);
+      }
+    });
+  }
+
+  function kakaoRequestPay() {
+    let uidDate = new dayjs().format("YYYYMMDDTHHmmss");
+    const rvDetailTotal = ${reservationDetail.rvDetailTotal};
+    const Fee = document.querySelector('#rvDetailFee').value;
+    // const Fee = 100;
+    const userEmail = '${sessionScope.sessionId}';
+    const userName = '${sessionScope.sessionName}';
+
+
+    console.log(uidDate);
+    console.log("뭐야")
+    var IMP = window.IMP;
+    IMP.init("imp44058332"); // 예: imp00000000
+    // IMP.request_pay(param, callback) 결제창 호출
+    IMP.request_pay({ // param
+      pg: "kakaopay.TC0ONETIME",
+      pay_method: "kakao-pay",
+      pay_currency: "₩",
+      merchant_uid: "BRING"+ uidDate,
+      name: "브링브링",
+      amount: Fee,
+      buyer_email: userEmail,
+      buyer_name: userName
+      // buyer_tel: "010-4242-4242",
+      // buyer_addr: "서울특별시 강남구 신사동",
+      // buyer_postcode: "01181"
+    }, function (rsp) { // callback
+      console.log(rsp);
+      if (rsp.success) {
+        // 결제 성공 시 로직
+        let msg = '결제가 완료되었습니다.';
+        let date = dayjs();
+        let format = "YYYY-MM-DD HH:mm:s";
+        let nowDate = date.format(format);
+        console.log(msg);
+
+        $.ajax({
+          type: "GET",
+          url: '/reservation/pay.do',
+          data: {
+            userId : userEmail,
+            rvDetailTotal: rvDetailTotal,
+            rvDetailFee: Fee,
+            payAmount: Fee,
+            payMethod: "kakao-pay",
+            payCurrency: "₩",
+            // payDate: nowDate,
+            // imp_uid: rsp.imp_uid,
+            payId: rsp.merchant_uid
+          },
+          success: function () {
+            location.href="/reservation/payComplete.do";
+          },
+          error: function () {
+            alert("Ajax 오류! 관리자에게 문의하세요");
+          }
+        });
+
+      } else {
+        // 결제 실패 시 로직
+        var msg = '결제에 실패하였습니다. 관리자에게 문의하세요';
+        alert(msg += '에러내용 : ' + rsp.error_msg);
+      }
+    });
+  }
+
 </script>
 
 <script>

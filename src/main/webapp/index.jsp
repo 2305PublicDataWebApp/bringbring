@@ -123,7 +123,7 @@
             <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
               <div class="icon-box">
                 <div class="icon"><i class="bi bi-wallet2"></i></div>
-                <h4 class="title"><a href="" class="stretched-link">금액 안내</a></h4>
+                <h4 class="title"><a href="/reservation/guide.do" class="stretched-link">금액 안내</a></h4>
               </div>
             </div><!--End Icon Box -->
 
@@ -735,7 +735,7 @@
     
    
     <!-- 로그인, 로그아웃 -->
-    <jsp:include page="/include/loginJs.jsp"></jsp:include>
+//     <jsp:include page="/include/loginJs.jsp"></jsp:include>
 
     $(document).ready(function() {
       var today = new Date();

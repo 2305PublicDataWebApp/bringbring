@@ -1,7 +1,9 @@
 package com.bringbring.inquire.store;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.image.domain.Image;
 import com.bringbring.inquire.domain.Inquire;
+import com.bringbring.inquire.domain.InquireDetail;
 import com.bringbring.inquire.domain.InquireDetails;
 
 import java.util.List;
@@ -64,4 +66,52 @@ public interface InquireStore {
 	  * @return Inquire
 	  */
 	  List<Inquire> selectInquireListByUserNo(int userNo);
+
+    /**
+     * 회원 번호로 리스트 불러오기 store
+     * @param userNo
+     * @return int
+     */
+    int getListCountByNo(int userNo);
+
+    /**
+     * 회원 번호로 문의내역 리스트 불러오기(페이징) store
+     * @param pInfo
+     * @param userNo
+     * @return
+     */
+    List<Inquire> selectPageInquireListByNo(PageInfo pInfo, int userNo);
+
+    /**
+     * 문의글 insert store
+     * @param inquire
+     * @return
+     */
+    int insertInquire(Inquire inquire);
+
+    /**
+     * 문의글 가장 최근번호 찾기 store
+     * @return
+     */
+    int selectMaxNo();
+
+    /**
+     * 문의글 이미지 insert store
+     * @param image
+     */
+    int insertImage(Image image);
+
+    /**
+     * 문의글 상세보기 정보 불러오기 store
+     * @param inqNo
+     * @return
+     */
+    InquireDetail selectInquireDetailByNo(int inqNo);
+
+    /**
+     * 문의글 사진 불러오기 store
+     * @param inqNo
+     * @return
+     */
+    List<Image> selectImageList(int inqNo);
 }

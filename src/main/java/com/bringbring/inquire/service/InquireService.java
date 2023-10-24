@@ -1,7 +1,9 @@
 package com.bringbring.inquire.service;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.image.domain.Image;
 import com.bringbring.inquire.domain.Inquire;
+import com.bringbring.inquire.domain.InquireDetail;
 import com.bringbring.inquire.domain.InquireDetails;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -91,5 +93,44 @@ public interface InquireService {
      */
     List<Inquire> selectInquireListByUserNo(int userNo);
 
+    PageInfo getPageInfo(Integer currentPage, int totalCount);
+
+    /**
+     * 회원 별 문의 리스트 개수 service
+     * @param userNo
+     * @return
+     */
+    int getListCountByNo(int userNo);
+
+    /**
+     * 회원 별 문의 내역 리스트
+     * @param pInfo
+     * @param userNo
+     * @return
+     */
+    List<Inquire> selectPageInquireListByNo(PageInfo pInfo, int userNo);
+
+    /**
+     * 문의 게시판 insert service
+     * @param inquire
+     * @param uploadFiles
+     * @param request
+     * @return
+     */
+    int insertInquire(Inquire inquire, MultipartFile[] uploadFiles, HttpServletRequest request);
+
+    /**
+     * 문의 게시판 상세보기 정보 불러오기 service
+     * @param inqNo
+     * @return
+     */
+    InquireDetail selectInquireDetailByNo(int inqNo);
+
+    /**
+     * 한 문의글 당 사진 리스트 불러오기
+     * @param inqNo
+     * @return
+     */
+    List<Image> selectImageList(int inqNo);
 }
 

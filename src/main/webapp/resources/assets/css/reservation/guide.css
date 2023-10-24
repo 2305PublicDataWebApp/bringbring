@@ -1,0 +1,136 @@
+.in-progress-bar {
+    width: 20%;
+    background: #A8DF8E;
+    animation: progressBarAnimation 1s ease-in-out;
+}
+@keyframes progressBarAnimation {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 20%;
+    }
+}
+.selectBox {
+    width: 300px;
+}
+.selectBtn {
+    border: none;
+    background: none;
+}
+.selectBtn > img {
+    width: 30px;
+}
+.itemList {
+    display: flex;
+    align-items: center;
+}
+
+/* 스핀 버튼 제거 */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+    width: 50px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid #CCC;
+}
+#category_box {
+    width: 975px;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+#category_box button {
+    font-size: 18px;
+    width: 100px;
+}
+.fee {
+    margin-right: 20px;
+}
+main {
+    margin-top: 100px;
+}
+.firstTd {
+    width: 26%;
+    /*background-color: #f5f5f5;*/
+}
+.firstTd:not(:first-of-type) {
+    background-color: #E9F2E1;
+}
+.secondTd {
+    width: 49%;
+    /*background-color: #f9f9f9;*/
+    padding: 0px;
+}
+.secondTd > p {
+    /*border: 1px solid #ccc;*/
+}
+.thirdTd {
+    width: 25%;
+    /*background-color: #f3f3f3;*/
+}
+.table {
+    border-collapse: collapse;
+    width: 90%;
+    margin: 0 auto;
+}
+
+
+.table td {
+    border: 1px solid #ccc;
+    /*padding: 8px;*/
+}
+.firstTd p,
+.secondTd p,
+.thirdTd p {
+    /*border: 1px solid #ccc;*/
+    padding: 4px;
+    background-color: transparent; /* 배경색을 투명으로 설정 */
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.firstTd, .thirdTd {
+    text-align: center;
+}
+.secondTd > p {
+    margin-left: 15px;
+}
+
+thead {
+    /*background-color: rgba(255,255,255,0.3);*/
+    height: 60px;
+    font-size: 23px;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+.table>thead {
+    color: white;
+    background-color: #03C988;
+    vertical-align: revert;
+    text-align: center;
+}
+.table>thead>th:nth-child(2) {
+    border-right: 1px solid white;
+    border-left: 1px solid white;
+}
+#listDiv-p {
+    margin: 100px;
+    text-align: center;
+    font-size: 25px;
+}
+tr:hover {
+    background-color: #dbffe9;
+}
+/* 클릭 시 색상 변경 스타일 */
+.btn.btn-outline-success.active {
+    background-color: #198754; /* 클릭 시 배경색 */
+    color: #fff; /* 클릭 시 텍스트 색상 */
+}

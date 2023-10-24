@@ -48,8 +48,7 @@ public class DivideController {
 	}
 	
 	@PostMapping("/insert.do")
-    public String insertDivide(Model model
-			, Divide divide
+    public String insertDivide(Divide divide
 			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
 			, HttpServletRequest request
 			, HttpSession httpSession) {
@@ -61,7 +60,6 @@ public class DivideController {
 		int result = divideService.insertDivide(divide, uploadFiles, request);
 		if(result > 0) {
 			int max = divideService.selectMaxNo();
-			model.addAttribute("redirect:/divide/detail.do?divNo="+max);
 			return "redirect:/divide/detail.do?divNo=" + max;
 		}else {
 			return "/";
@@ -83,7 +81,6 @@ public class DivideController {
 			Heart heart = divideService.selectHeartByMap(map);
 			model.addAttribute("heart", heart);
 		}
-//		date.format(DateTimeFormatter.ISO_DATE);
 		model.addAttribute("iList", imageList).addAttribute("dData", detailData);
 		return "divide/detail";
 	}
@@ -93,6 +90,10 @@ public class DivideController {
 			, int divNo) {
 
 		List<WasteCategory> wasteCategories = reservationService.selectWasteCategoryList();
+		List<Image> imageList = divideService.selectImageListByNo(divNo);
+		if(!imageList.isEmpty()){
+			model.addAttribute("iList", imageList);
+		}
 		List<City> cityList = regionService.selectCityList();
 		UpdateData updateData = divideService.selectUpdateDataByNo(divNo);
 
@@ -103,10 +104,17 @@ public class DivideController {
 
 	@PostMapping("/update.do")
 	public String updateDivide(Divide divide
-			, Model model) {
+			, @RequestParam (value="uploadFiles", required = false) MultipartFile[] uploadFiles
+			, @RequestParam (value="deletePreImageNo", required = false) int[] deletePreImageNo
+			, HttpServletRequest request) {
 
-		divideService.updateDivide(divide);
-		return "redirect:/divide/detail.do?divNo="+divide.getDivNo();
+		int result = divideService.updateDivide(divide, uploadFiles, deletePreImageNo, request);
+		if(result > 0){
+			return "redirect:/divide/detail.do?divNo="+divide.getDivNo();
+		}else{
+			return "/";
+		}
+
 	}
 
 	@GetMapping("/delete.do")
@@ -119,7 +127,7 @@ public class DivideController {
 
 		String userId = (String) httpSession.getAttribute("sessionId");
 		int totalCount = divideService.getListCount();
-		PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
+		PageInfo pInfo = divideService.getPageInfo(currentPage, totalCount);
 
 		if (userId != null && !userId.isEmpty()) {
 			User user = userService.selectOneById(userId);
@@ -130,34 +138,12 @@ public class DivideController {
 			model.addAttribute("rData", responseData);
 		}
 
-
 		model.addAttribute("pInfo", pInfo);
 
 		return "divide/list";
 	}
 
-	public PageInfo getPageInfo(int currentPage, int totalCount) {
 
-		PageInfo pi = null;
-		int recordCountPerPage = 10;
-		int naviCountPerPage = 5;
-		int naviTotalCount;
-		int startNavi;
-		int endNavi;
-
-		naviTotalCount = (int)((double) totalCount / recordCountPerPage + 0.9);
-
-		startNavi = (((int) ((double) currentPage / naviCountPerPage + 0.9)) - 1) * naviCountPerPage + 1;
-
-		endNavi = startNavi + naviCountPerPage - 1;
-		if (endNavi > naviTotalCount) {
-			endNavi = naviTotalCount;
-		}
-
-		pi = new PageInfo(currentPage, totalCount, naviTotalCount, recordCountPerPage, naviCountPerPage,
-		 startNavi, endNavi);
-		return pi;
-	}
 
 }
 

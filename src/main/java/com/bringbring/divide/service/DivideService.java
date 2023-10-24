@@ -38,7 +38,7 @@ public interface DivideService {
 
     UpdateData selectUpdateDataByNo(int divNo);
 
-	int updateDivide(Divide divide);
+	int updateDivide(Divide divide, MultipartFile[] uploadFiles, int[] deletePreImageNo, HttpServletRequest request);
 
 	Divide selectOneByNo(int divNo);
 
@@ -47,4 +47,6 @@ public interface DivideService {
 	UserData selectUserDataByNo(int divNo);
 
     List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo);
+
+    PageInfo getPageInfo(Integer currentPage, int totalCount);
 }
