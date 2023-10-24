@@ -52,11 +52,14 @@ public interface ReservationStore {
 
     int updateReservationIsCancel(int rvNo);
 
-    int updatePayIsCancel(int rvDeatilNo);
+    int updatePayIsCancel(int rvDetailNo);
 
     int insertPayCancel(PayCancel payCancel);
 
     ReservationDetail selectReservationDetailByDetailNo(int rvDetailNo);
 
     CancelRequest selectPayIdByDischargeNo(String dischargeNo);
+
+
+    List<ReservationComplete> selectMyReservationDetailList(Connection connection);
 }

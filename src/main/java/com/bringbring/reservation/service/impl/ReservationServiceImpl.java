@@ -40,8 +40,6 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationStore.selectInfoNoData(wasteInfoNo);
     }
 
-
-
     @Transactional
     @Override
     public Integer insertReservation(List<Integer> selectedItems, Map<String, Object> imageAdd, Reservation reservationUserInfo, ReservationDetail reservationDetail, Pay pay) {
@@ -72,8 +70,8 @@ public class ReservationServiceImpl implements ReservationService {
                 reservationDetail.setRvNo(rvNo);
                 reservationDetailResult = reservationStore.insertReservationDetail(reservationDetail);
 
-                rvDetailNo = reservationDetail.getRvDeatilNo();
-                reservationDetail.setRvDeatilNo(rvDetailNo);
+                rvDetailNo = reservationDetail.getRvDetailNo();
+                reservationDetail.setRvDetailNo(rvDetailNo);
                 System.out.println("rvDetailNo = " + rvDetailNo);
                 System.out.println("reservationDetailResult = " + reservationDetailResult);
             }
@@ -123,7 +121,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public PageInfo getPageInfo(Integer currentPage, int userNo, int totalCount) {
         PageInfo pi = null;
-        int recordCountPerPage = 10;
+        int recordCountPerPage = 3;
         int naviCountPerPage = 5;
         int naviTotalCount;
         int startNavi;
@@ -149,6 +147,11 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public List<ReservationComplete> selectMyReservationDetailList(Connection connection) {
+        return reservationStore.selectMyReservationDetailList(connection);
+    }
+
+    @Override
     public List<WasteData> AllWasteList() {
         return reservationStore.selectAllWasteList();
     }
@@ -167,22 +170,23 @@ public class ReservationServiceImpl implements ReservationService {
     // ***************** 이미지 관련 *****************
     // 세션에 저장용, 실제 저장은 x
     @Override
-    public Map<String, Object> addImages(String[] wasteInfoNo, MultipartFile[] uploadFiles, HttpServletRequest request) {
+    public Map<String, Object> addImages(String[] wasteInfoNo, String[] imageIndexNo, MultipartFile[] uploadFiles, HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
         // 파일 업로드 및 저장
-        List<Map<String, String>> saveImgs = uploadImages(wasteInfoNo, uploadFiles, request);
+        List<Map<String, String>> saveImgs = uploadImages(wasteInfoNo, imageIndexNo, uploadFiles, request);
         // 이미지 정보 저장
         result.put("imagePaths", saveImgs);
         return result;
     }
 
     // 파일 리네임 밒 경로 생성 메소드
-    public List<Map<String, String>> uploadImages(String[] wasteInfoNo, MultipartFile[] uploadFiles, HttpServletRequest request) {
+    public List<Map<String, String>> uploadImages(String[] wasteInfoNo, String[] imageIndexNo, MultipartFile[] uploadFiles, HttpServletRequest request) {
         List<Map<String, String>> imagePaths = new ArrayList<>();
 
         for (int i = 0; i < uploadFiles.length; i++) {
             MultipartFile files = uploadFiles[i];
             String currentWasteInfoNo = wasteInfoNo[i]; // 해당 이미지의 wasteInfoNo
+            String currentImageIndexNo = imageIndexNo[i];
 
             if (!files.isEmpty()) {
                 try {
@@ -211,6 +215,7 @@ public class ReservationServiceImpl implements ReservationService {
                     imageInfo.put("imageRename", imageRename);
                     imageInfo.put("savePath", dbPath);
                     imageInfo.put("wasteInfoNo", currentWasteInfoNo); // wasteInfoNo를 맵에 추가
+                    imageInfo.put("imageIndexNo", currentImageIndexNo); // wasteInfoNo를 맵에 추가
                     imagePaths.add(imageInfo);
 
                     System.out.println("Image Info: " + imageInfo);
@@ -226,7 +231,7 @@ public class ReservationServiceImpl implements ReservationService {
         return imagePaths;
     }
     // 실제로 db에 저장
-    private int insertImages(Map<String, Object> imageAdd, int rvDeatilNo) {
+    private int insertImages(Map<String, Object> imageAdd, int rvDetailNo) {
         int result = 0; // 이미지 삽입 횟수를 초기화
 
         for (Map.Entry<String, Object> entry : imageAdd.entrySet()) {
@@ -243,10 +248,12 @@ public class ReservationServiceImpl implements ReservationService {
                         String imageRename = (String) innerMap.get("imageRename");
                         String savePath = (String) innerMap.get("savePath");
                         String wasteInfoNoStr =  (String) innerMap.get("wasteInfoNo");
+                        String imageIndexNoStr =  (String) innerMap.get("imageIndexNo");
                         int wasteInfoNo = Integer.parseInt(wasteInfoNoStr);
+                        int imageIndexNo = Integer.parseInt(imageIndexNoStr);
 
                         // 이미지 객체 생성
-                        Image image = new Image("reservation", rvDeatilNo, imageName, imageRename, savePath);
+                        Image image = new Image("reservation", rvDetailNo, imageName, imageRename, savePath);
                         System.out.println("image = " + image);
                         // 이미지 객체를 데이터베이스에 삽입
                         int insertResult = reservationStore.insertReservationImage(image);
@@ -260,8 +267,9 @@ public class ReservationServiceImpl implements ReservationService {
 
                             // 가져온 이미지 번호와 imageAdd가 가지고 있는 정보로 연결 테이블에 삽입합니다.
                             Connection connection = new Connection();
-                            connection.setRvDetailNo(rvDeatilNo);
+                            connection.setRvDetailNo(rvDetailNo);
                             connection.setWasteInfoNo(wasteInfoNo);
+                            connection.setImageIndexNo(imageIndexNo);
                             connection.setImageNo(imageNo);
 
                             int insertConnection = reservationStore.insertConnection(connection);

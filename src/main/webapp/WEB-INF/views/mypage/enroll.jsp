@@ -105,7 +105,7 @@
 	                                    <img src="${resInfo.image.imagePath }" class="rounded">
 	                                </div>
 	                                <div class="col-6 mt-5">
-	                                    <h2>책상</h2>
+	                                    <h2>${resInfo.wasteType.wasteTypeName}</h2>
 	                                    <p class="fs-4">예약 번호 ${resInfo.reservation.rvDischargeNo }</p>
 	                                    <p class="fs-4">결제 금액 ${resInfo.reservationDetail.rvDetailFee }원</p>
 	                                </div>
@@ -134,40 +134,38 @@
 			                </c:otherwise>
 			            </c:choose>
 						</c:forEach>
-						
+                        <div style="width: 1000px;margin: 0 auto;margin-top: 60px;">
+                            <nav aria-label="Page navigation example" style="display: flex; width: 770px;">
+                                <ul class="pagination" style="margin: 0 auto;">
+                                    <c:if test="${pageInfo.startNavi ne 1}">
+                                        <c:url var="bPageUrl" value="/mypage/enroll.do">
+                                            <c:param name="page" value="${pageInfo.startNavi-1}"></c:param>
+                                        </c:url>
+                                        <li class="page-item">
+                                            <a style="color: black;" class="page-link" href="${bPageUrl}"><</a>
+                                        </li>
+                                    </c:if>
+                                    <c:forEach begin="${pageInfo.startNavi}" end="${pageInfo.endNavi}" var="p">
+                                        <c:url var="pageUrl" value="/mypage/enroll.do">
+                                            <c:param name="page" value="${p}"></c:param>
+                                        </c:url>
+                                        <li class="page-item">
+                                            <a style="color: black;" class="page-link" href="${pageUrl}">${p}</a>
+                                        </li>
+                                    </c:forEach>
+                                    <c:if test="${pageInfo.endNavi ne pageInfo.naviTotalCount}">
+                                        <c:url var="nPageUrl" value="/mypage/enroll.do">
+                                            <c:param name="page" value="${pageInfo.endNavi+1}"></c:param>
+                                        </c:url>
+                                        <li class="page-item">
+                                            <a style="color: black;" class="page-link" href="${nPageUrl}">>/a>
+                                        </li>
+                                    </c:if>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
-
                 </div>
-            </div>
-            <div style="width: 1000px;margin: 0 auto;margin-top: 60px;">
-                <nav aria-label="Page navigation example" style="display: flex;">
-                    <ul class="pagination" style="margin: 0 auto;">
-                        <c:if test="${pageInfo.startNavi ne 1}">
-                            <c:url var="bPageUrl" value="/mypage/enroll.do">
-                                <c:param name="page" value="${pageInfo.startNavi-1}"></c:param>
-                            </c:url>
-                            <li class="page-item">
-                                <a style="color: black;" class="page-link" href="${bPageUrl}"><</a>
-                            </li>
-                        </c:if>
-                        <c:forEach begin="${pageInfo.startNavi}" end="${pageInfo.endNavi}" var="p">
-                            <c:url var="pageUrl" value="/mypage/enroll.do">
-                                <c:param name="page" value="${p}"></c:param>
-                            </c:url>
-                            <li class="page-item">
-                                <a style="color: black;" class="page-link" href="${pageUrl}">${p}</a>
-                            </li>
-                        </c:forEach>
-                        <c:if test="${pageInfo.endNavi ne pageInfo.naviTotalCount}">
-                            <c:url var="nPageUrl" value="/mypage/enroll.do">
-                                <c:param name="page" value="${pageInfo.endNavi+1}"></c:param>
-                            </c:url>
-                            <li class="page-item">
-                                <a style="color: black;" class="page-link" href="${nPageUrl}">>/a>
-                            </li>
-                        </c:if>
-                    </ul>
-                </nav>
             </div>
         </div>
 
@@ -213,103 +211,252 @@
 
 	<script>
 	function openModal(rvNo) {
-	    // JavaScript에서 reservationInfo 리스트와 rvNo 값을 비교하여 일치하는 항목 찾기
-	    let matchedReservations = [];
-	    const list = ${reservationInfoAsJson};
-	    for (let i = 0; i < list.length; i++) {
-	        if (list[i].reservation.rvNo === rvNo) {
-	        	matchedReservations.push(list[i]);
-	        }
-	    }
-// 	    const matchRvJson = JSON.stringify(matchedReservations);
-	    console.log(matchedReservations);
 
-	    if (matchedReservations.length > 0) {
-	        // 모달을 열고 matchedReservation을 사용하여 모달 내용을 업데이트
-	        const modalBody = document.getElementById("modal_body_content");
+        $.ajax({
+            url: '/reservation/selectMyList.do', // 요청을 보낼 API 엔드포인트
+            type: 'GET',
+            data: { rvNo: rvNo }, // 요청 데이터 (rvNo 매개변수를 전달)
+            success: function(response) {
+                console.log(response);
 
-	        // 모달 내용을 채워넣기
-	        let modalContent = '<div class="modal_border_bottom p-3">';
-		        modalContent += '<p id="rvDischargeNo">예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
-                <%--modalContent += '<input type="hidden" id="modalPayId" name="modalPayId" value="' + ${reservationInfo.get(0).pay.payId} + '">';--%>
-            modalContent += '<input type="hidden" id="modalPayId" name="modalPayId" value="${reservationInfo.get(0).pay.payId}">';
+                // var groupedData = {};
+                //
+                // for (var i = 0; i < response.length; i++) {
+                //     var item = response[i];
+                //     var image = item.image;
+                //     var connection = item.connection;
+                //     var imageIndexNo = connection.imageIndexNo;
+                //
+                //     if (!groupedData[imageIndexNo]) {
+                //         groupedData[imageIndexNo] = {
+                //             image: image,
+                //             connection: connection
+                //         };
+                //     }
+                // }
+                //
+                // console.log("groupdata",groupedData);
 
-            modalContent += '<p class="m-0">예약 날짜 : ' + matchedReservations[0].reservation.rvRvDate + '</p>';
-		        modalContent += '</div>';
-		        modalContent += '<div class="modal_border_bottom p-3">';
-		        modalContent += '<p class="fs-5">장소 : ' + matchedReservations[0].reservation.rvAddr + matchedReservations[0].reservation.rvAddrDetail + '</p>';
-		        modalContent += '<p>요청사항 : ' + matchedReservations[0].reservation.rvRequest + '</p>';
+                const matchedReservations = response;
 
-	        // matchedReservations 배열에 대한 forEach 루프
-	        for (let i = 0; i < matchedReservations.length; i++) {
-	            modalContent += '<div class="row mb-2">';
-	            modalContent += '<div class="col-4 text-center">';
-	            modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded">';
-	            modalContent += '</div>';
-	            modalContent += '<div class="col-8 row">';
-	            modalContent += '<div class="col-10 pt-4">';
-	            modalContent += '<h3>' + matchedReservations[i].wasteType.wasteTypeName + '</h3>';
-	            modalContent += '</div>';
-	            modalContent += '<div class="col-6">';
-	            modalContent += '<p>수량 :  1개</p>';
-	            modalContent += '</div>';
-	            modalContent += '<div class="col-6 text-end">';
-	            modalContent += '<p>' + matchedReservations[i].wasteInfo.wasteInfoFee + '원</p>';
-	            modalContent += '</div>';
-	            modalContent += '</div>';
-	            modalContent += '</div>';
-	        }
+                if (response.length > 0) {
 
-	        modalContent += '</div>';
-	        modalContent += '<div class="">';
-	        modalContent += '<div class="row p-3 pb-0">';
-	        modalContent += '<div class="col">';
-	        modalContent += '<p class="fs-4 m-0">총 결제 금액</p>';
-	        modalContent += '</div>';
-	        modalContent += '<div class="col">';
-	        modalContent += '<p class="fs-4 m-0 text-end" id="rvDetailFee">' + matchedReservations[0].reservationDetail.rvDetailFee + '원</p>';
-	        modalContent += '</div>';
-	        modalContent += '</div>';
-	        modalContent += '</div>';
-	           
-	        modalBody.innerHTML = modalContent;
+                    // 모달을 열고 matchedReservation을 사용하여 모달 내용을 업데이트
+                    const modalBody = document.getElementById("modal_body_content");
 
-            const modalFooter = document.querySelector('.modal-footer');
+                    // 모달 내용을 채워넣기
+                    let modalContent = '<div class="modal_border_bottom p-3">';
+                    modalContent += '<p id="rvDischargeNo">예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
+                    modalContent += '<input type="hidden" id="modalPayId" name="modalPayId" value="' + matchedReservations[0].pay.payId + '">';
 
-            // 모달 푸터 내용 초기화
-            modalFooter.innerHTML = '';
+                    modalContent += '<p class="m-0">예약 날짜 : ' + matchedReservations[0].reservation.rvRvDate + '</p>';
+                    modalContent += '</div>';
+                    modalContent += '<div class="modal_border_bottom p-3">';
+                    modalContent += '<p class="fs-5">장소 : ' + matchedReservations[0].reservation.rvAddr + matchedReservations[0].reservation.rvAddrDetail + '</p>';
+                    modalContent += '<p>요청사항 : ' + matchedReservations[0].reservation.rvRequest + '</p>';
 
-            if (matchedReservations[0].reservation.isRvCancel === 'N') {
-                if (matchedReservations[0].reservation.isRvCompletion === 'N') {
-                    // 수거가 완료되지 않았을 때
-                    modalFooter.innerHTML =
-                        // '<input type="submit" id="rvUpdate" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="정보 수정">' +
-                        '<input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소" onclick="confirmCancel()">';
+                    const displayedImageIndexes = [];
+
+                    for (let i = 0; i < matchedReservations.length; i++) {
+                        const imageIndexNo = matchedReservations[i].connection.imageIndexNo;
+
+                        // 이미 출력한 imageIndexNo가 아닌 경우에만 이미지 출력
+                        if (!displayedImageIndexes.includes(imageIndexNo)) {
+
+                            const imageJson = JSON.stringify(matchedReservations[i].image);
+
+                            const data = {
+                                imageIndexNo : matchedReservations[i].connection.imageIndexNo,
+                                rvDetailNo : matchedReservations[i].reservationDetail.rvDetailNo
+                            }
+
+                            console.log("data", JSON.stringify(data));
+
+                            modalContent += '<div class="row mb-2">';
+                            modalContent += '<div class="col-4 text-center">';
+                            modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded popup-image" ' +
+                                'onclick="openImagePopup(this)">';
+                            modalContent += '<input type="hidden" id="imageIndexNo' + imageIndexNo + '" value="' + matchedReservations[i].connection.imageIndexNo + '">';
+                            modalContent += '<input type="hidden" id="rvDetailNo' + imageIndexNo + '" value="' + matchedReservations[i].reservationDetail.rvDetailNo + '">';
+
+                            // modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded popup-image" ' +
+                            //     'onclick="openImagePopup(' + imageIndexNo + ')">';
+                            // modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded popup-image" ' +
+                            //     'onclick="openImagePopup(' + imageIndexNo + ', groupedData)">';
+
+                            modalContent += '</div>';
+                            modalContent += '<div class="col-8 row">';
+                            modalContent += '<div class="col-10 pt-4">';
+                            modalContent += '<h3>' + matchedReservations[i].wasteType.wasteTypeName + '</h3>';
+                            modalContent += '</div>';
+                            modalContent += '<div class="col-6">';
+                            modalContent += '<p>수량 : 1개</p>';
+                            modalContent += '</div>';
+                            modalContent += '<div class="col-6 text-end">';
+                            modalContent += '<p>' + matchedReservations[i].wasteInfo.wasteInfoFee + '원</p>';
+                            modalContent += '</div>';
+                            modalContent += '</div>';
+                            modalContent += '</div>';
+                            // 이미 출력한 imageIndexNo를 배열에 추가
+                            displayedImageIndexes.push(imageIndexNo);
+                        } else {
+                            // 이미 출력한 imageIndexNo인 경우에는 추가하지 않고 다음으로 넘어감
+                            continue;
+                        }
+                    }
+
+
+
+
+                    modalContent += '</div>';
+                    modalContent += '<div class="">';
+                    modalContent += '<div class="row p-3 pb-0">';
+                    modalContent += '<div class="col">';
+                    modalContent += '<p class="fs-4 m-0">총 결제 금액</p>';
+                    modalContent += '</div>';
+                    modalContent += '<div class="col">';
+                    modalContent += '<p class="fs-4 m-0 text-end" id="rvDetailFee">' + matchedReservations[0].reservationDetail.rvDetailFee + '원</p>';
+                    modalContent += '</div>';
+                    modalContent += '</div>';
+                    modalContent += '</div>';
+
+                    modalBody.innerHTML = modalContent;
+
+                    const modalFooter = document.querySelector('.modal-footer');
+                    modalFooter.innerHTML = '';
+
+                    if (matchedReservations[0].reservation.isRvCancel === 'N') {
+                        if (matchedReservations[0].reservation.isRvCompletion === 'N') {
+                            modalFooter.innerHTML =
+                                '<input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소" onclick="confirmCancel()">';
+                        } else {
+                            modalFooter.innerHTML = '<p>수거가 완료되었습니다</p>';
+                        }
+                    } else if (matchedReservations[0].reservation.isRvCancel === 'Y') {
+                        modalFooter.innerHTML = '<p>예약 취소되었습니다</p>';
+                    }
+
+                    const modal = document.getElementById("enroll_modal");
+                    modal.dataset.matchedReservations = JSON.stringify(matchedReservations);
+
+                    console.log("modal", modal);
+
+                    // 모달을 열기
+                    $('#enroll_modal').modal('show');
+
+
+
+
+
+
+
+
+
                 } else {
-                    // 수거가 완료되었을 때
-                    modalFooter.innerHTML = '<p>수거가 완료되었습니다</p>';
+                    // 일치하는 예약을 찾지 못한 경우 처리
+                    alert("일치하는 예약을 찾지 못했습니다.");
                 }
-            } else if (matchedReservations[0].reservation.isRvCancel === 'Y') {
-                // 예약이 취소된 경우
-                modalFooter.innerHTML = '<p>예약 취소되었습니다</p>';
+            },
+            error: function(xhr, status, error) {
+                console.error('Ajax 요청 실패:', status, error);
             }
-
-            // const isRvComplete = matchedReservations[0].
-
-            const modal = document.getElementById("enroll_modal");
-            modal.dataset.matchedReservations = JSON.stringify(matchedReservations);
-
-            console.log("modal", modal);
-
-
-	    	// 모달을 열기
-	        $('#enroll_modal').modal('show');
-            // updateModalFooter(matchedReservations);
-	    } else {
-	        // 일치하는 예약을 찾지 못한 경우 처리
-	        alert("일치하는 예약을 찾지 못했습니다.");
-	    }
+        });
 	}
+
+    function openImagePopup(obj) {
+        // 이 부분에서 matchedReservations 변수를 사용할 수 있습니다.
+        console.log("imageIndexNo: ", obj);
+        var parentDiv = obj.parentElement;
+        // 부모 요소의 모든 자식 요소를 가져옵니다.
+        var siblings = Array.from(parentDiv.children);
+        // siblings 배열에서 obj 요소의 인덱스를 찾습니다.
+        var objIndex = siblings.indexOf(obj);
+        var imageIndexNoSibling = siblings[objIndex + 1];
+        var rvDetailNoSibling = siblings[objIndex + 2];
+
+        let imageIndexNo = imageIndexNoSibling.value;
+        let rvDetailNo = rvDetailNoSibling.value;
+
+        console.log("imageIndexNoSibling", imageIndexNo);
+        console.log("rvDetailNoSibling", rvDetailNoSibling);
+
+        $.ajax({
+            url: '/reservation/selectImage.do',
+            type: 'GET',
+            data: { imageIndexNo: imageIndexNoSibling, rvDetailNo: rvDetailNo },
+            success: function(response) {
+                // 에이젝스 요청을 통해 이미지 데이터를 가져왔습니다.
+                // 이제 response를 사용하여 모달 창을 열고 캐러셀 형태로 이미지를 표시하세요.
+            },
+            error: function(error) {
+                console.error('에이젝스 요청 오류:', error);
+            }
+        });
+
+
+
+
+    }
+
+
+    // function openImagePopup(imageIndexNo, matchedReservations) {
+    //
+    //     console.log("imageIndexNo : ", imageIndexNo);
+    //
+    //     const modalBody = document.getElementById("modal_body_content");
+    //     modalBody.innerHTML = '';
+    //
+    //     // 이미지 정보 가져오기
+    //     const imageInfo = groupedData[imageIndexNo];
+    //
+    //     if (imageInfo) {
+    //         // 이미지 정보 활용하여 모달 창에 내용 추가 및 동작 수행
+    //         const image = imageInfo.image;
+    //         const connection = imageInfo.connection;
+    //
+    //         // 이미지 캐러셀을 생성
+    //         const carouselContent = document.createElement("div");
+    //         carouselContent.classList.add("carousel");
+    //
+    //         for (let i = 0; i < matchedReservations.length; i++) {
+    //             const slide = document.createElement("div");
+    //             slide.classList.add("carousel-item");
+    //             if (i === imageIndexNo) {
+    //                 slide.classList.add("active");
+    //             }
+    //
+    //             const image = document.createElement("img");
+    //             image.src = matchedReservations[i].image.imagePath;
+    //             image.classList.add("d-block", "w-100");
+    //             slide.appendChild(image);
+    //             carouselContent.appendChild(slide);
+    //         }
+    //
+    //         // 캐러셀 컨트롤 버튼 추가
+    //         const carouselControls = document.createElement("a");
+    //         carouselControls.href = "#imageCarousel";
+    //         carouselControls.role = "button";
+    //         carouselControls.setAttribute("data-slide", "prev");
+    //         carouselControls.classList.add("carousel-control-prev");
+    //         carouselControls.innerHTML = '<span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>';
+    //
+    //         // 모달 내용에 추가
+    //         modalBody.appendChild(carouselContent);
+    //         modalBody.appendChild(carouselControls);
+    //     }
+    //
+    //     // 모달을 열기
+    //     $('#enroll_modal').modal('show');
+    // }
+
+
+    function changeImage(index) {
+        currentImageIndex = index;
+        var popupImage = document.getElementById("popupImage");
+        popupImage.src = images[currentImageIndex];
+    }
+
+
 
 	</script>
     <script>

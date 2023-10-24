@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservationDetail {
-    private int rvDeatilNo;
+    private int rvDetailNo;
     private int rvNo;
     private int rvDetailTotal;
     private int rvDetailFee;

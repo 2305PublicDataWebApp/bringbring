@@ -16,7 +16,7 @@ public interface ReservationService {
 
     WasteData selectInfoNoData(Integer wasteInfoNo);
 
-    Map<String, Object> addImages(String[] wasteInfo, MultipartFile[] uploadFiles, HttpServletRequest request);
+    Map<String, Object> addImages(String[] wasteInfo, String[] imageIndexNo, MultipartFile[] uploadFiles, HttpServletRequest request);
 
     Integer insertReservation(List<Integer> selectedItems, Map<String, Object> imageAdd, Reservation reservationUserInfo, ReservationDetail reservationDetail, Pay pay);
 
@@ -39,4 +39,6 @@ public interface ReservationService {
     CancelRequest selectPayIdByDischargeNo(String dischargeNo);
 
     List<ReservationComplete> selectMyReservationList(PageInfo pageInfo, int userNo);
+
+    List<ReservationComplete> selectMyReservationDetailList(Connection connection);
 }

@@ -113,26 +113,25 @@
 	                                    <img src="${resInfo.image.imagePath }" class="rounded">
 	                                </div>
 	                                <div class="col-6 mt-5">
-	                                	<!-- <c:if test="${resInfo.reservationDetail.rvDetailTotal >= 2 }"> -->
-	                                    	<h2>${resInfo.wasteType.wasteTypeName }</h2>
-	                                    <!-- </c:if> -->
 	                                    <h2>${resInfo.wasteType.wasteTypeName }</h2>
 	                                    <p class="fs-4">예약 번호 ${resInfo.reservation.rvDischargeNo }</p>
-	                                    <p class="fs-4">결제 금액 ${resInfo.pay.payCurrency }${resInfo.pay.payAmount }</p>
+	                                    <p class="fs-4">결제 금액 ${resInfo.pay.payAmount}원</p>
 	                                </div>
 	                                <div class="col-3 text-end">
 	                                    <!-- 상세보기 모달 -->
 	                                    <a href="javascript:void(0)" onclick="openModal(${resInfo.reservation.rvNo})">상세보기 >></a>
 	                                    <p class="fw-1 fs-1 pt-5">
-		                                    <c:if test="${fn:contains(resInfo.reservation.isRvCompletion, 'N')}">
-		 	                                   신청 완료
-		                                    </c:if>
-		                                    <c:if test="${fn:contains(resInfo.reservation.isRvCancel, 'Y')}">
-		 	                                   신청 취소
-		                                    </c:if>
-		                                    <c:if test="${fn:contains(resInfo.reservation.isRvCompletion, 'Y')}">
-		 	                                   처리 완료
-		                                    </c:if>
+		                                    <c:choose>
+                                                <c:when test="${fn:contains(resInfo.reservation.isRvCancel, 'Y')}">
+                                                    신청 취소
+                                                </c:when>
+                                                <c:when test="${fn:contains(resInfo.reservation.isRvCompletion, 'N')}">
+                                                    신청 완료
+                                                </c:when>
+                                                <c:when test="${fn:contains(resInfo.reservation.isRvCompletion, 'Y')}">
+                                                    처리 완료
+                                                </c:when>
+                                            </c:choose>
 	                                    </p>
 	                                </div>
 	                            </div>
@@ -164,7 +163,7 @@
 		                                	<c:forEach var="inquire" items="${inquireList }" begin="0" end="1" varStatus="i">
 			                                    <tr>
 			                                        <td class="text-center">${i.count }</td>
-			                                        <td>${inquire.inqTitle }</td>
+			                                        <td><a href="/inquire/detail.do?inqNo=${inquire.inqNo}">${inquire.inqTitle }</a></td>
 			                                        <td class="text-center">
 														<!-- fn:contains를 사용하여 문자열 비교 -->
 			                                        	<c:choose>
@@ -202,7 +201,7 @@
                     </div>
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> -->
-                        <input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소">
+                        <input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소" onclick="confirmCancel()">
                     </div>
                 </div>
             </div>
@@ -261,14 +260,15 @@
 	    }
 	    console.log(matchedReservations);
 	    console.log(images);
-
+	    
 	    if (matchedReservations.length > 0) {
 	        // 모달을 열고 matchedReservation을 사용하여 모달 내용을 업데이트
 	        const modalBody = document.getElementById("modal_body_content");
 
 	        // 모달 내용을 채워넣기
 	        let modalContent = '<div class="modal_border_bottom p-3">';
-		        modalContent += '<p>예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
+		        modalContent += '<p id="rvDischargeNo">예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
+		        modalContent += '<input type="hidden" id="modalPayId" name="modalPayId" value="' + matchedReservations[0].pay.payId + '">';
 		        modalContent += '<p class="m-0">예약 날짜 : ' + matchedReservations[0].reservation.rvRvDate + '</p>';
 		        modalContent += '</div>';
 		        modalContent += '<div class="modal_border_bottom p-3">';
@@ -277,24 +277,33 @@
 		        modalContent += '<p>연락처 : ' + matchedReservations[0].reservation.rvPhone + '</p>';
 		        modalContent += '<p>요청사항 : ' + matchedReservations[0].reservation.rvRequest + '</p>';
 
+		        var printedWasteTypeNos = []; // 중복 방지를 위한 배열
+		        
 	        // matchedReservations 배열에 대한 forEach 루프
 	        for (let i = 0; i < matchedReservations.length; i++) {
-	            modalContent += '<div class="row mb-2">';
-	            modalContent += '<div class="col-4 text-center">';
-	            modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded popup-image" onclick="openImagePopup(\''+ matchedReservations[i].image.imagePath +'\')">';
-	            modalContent += '</div>';
-	            modalContent += '<div class="col-8 row">';
-	            modalContent += '<div class="col-10 pt-4">';
-	            modalContent += '<h3>' + matchedReservations[i].wasteType.wasteTypeName + '</h3>';
-	            modalContent += '</div>';
-	            modalContent += '<div class="col-6">';
-	            modalContent += '<p>수량 :  1개</p>';
-	            modalContent += '</div>';
-	            modalContent += '<div class="col-6 text-end">';
-	            modalContent += '<p>' + matchedReservations[i].wasteInfo.wasteInfoFee + '</p>';
-	            modalContent += '</div>';
-	            modalContent += '</div>';
-	            modalContent += '</div>';
+	        	// 이미지 리스트 중복 제거위한 코드
+	        	const wasteTypeNo = matchedReservations[i].wasteType.wasteTypeNo;
+
+	            if (!printedWasteTypeNos.includes(wasteTypeNo)) {
+		            modalContent += '<div class="row mb-2">';
+		            modalContent += '<div class="col-4 text-center">';
+		            modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded popup-image" onclick="openImagePopup(\''+ matchedReservations[i].image.imagePath +'\')">';
+		            modalContent += '</div>';
+		            modalContent += '<div class="col-8 row">';
+		            modalContent += '<div class="col-10 pt-4">';
+		            modalContent += '<h3>' + matchedReservations[i].wasteType.wasteTypeName + '</h3>';
+		            modalContent += '</div>';
+		            modalContent += '<div class="col-6">';
+		            modalContent += '<p>수량 :  1개</p>';
+		            modalContent += '</div>';
+		            modalContent += '<div class="col-6 text-end">';
+		            modalContent += '<p>' + matchedReservations[i].wasteInfo.wasteInfoFee + '원</p>';
+		            modalContent += '</div>';
+		            modalContent += '</div>';
+		            modalContent += '</div>';
+		            
+		            printedWasteTypeNos.push(wasteTypeNo); // 중복 방지 배열에 추가
+	            }
 	        }
 
 	        modalContent += '</div>';
@@ -304,7 +313,7 @@
 	        modalContent += '<p class="fs-4 m-0">총 결제 금액</p>';
 	        modalContent += '</div>';
 	        modalContent += '<div class="col">';
-	        modalContent += '<p class="fs-4 m-0 text-end">' + matchedReservations[0].reservationDetail.rvDetailFee + '</p>';
+	        modalContent += '<p class="fs-4 m-0 text-end" id="rvDetailFee">' + matchedReservations[0].reservationDetail.rvDetailFee + '원</p>';
 	        modalContent += '</div>';
 	        modalContent += '</div>';
 	        modalContent += '</div>';
@@ -330,36 +339,75 @@
             var imageItem = document.createElement("img");
             imageItem.src = images[i];
             imageItem.classList.add("popup-thumbnail");
-            imageItem.onclick = function () {
-                changeImage(images.indexOf(this.src));
-            };
+            
+         // 이미지 목록에서 이미지를 클릭했을 때 해당 이미지를 보여주는 이벤트 핸들러 설정
+            (function (index) {
+            	imageItem.onclick = function () {
+                	changeImage(index);
+            	};
+        	})(i);
+         
             imageList.appendChild(imageItem);
         }
 
 	    // 이미지 팝업 모달 열기
 	    $('#imagePopup').modal('show');
 	}
-	function changeImage(offset) {
-        currentImageIndex += offset;
-        if (currentImageIndex < 0) {
-            currentImageIndex = images.length - 1;
-        } else if (currentImageIndex >= images.length) {
-            currentImageIndex = 0;
-        }
-        var popupImage = document.getElementById("popupImage");
-        popupImage.src = images[currentImageIndex];
-    }
+	function changeImage(index) {
+		currentImageIndex = index;
+	    var popupImage = document.getElementById("popupImage");
+	    popupImage.src = images[currentImageIndex];
+	}
 	</script>
+	<script>
+        function confirmCancel() {
+            // 모달에서 matchedReservations 데이터를 읽어옴
+            const modal = document.getElementById("enroll_modal");
+            const matchedReservations = JSON.parse(modal.dataset.matchedReservations);
+            console.log(matchedReservations)
+            const isConfirm = confirm("예약을 취소하시겠습니까? 확인 후 복구할 수 없습니다.")
+            if (isConfirm) {
+                cancelPay(matchedReservations);
+            }
+        }
+
+        function cancelPay() {
+            // const modal = document.getElementById("enroll_modal");
+            // const matchedReservations = JSON.parse(modal.dataset.matchedReservations);
+
+            const dischaegeNoStr = document.querySelector("#rvDischargeNo").textContent;
+            const dischargeNo = dischaegeNoStr.substring(dischaegeNoStr.length - 17);
+            const cancel_request_amount = document.querySelector("#rvDetailFee").textContent;
+            const payId = document.querySelector("#modalPayId").value;
+            console.log(dischargeNo);
+            console.log(cancel_request_amount)
+            console.log(payId);
+
+            $.ajax({
+                url: "/reservation/cancel.do",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    dischargeNo : dischargeNo,
+                    merchant_uid: payId, // 예: ORD20180131-0000011
+                    cancel_request_amount: cancel_request_amount, // 환불금액
+                    reason: "결제 취소 요청" // 환불사유
+                }),
+                success: function (data) {
+                    console.log("data", data);
+                    alert("예약 취소 요청이 성공했습니다.")
+                    $('#enroll_modal').modal('hide');
+                },
+                error: function () {
+                    alert("예약 취소 요청이 실패했습니다 관리자에게 문의하세요");
+                }
+            });
+        }
+    </script>
+	
 
     <!-- 채널톡 api -->
-    <script>
-        (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-        ChannelIO('boot', {
-            "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-        });
-
-    </script>
+    <jsp:include page="/include/chatBot.jsp"></jsp:include>
 
 
 </body>

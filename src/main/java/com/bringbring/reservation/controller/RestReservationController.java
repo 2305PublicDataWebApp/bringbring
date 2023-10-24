@@ -46,9 +46,10 @@ public class RestReservationController {
     @ResponseBody
     public String handleFileUpload(@RequestParam("file") MultipartFile[] uploadFiles
             , @RequestParam("wasteInfoNo") String[] wasteInfoNo
+            , @RequestParam("imageIndexNo") String[] imageIndexNo
             , HttpServletRequest request
             , HttpSession session, Model model) {
-        Map<String, Object> result = reservationService.addImages(wasteInfoNo , uploadFiles, request);
+        Map<String, Object> result = reservationService.addImages(wasteInfoNo, imageIndexNo, uploadFiles, request);
         if(result != null) {
             session.setAttribute("imageAdd", result);
             return "success";
@@ -58,7 +59,6 @@ public class RestReservationController {
             return "/common/error";
         }
     }
-
 
     @PostMapping("/select/userInfo.do")
     public ResponseEntity<User> selectUserInfo(@RequestParam String userId) {
@@ -128,6 +128,24 @@ public class RestReservationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+    @GetMapping("/selectImage.do")
+    public ResponseEntity<List<ReservationComplete>> selectImages(@RequestParam int rvDetailNo
+            , @RequestParam int imageIndexNo) {
+        Connection connection = new Connection();
+        connection.setImageIndexNo(imageIndexNo);
+        connection.setRvDetailNo(rvDetailNo);
+
+
+        List<ReservationComplete> reservationCompletes = reservationService.selectMyReservationDetailList(connection);
+        if (reservationCompletes != null) {
+            return ResponseEntity.ok(reservationCompletes);
+        } else {
+            // 데이터가 없는 경우 404 Not Found 상태 코드 반환
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 
 }

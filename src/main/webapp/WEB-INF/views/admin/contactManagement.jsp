@@ -133,10 +133,18 @@
                             <td><a href="${detailUrl}">${inq.inqTitle}</a></td>
                             <td>${inq.districtName}</td>
                             <td>${inq.inqCategory}</td>
-                            <fmt:parseDate value="${inq.inqCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime" type="both" />
-                            <td><fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" /></td>
+<%--                            <fmt:parseDate value="${inq.inqCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime" type="both" />--%>
+<%--                            <td><fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" /></td>--%>
+                            <td id="inqCreateDate${i.index}"></td>
                             <td>${inq.answerYn}</td>
                         </tr>
+                        <script>
+                            var inqCreateDate${i.index} = new Date('${inq.inqCreateDate}'); // 날짜를 자바스크립트 Date 객체로 변환합니다.
+                            var formattedDate${i.index} = inqCreateDate${i.index}.getFullYear() + '-' +
+                                ('0' + (inqCreateDate${i.index}.getMonth() + 1)).slice(-2) + '-' +
+                                ('0' + inqCreateDate${i.index}.getDate()).slice(-2);
+                            document.getElementById('inqCreateDate${i.index}').textContent = formattedDate${i.index}; // 날짜를 표시합니다.
+                        </script>
                     </c:forEach>
                     </tbody>
                 </table>
@@ -196,12 +204,8 @@
   <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
+<jsp:include page="/include/chatBot.jsp"></jsp:include>
   <script>
-    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-    ChannelIO('boot', {
-      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    });
 
     $(document).ready(function () {
       var trigger = $('.hamburger'),

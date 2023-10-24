@@ -168,6 +168,7 @@
           <tbody>
           <c:forEach var="res" items="${resList}" varStatus="r">
             <tr>
+<%--              <td>${res.region.regionNo}</td>--%>
               <td>${res.reservation.rvNo}</td>
               <td>${res.reservation.rvName}</td>
               <td>${res.district.districtName}</td>
@@ -175,21 +176,21 @@
               <td>${res.reservation.rvRvDate}</td>
               <td>${res.pay.isPayStatus}</td>
               <td>
-                <c:if test="${sessionScope.sessionRegionNo eq res.region.regionNo}">
-                  <c:if test="${res.reservation.isRvCompletion.toString() eq 'Y'}">
-                    <button type="button" class="btn btn-light" onclick="redirectToReservationDetail(${res.reservation.rvNo})">
-                      예약완료
-                    </button>
+                  <c:if test="${sessionScope.sessionRegionNo eq res.region.regionNo}">
+                    <c:if test="${res.reservation.isRvCompletion.toString() eq 'Y'}">
+                      <button type="button" class="btn btn-light" onclick="redirectToReservationDetail(${res.reservation.rvNo})">
+                        예약완료
+                      </button>
+                    </c:if>
+                    <c:if test="${res.reservation.isRvCompletion.toString() eq 'N'}">
+                      <button type="button" class="btn btn-success" onclick="redirectToReservationDetail(${res.reservation.rvNo})">
+                        예약접수
+                      </button>
+                    </c:if>
                   </c:if>
-                <c:if test="${res.reservation.isRvCompletion.toString() eq 'N'}">
-                  <button type="button" class="btn btn-success" onclick="redirectToReservationDetail(${res.reservation.rvNo})">
-                    예약접수
-                  </button>
-                </c:if>
-                </c:if>
-                <c:if test="${sessionScope.sessionRegionNo ne res.region.regionNo}">
-                  타 지역 접수건
-                </c:if>
+                  <c:if test="${sessionScope.sessionRegionNo ne res.region.regionNo}">
+                    타 지역 접수건
+                  </c:if>
               </td>
             </tr>
           </c:forEach>
@@ -248,13 +249,9 @@
   <script src="../resources/assets/js/main.js"></script>
 
   <!-- 채널톡 api -->
+<jsp:include page="/include/chatBot.jsp"></jsp:include>
   <script>
-    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-    ChannelIO('boot', {
-      "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    });
-
+    console.log("리전세션"+'${sessionScope.sessionRegionNo}');
     $(document).ready(function () {
       var trigger = $('.hamburger'),
           overlay = $('.overlay'),
@@ -370,7 +367,7 @@
         success: function (searchData) {
           var reservationList = searchData.reservationList;
           var pageInfo = searchData.pInfo;
-
+          var sessionRegionNo = ${sessionScope.sessionRegionNo};
           // 테이블 바디를 찾습니다
           var tbody = $('#reservationTable tbody');
           tbody.empty(); // 기존 tbody 내용을 지웁니다.
@@ -386,15 +383,22 @@
                     "<td>" + res.reservation.rvRvDate + "</td>" +
                     "<td>" + res.pay.isPayStatus + "</td>" +
                     "<td>";
-            if (res.reservation.isRvCompletion.toString() === 'Y') {
-              row += "<button type='button' class='btn btn-light' onclick='redirectToReservationDetail(" + res.reservation.rvNo + ")'>예약완료</button>";
+
+            if (sessionRegionNo === res.region.regionNo) {
+              if (res.reservation.isRvCompletion === 'Y') {
+                row += "<button type='button' class='btn btn-light' onclick='redirectToReservationDetail(" + res.reservation.rvNo + ")'>예약완료</button>";
+              } else {
+                row += "<button type='button' class='btn btn-success' onclick='redirectToReservationDetail(" + res.reservation.rvNo + ")'>예약접수</button>";
+              }
             } else {
-              row += "<button type='button' class='btn btn-success' onclick='redirectToReservationDetail(" + res.reservation.rvNo + ")'>예약접수</button>";
+              row += "타 지역 접수건";
             }
+
             row += "</td></tr>";
 
             tbody.append(row);
           }
+
 
           var paginationContainer = $('.pagination');
           paginationContainer.empty(); // 기존 페이징 UI를 비웁니다.
