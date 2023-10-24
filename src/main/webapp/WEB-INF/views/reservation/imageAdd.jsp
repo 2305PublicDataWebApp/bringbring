@@ -101,6 +101,7 @@
                     </div>
                     <input type="file" name="uploadFiles" class="uploadImg" accept="image/*" required multiple style="display: none;">
                     <input type="hidden" class="wasteInfoNo" name="wasteInfoNo" value="${item.wasteInfo.wasteInfoNo}">
+                    <input type="hidden" class="imageIndexNo" name="imageIndexNo" value="${i.index+1}">
                     <div class="pic-Add-Btn">
                       <button class="btn btn-outline-success pic-Add-Btn" onclick="document.getElementById('uploadImg').click()">사진 추가</button>
                     </div>
@@ -170,12 +171,13 @@
     // var fileArr = fileListArr.slice(); // 파일 목록 배열을 복사
     var inputElements = document.querySelectorAll('input[name="uploadFiles"]');
       const wasteInfoNo = event.target.closest('tr').querySelector('.wasteInfoNo').value;
+      const imageIndexNo = event.target.closest('tr').querySelector('.imageIndexNo').value;
 
 
       // 파일을 배열에 추가
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        filesArr.push({file, wasteInfoNo});
+        filesArr.push({file, wasteInfoNo, imageIndexNo});
       }
 
       console.log("fileArrs", filesArr);
@@ -346,6 +348,9 @@ console.log("imgUploads ", imgUploads);
     let allRowsHaveImages = true; // 모든 행에 이미지가 첨부되었음을 가정
     let alertShown = false; // 알림이 이미 표시되었는지 여부를 추적
 
+    // 중복 파일 확인을 위한 Set을 생성
+    const addedFiles = new Set();
+
     // 각 행(tr)마다 이미지 업로드 확인 및 FormData에 추가
     formLists.forEach(formList => {
       const uploadFiles = Array.from(formList.querySelectorAll('.uploadImg'));
@@ -361,6 +366,7 @@ console.log("imgUploads ", imgUploads);
       }
 
       const wasteInfoNo = uploadFiles[0].closest('tr').querySelector('.wasteInfoNo').value;
+      const imageIndexNo = uploadFiles[0].closest('tr').querySelector('.imageIndexNo').value;
 
       const filesArrForTr = filesArr.filter(fileObj => fileObj.wasteInfoNo === wasteInfoNo);
 
@@ -375,8 +381,17 @@ console.log("imgUploads ", imgUploads);
 
       // FormData에 해당 행(tr)의 이미지 파일 추가
       for (let i = 0; i < filesArrForTr.length; i++) {
-        formData.append('file', filesArrForTr[i].file);
-        formData.append('wasteInfoNo', filesArrForTr[i].wasteInfoNo);
+        const isFileAdded = addedFiles.has(filesArrForTr[i].file);
+        // 이미 추가된 파일이 아닌 경우에만 추가
+          if (!isFileAdded) {
+            formData.append('file', filesArrForTr[i].file);
+            formData.append('wasteInfoNo', filesArrForTr[i].wasteInfoNo);
+            formData.append('imageIndexNo', filesArrForTr[i].imageIndexNo);
+            console.log(imageIndexNo);
+
+            // Set에 이미 추가된 파일 추가
+            addedFiles.add(filesArrForTr[i].file);
+          }
       }
     });
 

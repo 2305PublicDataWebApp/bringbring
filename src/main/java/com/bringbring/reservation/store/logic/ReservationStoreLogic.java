@@ -153,4 +153,9 @@ public class ReservationStoreLogic implements ReservationStore {
         return sqlSession.selectOne("ReservationMapper.selectPayIdByDischargeNo", dischargeNo);
     }
 
+    @Override
+    public List<ReservationComplete> selectMyReservationDetailList(int rvNo) {
+        return sqlSession.selectList("ReservationMapper.selectMyReservationDetailList", rvNo);
+    }
+
 }

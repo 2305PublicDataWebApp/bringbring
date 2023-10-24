@@ -15,4 +15,5 @@ public class Connection {
     private int rvDetailNo;
     private int wasteInfoNo;
     private int imageNo;
+    private int imageIndexNo;
 }

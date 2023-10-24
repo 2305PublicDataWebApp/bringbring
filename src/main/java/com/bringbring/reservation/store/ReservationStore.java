@@ -59,4 +59,6 @@ public interface ReservationStore {
     ReservationDetail selectReservationDetailByDetailNo(int rvDetailNo);
 
     CancelRequest selectPayIdByDischargeNo(String dischargeNo);
+
+    List<ReservationComplete> selectMyReservationDetailList(int rvNo);
 }
