@@ -17,5 +17,5 @@ public class Answer {
     private String ansContent;
     private LocalDateTime ansCreateDate;
     private LocalDateTime ansUpdateDate;
-    private int AdminNO;
+    private int userNo;
 }

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
 import com.bringbring.image.domain.Image;
-import com.bringbring.region.domain.District;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
@@ -123,6 +122,7 @@ public class DivideController {
 	@GetMapping("/list.do")
 	public String showDivideList(Model model
 			, @RequestParam(value= "page", required = false, defaultValue="1") Integer currentPage
+			, @RequestParam(value= "searchOption", required = false, defaultValue="date") String searchOption
 			, HttpSession httpSession) {
 
 		String userId = (String) httpSession.getAttribute("sessionId");
@@ -131,16 +131,59 @@ public class DivideController {
 
 		if (userId != null && !userId.isEmpty()) {
 			User user = userService.selectOneById(userId);
-			List<ResponseData> responseData = divideService.selectLoginResponseDataList(pInfo, user.getUserNo());
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("userNo", user.getUserNo());
+			map.put("searchOption", searchOption);
+			List<ResponseData> responseData = divideService.selectLoginResponseDataList(pInfo, map);
 			model.addAttribute("cUserNo", user.getUserNo()).addAttribute("rData", responseData);
 		}else{
-			List<ResponseData> responseData = divideService.selectResponseDataList(pInfo);
+			List<ResponseData> responseData = divideService.selectResponseDataList(pInfo, searchOption);
 			model.addAttribute("rData", responseData);
 		}
 
-		model.addAttribute("pInfo", pInfo);
+		model.addAttribute("pInfo", pInfo).addAttribute("searchOption", searchOption);
 
 		return "divide/list";
+	}
+
+	@GetMapping("/search.do")
+	public String searchDivideList(
+			@RequestParam(value="searchCondition") String searchCondition
+			, @RequestParam(value="searchKeyword") String searchKeyword
+			, @RequestParam(value="page", required=false, defaultValue="1") Integer currentPage
+			, @RequestParam(value= "searchOption", required = false, defaultValue="date") String searchOption
+			, HttpSession httpSession
+			, Model model){
+
+		String userId = (String) httpSession.getAttribute("sessionId");
+		int totalCount = 0;
+		PageInfo pInfo = null;
+		Map<String, Object> map = null;
+		if (userId != null && !userId.isEmpty()) {
+			User user = userService.selectOneById(userId);
+			map = new HashMap<String, Object>();
+			map.put("userNo", user.getUserNo());
+			map.put("searchOption", searchOption);
+			map.put("searchCondition", searchCondition);
+			map.put("searchKeyword", searchKeyword);
+			totalCount = divideService.getSearchListCount(map);
+			pInfo = divideService.getPageInfo(currentPage, totalCount);
+			List<ResponseData> responseData = divideService.selectLoginResponseDataSearchList(pInfo, map);
+			model.addAttribute("cUserNo", user.getUserNo()).addAttribute("rData", responseData);
+		}else{
+			map = new HashMap<String, Object>();
+			map.put("searchOption", searchOption);
+			map.put("searchCondition", searchCondition);
+			map.put("searchKeyword", searchKeyword);
+			totalCount = divideService.getSearchListCount(map);
+			pInfo = divideService.getPageInfo(currentPage, totalCount);
+			List<ResponseData> responseData = divideService.selectResponseDataSearchList(pInfo, map);
+			model.addAttribute("rData", responseData);
+		}
+
+		model.addAttribute("pInfo", pInfo).addAttribute("map", map);
+
+		return "divide/search";
 	}
 
 

@@ -6,7 +6,6 @@
     // console.log(Kakao.isInitialized());
   	 //function deleteCookie(name) {
         //document.cookie = name + '=; path=/; Expires=Thu, 01 Jan 1999 00:00:10 GMT; domain=.kakao.com;';
-
     //}
      function login(){
     	// deleteCookie('_kawlt');
