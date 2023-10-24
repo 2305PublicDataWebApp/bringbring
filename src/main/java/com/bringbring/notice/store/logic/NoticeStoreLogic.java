@@ -113,6 +113,13 @@ public class NoticeStoreLogic implements NoticeStore {
 		return sqlSession.selectList("NoticeMapper.searchUpdateByKeyword", searchKeyword, rowBounds);
 	}
 
+	@Override
+	public Image selectImageByNo(Integer noticeNo) {
+		return sqlSession.selectOne("NoticeMapper.selectImageByNo",noticeNo);
+	}
+
+
+
 
 
 

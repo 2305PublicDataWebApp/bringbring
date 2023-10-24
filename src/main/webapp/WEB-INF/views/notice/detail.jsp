@@ -94,6 +94,7 @@
 				</c:url>
 				<c:url var="modiUrl" value="/notice/update.do">
 					<c:param name="noticeNo" value="${notice.noticeNo }" />
+					<c:param name="userNo" value="${notice.userNo }" />
 				</c:url>
 					<!-- 관리자만 보이는 버튼 -->
 			<c:if test="${sessionScope.sessionUserGrade >=2 }">
@@ -117,45 +118,9 @@
 		<hr>
 		<div class="content">
 			${notice.noticeContent }
-				<img src=${image.imagePath }>
+				<img width="800px" src="${image.imagePath }">
 		</div>
 		<hr>
-		<!-- 이전글/다음글 -->
-		<div class="otherdetail">
-        <table id="nextBoard">
-            <tr>
-                <td style="width:70px;">이전</td>
-                <td>
-                	<c:choose>
-                		<c:when test="${notice.preNoticeNo == 0 }">
-                			<span style="coloc:gray;">이전글이 없습니다.</span>
-                		</c:when>
-                		<c:otherwise>
-                			<span class="preNoticeTitle">
-                				<a href="/notice/detail?noticeNo=${notice.preNoticeNo}"></a>
-                			</span>
-                		</c:otherwise>
-                	</c:choose>
-                </td>
-            </tr>
-
-            <tr style="border-top: 1px solid #dbdbdb;">
-                <td>다음</td>
-                <td>
-                	<c:choose>
-                		<c:when test="${notice.nextNoticeNo == 0 }">
-                			<span style="coloc:gray;">다음글이 없습니다.</span>
-                		</c:when>
-                		<c:otherwise>
-                			<span class="nextNoticeTitle">
-                				<a href="/notice/detail?noticeNo=${notice.nextNoticeNo}"></a>
-                			</span>
-                		</c:otherwise>
-                	</c:choose>
-                </td>
-            </tr>
-        </table>
-		</div>
 
 		<button class="btn btn-success" onclick="goList()">목록으로</button>
 	</main>

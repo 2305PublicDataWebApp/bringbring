@@ -87,6 +87,11 @@
 	<main id="main" class="main">
 		<form class="notice-form" action="/notice/update.do" method="post"
 			enctype="multipart/form-data">
+			<input type="hidden" name="userNo" value="${notice.userNo }">
+			<input type="hidden" name="noticeNo" value="${notice.noticeNo }">
+			<input type="hidden" name="imageName" value="${image.imageName }">
+			<input type="hidden" name="imageRename" value="${image.imageRename }">
+			<input type="hidden" name="imagePath" value="${image.imagePath }">
 			<h2>공지사항 수정</h2>
 			<hr>
 			<div class="container">
@@ -125,8 +130,8 @@
 				<div class="row mb-3">
 					<label for="inputNumber" class="col-sm-1 col-form-label">첨부파일</label>
 					<div class="col-sm-6">
-						<input class="form-control" type="file" id="formFile"
-							name="uploadFile">
+						<a href="../resources/assets/nUploadFiles/img/${image.imageRename }">${image.imageRename }</a>
+						<input class="form-control" type="file" id="formFile" name="uploadFile" value="${image.imagePath }">
 					</div>
 				</div>
 
@@ -140,7 +145,7 @@
 			<hr>
 			<!-- <div class="col-sm-10"> -->
 			<button type="submit" class="btn btn-primary"
-				onclick="notice_check(event)">수정하기</button>
+				onclick="return notice_check();">수정하기</button>
 		</form>
 	</main>
 	<!-- End #main -->

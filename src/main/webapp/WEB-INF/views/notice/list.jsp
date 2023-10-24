@@ -251,9 +251,6 @@
 		function showUpdateList(){
 			location.href = "/notice/updateList.do"
 		}
-
-
-				
 		
 	</script>
 
