@@ -123,7 +123,13 @@
                       <c:if test="${rdList.reservation.isRvCompletion.toString() eq 'N'}">
                           <td colspan="3">신청상태</td>
                       </c:if>
-                  </tr>           
+                  </tr>
+                  <tr>
+                      <td class="trHead">사진</td>
+                      <td colspan="3">
+                          <img src="${rdList.image.imagePath};}"/>
+                      </td>
+                  </tr>
               </table>
                 </c:forEach>
                 <div style="display: flex; justify-content: space-around;">

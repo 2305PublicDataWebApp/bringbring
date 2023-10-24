@@ -379,13 +379,6 @@ public class AdminController {
 		}
 	}
 
-	
-//	예약 상세 조회
-	@GetMapping("/rDetail.do")
-	public ModelAndView showReservationDetail(ModelAndView mv) {
-		mv.setViewName("admin/reservationDetail");
-		return mv;
-	}
 
 //	예약 조회
 	@GetMapping("/reservationList.do")
