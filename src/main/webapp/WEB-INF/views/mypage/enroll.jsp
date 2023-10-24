@@ -265,10 +265,19 @@
 
                             const imageJson = JSON.stringify(matchedReservations[i].image);
 
+                            const data = {
+                                imageIndexNo : matchedReservations[i].connection.imageIndexNo,
+                                rvDetailNo : matchedReservations[i].reservationDetail.rvDetailNo
+                            }
+
+                            console.log("data", JSON.stringify(data));
+
                             modalContent += '<div class="row mb-2">';
                             modalContent += '<div class="col-4 text-center">';
                             modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded popup-image" ' +
-                                'onclick="openImagePopup(' + imageIndexNo + ', ' + (matchedReservations) + ')">';
+                                'onclick="openImagePopup(this)">';
+                            modalContent += '<input type="hidden" id="imageIndexNo' + imageIndexNo + '" value="' + matchedReservations[i].connection.imageIndexNo + '">';
+                            modalContent += '<input type="hidden" id="rvDetailNo' + imageIndexNo + '" value="' + matchedReservations[i].reservationDetail.rvDetailNo + '">';
 
                             // modalContent += '<img src="' + matchedReservations[i].image.imagePath + '" class="rounded popup-image" ' +
                             //     'onclick="openImagePopup(' + imageIndexNo + ')">';
@@ -354,18 +363,39 @@
         });
 	}
 
-    function openImagePopup(imageIndexNo, matchedReservations) {
+    function openImagePopup(obj) {
         // 이 부분에서 matchedReservations 변수를 사용할 수 있습니다.
-        console.log("imageIndexNo: ", imageIndexNo);
+        console.log("imageIndexNo: ", obj);
+        var parentDiv = obj.parentElement;
+        // 부모 요소의 모든 자식 요소를 가져옵니다.
+        var siblings = Array.from(parentDiv.children);
+        // siblings 배열에서 obj 요소의 인덱스를 찾습니다.
+        var objIndex = siblings.indexOf(obj);
+        var imageIndexNoSibling = siblings[objIndex + 1];
+        var rvDetailNoSibling = siblings[objIndex + 2];
 
-        // JSON 문자열을 파싱하여 데이터 추출
-        matchedReservations = JSON.parse(matchedReservations);
-        console.log("matchedReservations", matchedReservations);
+        let imageIndexNo = imageIndexNoSibling.value;
+        let rvDetailNo = rvDetailNoSibling.value;
 
-        const modalBody = document.getElementById("modal_body_content");
-        modalBody.innerHTML = '';
+        console.log("imageIndexNoSibling", imageIndexNo);
+        console.log("rvDetailNoSibling", rvDetailNoSibling);
 
-        // 이어서 모달 내용을 업데이트하고 이미지 정보를 처리하는 작업을 수행합니다.
+        $.ajax({
+            url: '/reservation/selectImage.do',
+            type: 'GET',
+            data: { imageIndexNo: imageIndexNoSibling, rvDetailNo: rvDetailNo },
+            success: function(response) {
+                // 에이젝스 요청을 통해 이미지 데이터를 가져왔습니다.
+                // 이제 response를 사용하여 모달 창을 열고 캐러셀 형태로 이미지를 표시하세요.
+            },
+            error: function(error) {
+                console.error('에이젝스 요청 오류:', error);
+            }
+        });
+
+
+
+
     }
 
 

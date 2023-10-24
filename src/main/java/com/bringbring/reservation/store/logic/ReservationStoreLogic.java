@@ -134,8 +134,8 @@ public class ReservationStoreLogic implements ReservationStore {
     }
 
     @Override
-    public int updatePayIsCancel(int rvDeatilNo) {
-        return sqlSession.update("ReservationMapper.updatePayIsCancel", rvDeatilNo);
+    public int updatePayIsCancel(int rvDetailNo) {
+        return sqlSession.update("ReservationMapper.updatePayIsCancel", rvDetailNo);
     }
 
     @Override
@@ -154,8 +154,9 @@ public class ReservationStoreLogic implements ReservationStore {
     }
 
     @Override
-    public List<ReservationComplete> selectMyReservationDetailList(int rvNo) {
-        return sqlSession.selectList("ReservationMapper.selectMyReservationDetailList", rvNo);
+    public List<ReservationComplete> selectMyReservationDetailList(Connection connection) {
+        return sqlSession.selectList("ReservationMapper.selectMyReservationDetailList", connection);
     }
+
 
 }

@@ -88,7 +88,9 @@ public class PayServiceImpl implements PayService {
             String access_token = token; // 포트원 서버로부터 발급받은 엑세스 토큰
             String merchant_uid = request.get("merchant_uid"); // 주문번호
             String reason = request.get("reason"); // 환불사유
-            int cancel_request_amount = Integer.parseInt(request.get("cancel_request_amount")); // 환불금액 (예: 100)
+            String amountStr = request.get("cancel_request_amount");
+            String amountWithoutWon = amountStr.replace("원", "");
+            int cancel_request_amount = Integer.parseInt(amountWithoutWon); // 환불금액 (예: 100)
 
             // 조회한 결제 정보로부터 imp_uid, amount(결제금액), cancel_amount(환불된 총 금액) 추출
             String imp_uid = "imp44058332";
@@ -164,7 +166,7 @@ public class PayServiceImpl implements PayService {
         payCancel.setCancelAmount(pay.getPayAmount());
         int totalResult = 0;
         int reservationResult = reservationStore.updateReservationIsCancel(reservation.getRvNo());
-        int payUpdate = reservationStore.updatePayIsCancel(reservationDetail.getRvDeatilNo());
+        int payUpdate = reservationStore.updatePayIsCancel(reservationDetail.getRvDetailNo());
         int payCancelInsert = reservationStore.insertPayCancel(payCancel);
         totalResult = reservationResult + payUpdate + payCancelInsert;
         System.out.println("payCancelInsert = " + totalResult);

@@ -54,7 +54,7 @@
         <result property="isRvCancel" column="IS_RV_CANCEL" />
     </resultMap>
     <resultMap id="reservationDetail" type="com.bringbring.reservation.domain.ReservationDetail">
-        <id property="rvDeatilNo" column="RV_DETAIL_NO" />
+        <id property="rvDetailNo" column="RV_DETAIL_NO" />
         <result property="rvNo" column="RV_NO" />
         <result property="rvDetailTotal" column="RV_DETAIL_TOTAL" />
         <result property="rvDetailFee" column="RV_DETAIL_FEE" />
@@ -147,7 +147,7 @@
     <!--        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, #{rvDetailTotal}, #{rvDetailFee})-->
     <!--    </insert>-->
     <insert id="insertReservationDetail" parameterType="com.bringbring.reservation.domain.ReservationDetail" >
-        <selectKey keyProperty="rvDeatilNo" order="AFTER" resultType="int">
+        <selectKey keyProperty="rvDetailNo" order="AFTER" resultType="int">
             SELECT SEQ_RV_DETAIL_NO.CURRVAL AS rvNo FROM DUAL
         </selectKey>
         insert into RESERVATION_DETAIL_TBL values (
@@ -194,7 +194,7 @@
     <update id="updatePayIsCancel">
         update PAY_TBL
             set IS_PAY_CANCEL = 'Y'
-            where RV_DETAIL_NO = #{rvDeatilNo}
+            where RV_DETAIL_NO = #{rvDetailNo}
     </update>
 
     <select id="selectWasteList" resultMap="wasteDataResultMap">
