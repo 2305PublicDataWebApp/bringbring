@@ -113,6 +113,9 @@
 	                                    <img src="${resInfo.image.imagePath }" class="rounded">
 	                                </div>
 	                                <div class="col-6 mt-5">
+	                                	<!-- <c:if test="${resInfo.reservationDetail.rvDetailTotal >= 2 }"> -->
+	                                    	<h2>${resInfo.wasteType.wasteTypeName }</h2>
+	                                    <!-- </c:if> -->
 	                                    <h2>${resInfo.wasteType.wasteTypeName }</h2>
 	                                    <p class="fs-4">예약 번호 ${resInfo.reservation.rvDischargeNo }</p>
 	                                    <p class="fs-4">결제 금액 ${resInfo.pay.payCurrency }${resInfo.pay.payAmount }</p>

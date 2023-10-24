@@ -1,5 +1,8 @@
 package com.bringbring.inquire.controller;
 
+
+import com.bringbring.inquire.service.InquireService;
+import com.bringbring.user.service.UserService;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.ResponseData;
 import com.bringbring.image.domain.Image;
@@ -17,7 +20,10 @@ import org.springframework.stereotype.Controller;
 import com.bringbring.inquire.service.InquireService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;

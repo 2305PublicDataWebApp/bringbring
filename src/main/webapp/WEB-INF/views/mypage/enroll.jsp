@@ -38,6 +38,7 @@
     <link href="../resources/assets/css/style.css" rel="stylesheet">
     <link href="../resources/assets/css/common.css" rel="stylesheet">
     <link href="../resources/assets/css/mypage/mypage.css" rel="stylesheet">
+    <link href="../resources/assets/css/mypage/enroll.css" rel="stylesheet">
 
     <!-- =======================================================
   * Template Name: Arsha
@@ -106,20 +107,22 @@
 	                                <div class="col-6 mt-5">
 	                                    <h2>책상</h2>
 	                                    <p class="fs-4">예약 번호 ${resInfo.reservation.rvDischargeNo }</p>
-	                                    <p class="fs-4">결제 금액 ${resInfo.pay.payCurrency }${resInfo.pay.payAmount }</p>
+	                                    <p class="fs-4">결제 금액 ${resInfo.reservationDetail.rvDetailFee }원</p>
 	                                </div>
 	                                <div class="col-3 text-end">
 	                                    <a href="javascript:void(0)" onclick="openModal(${resInfo.reservation.rvNo})">상세보기 >></a>
 	                                    <p class="fw-1 fs-1 pt-5">
-											<c:if test="${fn:contains(resInfo.reservation.isRvCompletion, 'N')}">
-		 	                                   신청 완료
-		                                    </c:if>
-		                                    <c:if test="${fn:contains(resInfo.reservation.isRvCancel, 'Y')}">
-		 	                                   신청 취소
-		                                    </c:if>
-		                                    <c:if test="${fn:contains(resInfo.reservation.isRvCompletion, 'Y')}">
-		 	                                   처리 완료
-		                                    </c:if>
+                                            <c:choose>
+                                                <c:when test="${fn:contains(resInfo.reservation.isRvCancel, 'Y')}">
+                                                    신청 취소
+                                                </c:when>
+                                                <c:when test="${fn:contains(resInfo.reservation.isRvCompletion, 'N')}">
+                                                    신청 완료
+                                                </c:when>
+                                                <c:when test="${fn:contains(resInfo.reservation.isRvCompletion, 'Y')}">
+                                                    처리 완료
+                                                </c:when>
+                                            </c:choose>
 										</p>
 	                                </div>
 	                            </div>
@@ -133,7 +136,38 @@
 						</c:forEach>
 						
                     </div>
+
                 </div>
+            </div>
+            <div style="width: 1000px;margin: 0 auto;margin-top: 60px;">
+                <nav aria-label="Page navigation example" style="display: flex;">
+                    <ul class="pagination" style="margin: 0 auto;">
+                        <c:if test="${pageInfo.startNavi ne 1}">
+                            <c:url var="bPageUrl" value="/mypage/enroll.do">
+                                <c:param name="page" value="${pageInfo.startNavi-1}"></c:param>
+                            </c:url>
+                            <li class="page-item">
+                                <a style="color: black;" class="page-link" href="${bPageUrl}"><</a>
+                            </li>
+                        </c:if>
+                        <c:forEach begin="${pageInfo.startNavi}" end="${pageInfo.endNavi}" var="p">
+                            <c:url var="pageUrl" value="/mypage/enroll.do">
+                                <c:param name="page" value="${p}"></c:param>
+                            </c:url>
+                            <li class="page-item">
+                                <a style="color: black;" class="page-link" href="${pageUrl}">${p}</a>
+                            </li>
+                        </c:forEach>
+                        <c:if test="${pageInfo.endNavi ne pageInfo.naviTotalCount}">
+                            <c:url var="nPageUrl" value="/mypage/enroll.do">
+                                <c:param name="page" value="${pageInfo.endNavi+1}"></c:param>
+                            </c:url>
+                            <li class="page-item">
+                                <a style="color: black;" class="page-link" href="${nPageUrl}">>/a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </nav>
             </div>
         </div>
 
@@ -149,8 +183,8 @@
                     <div id="modal_body_content" class="modal-body container">
                     </div>
                     <div class="modal-footer">
-                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button> -->
-                        <input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소">
+                        <input type="submit" id="rvUpdate" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="정보 수정">
+                        <input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소" onclick="cancelPay()">
                     </div>
                 </div>
             </div>
@@ -196,8 +230,11 @@
 
 	        // 모달 내용을 채워넣기
 	        let modalContent = '<div class="modal_border_bottom p-3">';
-		        modalContent += '<p>예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
-		        modalContent += '<p class="m-0">예약 날짜 : ' + matchedReservations[0].reservation.rvRvDate + '</p>';
+		        modalContent += '<p id="rvDischargeNo">예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
+                <%--modalContent += '<input type="hidden" id="modalPayId" name="modalPayId" value="' + ${reservationInfo.get(0).pay.payId} + '">';--%>
+            modalContent += '<input type="hidden" id="modalPayId" name="modalPayId" value="${reservationInfo.get(0).pay.payId}">';
+
+            modalContent += '<p class="m-0">예약 날짜 : ' + matchedReservations[0].reservation.rvRvDate + '</p>';
 		        modalContent += '</div>';
 		        modalContent += '<div class="modal_border_bottom p-3">';
 		        modalContent += '<p class="fs-5">장소 : ' + matchedReservations[0].reservation.rvAddr + matchedReservations[0].reservation.rvAddrDetail + '</p>';
@@ -217,7 +254,7 @@
 	            modalContent += '<p>수량 :  1개</p>';
 	            modalContent += '</div>';
 	            modalContent += '<div class="col-6 text-end">';
-	            modalContent += '<p>' + matchedReservations[i].wasteInfo.wasteInfoFee + '</p>';
+	            modalContent += '<p>' + matchedReservations[i].wasteInfo.wasteInfoFee + '원</p>';
 	            modalContent += '</div>';
 	            modalContent += '</div>';
 	            modalContent += '</div>';
@@ -230,20 +267,96 @@
 	        modalContent += '<p class="fs-4 m-0">총 결제 금액</p>';
 	        modalContent += '</div>';
 	        modalContent += '<div class="col">';
-	        modalContent += '<p class="fs-4 m-0 text-end">' + matchedReservations[0].reservationDetail.rvDetailFee + '</p>';
+	        modalContent += '<p class="fs-4 m-0 text-end" id="rvDetailFee">' + matchedReservations[0].reservationDetail.rvDetailFee + '원</p>';
 	        modalContent += '</div>';
 	        modalContent += '</div>';
 	        modalContent += '</div>';
 	           
 	        modalBody.innerHTML = modalContent;
+
+            const modalFooter = document.querySelector('.modal-footer');
+
+            // 모달 푸터 내용 초기화
+            modalFooter.innerHTML = '';
+
+            if (matchedReservations[0].reservation.isRvCancel === 'N') {
+                if (matchedReservations[0].reservation.isRvCompletion === 'N') {
+                    // 수거가 완료되지 않았을 때
+                    modalFooter.innerHTML =
+                        // '<input type="submit" id="rvUpdate" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="정보 수정">' +
+                        '<input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소" onclick="confirmCancel()">';
+                } else {
+                    // 수거가 완료되었을 때
+                    modalFooter.innerHTML = '<p>수거가 완료되었습니다</p>';
+                }
+            } else if (matchedReservations[0].reservation.isRvCancel === 'Y') {
+                // 예약이 취소된 경우
+                modalFooter.innerHTML = '<p>예약 취소되었습니다</p>';
+            }
+
+            // const isRvComplete = matchedReservations[0].
+
+            const modal = document.getElementById("enroll_modal");
+            modal.dataset.matchedReservations = JSON.stringify(matchedReservations);
+
+            console.log("modal", modal);
+
+
 	    	// 모달을 열기
 	        $('#enroll_modal').modal('show');
+            // updateModalFooter(matchedReservations);
 	    } else {
 	        // 일치하는 예약을 찾지 못한 경우 처리
 	        alert("일치하는 예약을 찾지 못했습니다.");
 	    }
 	}
+
 	</script>
+    <script>
+        function confirmCancel() {
+            // 모달에서 matchedReservations 데이터를 읽어옴
+            const modal = document.getElementById("enroll_modal");
+            const matchedReservations = JSON.parse(modal.dataset.matchedReservations);
+            console.log(matchedReservations)
+            const isConfirm = confirm("예약을 취소하시겠습니까? 확인 후 복구할 수 없습니다.")
+            if (isConfirm) {
+                cancelPay(matchedReservations);
+            }
+        }
+
+        function cancelPay() {
+            // const modal = document.getElementById("enroll_modal");
+            // const matchedReservations = JSON.parse(modal.dataset.matchedReservations);
+
+            const dischaegeNoStr = document.querySelector("#rvDischargeNo").textContent;
+            const dischargeNo = dischaegeNoStr.substring(dischaegeNoStr.length - 17);
+            const cancel_request_amount = document.querySelector("#rvDetailFee").textContent;
+            const payId = document.querySelector("#modalPayId").value;
+            console.log(dischargeNo);
+            console.log(cancel_request_amount)
+            console.log(payId);
+
+            $.ajax({
+                url: "/reservation/cancel.do",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    dischargeNo : dischargeNo,
+                    merchant_uid: payId, // 예: ORD20180131-0000011
+                    cancel_request_amount: cancel_request_amount, // 환불금액
+                    reason: "결제 취소 요청" // 환불사유
+                }),
+                success: function (data) {
+                    console.log("data", data);
+                    alert("예약 취소 요청이 성공했습니다.")
+                    $('#enroll_modal').modal('hide');
+                },
+                error: function () {
+                    alert("예약 취소 요청이 실패했습니다 관리자에게 문의하세요");
+                }
+            });
+        }
+    </script>
     <!-- 채널톡 api -->
     <script>
         (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();

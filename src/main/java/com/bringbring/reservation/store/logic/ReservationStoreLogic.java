@@ -105,7 +105,7 @@ public class ReservationStoreLogic implements ReservationStore {
     }
 
     @Override
-    public List<ReservationComplete> selectReservationList(PageInfo pageInfo, int userNo) {
+    public List<ReservationComplete> selectMyReservationList(PageInfo pageInfo, int userNo) {
         int limit = pageInfo.getRecordCountPerPage();
         int offset = (pageInfo.getCurrentPage() - 1) * limit;
         RowBounds rowBounds = new RowBounds(offset, limit);
@@ -117,4 +117,40 @@ public class ReservationStoreLogic implements ReservationStore {
 
         return sqlSession.selectList("ReservationMapper.selectAllWasteList");
     }
+
+    @Override
+    public Pay selectPayInfoByPayId(String payId) {
+        return sqlSession.selectOne("ReservationMapper.selectPayInfoByPayId", payId);
+    }
+
+    @Override
+    public Reservation selectReservationNoByRvNo(int rvNo) {
+        return sqlSession.selectOne("ReservationMapper.selectReservationNoByRvNo", rvNo);
+    }
+
+    @Override
+    public int updateReservationIsCancel(int rvNo) {
+        return sqlSession.update("ReservationMapper.updateReservationIsCancel", rvNo);
+    }
+
+    @Override
+    public int updatePayIsCancel(int rvDeatilNo) {
+        return sqlSession.update("ReservationMapper.updatePayIsCancel", rvDeatilNo);
+    }
+
+    @Override
+    public int insertPayCancel(PayCancel payCancel) {
+        return sqlSession.insert("ReservationMapper.insertPayCancel", payCancel);
+    }
+
+    @Override
+    public ReservationDetail selectReservationDetailByDetailNo(int rvDetailNo) {
+        return sqlSession.selectOne("ReservationMapper.selectReservationDetailByDetailNo", rvDetailNo);
+    }
+
+    @Override
+    public CancelRequest selectPayIdByDischargeNo(String dischargeNo) {
+        return sqlSession.selectOne("ReservationMapper.selectPayIdByDischargeNo", dischargeNo);
+    }
+
 }
