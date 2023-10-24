@@ -91,8 +91,8 @@ public class InquireController {
 	public String showInquireDetail(Model model
 			, int inqNo
 			, HttpSession httpSession){
-
-		if((int)httpSession.getAttribute("sessionUserGrade") > 2){
+		Integer sessionUserGrade = (Integer) httpSession.getAttribute("sessionUserGrade");
+		if (sessionUserGrade != null && sessionUserGrade > 1) {
 			User admin = userService.selectOneById((String)httpSession.getAttribute("sessionId"));
 			model.addAttribute("admin", admin);
 		}

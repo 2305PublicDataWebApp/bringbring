@@ -125,36 +125,176 @@
 		WHERE A.DIV_NO = #{value}
 	</select>
 	<select id="selectLoginResponseDataList" resultMap="responseData">
-		SELECT A.*, B.*, C.*, D.*, E.*, F.*, G.USER_NO AS heartUserNo
-			 , (SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount
-			 , (SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount
-			 , H.USER_NO AS mUserNo, H.GET_USER_NO
+		SELECT A.*, B.*, C.*, E.*, F.*, G.USER_NO AS heartUserNo,
+			   (SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount,
+			   (SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount,
+			   H.USER_NO AS mUserNo, H.GET_USER_NO
 		FROM DIVIDE_TBL A
 				 JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
 				 JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
-				 JOIN IMAGE_TBL D ON A.DIV_NO = D.IMAGE_GROUP_NO
 				 JOIN USER_TBL E ON A.USER_NO = E.USER_NO
 				 JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
 				 LEFT JOIN (
 			SELECT DIV_NO, COUNT(*) AS heartCount, USER_NO
 			FROM HEART_TBL
-			WHERE USER_NO = 1
+			WHERE USER_NO = 2
 			GROUP BY DIV_NO, USER_NO
 		) G ON A.DIV_NO = G.DIV_NO
 				 LEFT JOIN (
 			SELECT DIV_NO, COUNT(*) AS chatroomNo, MIN(USER_NO) AS USER_NO, MIN(GET_USER_NO) AS GET_USER_NO
 			FROM CHATROOM_TBL
-			WHERE USER_NO = 1 OR GET_USER_NO = 1
+			WHERE USER_NO = 2 OR GET_USER_NO = 2
 			GROUP BY DIV_NO
 		) H ON A.DIV_NO = H.DIV_NO
 		WHERE A.IS_DIV_DELETED = 'N'
-		  AND D.IMAGE_NO = (
-			SELECT MIN(IMAGE_NO)
-			FROM IMAGE_TBL
-			WHERE IMAGE_GROUP_NO = A.DIV_NO
-			  AND TABLE_NAME = 'divide'  -- This condition checks for TABLE_NAME
+		  AND A.DIV_NO IN (
+			SELECT D.IMAGE_GROUP_NO
+			FROM IMAGE_TBL D
+			WHERE TABLE_NAME = 'divide'
+			  AND D.IMAGE_NO = (
+				SELECT MIN(IMAGE_NO)
+				FROM IMAGE_TBL
+				WHERE IMAGE_GROUP_NO = D.IMAGE_GROUP_NO
+				  AND TABLE_NAME = 'divide'
+			)
 		)
-		ORDER BY A.DIV_NO DESC
+		ORDER BY DIV_CREATE_DATE DESC
+	</select>
+	<select id="selectLoginResponseDataListHeart" resultMap="responseData">
+		SELECT A.*, B.*, C.*, E.*, F.*, G.USER_NO AS heartUserNo,
+			   (SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount,
+			   (SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount,
+			   H.USER_NO AS mUserNo, H.GET_USER_NO
+		FROM DIVIDE_TBL A
+				 JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+				 JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
+				 JOIN USER_TBL E ON A.USER_NO = E.USER_NO
+				 JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
+				 LEFT JOIN (
+			SELECT DIV_NO, COUNT(*) AS heartCount, USER_NO
+			FROM HEART_TBL
+			WHERE USER_NO = 2
+			GROUP BY DIV_NO, USER_NO
+		) G ON A.DIV_NO = G.DIV_NO
+				 LEFT JOIN (
+			SELECT DIV_NO, COUNT(*) AS chatroomNo, MIN(USER_NO) AS USER_NO, MIN(GET_USER_NO) AS GET_USER_NO
+			FROM CHATROOM_TBL
+			WHERE USER_NO = 2 OR GET_USER_NO = 2
+			GROUP BY DIV_NO
+		) H ON A.DIV_NO = H.DIV_NO
+		WHERE A.IS_DIV_DELETED = 'N'
+		  AND A.DIV_NO IN (
+			SELECT D.IMAGE_GROUP_NO
+			FROM IMAGE_TBL D
+			WHERE TABLE_NAME = 'divide'
+			  AND D.IMAGE_NO = (
+				SELECT MIN(IMAGE_NO)
+				FROM IMAGE_TBL
+				WHERE IMAGE_GROUP_NO = D.IMAGE_GROUP_NO
+				  AND TABLE_NAME = 'divide'
+			)
+		)
+		ORDER BY heartCount DESC
+	</select>
+	<select id="selectLoginResponseDataSearchListHeart" resultMap="responseData">
+		SELECT A.*, B.*, C.*, E.*, F.*, G.USER_NO AS heartUserNo,
+		(SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount,
+		(SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount,
+		H.USER_NO AS mUserNo, H.GET_USER_NO
+		FROM DIVIDE_TBL A
+		JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+		JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
+		JOIN USER_TBL E ON A.USER_NO = E.USER_NO
+		JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
+		LEFT JOIN (
+		SELECT DIV_NO, COUNT(*) AS heartCount, USER_NO
+		FROM HEART_TBL
+		WHERE USER_NO = 2
+		GROUP BY DIV_NO, USER_NO
+		) G ON A.DIV_NO = G.DIV_NO
+		LEFT JOIN (
+		SELECT DIV_NO, COUNT(*) AS chatroomNo, MIN(USER_NO) AS USER_NO, MIN(GET_USER_NO) AS GET_USER_NO
+		FROM CHATROOM_TBL
+		WHERE USER_NO = 2 OR GET_USER_NO = 2
+		GROUP BY DIV_NO
+		) H ON A.DIV_NO = H.DIV_NO
+		WHERE A.IS_DIV_DELETED = 'N'
+		AND A.DIV_NO IN (
+		SELECT D.IMAGE_GROUP_NO
+		FROM IMAGE_TBL D
+		WHERE TABLE_NAME = 'divide'
+		AND D.IMAGE_NO = (
+		SELECT MIN(IMAGE_NO)
+		FROM IMAGE_TBL
+		WHERE IMAGE_GROUP_NO = D.IMAGE_GROUP_NO
+		AND TABLE_NAME = 'divide'
+		)
+		)
+		<if test="searchCondition == 'all'">
+			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%' OR DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+			OR B.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+		    OR F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'title'">
+			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'region'">
+			AND B.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'category'">
+			AND F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		ORDER BY heartCount DESC
+	</select>
+	<select id="selectLoginResponseDataSearchList" resultMap="responseData">
+		SELECT A.*, B.*, C.*, E.*, F.*, G.USER_NO AS heartUserNo,
+		(SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount,
+		(SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount,
+		H.USER_NO AS mUserNo, H.GET_USER_NO
+		FROM DIVIDE_TBL A
+		JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+		JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
+		JOIN USER_TBL E ON A.USER_NO = E.USER_NO
+		JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
+		LEFT JOIN (
+		SELECT DIV_NO, COUNT(*) AS heartCount, USER_NO
+		FROM HEART_TBL
+		WHERE USER_NO = 2
+		GROUP BY DIV_NO, USER_NO
+		) G ON A.DIV_NO = G.DIV_NO
+		LEFT JOIN (
+		SELECT DIV_NO, COUNT(*) AS chatroomNo, MIN(USER_NO) AS USER_NO, MIN(GET_USER_NO) AS GET_USER_NO
+		FROM CHATROOM_TBL
+		WHERE USER_NO = 2 OR GET_USER_NO = 2
+		GROUP BY DIV_NO
+		) H ON A.DIV_NO = H.DIV_NO
+		WHERE A.IS_DIV_DELETED = 'N'
+		AND A.DIV_NO IN (
+		SELECT D.IMAGE_GROUP_NO
+		FROM IMAGE_TBL D
+		WHERE TABLE_NAME = 'divide'
+		AND D.IMAGE_NO = (
+		SELECT MIN(IMAGE_NO)
+		FROM IMAGE_TBL
+		WHERE IMAGE_GROUP_NO = D.IMAGE_GROUP_NO
+		AND TABLE_NAME = 'divide'
+		)
+		)
+		<if test="searchCondition == 'all'">
+			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%' OR DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+			OR B.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+			OR F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'title'">
+			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'region'">
+			AND B.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'category'">
+			AND F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		ORDER BY DIV_CREATE_DATE DESC
 	</select>
 	<select id="selectResponseDataList" resultMap="responseData">
 		SELECT A.*, B.*, C.*, D.*, E.*, F.*
@@ -171,9 +311,95 @@
 			SELECT MIN(IMAGE_NO)
 			FROM IMAGE_TBL
 			WHERE IMAGE_GROUP_NO = A.DIV_NO
-			  AND TABLE_NAME = 'divide'  -- This condition checks for TABLE_NAME
+			  AND TABLE_NAME = 'divide'
 		)
-		ORDER BY A.DIV_NO DESC
+		ORDER BY DIV_CREATE_DATE DESC
+	</select>
+	<select id="selectResponseDataSearchList" resultMap="responseData">
+		SELECT A.*, B.*, C.*, D.*, E.*, F.*,
+		(SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount,
+		(SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount
+		FROM DIVIDE_TBL A
+		JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+		JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
+		JOIN (
+		SELECT IMAGE_GROUP_NO, MIN(IMAGE_NO) AS MIN_IMAGE_NO
+		FROM IMAGE_TBL
+		WHERE TABLE_NAME = 'divide'
+		GROUP BY IMAGE_GROUP_NO
+		) D ON A.DIV_NO = D.IMAGE_GROUP_NO
+		JOIN USER_TBL E ON A.USER_NO = E.USER_NO
+		JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
+		WHERE A.IS_DIV_DELETED = 'N'
+		<if test="searchCondition == 'all'">
+			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%' OR DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+			OR B.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+			OR F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'title'">
+			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'region'">
+			AND B.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'category'">
+			AND F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		ORDER BY DIV_CREATE_DATE DESC
+ 	</select>
+	<select id="selectResponseDataListHeart" resultMap="responseData">
+		SELECT A.*, B.*, C.*, D.*, E.*, F.*
+			 , (SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount
+			 , (SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount
+		FROM DIVIDE_TBL A
+				 JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+				 JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
+				 JOIN IMAGE_TBL D ON A.DIV_NO = D.IMAGE_GROUP_NO
+				 JOIN USER_TBL E ON A.USER_NO = E.USER_NO
+				 JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
+		WHERE A.IS_DIV_DELETED = 'N'
+		  AND D.IMAGE_NO = (
+			SELECT MIN(IMAGE_NO)
+			FROM IMAGE_TBL
+			WHERE IMAGE_GROUP_NO = A.DIV_NO
+			  AND TABLE_NAME = 'divide'
+		)
+		ORDER BY heartCount DESC
+	</select>
+	<select id="selectResponseDataSearchListHeart" resultMap="responseData">
+		SELECT A.*, B.*, C.*, D.*, E.*, F.*,
+		(SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount,
+		(SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount
+		FROM DIVIDE_TBL A
+		JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+		JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
+		JOIN (
+		SELECT IMAGE_GROUP_NO, MIN(IMAGE_NO) AS MIN_IMAGE_NO
+		FROM IMAGE_TBL
+		WHERE TABLE_NAME = 'divide'
+		GROUP BY IMAGE_GROUP_NO
+		) D ON A.DIV_NO = D.IMAGE_GROUP_NO
+		JOIN USER_TBL E ON A.USER_NO = E.USER_NO
+		JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
+		WHERE A.IS_DIV_DELETED = 'N'
+		<if test="searchCondition == 'all'">
+			AND (
+			DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+			OR B.CITY_NAME LIKE '%'||#{searchKeyword}||'%'
+			OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+			OR F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+			)
+		</if>
+		<if test="searchCondition == 'title'">
+			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'region'">
+			AND (B.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%')
+		</if>
+		<if test="searchCondition == 'category'">
+			AND F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		ORDER BY heartCount DESC
 	</select>
   	<select id="selectMaxNo" resultType="_int">
   		SELECT MAX(DIV_NO) FROM DIVIDE_TBL
@@ -186,6 +412,39 @@
 				 JOIN IMAGE_TBL B ON A.DIV_NO = B.IMAGE_GROUP_NO
 				 JOIN WASTE_CATEGORY_TBL E ON A.WASTE_CATEGORY_NO = E.WASTE_CATEGORY_NO
 		WHERE A.IS_DIV_DELETED = 'N' AND B.IMAGE_NO = (SELECT MIN(IMAGE_NO) FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = A.DIV_NO)
+	</select>
+	<select id="getSearchListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM DIVIDE_TBL A
+				 JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
+				 JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
+				 JOIN IMAGE_TBL D ON A.DIV_NO = D.IMAGE_GROUP_NO
+				 JOIN USER_TBL E ON A.USER_NO = E.USER_NO
+				 JOIN WASTE_CATEGORY_TBL F ON A.WASTE_CATEGORY_NO = F.WASTE_CATEGORY_NO
+		WHERE A.IS_DIV_DELETED = 'N'
+		  AND D.IMAGE_NO = (
+			SELECT MIN(IMAGE_NO)
+			FROM IMAGE_TBL
+			WHERE IMAGE_GROUP_NO = A.DIV_NO
+			  AND TABLE_NAME = 'divide'
+		)
+		<if test="searchCondition == 'all'">
+			AND (
+			DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+			OR B.CITY_NAME LIKE '%'||#{searchKeyword}||'%'
+			OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+			OR F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+			)
+		</if>
+		<if test="searchCondition == 'title'">
+			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'region'">
+			AND (B.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%')
+		</if>
+		<if test="searchCondition == 'category'">
+			AND F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
 	</select>
 	<select id="getHeartCount" resultType="_int">
 		SELECT COUNT(*) FROM HEART_TBL WHERE DIV_NO = #{value}

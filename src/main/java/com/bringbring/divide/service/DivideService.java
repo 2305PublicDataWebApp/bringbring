@@ -18,7 +18,7 @@ public interface DivideService {
 
 	int getListCount();
 
-	List<ResponseData> selectResponseDataList(PageInfo pInfo);
+	List<ResponseData> selectResponseDataList(PageInfo pInfo, String searchOption);
 
     int selectMaxNo();
 
@@ -46,7 +46,13 @@ public interface DivideService {
 
 	UserData selectUserDataByNo(int divNo);
 
-    List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo);
+    List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, Map<String, Object> map);
 
     PageInfo getPageInfo(Integer currentPage, int totalCount);
+
+	List<ResponseData> selectLoginResponseDataSearchList(PageInfo pInfo, Map<String, Object> map);
+
+    List<ResponseData> selectResponseDataSearchList(PageInfo pInfo, Map<String, Object> map);
+
+	int getSearchListCount(Map<String, Object> map);
 }

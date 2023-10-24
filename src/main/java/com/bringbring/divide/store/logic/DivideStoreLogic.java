@@ -6,14 +6,12 @@ import java.util.Map;
 import com.bringbring.chatting.domain.UserData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
-import com.bringbring.region.domain.District;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.bringbring.divide.store.DivideStore;
 import com.bringbring.image.domain.Image;
-import com.bringbring.reservation.domain.WasteCategory;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,11 +40,16 @@ public class DivideStoreLogic implements DivideStore{
 	public int getListCount() { return sqlSession.selectOne("DivideMapper.getListCount"); }
 
     @Override
-    public List<ResponseData> selectResponseDataList(PageInfo pInfo) {
+    public List<ResponseData> selectResponseDataList(PageInfo pInfo, String searchOption) {
 		int limit = pInfo.getRecordCountPerPage();
 		int offset = (pInfo.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return sqlSession.selectList("DivideMapper.selectResponseDataList", null, rowBounds);
+		if(searchOption.equals("heart")){
+			return sqlSession.selectList("DivideMapper.selectResponseDataListHeart", null, rowBounds);
+		}else{
+			return sqlSession.selectList("DivideMapper.selectResponseDataList", null, rowBounds);
+		}
+
 	}
 
 	@Override
@@ -88,14 +91,45 @@ public class DivideStoreLogic implements DivideStore{
 	public UserData selectUserDataByNo(int divNo) { return sqlSession.selectOne("DivideMapper.selectUserDataByNo", divNo); }
 
 	@Override
-	public List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo) {
+	public List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, Map<String, Object> map) {
 		int limit = pageInfo.getRecordCountPerPage();
 		int offset = (pageInfo.getCurrentPage() - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return sqlSession.selectList("DivideMapper.selectLoginResponseDataList", userNo, rowBounds);
+		if(map.get("searchOption").equals("heart")){
+			return sqlSession.selectList("DivideMapper.selectLoginResponseDataListHeart", map.get("userNo"), rowBounds);
+		}else{
+			return sqlSession.selectList("DivideMapper.selectLoginResponseDataList", map.get("userNo"), rowBounds);
+		}
 	}
 
 	@Override
 	public int deleteImage(int imageNo) { return sqlSession.delete("DivideMapper.deleteImage", imageNo); }
+
+	@Override
+	public List<ResponseData> selectLoginResponseDataSearchList(PageInfo pageInfo, Map<String, Object> map) {
+		int limit = pageInfo.getRecordCountPerPage();
+		int offset = (pageInfo.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		if(map.get("searchOption").equals("heart")){
+			return sqlSession.selectList("DivideMapper.selectLoginResponseDataSearchListHeart", map, rowBounds);
+		}else{
+			return sqlSession.selectList("DivideMapper.selectLoginResponseDataSearchList", map, rowBounds);
+		}
+	}
+
+	@Override
+	public List<ResponseData> selectResponseDataSearchList(PageInfo pageInfo, Map<String, Object> map) {
+		int limit = pageInfo.getRecordCountPerPage();
+		int offset = (pageInfo.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		if(map.get("searchOption").equals("heart")){
+			return sqlSession.selectList("DivideMapper.selectResponseDataSearchListHeart", map, rowBounds);
+		}else{
+			return sqlSession.selectList("DivideMapper.selectResponseDataSearchList", map, rowBounds);
+		}
+	}
+
+    @Override
+    public int getSearchListCount(Map<String, Object> map) { return sqlSession.selectOne("DivideMapper.getSearchListCount", map); }
 
 }

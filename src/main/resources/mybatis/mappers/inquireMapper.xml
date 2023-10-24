@@ -207,6 +207,9 @@
 		INSERT INTO IMAGE_TBL VALUES (
 		SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath})
 	</insert>
+	<insert id="insertAnswer">
+		INSERT INTO ANSWER_TBL VALUES (SEQ_ANS_NO.NEXTVAL, #{inqNo}, #{ansContent}, DEFAULT, DEFAULT, #{userNo})
+	</insert>
 	<update id="updateInquire">
 		UPDATE INQUIRE_TBL SET INQ_TITLE = #{inqTitle}, INQ_CONTENT = #{inqContent}, INQ_UPDATE_DATE = DEFAULT
  		, INQ_CATEGORY = #{inqCategory}, CITY_NO = #{cityNo}, DISTRICT_NO = #{districtNo} WHERE INQ_NO = #{inqNo}
@@ -214,7 +217,11 @@
 	<update id="deleteInquire">
 		UPDATE INQUIRE_TBL SET IS_INQ_DELETED = 'Y' WHERE INQ_NO = #{value}
 	</update>
+	<update id="updateAnswer">
+		UPDATE ANSWER_TBL SET ANS_CONTENT = #{ansContent}, ANS_UPDATE_DATE = DEFAULT WHERE INQ_NO = #{inqNo}
+	</update>
 	<delete id="deleteImage">
 		DELETE FROM IMAGE_TBL WHERE IMAGE_NO = #{value}
 	</delete>
+
 </mapper>

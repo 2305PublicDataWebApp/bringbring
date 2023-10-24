@@ -7,8 +7,6 @@ import com.bringbring.chatting.domain.UserData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
 import com.bringbring.image.domain.Image;
-import com.bringbring.region.domain.District;
-import com.bringbring.reservation.domain.WasteCategory;
 
 public interface DivideStore {
 
@@ -20,7 +18,7 @@ public interface DivideStore {
 
 	int getListCount();
 
-	List<ResponseData> selectResponseDataList(PageInfo pInfo);
+	List<ResponseData> selectResponseDataList(PageInfo pInfo, String searchOption);
 
     Divide selectOneByNo(int divNo);
 
@@ -46,7 +44,13 @@ public interface DivideStore {
 
 	UserData selectUserDataByNo(int divNo);
 
-    List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo);
+    List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, Map<String, Object> map);
 
     int deleteImage(int imageNo);
+
+	List<ResponseData> selectLoginResponseDataSearchList(PageInfo pInfo, Map<String, Object> map);
+
+    List<ResponseData> selectResponseDataSearchList(PageInfo pInfo, Map<String, Object> map);
+
+    int getSearchListCount(Map<String, Object> map);
 }
