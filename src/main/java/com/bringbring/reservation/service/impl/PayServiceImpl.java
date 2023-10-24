@@ -166,7 +166,7 @@ public class PayServiceImpl implements PayService {
         payCancel.setCancelAmount(pay.getPayAmount());
         int totalResult = 0;
         int reservationResult = reservationStore.updateReservationIsCancel(reservation.getRvNo());
-        int payUpdate = reservationStore.updatePayIsCancel(reservationDetail.getRvDeatilNo());
+        int payUpdate = reservationStore.updatePayIsCancel(reservationDetail.getRvDetailNo());
         int payCancelInsert = reservationStore.insertPayCancel(payCancel);
         totalResult = reservationResult + payUpdate + payCancelInsert;
         System.out.println("payCancelInsert = " + totalResult);

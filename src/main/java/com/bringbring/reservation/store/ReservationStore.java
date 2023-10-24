@@ -52,7 +52,7 @@ public interface ReservationStore {
 
     int updateReservationIsCancel(int rvNo);
 
-    int updatePayIsCancel(int rvDeatilNo);
+    int updatePayIsCancel(int rvDetailNo);
 
     int insertPayCancel(PayCancel payCancel);
 
@@ -60,5 +60,6 @@ public interface ReservationStore {
 
     CancelRequest selectPayIdByDischargeNo(String dischargeNo);
 
-    List<ReservationComplete> selectMyReservationDetailList(int rvNo);
+
+    List<ReservationComplete> selectMyReservationDetailList(Connection connection);
 }

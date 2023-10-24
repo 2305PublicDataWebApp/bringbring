@@ -1,5 +1,6 @@
 package com.bringbring.reservation.domain;
 
+import com.bringbring.image.domain.Image;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,11 +8,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class ReservationDetail {
-    private int rvDetailNo;
-    private int rvNo;
-    private int rvDetailTotal;
-    private int rvDetailFee;
+@NoArgsConstructor
+public class MyPageImage {
+
+    private Connection connection;
+    private Image image;
 }

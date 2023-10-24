@@ -129,9 +129,15 @@ public class RestReservationController {
         }
     }
 
-    @GetMapping("/selectMyList.do")
-    public ResponseEntity<List<ReservationComplete>> selectMyReservationDetailList(@RequestParam int rvNo) {
-        List<ReservationComplete> reservationCompletes = reservationService.selectMyReservationDetailList(rvNo);
+    @GetMapping("/selectImage.do")
+    public ResponseEntity<List<ReservationComplete>> selectImages(@RequestParam int rvDetailNo
+            , @RequestParam int imageIndexNo) {
+        Connection connection = new Connection();
+        connection.setImageIndexNo(imageIndexNo);
+        connection.setRvDetailNo(rvDetailNo);
+
+
+        List<ReservationComplete> reservationCompletes = reservationService.selectMyReservationDetailList(connection);
         if (reservationCompletes != null) {
             return ResponseEntity.ok(reservationCompletes);
         } else {
@@ -139,17 +145,6 @@ public class RestReservationController {
             return ResponseEntity.notFound().build();
         }
     }
-//    @GetMapping("/selectImage.do")
-//    public ResponseEntity<List<ReservationComplete>> selectImages(@RequestParam int rvDeteailNo
-//            , @RequestParam int imageIndexNo) {
-//        List<ReservationComplete> reservationCompletes = reservationService.selectMyReservationDetailList(rvNo);
-//        if (reservationCompletes != null) {
-//            return ResponseEntity.ok(reservationCompletes);
-//        } else {
-//            // 데이터가 없는 경우 404 Not Found 상태 코드 반환
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
 
 
 
