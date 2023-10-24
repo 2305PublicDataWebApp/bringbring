@@ -53,6 +53,20 @@ public class AdminController {
 			PageInfo pInfo = this.getPageInfo(currentPage, inquireCount);
 			List<InquireDetails> inqList = inquireService.selectInquireList(pInfo);
 			List<City> cList = regionService.selectCityList();
+
+			Map<String, String> categoryMap = new HashMap<>();
+			categoryMap.put("delivery", "배송");
+			categoryMap.put("divide", "나눔게시판");
+			categoryMap.put("chatting", "채팅");
+			categoryMap.put("improvement", "개선");
+			categoryMap.put("etc", "기타");
+
+			for (InquireDetails inquire : inqList) {
+				String category = inquire.getInqCategory();
+				String categoryDescription = categoryMap.get(category);
+				inquire.setInqCategory(categoryDescription);
+			}
+
 			model.addAttribute("inqList", inqList)
 					.addAttribute("pInfo", pInfo)
 					.addAttribute("inquireCount", inquireCount)
