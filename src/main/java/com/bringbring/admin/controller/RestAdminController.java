@@ -44,6 +44,19 @@ public class RestAdminController {
             PageInfo pInfo = adminController.getPageInfo(currentPage, inquireCount);
             List<InquireDetails> result = inquireService.selectInquiriesByAnswer(inquireDetails, pInfo);
 
+            Map<String, String> categoryMap = new HashMap<>();
+            categoryMap.put("delivery", "배송");
+            categoryMap.put("divide", "나눔게시판");
+            categoryMap.put("chatting", "채팅");
+            categoryMap.put("improvement", "개선");
+            categoryMap.put("etc", "기타");
+
+            for (InquireDetails inquire : result) {
+                String category = inquire.getInqCategory();
+                String categoryDescription = categoryMap.get(category);
+                inquire.setInqCategory(categoryDescription);
+            }
+
             Map<String, Object> response = new HashMap<>();
             response.put("pageInfo", pInfo);
             response.put("inqList", result);
@@ -64,6 +77,19 @@ public class RestAdminController {
             int inquireCount = inquireService.selectInquireCountByCity(inquireDetails.getCityNo());
             PageInfo pInfo = adminController.getPageInfo(currentPage, inquireCount);
             List<InquireDetails> inqList = inquireService.selectInquireByCityNo(inquireDetails, pInfo);
+
+            Map<String, String> categoryMap = new HashMap<>();
+            categoryMap.put("delivery", "배송");
+            categoryMap.put("divide", "나눔게시판");
+            categoryMap.put("chatting", "채팅");
+            categoryMap.put("improvement", "개선");
+            categoryMap.put("etc", "기타");
+
+            for (InquireDetails inquire : inqList) {
+                String category = inquire.getInqCategory();
+                String categoryDescription = categoryMap.get(category);
+                inquire.setInqCategory(categoryDescription);
+            }
 
             Map<String, Object> response = new HashMap<>();
             response.put("pageInfo", pInfo);
@@ -91,6 +117,19 @@ public class RestAdminController {
             int totalCount = inquireService.searchInqListCount(paramMap);
             PageInfo pInfo = adminController.getPageInfo(currentPage, totalCount);
             List<InquireDetails> inqList = inquireService.searchInquireByKeyword(pInfo, paramMap);
+
+            Map<String, String> categoryMap = new HashMap<>();
+            categoryMap.put("delivery", "배송");
+            categoryMap.put("divide", "나눔게시판");
+            categoryMap.put("chatting", "채팅");
+            categoryMap.put("improvement", "개선");
+            categoryMap.put("etc", "기타");
+
+            for (InquireDetails inquire : inqList) {
+                String category = inquire.getInqCategory();
+                String categoryDescription = categoryMap.get(category);
+                inquire.setInqCategory(categoryDescription);
+            }
 
             response.put("searchCondition", searchCondition);
             response.put("searchKeyword", searchKeyword);

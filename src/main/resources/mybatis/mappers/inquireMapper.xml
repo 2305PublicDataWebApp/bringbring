@@ -94,6 +94,7 @@
 		FROM INQUIRE_TBL i
 		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
 		JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
+		JOIN CITY_TBL c ON i.CITY_NO = c.CITY_NO
 		WHERE i.ANSWER_YN = #{answerYn}
 	</select>
 
@@ -102,6 +103,7 @@
 		FROM INQUIRE_TBL i
 				 JOIN USER_TBL u ON i.USER_NO = u.USER_NO
 				 JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
+				 JOIN CITY_TBL c ON i.CITY_NO = c.CITY_NO
 		WHERE i.CITY_NO = #{cityNo}
 	</select>
 
@@ -124,6 +126,7 @@
 		SELECT COUNT(*)
 		FROM INQUIRE_TBL i
 		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+		JOIN CITY_TBL c ON i.CITY_NO = c.CITY_NO
 		JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
 		<if test="searchCondition == 'all'">
 			WHERE d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%' OR u.USER_ID LIKE '%'||#{searchKeyword}||'%' OR i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
@@ -143,6 +146,7 @@
 		SELECT i.INQ_NO, u.USER_ID, i.INQ_TITLE, u.USER_NAME, i.INQ_CREATE_DATE, i.ANSWER_YN, i.CITY_NO, i.DISTRICT_NO, i.INQ_CATEGORY, d.DISTRICT_NAME
 		FROM INQUIRE_TBL i
 		JOIN USER_TBL u ON i.USER_NO = u.USER_NO
+		JOIN CITY_TBL c ON i.CITY_NO = c.CITY_NO
 		JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
 		<if test="searchCondition == 'all'">
 			WHERE d.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%' OR u.USER_ID LIKE '%'||#{searchKeyword}||'%' OR i.INQ_CATEGORY LIKE '%'||#{searchKeyword}||'%'
