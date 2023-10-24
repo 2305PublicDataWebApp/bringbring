@@ -124,6 +124,9 @@
                     </td >
                     <td style="text-align: left;font-size: 17px;">
                         <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
+                            <c:if test="${data.divide.divYn.toString() eq 'Y'}">
+                                <button class="btn btn-success" style="height: 35px;">나눔 완료</button>
+                            </c:if>
                             <a href="${detailUrl}">${data.divide.divTitle}</a>
                         </h4>
                         <br>

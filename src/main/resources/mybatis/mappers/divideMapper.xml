@@ -34,6 +34,17 @@
 		<association property="user" resultMap="user"/>
 	</resultMap>
 
+	<resultMap id="heartData" type="com.bringbring.divide.domain.HeartData">
+		<association property="divide" resultMap="divide"/>
+		<association property="user" resultMap="user"/>
+		<association property="heart" resultMap="heart"/>
+	</resultMap>
+
+	<resultMap id="divideData" type="com.bringbring.divide.domain.DivideData">
+		<association property="divide" resultMap="divide"/>
+		<association property="user" resultMap="user"/>
+	</resultMap>
+
 	<resultMap id="divide" type="com.bringbring.divide.domain.Divide">
 		<id property="divNo" column="DIV_NO" />
 		<result property="userNo" column="USER_NO" />
@@ -472,6 +483,28 @@
 	</select>
 	<select id="selectUserDataByNo" resultMap="userData">
 		SELECT * FROM DIVIDE_TBL JOIN USER_TBL USING(USER_NO) WHERE DIV_NO = #{value}
+	</select>
+	<select id="getHeartListCountByNo" resultType="_int">
+		SELECT COUNT(*) FROM HEART_TBL A
+			 JOIN DIVIDE_TBL B ON A.DIV_NO = B.DIV_NO
+			 JOIN USER_TBL C ON B.USER_NO = C.USER_NO
+		WHERE A.USER_NO = #{value}
+	</select>
+	<select id="selectHeartList" resultMap="heartData">
+		SELECT * FROM HEART_TBL A
+			  JOIN DIVIDE_TBL B ON A.DIV_NO = B.DIV_NO
+			  JOIN USER_TBL C ON B.USER_NO = C.USER_NO
+		WHERE A.USER_NO = #{userNo}
+	</select>
+	<select id="getDivideListCountByNo" resultType="_int">
+		SELECT COUNT(*) FROM DIVIDE_TBL
+			  JOIN USER_TBL USING(USER_NO)
+		WHERE USER_NO = #{value}
+	</select>
+	<select id="selectMypageDivideList" resultMap="divideData">
+		SELECT * FROM DIVIDE_TBL
+			  JOIN USER_TBL USING(USER_NO)
+		WHERE USER_NO = #{value}
 	</select>
   	<insert id="insertDivide">
   		INSERT INTO DIVIDE_TBL VALUES (
