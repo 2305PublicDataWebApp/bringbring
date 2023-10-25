@@ -20,14 +20,14 @@
 		INSERT INTO NOTICE_TBL VALUES
 		(#{noticeNo},#{noticeType},#{noticeTitle},#{noticeContent},DEFAULT,DEFAULT,DEFAULT,#{userNo})
 	</insert>
-  	<insert id="insertImage">
-  		INSERT INTO IMAGE_TBL VALUES (SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath})
-  	</insert>
+  	
 	<update id="updateNotice">
 		UPDATE NOTICE_TBL SET NOTICE_TITLE = #{noticeTitle}, NOTICE_CONTENT = #{noticeContent} WHERE NOTICE_NO = #{noticeNo}
 	</update>
 
- 	<select id="selectListCount" resultType="_int">
+ 	<update id="deleteNotice">
+		UPDATE NOTICE_TBL SET IS_NOTICE_DELETED = 'Y' WHERE NOTICE_NO = #{noticeNo }
+	</update><select id="selectListCount" resultType="_int">
 		SELECT COUNT(*) FROM
 		NOTICE_TBL WHERE IS_NOTICE_DELETED = 'N'
 	</select>
@@ -67,9 +67,7 @@
 	</select>
 
 	
-	<update id="deleteNotice">
-		UPDATE NOTICE_TBL SET IS_NOTICE_DELETED = 'Y' WHERE NOTICE_NO = #{noticeNo }
-	</update>
+	
 	
 	<update id="updateViewCount">
 		UPDATE NOTICE_TBL SET NOTICE_VIEW_COUNT = NOTICE_VIEW_COUNT +1 WHERE NOTICE_NO=#{noticeNo }
@@ -105,7 +103,9 @@
 		WHERE NOTICE_TITLE LIKE'%' ||#{searchKeyword}||'%' OR NOTICE_CONTENT LIKE'%'||#{searchKeyword }||'%'  AND IS_NOTICE_DELETED = 'N' AND NOTICE_TYPE = '업데이트' ORDER BY NOTICE_NO DESC
 	</select>
 
-	<select id="selectImageByNo" resultType="Image">
+	<insert id="insertImage">
+  		INSERT INTO IMAGE_TBL VALUES (SEQ_IMAGE_NO.NEXTVAL, #{tableName}, #{imageGroupNo}, #{imageName}, #{imageRename}, #{imagePath})
+  	</insert><select id="selectImageByNo" resultType="Image">
 		SELECT * FROM IMAGE_TBL WHERE IMAGE_GROUP_NO = #{noticeNo} AND TABLE_NAME = 'notice'
 	</select>
 
