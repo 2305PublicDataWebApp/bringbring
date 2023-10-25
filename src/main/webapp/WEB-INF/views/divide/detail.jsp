@@ -173,10 +173,8 @@
           </h3>
           <p style="margin-bottom: 5px;">${dData.wasteCategory.wasteCategoryName}</p>
           <p style="margin: 0px;">
-<%--            <fmt:parseDate value="${dData.divide.divCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime1" type="both" />--%>
             <fmt:parseDate value="${dData.divide.divCreateDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parseDateTime1" type="both" />
             <fmt:formatDate value="${parseDateTime1}" pattern="yyyy. MM. dd." />
-<%--            ${dData.divide.divCreateDate}--%>
           </p>
         </div>
         <div id="heartDiv" style="width: 8%;text-align: center;" class="align-self-center">
@@ -224,9 +222,9 @@
       <div id="map" style="width: 100%;height: 300px;border: 1px solid #ccc;"></div>
       <!-- 버튼 영역 -->
       <div style="margin: 0 auto;text-align: center;margin-top: 100px;">
-<%--        <c:if test="${sessionId ne null && sessionId ne dData.user.userId}">--%>
+        <c:if test="${dData.user.userId ne sessionId}">
           <button onclick="openPopup('/chatting/${sessionId}?divNo=${dData.divide.divNo}&getUserId=${dData.user.userId}')" class="btn btn-success btn-lg">1:1 채팅 신청</button>
-<%--        </c:if>--%>
+        </c:if>
       </div>
     </div>
 
