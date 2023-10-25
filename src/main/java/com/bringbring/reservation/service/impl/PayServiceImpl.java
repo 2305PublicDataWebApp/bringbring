@@ -106,7 +106,7 @@ public class PayServiceImpl implements PayService {
             }
 
             // 환불 요청 데이터 생성
-            String requestBody = String.format("{\"reason\":\"%s\", \"imp_uid\":\"%s\", \"amount\":%d, \"checksum\":%d}", reason, imp_uid, cancel_request_amount, cancelableAmount);
+            String requestBody = String.format("{\"reason\":\"%s\", \"merchant_uid\":\"%s\", \"amount\":%d, \"checksum\":%d}", reason, merchant_uid, cancel_request_amount, cancelableAmount);
 
             // 환불 요청
             try {
