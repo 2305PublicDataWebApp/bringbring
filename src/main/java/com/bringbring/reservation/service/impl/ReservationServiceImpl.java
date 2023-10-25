@@ -154,6 +154,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<ReservationComplete> selectMyReservationDetailList(int rvNo) {
         return reservationStore.selectMyReservationDetailList(rvNo);
+
     }
 
     @Override

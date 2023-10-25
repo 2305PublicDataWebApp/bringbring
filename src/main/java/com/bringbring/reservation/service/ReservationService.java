@@ -43,4 +43,5 @@ public interface ReservationService {
     List<ReservationComplete> selectMyReservationDetailImage(Connection connection);
 
     List<ReservationComplete> selectMyReservationDetailList(int rvNo);
+
 }

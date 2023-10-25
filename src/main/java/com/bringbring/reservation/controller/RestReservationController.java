@@ -129,9 +129,15 @@ public class RestReservationController {
         }
     }
 
-    @GetMapping("/selectMyList.do")
-    public ResponseEntity<List<ReservationComplete>> selectMyReservationDetailList(@RequestParam int rvNo) {
-        List<ReservationComplete> reservationCompletes = reservationService.selectMyReservationDetailList(rvNo);
+    @GetMapping("/selectImage.do")
+    public ResponseEntity<List<ReservationComplete>> selectImages(@RequestParam int rvDetailNo
+            , @RequestParam int imageIndexNo) {
+        Connection connection = new Connection();
+        connection.setImageIndexNo(imageIndexNo);
+        connection.setRvDetailNo(rvDetailNo);
+
+
+        List<ReservationComplete> reservationCompletes = reservationService.selectMyReservationDetailList(connection);
         if (reservationCompletes != null) {
             return ResponseEntity.ok(reservationCompletes);
         } else {
@@ -156,6 +162,7 @@ public class RestReservationController {
             return ResponseEntity.notFound().build();
         }
     }
+
 
 
 
