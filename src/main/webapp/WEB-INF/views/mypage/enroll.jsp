@@ -78,7 +78,7 @@
     <main>
         <div class="mypage_top m-auto rounded">
             <div class="mypage_top_div ps-5 pb-3 mt-3" style="height:75px;">
-                <h1 class="d-inline">${userOne.userName }</h1>
+                <h1 class="d-inline">${userOne.userName}</h1>
                 <div class="d-inline">
                     <a href="/user/update.do">
                         <img src="../resources/assets/img/mypage/mypage_gear.png" class="h-100 pb-3">
@@ -90,8 +90,10 @@
                 <div class="row" style="min-height:750px;">
                     <div class="mypage_sidebar col-3 p-5">
                         <a href="/mypage/enroll.do" class="fs-1">신청 내역</a>
-                        <a href="/mypage/inquire.do" class="fs-1">문의 내역</a>
-                        <a href="#" class="fs-1">채팅 내역</a>
+                        <a href="/inquire/list.do" class="fs-1">문의 내역</a>
+                        <a href="/mypage/divide.do" class="fs-1">나눔 내역</a>
+                        <a href="/mypage/chatting.do" class="fs-1">채팅방 목록</a>
+                        <a href="/mypage/heart.do" class="fs-1">찜한 게시물</a>
                     </div>
                     <div class="col-9 ps-5 pt-5">
                         
@@ -362,6 +364,8 @@
             }
         });
 	}
+
+    <jsp:include page="/include/loginJs.jsp"></jsp:include>
 
     function openImagePopup(obj) {
         var parentDiv = obj.parentElement;

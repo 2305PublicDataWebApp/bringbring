@@ -109,6 +109,7 @@ pageEncoding="UTF-8"%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
     <script>
+        <jsp:include page="/include/loginJs.jsp"></jsp:include>
         //테스트
         $(document).ready(function(){
             openElement();

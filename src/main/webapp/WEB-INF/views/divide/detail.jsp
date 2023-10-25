@@ -118,10 +118,10 @@
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${loop.index}" class="<c:if test='${loop.first}'>active</c:if>" aria-label="Slide ${loop.index + 1}"></button>
         </c:forEach>
       </div>
-      <div class="carousel-inner" style="position: relative;">
+      <div class="carousel-inner" style="position: relative;" >
         <c:forEach var="image" items="${iList}" varStatus="loop">
-          <div class="carousel-item <c:if test='${loop.first}'>active</c:if>">
-            <div class="divideImg" style="background-image: url(${image.imagePath});" data-bs-interval="4000"></div>
+          <div data-bs-interval="4000" class="carousel-item <c:if test='${loop.first}'>active</c:if>">
+            <div class="divideImg" style="background-image: url(${image.imagePath});" ></div>
           </div>
         </c:forEach>
         <div style="width: 850px;height: 50px;position:absolute;bottom: 50px;background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));"></div>
@@ -283,14 +283,11 @@
 <%--  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>--%>
   <!-- Template Main JS File -->
   <script src="../../../resources/assets/js/main.js"></script>
+  <jsp:include page="/include/chatBot.jsp"></jsp:include>
 
   <!-- 채널톡 api -->
   <script>
-    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-        ChannelIO('boot', {
-          "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-        });
+    <jsp:include page="/include/loginJs.jsp"></jsp:include>
 
       </script>
       <script>
@@ -553,8 +550,6 @@
           }
         }
 
-    <!-- 로그인, 로그아웃 -->
-    <jsp:include page="/include/loginJs.jsp"></jsp:include>
   </script>
 </body>
 

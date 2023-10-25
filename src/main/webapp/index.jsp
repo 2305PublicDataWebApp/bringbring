@@ -736,7 +736,7 @@
     
    
     <!-- 로그인, 로그아웃 -->
-//     <jsp:include page="/include/loginJs.jsp"></jsp:include>
+    <jsp:include page="/include/loginJs.jsp"></jsp:include>
 
     $(document).ready(function() {
       var today = new Date();

@@ -244,8 +244,9 @@
 
     <!-- Template Main JS File -->
     <script src="../resources/assets/js/main.js"></script>
+
 	<script>
-    
+        <jsp:include page="/include/loginJs.jsp"></jsp:include>
 	let images = []; 
     var currentImageIndex = 0;
 	function openModal(rvNo) {
