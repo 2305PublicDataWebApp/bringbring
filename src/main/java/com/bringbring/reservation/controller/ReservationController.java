@@ -179,5 +179,10 @@ public class ReservationController {
         return "/reservation/guide";
     }
 
+    @GetMapping("/modify.do")
+    public String showReservationModify(Model model, HttpSession session) {
+        return "/reservation/modify";
+    }
+
 
 }

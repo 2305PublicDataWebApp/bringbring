@@ -163,7 +163,7 @@ public class DivideServiceImpl implements DivideService{
     }
 
 
-    private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
+	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
 		Map<String, Object> fileInfoMap = new HashMap<String, Object>();
 		try {
 			//업로드 저장 경로생성

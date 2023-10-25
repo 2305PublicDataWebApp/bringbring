@@ -2,3 +2,13 @@
     height: 570px;
     overflow-y: auto;
 }
+
+select {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

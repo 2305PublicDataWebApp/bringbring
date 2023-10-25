@@ -17,9 +17,12 @@ pageEncoding="UTF-8"%>
 <%--    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>--%>
     <link rel="stylesheet" href="../resources/assets/css/chatting/style.css">
     <style>
-        /*.floating-chat .chat .messages li.self:before {*/
-        /*    background-image: url(../resources/assets/img/divide/free-icon-gift-3835774.png);*/
-        /*}*/
+        .floating-chat .chat .messages li.self:before {
+            background-image: url(${getUser.userProfilePath});
+        }
+        .floating-chat .chat .messages li.other:before {
+            background-image: url(${user.userProfilePath});
+        }
         .header a:link, .header a:visited{
             color: #103b31;
             text-decoration: none;
@@ -192,27 +195,27 @@ pageEncoding="UTF-8"%>
                 }
                 // DB 보내기
                 console.log(username + ":" + msg.textContent);
-                <%--$.ajax({--%>
-                <%--    url: "/chatting/insert.do",--%>
-                <%--    data: { divNo: ${uData.divide.divNo}--%>
-                <%--        , userNo: ${user.userNo}--%>
-                <%--        , getUserNo: ${getUser.userNo}--%>
-                <%--        , chatContent: msg.textContent--%>
-                <%--        , chatRoomNo: chatroomNo--%>
-                <%--    },--%>
-                <%--    type: "POST",--%>
-                <%--    success: function(data) {--%>
-                <%--        if(data === "success"){--%>
+                $.ajax({
+                    url: "/chatting/insert.do",
+                    data: { divNo: ${uData.divide.divNo}
+                        , userNo: ${user.userNo}
+                        , getUserNo: ${getUser.userNo}
+                        , chatContent: msg.textContent
+                        , chatRoomNo: chatroomNo
+                    },
+                    type: "POST",
+                    success: function(data) {
+                        if(data === "success"){
 
-                <%--        }else{--%>
-                <%--            alert("채팅저장 실패!");--%>
-                <%--        }--%>
+                        }else{
+                            alert("채팅저장 실패!");
+                        }
 
-                <%--    },--%>
-                <%--    error: function() {--%>
-                <%--        alert("Ajax 오류! 관리자에게 문의하세요");--%>
-                <%--    }--%>
-                <%--});--%>
+                    },
+                    error: function() {
+                        alert("Ajax 오류! 관리자에게 문의하세요");
+                    }
+                });
 
                 stomp.send('/pub/chat/message', {}, JSON.stringify({chatroomNo: chatroomNo, message: msg.textContent, writer: username, userNo: ${user.userNo}}));
 

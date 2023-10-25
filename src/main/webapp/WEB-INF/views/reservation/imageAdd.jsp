@@ -103,7 +103,7 @@
                     <input type="hidden" class="wasteInfoNo" name="wasteInfoNo" value="${item.wasteInfo.wasteInfoNo}">
                     <input type="hidden" class="imageIndexNo" name="imageIndexNo" value="${i.index+1}">
                     <div class="pic-Add-Btn">
-                      <button class="btn btn-outline-success pic-Add-Btn" onclick="document.getElementById('uploadImg').click()">사진 추가</button>
+                      <button class="btn btn-outline-success pic-Add-Btn"  onclick="document.querySelector('.uploadImg').click()">사진 추가</button>
                     </div>
                   </div>
                 </div>
@@ -148,14 +148,9 @@
 <script src="../../../resources/assets/js/main.js"></script>
 
 <!-- 채널톡 api -->
+<jsp:include page="/include/chatBot.jsp"></jsp:include>
+
 <script>
-  (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-  ChannelIO('boot', {
-    "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-  });
-
-
 
   const imgCount = new Map();
   // input file
@@ -197,10 +192,10 @@
 
 
 
-    if (imgCount.get(tr) > 4) {
-      alert('이미지는 물품당 4개까지 첨부할 수 있습니다.');
+    if (imgCount.get(tr) > 5) {
+      alert('이미지는 물품당 5개까지 첨부할 수 있습니다.');
       e.target.value = '';
-      imgCount.set(tr, 4);
+      imgCount.set(tr, 5);
     }
   }
 
@@ -253,8 +248,8 @@ console.log("imgUploads ", imgUploads);
     const wasteInfoNo = e.target.closest('tr').querySelector('.wasteInfoNo').value;
     const docFrag = new DocumentFragment();
     // 파일 갯수 검사
-    if (imgPreview.children.length + e.currentTarget.files.length > 4) {
-      alert('이미지는 한장씩 첨부할 수 있습니다.');
+    if (imgPreview.children.length + e.currentTarget.files.length > 5) {
+      alert('이미지는 물품당 최대 5장씩 첨부할 수 있습니다.');
       e.target.value = '';
       return;
     }
@@ -359,7 +354,7 @@ console.log("imgUploads ", imgUploads);
       if (uploadFiles.length < 1) {
         allRowsHaveImages = false; // 이미지가 없는 행이 있음을 표시
         if (!alertShown) {
-          alert('최소한 한 장의 이미지를 첨부해야 합니다.');
+          alert('물품당 반드시 한 장의 이미지를 첨부해야 합니다.');
           alertShown = true; // 알림을 한 번만 표시
         }
         return;
@@ -373,7 +368,7 @@ console.log("imgUploads ", imgUploads);
       if (filesArrForTr.length < 1) {
         allRowsHaveImages = false; // 이미지가 없는 행이 있음을 표시
         if (!alertShown) {
-          alert('각 행당 최소한 한 장의 이미지를 첨부해야 합니다.');
+          alert('물품당 반드시 한 장의 이미지를 첨부해야 합니다.');
           alertShown = true; // 알림을 한 번만 표시
         }
         return;
@@ -413,47 +408,6 @@ console.log("imgUploads ", imgUploads);
         }
       });
     }
-
-
-
-    // // 각 .formList 요소를 순회하며 FormData에 파일 필드와 데이터 추가
-    // formLists.forEach(function (formList) {
-    //   const listId = formList.dataset.listId; // data-list-id 속성을 사용하여 리스트 ID 가져옴
-    //   const wasteInfoNo = formList.querySelector('.wasteInfoNo').value;
-    //   const fileInput = formList.querySelector('.uploadImg');
-    //
-    //   console.log("fileInput" + fileInput + wasteInfoNo);
-    //
-    //   if (fileInput && fileInput.files.length > 0) {
-    //     formData.append("listId", listId);
-    //     formData.append("wasteInfoNo", wasteInfoNo);
-    //     for (let i = 0; i < fileInput.files.length; i++) {
-    //       formData.append("uploadFiles[]", fileInput.files[i]);
-    //     }
-    //     hasFiles = true; // 이미지가 첨부되었음을 표시
-    //     console.log("파일이 선택됨");
-    //   } else {
-    //     console.log("파일이 선택되지 않았음");
-    //     hasFiles = false;
-    //     return false; // 이미지가 첨부되지 않았을 때 폼 전송 중지
-    //   }
-    // });
-    //
-    // if (hasFiles) {
-    //   console.log(formData);
-    //   console.log(form);
-    //
-    //   console.log("uploadFiles: " + formData.get('uploadFiles[]'));
-    //   console.log("wasteInfoNo: " + formData.get('wasteInfoNo'));
-    //
-    //   form.submit();
-    //   for (const [key, value] of formData.entries()) {
-    //     console.log(key + ": " + value);
-    //   }
-    // } else {
-    //   alert('물품마다 이미지는 반드시 첨부해야 합니다.');
-    // }
-
   }
 
 
