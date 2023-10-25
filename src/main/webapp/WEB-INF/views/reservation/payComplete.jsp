@@ -13,8 +13,8 @@
 
 
   <!-- Favicons -->
-  <link href="../../../resources/assets/img/main/title-icon.png" rel="icon">
-    <link href="../../../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -83,7 +83,7 @@
 
 <main>
   <div>
-    <h2 class="subject">결제 완료</h2>
+    <h2 class="subject" style="margin-bottom: 35px;">결제 완료</h2>
   </div>
   <div>
     <div class="progress-bar out-progress-bar">
@@ -159,7 +159,7 @@
     </table>
   </div>
   <div id="submit_btn_box">
-    <button class="btn btn-success" id="submitBtn" type="button">마이페이지로 이동</button>
+    <button class="btn btn-success" id="submitBtn" type="button" style="font-family: 'LINESeedKR-Bd';font-size: 20px;">마이페이지로 이동</button>
   </div>
 </main>
 </div><!-- End Hero -->

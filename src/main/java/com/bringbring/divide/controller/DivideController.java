@@ -60,8 +60,7 @@ public class DivideController {
 		System.out.println(divide);
 		int result = divideService.insertDivide(divide, uploadFiles, request);
 		if(result > 0) {
-			int max = divideService.selectMaxNo();
-			return "redirect:/divide/detail.do?divNo=" + max;
+			return "redirect:/divide/detail.do?divNo=" + result;
 		}else {
 			return "/";
 		}

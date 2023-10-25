@@ -55,6 +55,8 @@ input[type=number] {
 #category_box button {
     font-size: 18px;
     width: 100px;
+    font-family: 'LINESeedKR-Bd';
+    height: 38px;
 }
 .fee {
     margin-right: 20px;

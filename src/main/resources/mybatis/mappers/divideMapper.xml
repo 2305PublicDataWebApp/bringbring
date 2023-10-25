@@ -574,6 +574,9 @@
 		WHERE A.USER_NO = #{value} OR A.GET_USER_NO = #{value}
 	</select>
   	<insert id="insertDivide">
+		<selectKey keyProperty="divNo" order="AFTER" resultType="int">
+			SELECT SEQ_DIV_NO.CURRVAL AS dvNo FROM DUAL
+		</selectKey>
   		INSERT INTO DIVIDE_TBL VALUES (
       SEQ_DIV_NO.NEXTVAL , #{userNo}, #{wasteCategoryNo}, #{divTitle}, #{divContent},
       DEFAULT, DEFAULT, 0, DEFAULT, DEFAULT,

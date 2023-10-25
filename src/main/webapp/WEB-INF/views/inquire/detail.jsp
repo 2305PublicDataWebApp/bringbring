@@ -13,6 +13,7 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
+  <!-- Favicons -->
   <link href="../resources/assets/img/main/icon-title.png" rel="icon">
   <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 

@@ -34,9 +34,10 @@ public class DivideServiceImpl implements DivideService{
 	public int insertDivide(Divide divide, MultipartFile[] uploadFiles, HttpServletRequest request) {
 			// 1. db에 먼저 게시글 정보 저장
 			int result = divideStore.insertDivide(divide);
+			int imageGroupNo = 0;
 			// 2. 저장성공시 파일업로드
 			if(result > 0) {
-				int imageGroupNo = divideStore.selectMaxNo();
+				imageGroupNo = divide.getDivNo();
 				for(MultipartFile uploadFile : uploadFiles) {
 					if(uploadFile != null && !uploadFile.isEmpty()) {
 						//파일저장 메소드 호출
@@ -49,7 +50,7 @@ public class DivideServiceImpl implements DivideService{
 					}
 				}
 			}
-			return result;
+			return imageGroupNo;
 	}
 
 	@Override

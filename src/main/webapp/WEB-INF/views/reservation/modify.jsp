@@ -14,8 +14,8 @@
 
 
   <!-- Favicons -->
-  <link href="../../../resources/assets/img/main/title-icon.png" rel="icon">
-  <link href="../../../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link

@@ -14,8 +14,8 @@
 
 
   <!-- Favicons -->
-  <link href="../../../resources/assets/img/main/title-icon.png" rel="icon">
-  <link href="../../../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -109,7 +109,7 @@
 <div style="width: 100%;">
 
   <main>
-    <h2 class="subject">정보 입력</h2>
+    <h2 class="subject" style="margin-bottom: 35px;">정보 입력</h2>
     <div>
       <div class="progress-bar out-progress-bar">
         <div class="progress-bar in-progress-bar"></div>
@@ -130,7 +130,7 @@
         <div id="infoContainer">
           <div class="container-in" id="regionArea">
             <%--          <li id="regionArea">--%>
-            <label for="cityNo">지역</label>
+            <label for="cityNo">*지역</label>
             <div>
               <select name="cityNo" id="cityNo" onchange="citySelect();" style="width: 100px;margin-right: 15px;">
                 <c:forEach var="city" items="${cList}" >
@@ -144,25 +144,25 @@
             <%--          </li>--%>
           </div>
           <div class="container-in">
-            <label>배출 주소</label>
+            <label>*배출 주소</label>
             <div id="address" class="input-div">
-              <input type="text" id="sample6_postcode" placeholder="우편번호">
-              <input type="button" onclick="sample5_execDaumPostcode();" value="우편번호 찾기"><br>
-              <input type="text" id="sample6_address" placeholder="주소" style="width: 400px"><br>
-              <input type="text" id="sample6_detailAddress" placeholder="상세주소" style="width: 400px">
+              <input type="text" id="sample6_postcode" placeholder="*우편번호">
+              <input type="button" onclick="sample5_execDaumPostcode();" value="*우편번호 찾기"><br>
+              <input type="text" id="sample6_address" placeholder="*주소" style="width: 400px"><br>
+              <input type="text" id="sample6_detailAddress" placeholder="상세주소(선택)" style="width: 400px">
               <input type="hidden" name="rvAddr" id="rvAddr">
               <%--            <input type="text" id="sample6_extraAddress" placeholder="참고항목">--%>
             </div>
           </div>
           <div class="container-in">
-            <label>물품 배출 위치</label>
+            <label>*물품 배출 위치</label>
             <div class="input-div">
               <div id="map"></div>
               <input type="text" id="rvAddrDetail" name="rvAddrDetail" placeholder="배출할 장소의 상세 정보를 입력해주세요" style="width: 400px">
             </div>
           </div>
           <div class="container-in">
-            <label>배출일</label>
+            <label>*배출일</label>
             <div class="input-group date input-div" style="width: 520px">
               <input type="text" name="rvRvDate" class="form-control" id="calenderControll" placeholder="배출일을 지정해주세요"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
               <input type="hidden" name="rvRvDate" id="rvRvDate">
@@ -172,19 +172,19 @@
             </div>
           </div>
           <div class="container-in">
-            <label>신청자명</label>
+            <label>*신청자명</label>
             <div class="input-div">
               <input type="text" id="rvName" name="rvName" placeholder="신청자의 이름을 입력해주세요" style="width: 400px">
             </div>
           </div>
           <div class="container-in">
-            <label>휴대폰</label>
+            <label>*휴대폰</label>
             <div class="input-div">
               <input type="number" id="rvPhone" name="rvPhone" placeholder="연락이 가능한 휴대전화 번호를 입력해주세요" style="width: 400px">
             </div>
           </div>
           <div class="container-in">
-            <label>요청사항</label>
+            <label>요청사항(선택)</label>
             <div class="input-div">
               <input type="text" id="rvRequest" name="rvRequest" placeholder="요청사항이 있으면 작성해주세요" style="width: 400px">
             </div>
@@ -203,8 +203,8 @@
         <li>배출 예약은 현재 날짜 기준으로 3일 이후부터 신청 가능하며 최대 한 달 후까지 예약이 가능합니다.</li>
       </ul>
     </div>
-    <div id="submit_btn_box">
-      <button class="btn btn-success" id="submitBtn" type="button">정보 입력</button>
+    <div id="submit_btn_box" style="padding-bottom: 50px;">
+      <button class="btn btn-success" id="submitBtn" type="button" style="font-family: 'LINESeedKR-Bd';font-size: 20px;">정보 입력</button>
     </div>
   </main>
 </div><!-- End Hero -->

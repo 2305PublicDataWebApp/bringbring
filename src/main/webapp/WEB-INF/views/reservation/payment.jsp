@@ -14,8 +14,8 @@
 
 
   <!-- Favicons -->
-  <link href="../../../resources/assets/img/main/title-icon.png" rel="icon">
-    <link href="../../../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -84,7 +84,7 @@
 <div style="width: 100%;height: 1000px;">
 
 <main>
-  <h2 class="subject">결제</h2>
+  <h2 class="subject" style="margin-bottom: 35px;">결제</h2>
   <div>
     <div class="progress-bar out-progress-bar">
       <div class="progress-bar in-progress-bar"></div>
@@ -176,8 +176,8 @@
       </div>
     </div>
   </div>
-  <div id="submit_btn_box">
-    <button class="btn btn-success" id="submitBtn" type="button" onclick="handlePayment()">결제하기</button>
+  <div id="submit_btn_box" style="padding-top: 70px;">
+    <button class="btn btn-success" id="submitBtn" type="button" onclick="handlePayment()" style="font-family: 'LINESeedKR-Bd';font-size: 20px;">결제하기</button>
   </div>
 </main>
 </div><!-- End Hero -->

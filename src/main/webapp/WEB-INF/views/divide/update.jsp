@@ -12,9 +12,9 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
-  <!-- Favicons -->
-  <link href="../resources/assets/img/main/icon-title.png" rel="icon">
-  <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
+	<!-- Favicons -->
+	<link href="../resources/assets/img/main/icon-title.png" rel="icon">
+	<link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 
   <!-- Vendor CSS Files -->
   <link href="../resources/assets/vendor/aos/aos.css" rel="stylesheet">

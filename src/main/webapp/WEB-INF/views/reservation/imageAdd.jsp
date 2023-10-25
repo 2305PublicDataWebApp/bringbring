@@ -14,8 +14,8 @@
 
 
   <!-- Favicons -->
-  <link href="../../../resources/assets/img/main/title-icon.png" rel="icon">
-  <link href="../../../resources/assets/img/main/title-icon.png" rel="apple-touch-icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="icon">
+  <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link
@@ -73,7 +73,7 @@
 <div style="width: 100%;">
 
   <main>
-    <h2 class="subject">대형 폐기물 사진 추가</h2>
+    <h2 class="subject" style="margin-bottom: 35px;">대형 폐기물 사진 추가</h2>
     <div>
       <div class="progress-bar out-progress-bar">
         <div class="progress-bar in-progress-bar"></div>
@@ -118,8 +118,8 @@
         </table>
       </form>
     </div>
-    <div id="submit_btn_box">
-      <button class="btn btn-success" id="submitBtn" type="button" onclick="submitFormBtn();">사진 추가하기</button>
+    <div id="submit_btn_box"  style="padding-bottom: 40px;">
+      <button class="btn btn-success" id="submitBtn" type="button" onclick="submitFormBtn();" style="font-family: 'LINESeedKR-Bd';font-size: 20px;">사진 추가하기</button>
       <%--    <button class="btn btn-success" id="submitButton" type="button">사진 추가하기</button>--%>
     </div>
   </main>

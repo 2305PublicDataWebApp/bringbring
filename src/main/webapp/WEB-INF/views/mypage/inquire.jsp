@@ -16,6 +16,7 @@
     <!-- JQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    <!-- Favicons -->
     <link href="../resources/assets/img/main/icon-title.png" rel="icon">
     <link href="../resources/assets/img/main/icon-title.png" rel="apple-touch-icon">
 

@@ -99,7 +99,12 @@
               </div>
           </form>
           <div style="float: right;">
-            <button onclick="showDivdeInsert();" type="button" class="btn btn-success">글 등록</button>
+              <c:if test="${sessionId ne null}">
+                <button onclick="showDivdeInsert();" type="button" class="btn btn-success">글 등록</button>
+              </c:if>
+              <c:if test="${sessionId eq null}">
+                  <button onclick="loginCheck();" type="button" class="btn btn-success">글 등록</button>
+              </c:if>
           </div>
           <div style="width: 100%;float: left;border-top: 1px solid #ccc;margin-top: 15px;padding: 10px 0px">
               <p style="float:left;font-size: 18px;margin: 0;padding: 5px;font-weight: 600;font-family: 'SUITE-Regular';letter-spacing: 2px;padding-left: 15px;"># ${pInfo.totalCount}건</p>
