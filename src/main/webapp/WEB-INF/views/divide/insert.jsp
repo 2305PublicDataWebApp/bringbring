@@ -316,6 +316,8 @@
 						var coords = new daum.maps.LatLng(result.y, result.x);
 						document.getElementById("coordinateX").value = result.x;
 						document.getElementById("coordinateY").value = result.y;
+						console.log(result.x);
+						console.log(result.y);
 						map.relayout();
 						// 지도 중심을 변경한다.
 						map.setCenter(coords);
@@ -350,6 +352,8 @@
 				marker.setPosition(mouseEvent.latLng);
 				document.getElementById("coordinateX").value = mouseEvent.latLng.La;
 				document.getElementById("coordinateY").value = mouseEvent.latLng.Ma;
+				console.log(mouseEvent.latLng.La);
+				console.log(mouseEvent.latLng.Ma);
 
 				marker.setMap(map);
 

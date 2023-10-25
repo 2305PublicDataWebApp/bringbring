@@ -47,7 +47,7 @@ pageEncoding="UTF-8"%>
                         <button id="divYnBtn" type="button" style="padding: 9px 10px 7px 10px; border-radius: 6px;background-color: #222;font-family: 'LINESeedKR-Bd';font-size: 14px;" readonly>나눔 완료</button>
                     </c:if>
                     <c:if test="${room.chatDivYn.toString() eq 'Y'}">
-                        <button id="divYnBtn" type="button" style="padding: 9px 10px 7px 10px; border-radius: 6px;background-color: #656262;font-family: 'LINESeedKR-Bd';font-size: 14px;" readonly>나눔 완료</button>
+                        <button id="divYnBtn" type="button" style="pointer-events: none;;padding: 9px 10px 7px 10px; border-radius: 6px;background-color: #656262;font-family: 'LINESeedKR-Bd';font-size: 14px;" readonly>나눔 완료</button>
                     </c:if>
                     <span class="divideTitle">
                         <a href="/divide/detail.do?divNo=${uData.divide.divNo}">
