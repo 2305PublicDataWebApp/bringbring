@@ -158,7 +158,7 @@
   <section id="weatherSection">
     <!-- 날씨 -->
     <div class="container mt-5" data-aos="fade-up">
-      <div class="section-title">
+      <div class="section-title" id="weatherArea">
         <h2>날씨 서비스</h2>
         <p>기상청 날씨 정보를 통해 수거 가능,지연 여부를 제공합니다.</p>
       </div>
@@ -358,7 +358,7 @@
                 <i class="bi bi-brightness-high"></i>
               </div>
               <div class="weatherIcon">
-                <h4><a>날씨 안내 서비스</a></h4>
+                <h4><a href="#weatherArea">날씨 안내 서비스</a></h4>
               </div>
                 <p>날씨를 미리 안내하여 픽업에 <br> 유의사항이 발생하거나<br>만일의 상황을 방지할 수 있습니다!</p>
             </div>
