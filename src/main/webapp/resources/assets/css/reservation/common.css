@@ -36,6 +36,7 @@ main {
 #submit_btn_box {
     display: flex;
     justify-content: center;
+    padding: 120px;
 }
 #submitBtn {
     width: 200px;

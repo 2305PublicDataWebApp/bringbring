@@ -11,6 +11,12 @@
         width: 20%;
     }
 }
+
+/* 클릭 시 색상 변경 스타일 */
+.btn.btn-outline-success.active {
+    background-color: #198754; /* 클릭 시 배경색 */
+    color: #fff; /* 클릭 시 텍스트 색상 */
+}
 .selectBox {
     width: 300px;
 }
@@ -107,4 +113,6 @@ input[type=number] {
 #selectTable {
     height: 100%;
 }
-
+.wasteInfoNo {
+    display: none;
+}

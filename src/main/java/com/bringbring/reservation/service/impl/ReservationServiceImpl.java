@@ -147,8 +147,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<ReservationComplete> selectMyReservationDetailList(Connection connection) {
-        return reservationStore.selectMyReservationDetailList(connection);
+    public List<ReservationComplete> selectMyReservationDetailImage(Connection connection) {
+        return reservationStore.selectMyReservationDetailImage(connection);
+    }
+
+    @Override
+    public List<ReservationComplete> selectMyReservationDetailList(int rvNo) {
+        return reservationStore.selectMyReservationDetailList(rvNo);
+
     }
 
     @Override

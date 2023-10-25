@@ -5,17 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
-
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class PayCancel {
+@NoArgsConstructor
+public class PayCancelReason {
 
-    private int cancelNo;
-    private int payNo;
-    private Date cancelDate;
-    private long cancelAmount;
     private int reasonNo;
+    private String reason;
 }

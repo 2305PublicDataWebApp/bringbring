@@ -79,7 +79,7 @@
   </div>
 
 </section>
-<div style="width: 100%;height: 1000px;">
+<div style="width: 100%;">
 
 <main>
   <div>
@@ -189,9 +189,12 @@
 <!--주소 api 사용 script-->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <!-- 채널톡 api -->
+<jsp:include page="/include/chatBot.jsp"></jsp:include>
 <script>
 
-
+  document.querySelector('#submitBtn').addEventListener('click', function () {
+    location.href = '/mypage/main.do'
+  })
 
 </script>
 

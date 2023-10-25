@@ -34,6 +34,9 @@
     <link href="../resources/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="../resources/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+    <!-- fslightbox 스타일 시트 추가 -->
+<%--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.4.1/fslightbox.min.css">--%>
+
     <!-- Template Main CSS File -->
     <link href="../resources/assets/css/style.css" rel="stylesheet">
     <link href="../resources/assets/css/common.css" rel="stylesheet">
@@ -182,7 +185,22 @@
                     </div>
                     <div class="modal-footer">
                         <input type="submit" id="rvUpdate" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="정보 수정">
-                        <input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소" onclick="cancelPay()">
+                        <input type="submit" id="findEmail_btn" class="cancel_reservation_btn w-100 text-center fw-bold fs-4 rounded mt-0" value="예약 취소" onclick="confirmCancel()">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 이미지 팝업 모달 -->
+        <div id="imagePopup" class="modal fade">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imagePopupLabel">이미지 상세보기</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img id="popupImage" class="popup-content">
+                        <div id="imageList" class="mt-3"></div>
                     </div>
                 </div>
             </div>
@@ -209,6 +227,8 @@
     <!-- Template Main JS File -->
     <script src="../resources/assets/js/main.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.4.1/index.min.js"></script>
+
 	<script>
 	function openModal(rvNo) {
 
@@ -217,25 +237,6 @@
             type: 'GET',
             data: { rvNo: rvNo }, // 요청 데이터 (rvNo 매개변수를 전달)
             success: function(response) {
-                console.log(response);
-
-                // var groupedData = {};
-                //
-                // for (var i = 0; i < response.length; i++) {
-                //     var item = response[i];
-                //     var image = item.image;
-                //     var connection = item.connection;
-                //     var imageIndexNo = connection.imageIndexNo;
-                //
-                //     if (!groupedData[imageIndexNo]) {
-                //         groupedData[imageIndexNo] = {
-                //             image: image,
-                //             connection: connection
-                //         };
-                //     }
-                // }
-                //
-                // console.log("groupdata",groupedData);
 
                 const matchedReservations = response;
 
@@ -245,17 +246,25 @@
                     const modalBody = document.getElementById("modal_body_content");
 
                     // 모달 내용을 채워넣기
-                    let modalContent = '<div class="modal_border_bottom p-3">';
-                    modalContent += '<p id="rvDischargeNo">예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
-                    modalContent += '<input type="hidden" id="modalPayId" name="modalPayId" value="' + matchedReservations[0].pay.payId + '">';
-
+                    let modalContent = '<div class="modal_border_bottom p-3" id="modalHeader">';
+                    modalContent += '<div>';
+                    modalContent += '<p>예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
                     modalContent += '<p class="m-0">예약 날짜 : ' + matchedReservations[0].reservation.rvRvDate + '</p>';
+                    modalContent += '</div>';
+                    modalContent += '<div>';
+                    modalContent += '<a href="/reservation/modify.do">';
+                    modalContent += '<button class="btn btn-primary" id="modifyButton">정보 수정</button>';
+                    modalContent += '</a>';
+                    modalContent += '</div>';
                     modalContent += '</div>';
                     modalContent += '<div class="modal_border_bottom p-3">';
                     modalContent += '<p class="fs-5">장소 : ' + matchedReservations[0].reservation.rvAddr + matchedReservations[0].reservation.rvAddrDetail + '</p>';
+                    modalContent += '<p>신청자 : ' + matchedReservations[0].reservation.rvName + '</p>';
+                    modalContent += '<p>연락처 : ' + matchedReservations[0].reservation.rvPhone + '</p>';
                     modalContent += '<p>요청사항 : ' + matchedReservations[0].reservation.rvRequest + '</p>';
 
                     const displayedImageIndexes = [];
+
 
                     for (let i = 0; i < matchedReservations.length; i++) {
                         const imageIndexNo = matchedReservations[i].connection.imageIndexNo;
@@ -307,7 +316,6 @@
 
 
 
-
                     modalContent += '</div>';
                     modalContent += '<div class="">';
                     modalContent += '<div class="row p-3 pb-0">';
@@ -339,17 +347,8 @@
                     const modal = document.getElementById("enroll_modal");
                     modal.dataset.matchedReservations = JSON.stringify(matchedReservations);
 
-                    console.log("modal", modal);
-
                     // 모달을 열기
                     $('#enroll_modal').modal('show');
-
-
-
-
-
-
-
 
 
                 } else {
@@ -364,114 +363,130 @@
 	}
 
     function openImagePopup(obj) {
-        // 이 부분에서 matchedReservations 변수를 사용할 수 있습니다.
-        console.log("imageIndexNo: ", obj);
         var parentDiv = obj.parentElement;
-        // 부모 요소의 모든 자식 요소를 가져옵니다.
         var siblings = Array.from(parentDiv.children);
-        // siblings 배열에서 obj 요소의 인덱스를 찾습니다.
         var objIndex = siblings.indexOf(obj);
         var imageIndexNoSibling = siblings[objIndex + 1];
         var rvDetailNoSibling = siblings[objIndex + 2];
-
         let imageIndexNo = imageIndexNoSibling.value;
         let rvDetailNo = rvDetailNoSibling.value;
-
-        console.log("imageIndexNoSibling", imageIndexNo);
-        console.log("rvDetailNoSibling", rvDetailNoSibling);
 
         $.ajax({
             url: '/reservation/selectImage.do',
             type: 'GET',
-            data: { imageIndexNo: imageIndexNoSibling, rvDetailNo: rvDetailNo },
+            data: { imageIndexNo: imageIndexNo, rvDetailNo: rvDetailNo },
             success: function(response) {
-                // 에이젝스 요청을 통해 이미지 데이터를 가져왔습니다.
-                // 이제 response를 사용하여 모달 창을 열고 캐러셀 형태로 이미지를 표시하세요.
+                // 이미지 데이터를 추출
+                var images = [];
+                for (var i = 0; i < response.length; i++) {
+                    var item = response[i];
+                    console.log(item)
+                    images.push(item.image.imagePath);
+                }
+                console.log("images", images)
+
+                // 모달 이미지 엘리먼트를 가져옵니다.
+                var popupImage = document.getElementById("popupImage");
+                popupImage.src = images[0]; // 첫 번째 이미지를 표시합니다.
+
+                // 이미지 목록 생성
+                var imageList = document.getElementById("imageList");
+                imageList.innerHTML = ""; // 이미지 목록 초기화
+
+                for (var i = 0; i < images.length; i++) {
+                    let imageItem = document.createElement("img");
+                    imageItem.src = images[i];
+                    imageItem.classList.add("popup-thumbnail");
+                    // 클로저를 사용하여 i 값을 고정
+                    (function(index) {
+                        imageItem.onclick = function () {
+                            changeImage(index, images);
+                        };
+                    })(i);
+
+                    imageList.appendChild(imageItem);
+                }
+
+                // 이미지 팝업 모달 열기
+                $('#imagePopup').modal('show');
             },
             error: function(error) {
                 console.error('에이젝스 요청 오류:', error);
             }
         });
-
-
-
-
     }
 
-
-    // function openImagePopup(imageIndexNo, matchedReservations) {
-    //
-    //     console.log("imageIndexNo : ", imageIndexNo);
-    //
-    //     const modalBody = document.getElementById("modal_body_content");
-    //     modalBody.innerHTML = '';
-    //
-    //     // 이미지 정보 가져오기
-    //     const imageInfo = groupedData[imageIndexNo];
-    //
-    //     if (imageInfo) {
-    //         // 이미지 정보 활용하여 모달 창에 내용 추가 및 동작 수행
-    //         const image = imageInfo.image;
-    //         const connection = imageInfo.connection;
-    //
-    //         // 이미지 캐러셀을 생성
-    //         const carouselContent = document.createElement("div");
-    //         carouselContent.classList.add("carousel");
-    //
-    //         for (let i = 0; i < matchedReservations.length; i++) {
-    //             const slide = document.createElement("div");
-    //             slide.classList.add("carousel-item");
-    //             if (i === imageIndexNo) {
-    //                 slide.classList.add("active");
-    //             }
-    //
-    //             const image = document.createElement("img");
-    //             image.src = matchedReservations[i].image.imagePath;
-    //             image.classList.add("d-block", "w-100");
-    //             slide.appendChild(image);
-    //             carouselContent.appendChild(slide);
-    //         }
-    //
-    //         // 캐러셀 컨트롤 버튼 추가
-    //         const carouselControls = document.createElement("a");
-    //         carouselControls.href = "#imageCarousel";
-    //         carouselControls.role = "button";
-    //         carouselControls.setAttribute("data-slide", "prev");
-    //         carouselControls.classList.add("carousel-control-prev");
-    //         carouselControls.innerHTML = '<span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>';
-    //
-    //         // 모달 내용에 추가
-    //         modalBody.appendChild(carouselContent);
-    //         modalBody.appendChild(carouselControls);
-    //     }
-    //
-    //     // 모달을 열기
-    //     $('#enroll_modal').modal('show');
-    // }
-
-
-    function changeImage(index) {
-        currentImageIndex = index;
+    function changeImage(i, images) {
+        console.log(i)
         var popupImage = document.getElementById("popupImage");
-        popupImage.src = images[currentImageIndex];
+        popupImage.src = images[i]; // 이미지를 변경합니다.
+        console.log(images[i])
     }
+
+
 
 
 
 	</script>
     <script>
+
+        let isSelectVisible = false;
+        let selectedOption = 4; // 기타를 기본 값으로 지정
+
         function confirmCancel() {
             // 모달에서 matchedReservations 데이터를 읽어옴
             const modal = document.getElementById("enroll_modal");
             const matchedReservations = JSON.parse(modal.dataset.matchedReservations);
-            console.log(matchedReservations)
-            const isConfirm = confirm("예약을 취소하시겠습니까? 확인 후 복구할 수 없습니다.")
-            if (isConfirm) {
-                cancelPay(matchedReservations);
+            console.log(matchedReservations);
+
+            if (!isSelectVisible) {
+                // select 창을 보여주기
+                const modalContent = document.getElementById("modal_body_content");
+                const selectElement = createSelectElement(matchedReservations);
+                modalContent.appendChild(selectElement);
+                isSelectVisible = true;
+
+                // 선택한 option의 변경을 감지하고 저장
+                selectElement.addEventListener('change', function () {
+                    selectedOption = selectElement.value;
+                });
+            } else {
+                if (selectedOption) {
+                    // 선택한 option을 cancelPay 함수에 전달
+                    const parsedOption = JSON.parse(selectedOption);
+                    cancelPay(parsedOption);
+                } else {
+                    alert("취소 이유를 선택하세요.");
+                }
             }
         }
 
-        function cancelPay() {
+        function createSelectElement(matchedReservations) {
+            const select = document.createElement("select");
+            select.className = 'form-select form-select-lg mb-3';
+            select.setAttribute("aria-label", ".form-select-lg example");
+
+                const option1 = document.createElement("option");
+                option1.value = '1';
+                option1.text =  '배출 물품 변경';
+                const option2 = document.createElement("option");
+                option2.value = '2';
+                option2.text =  '기상 악화로 인한 취소';
+                const option3 = document.createElement("option");
+                option3.value = '3';
+                option3.text =  '개인 사정으로 인한 일정 변경';
+                const option4 = document.createElement("option");
+                option4.value = '4';
+                option4.text =  '기타';
+                select.appendChild(option1);
+                select.appendChild(option2);
+                select.appendChild(option3);
+                select.appendChild(option4);
+
+            return select;
+        }
+
+        function cancelPay(parsedOption) {
             // const modal = document.getElementById("enroll_modal");
             // const matchedReservations = JSON.parse(modal.dataset.matchedReservations);
 
@@ -479,9 +494,11 @@
             const dischargeNo = dischaegeNoStr.substring(dischaegeNoStr.length - 17);
             const cancel_request_amount = document.querySelector("#rvDetailFee").textContent;
             const payId = document.querySelector("#modalPayId").value;
+
             console.log(dischargeNo);
             console.log(cancel_request_amount)
             console.log(payId);
+            console.log(parsedOption)
 
             $.ajax({
                 url: "/reservation/cancel.do",
@@ -491,7 +508,7 @@
                     dischargeNo : dischargeNo,
                     merchant_uid: payId, // 예: ORD20180131-0000011
                     cancel_request_amount: cancel_request_amount, // 환불금액
-                    reason: "결제 취소 요청" // 환불사유
+                    reason: parsedOption // 환불사유
                 }),
                 success: function (data) {
                     console.log("data", data);
@@ -505,14 +522,9 @@
         }
     </script>
     <!-- 채널톡 api -->
-    <script>
-        (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
+    <jsp:include page="/include/chatBot.jsp"></jsp:include>
 
-        ChannelIO('boot', {
-            "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-        });
 
-    </script>
 
 
 </body>

@@ -8,5 +8,5 @@ public interface PayService {
 
     boolean cancelRequest(Map<String, String> request, String token) throws ProtocolException;
 
-    boolean cancelPayInfo(String payId);
+    boolean cancelPayInfo(String payId, Integer reasonNo);
 }
