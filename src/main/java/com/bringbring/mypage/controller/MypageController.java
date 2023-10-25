@@ -1,5 +1,6 @@
 package com.bringbring.mypage.controller;
 
+import com.bringbring.chatting.domain.ChatData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.DivideData;
 import com.bringbring.divide.domain.HeartData;
@@ -127,5 +128,27 @@ public class MypageController {
 		model.addAttribute("pInfo", pInfo);
 		return "mypage/divide";
 	}
-	
+
+	@GetMapping("/divideYn.do")
+	public String updateDivideYn(int divNo){
+		mypageService.updateDivideYn(divNo);
+		return "redirect:/mypage/divide.do";
+	}
+
+	@GetMapping("/chatting.do")
+	public String showMypageChatting(Model model
+			, @RequestParam(value= "page", required = false, defaultValue="1") Integer currentPage
+			, HttpSession httpSession){
+
+		User user = userService.selectOneById((String)httpSession.getAttribute("sessionId"));
+		int totalCount = mypageService.getChatDataListCountByNo(user.getUserNo());
+		PageInfo pInfo = mypageService.getPageInfo(currentPage, totalCount);
+		List<ChatData> chatData = mypageService.selectMypageChatList(pInfo, user.getUserNo());
+		if(!chatData.isEmpty()){
+			model.addAttribute("cData", chatData);
+		}
+		model.addAttribute("pInfo", pInfo).addAttribute("user", user);
+		return "mypage/chatting";
+	}
+
 }

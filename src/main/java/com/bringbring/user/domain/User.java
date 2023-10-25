@@ -17,8 +17,12 @@ public class User {
 
 	private int userNo;
 	private String userId;
+	private String sendUserId;
+	private String getUserId;
 	private String userPwd;
 	private String userName;
+	private String sendUserName;
+	private String getUserName;
 	private String userPhone;
 	private String userPostCode;
 	private String userAddress;

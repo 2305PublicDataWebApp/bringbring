@@ -43,7 +43,7 @@ public class ChatController extends Socket {
         String userId = (String)session.getAttribute("sessionId");
         Map<String, Object> map;
         //     작성자랑 채팅시작자가 다를 때
-        if(!id.equals(getUserId)){
+        if(!id.equals(getUserId)) {
             User user = userService.selectOneById(userId);
             User getUser = userService.selectOneById(getUserId);
             // 채팅방이 존재하는 지 확인
@@ -53,39 +53,18 @@ public class ChatController extends Socket {
             chatRoomMap.put("getUserNo", getUser.getUserNo());
             ChatRoom chatRoom = chatService.selectChatRoom(chatRoomMap);
             // 없으면 채팅방 생성
-            if(chatRoom == null){
+            if (chatRoom == null) {
                 int result = chatService.insertChatRoom(chatRoomMap);
                 chatRoom = chatService.selectChatRoom(chatRoomMap);
             }
             List<Chat> chatList = chatService.selectChatRoomListByNo(chatRoom.getChatroomNo());
-            if(chatList.size() > 0){
+            if (chatList.size() > 0) {
                 model.addAttribute("cList", chatList);
             }
 
             model.addAttribute("name", user.getUserName()).addAttribute("user", user).addAttribute("getUser", getUser);
             model.addAttribute("room", chatRoom);
 
-        }else if(id.equals("admin@kh.com")){
-            getUserId = "khuser01@kh.com";
-            User user = userService.selectOneById(userId);
-            User getUser = userService.selectOneById(getUserId);
-            // 채팅방이 존재하는 지 확인
-            Map<String, Object> chatRoomMap = new HashMap<String, Object>();
-            chatRoomMap.put("divNo", divNo);
-            chatRoomMap.put("userNo", user.getUserNo());
-            chatRoomMap.put("getUserNo", getUser.getUserNo());
-            ChatRoom chatRoom = chatService.selectChatRoom(chatRoomMap);
-            // 없으면 채팅방 생성
-            if(chatRoom == null){
-                int result = chatService.insertChatRoom(chatRoomMap);
-                chatRoom = chatService.selectChatRoom(chatRoomMap);
-            }
-            List<Chat> chatList = chatService.selectChatRoomListByNo(chatRoom.getChatroomNo());
-            if(chatList.size() > 0){
-                model.addAttribute("cList", chatList);
-            }
-            model.addAttribute("name", user.getUserName()).addAttribute("user", user).addAttribute("getUser", getUser);
-            model.addAttribute("room", chatRoom);
         }else{
             return "/";
         }

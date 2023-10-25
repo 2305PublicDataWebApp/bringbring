@@ -2,6 +2,7 @@ package com.bringbring.mypage.service.impl;
 
 import java.util.List;
 
+import com.bringbring.chatting.domain.ChatData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.DivideData;
 import com.bringbring.divide.domain.HeartData;
@@ -58,4 +59,15 @@ public class MypageServiceImpl implements MypageService{
 
 	@Override
 	public List<DivideData> selectMypageDivideList(PageInfo pInfo, int userNo) { return mypageStore.selectMypageDivideList(pInfo, userNo); }
+
+    @Override
+    public int getChatDataListCountByNo(int userNo) {
+        return mypageStore.getChatDataListCountByNo(userNo);
+    }
+
+	@Override
+	public List<ChatData> selectMypageChatList(PageInfo pInfo, int userNo) { return mypageStore.selectMypageChatList(pInfo, userNo); }
+
+    @Override
+    public int updateDivideYn(int divNo) { return mypageStore.updateDivideYn(divNo); }
 }

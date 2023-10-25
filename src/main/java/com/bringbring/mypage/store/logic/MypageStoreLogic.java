@@ -2,6 +2,7 @@ package com.bringbring.mypage.store.logic;
 
 import java.util.List;
 
+import com.bringbring.chatting.domain.ChatData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.DivideData;
 import com.bringbring.divide.domain.HeartData;
@@ -46,4 +47,20 @@ public class MypageStoreLogic implements MypageStore{
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return sqlSession.selectList("DivideMapper.selectMypageDivideList", userNo, rowBounds);
 	}
+
+    @Override
+    public int getChatDataListCountByNo(int userNo) {
+        return sqlSession.selectOne("DivideMapper.getChatDataListCountByNo", userNo);
+    }
+
+	@Override
+	public List<ChatData> selectMypageChatList(PageInfo pInfo, int userNo) {
+		int limit = pInfo.getRecordCountPerPage();
+		int offset = (pInfo.getCurrentPage() - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return sqlSession.selectList("DivideMapper.selectMypageChatList", userNo, rowBounds);
+	}
+
+    @Override
+    public int updateDivideYn(int divNo) { return sqlSession.update("DivideMapper.updateDivideYn", divNo); }
 }

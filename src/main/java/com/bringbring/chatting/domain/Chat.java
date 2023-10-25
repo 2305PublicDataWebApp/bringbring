@@ -20,11 +20,6 @@ public class Chat {
     private String chatContent;
     private LocalDateTime chatCreateDate;
     private char isChatDeleted;
-    private char chatDivYn;
     private int chatRoomNo;
-
-//    public enum messageType{
-//        ENTER, TALK;
-//    }
 
 }

@@ -19,9 +19,11 @@ pageEncoding="UTF-8"%>
     <style>
         .floating-chat .chat .messages li.self:before {
             background-image: url(${getUser.userProfilePath});
+            background-color: white;
         }
         .floating-chat .chat .messages li.other:before {
             background-image: url(${user.userProfilePath});
+            background-color: white;
         }
         .header a:link, .header a:visited{
             color: #103b31;
@@ -41,8 +43,11 @@ pageEncoding="UTF-8"%>
                 </span>
                 </div>
                 <div class="header text-center" style="border-bottom: 1px solid #17594A;padding-left: 10px;margin-bottom: 5px;">
-                    <c:if test="${sessionId eq uData.user.userId}">
-                        <button type="button" style="padding: 9px 10px 7px 10px; border-radius: 6px;background-color: #222;font-family: 'LINESeedKR-Bd';font-size: 14px;" readonly>나눔 완료</button>
+                    <c:if test="${sessionId eq uData.user.userId && room.chatDivYn.toString() eq 'N'}">
+                        <button id="divYnBtn" type="button" style="padding: 9px 10px 7px 10px; border-radius: 6px;background-color: #222;font-family: 'LINESeedKR-Bd';font-size: 14px;" readonly>나눔 완료</button>
+                    </c:if>
+                    <c:if test="${room.chatDivYn.toString() eq 'Y'}">
+                        <button id="divYnBtn" type="button" style="padding: 9px 10px 7px 10px; border-radius: 6px;background-color: #656262;font-family: 'LINESeedKR-Bd';font-size: 14px;" readonly>나눔 완료</button>
                     </c:if>
                     <span class="divideTitle">
                         <a href="/divide/detail.do?divNo=${uData.divide.divNo}">
@@ -112,6 +117,7 @@ pageEncoding="UTF-8"%>
 
             console.log(chatroomNo + ", " + username);
 
+
             var sockJs = new SockJS("/stomp/chat");
             //1. SockJS를 내부에 들고있는 stomp를 내어줌
             var stomp = Stomp.over(sockJs);
@@ -129,7 +135,7 @@ pageEncoding="UTF-8"%>
                     var liElement = document.createElement("li");
                     var spanElement = document.createElement("span");
 
-                    if(content.message === "님이 채팅방에 참여하였습니다."){
+                    if(content.message === "bringbring chatting start"){
                         message = content.writer + "님이 입장하셨습니다.";
                         var ulElement = document.getElementById("msgArea");
                         var pElement = document.createElement("p");
@@ -141,7 +147,7 @@ pageEncoding="UTF-8"%>
                         spanElement.appendChild(textNode);
                         pElement.appendChild(spanElement);
                         ulElement.appendChild(pElement);
-                    } else if(content.message === "님이 채팅방에서 퇴장하였습니다."){
+                    } else if(content.message === "bringbring chatting close"){
                         message = content.writer + "님이 퇴장하셨습니다.";
                         var ulElement = document.getElementById("msgArea");
                         var pElement = document.createElement("p");
@@ -153,7 +159,19 @@ pageEncoding="UTF-8"%>
                         spanElement.appendChild(textNode);
                         pElement.appendChild(spanElement);
                         ulElement.appendChild(pElement);
-                    } else{
+                    } else if(content.message === "chatting divide complete"){
+                        message = "나눔이 완료되었습니다.";
+                        var ulElement = document.getElementById("msgArea");
+                        var pElement = document.createElement("p");
+                        pElement.setAttribute("class", "infoMessageArea");
+                        var spanElement = document.createElement("span");
+                        spanElement.setAttribute("class", "infoMessage");
+                        var textNode = document.createTextNode(message);
+
+                        spanElement.appendChild(textNode);
+                        pElement.appendChild(spanElement);
+                        ulElement.appendChild(pElement);
+                    }else{
                         if(content.userNo === ${user.userNo}){
 
                             divElement.setAttribute("class", "chatDiv");
@@ -186,6 +204,35 @@ pageEncoding="UTF-8"%>
                 //3. send(path, header, message)로 메세지를 보낼 수 있음
                 stomp.send('/pub/chat/enter', {}, JSON.stringify({chatroomNo: chatroomNo, writer: username, userNo: ${user.userNo}}))
             });
+
+            // divYnBtn 버튼 엘리먼트 가져오기
+            var divYnBtn = document.getElementById("divYnBtn");
+            // divYnBtn이 존재하면 클릭 이벤트 리스너 추가
+            if (divYnBtn) {
+                divYnBtn.addEventListener("click", function() {
+                    if(confirm("나눔 완료로 바꾸시겠습니까? 한 번 누르면 취소할 수 없습니다.")){
+                        // stomp.send()를 사용하여 원하는 동작 수행
+                        $.ajax({
+                            url: "/chatting/updateDivide.do",
+                            data: { chatroomNo : ${room.chatroomNo} },
+                            type: "POST",
+                            success: function(data) {
+                                if(data === "success"){
+                                    stomp.send('/pub/chat/divide', {}, JSON.stringify({chatroomNo: chatroomNo, message: "", writer: username, userNo: ${user.userNo}}));
+                                }else{
+                                    alert("나눔완료 실패!");
+                                }
+
+                            },
+                            error: function() {
+                                alert("Ajax 오류! 관리자에게 문의하세요");
+                            }
+                        });
+                    }
+                });
+
+            }
+
 
             $("#sendBtn").on("click", function(e){
                 // enterkey();
