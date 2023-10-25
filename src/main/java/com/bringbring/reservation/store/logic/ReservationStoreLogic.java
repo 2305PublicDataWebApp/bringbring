@@ -164,5 +164,10 @@ public class ReservationStoreLogic implements ReservationStore {
 
     }
 
+    @Override
+    public List<ReservationComplete> selectInfoByDischargeNo(Reservation reservation) {
+        return sqlSession.selectList("ReservationMapper.selectInfoByDischargeNo", reservation);
+    }
+
 
 }

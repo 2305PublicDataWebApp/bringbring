@@ -64,4 +64,5 @@ public interface ReservationStore {
 
     List<ReservationComplete> selectMyReservationDetailList(int rvNo);
 
+    List<ReservationComplete> selectInfoByDischargeNo(Reservation reservation);
 }

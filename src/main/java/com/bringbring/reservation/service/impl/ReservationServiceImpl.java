@@ -60,30 +60,32 @@ public class ReservationServiceImpl implements ReservationService {
         int imageTotal = imageAdd.size();
         System.out.println("imageTotal = " + imageTotal);
 
-            if (reservationUserInfo != null) {
+        int rvNo = 0;
+
+        if (reservationUserInfo != null) {
                 reservationResult = reservationStore.insertResertvation(reservationUserInfo);
                 System.out.println("reservationResult = " + reservationResult);
             }
 
             if (reservationDetail != null  && reservationResult > 0) {
-                int rvNo = reservationUserInfo.getRvNo();
+                rvNo = reservationUserInfo.getRvNo();
                 reservationDetail.setRvNo(rvNo);
                 reservationDetailResult = reservationStore.insertReservationDetail(reservationDetail);
 
-                rvDetailNo = reservationDetail.getRvDetailNo();
-                reservationDetail.setRvDetailNo(rvDetailNo);
-                System.out.println("rvDetailNo = " + rvDetailNo);
+//                rvDetailNo = reservationDetail.getRvDetailNo();
+                reservationDetail.setRvDetailNo(rvNo);
+//                System.out.println("rvDetailNo = " + rvDetailNo);
                 System.out.println("reservationDetailResult = " + reservationDetailResult);
             }
 
             if (!imageAdd.isEmpty() && reservationDetailResult > 0) {
-                imageResult = this.insertImages(imageAdd, rvDetailNo);
+                imageResult = this.insertImages(imageAdd, rvNo);
                 System.out.println("imageResult = " + imageResult);
             } else {
                 System.out.println("[오류] = 왜 오류가 날까 / imageAdd.isEmpty?" + imageAdd.isEmpty() + "[imageResult] = " + imageResult);
             }
 
-            pay.setRvDetailNo(rvDetailNo);
+            pay.setRvDetailNo(rvNo);
             payResult = reservationStore.insertPay(pay);
             System.out.println("payResult = " + payResult);
 
@@ -155,6 +157,11 @@ public class ReservationServiceImpl implements ReservationService {
     public List<ReservationComplete> selectMyReservationDetailList(int rvNo) {
         return reservationStore.selectMyReservationDetailList(rvNo);
 
+    }
+
+    @Override
+    public List<ReservationComplete> selectInfoByDischargeNo(Reservation reservation) {
+        return reservationStore.selectInfoByDischargeNo(reservation);
     }
 
     @Override
@@ -237,7 +244,7 @@ public class ReservationServiceImpl implements ReservationService {
         return imagePaths;
     }
     // 실제로 db에 저장
-    private int insertImages(Map<String, Object> imageAdd, int rvDetailNo) {
+    private int insertImages(Map<String, Object> imageAdd, int rvNo) {
         int result = 0; // 이미지 삽입 횟수를 초기화
 
         for (Map.Entry<String, Object> entry : imageAdd.entrySet()) {
@@ -259,7 +266,7 @@ public class ReservationServiceImpl implements ReservationService {
                         int imageIndexNo = Integer.parseInt(imageIndexNoStr);
 
                         // 이미지 객체 생성
-                        Image image = new Image("reservation", rvDetailNo, imageName, imageRename, savePath);
+                        Image image = new Image("reservation", rvNo, imageName, imageRename, savePath);
                         System.out.println("image = " + image);
                         // 이미지 객체를 데이터베이스에 삽입
                         int insertResult = reservationStore.insertReservationImage(image);
@@ -273,7 +280,7 @@ public class ReservationServiceImpl implements ReservationService {
 
                             // 가져온 이미지 번호와 imageAdd가 가지고 있는 정보로 연결 테이블에 삽입합니다.
                             Connection connection = new Connection();
-                            connection.setRvDetailNo(rvDetailNo);
+                            connection.setRvDetailNo(rvNo);
                             connection.setWasteInfoNo(wasteInfoNo);
                             connection.setImageIndexNo(imageIndexNo);
                             connection.setImageNo(imageNo);

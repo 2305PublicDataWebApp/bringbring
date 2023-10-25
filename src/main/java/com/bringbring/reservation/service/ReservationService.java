@@ -44,4 +44,5 @@ public interface ReservationService {
 
     List<ReservationComplete> selectMyReservationDetailList(int rvNo);
 
+    List<ReservationComplete> selectInfoByDischargeNo(Reservation reservation);
 }

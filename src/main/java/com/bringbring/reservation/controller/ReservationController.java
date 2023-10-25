@@ -180,7 +180,24 @@ public class ReservationController {
     }
 
     @GetMapping("/modify.do")
-    public String showReservationModify(Model model, HttpSession session) {
+    public String showReservationModify(Model model, HttpSession session
+    , String rvDischargeNo) {
+        String userId = (String)session.getAttribute("sessionId");
+        System.out.println("userId = " + userId);
+        User user = reservationService.selectUserNo(userId);
+        int userNo = user.getUserNo();
+        Reservation reservation = new Reservation();
+        reservation.setUserNo(userNo);
+        reservation.setRvDischargeNo(rvDischargeNo);
+        List<ReservationComplete> reservationComplete = reservationService.selectInfoByDischargeNo(reservation);
+        if(reservationComplete != null) {
+            List<City> cityList = regionService.selectCityList();
+            model.addAttribute("infoList", reservationComplete).addAttribute("cList", cityList);
+        } else {
+            model.addAttribute("msg", "유효한 접근이 아닙니다.")
+                    .addAttribute("url", "/");
+            return "/common/error";
+        }
         return "/reservation/modify";
     }
 
