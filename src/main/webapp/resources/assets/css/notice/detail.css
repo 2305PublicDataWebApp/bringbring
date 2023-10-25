@@ -21,13 +21,6 @@ main .icon{
     color:#157347
 }
 
-main .notice-btn{
-    width: 170px;
-    display: flex;
-    justify-content: space-between;
-    float: right;
-    margin-right: 50px;
-}
 
 main .notice-subtitle{
     display: flex;
