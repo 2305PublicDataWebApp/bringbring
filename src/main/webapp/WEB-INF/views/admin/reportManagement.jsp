@@ -148,7 +148,7 @@
                                     aria-label="Close"></button>
                           </div>
                           <div class="modal-body">
-                              <input type="text" class="form-control" id="divNoModal"
+                              <input type="hidden" class="form-control" id="divNoModal"
                                      name="memberId" required>
                               <div class="mb-3">
                                 <label  class="form-label"><h6>제목</h6></label>
