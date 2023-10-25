@@ -76,6 +76,12 @@
   .icon:hover {
     cursor: pointer;
   }
+  ul {
+    list-style: none;
+  }
+  .divideLi {
+    margin-bottom: 10px;
+  }
   </style>
 </head>
 
@@ -185,11 +191,18 @@
             <!-- <img src="../resources/assets/img/main/2041357502_YnIzcZ4u_1.jpg" class="img-fluid rounded-4 mb-4" alt=""> -->
             <img src="../resources/assets/img/main/9313_3641_4444.jpg" style="box-shadow: 6px 5px 8px rgba(0, 0, 0, 0.2);" class="img-fluid rounded-4 mb-4" alt="">
             <h6 style="padding: 10px 0px;">나눔게시판 나눔 ❤️</h6>
-            <p>처리 비용은 부담되고 다른 사람에게 도움을 주고 싶으신가요? <br>상태가 좋다면
-              다른 사람에게 나눔하는 것은 어떨까요?<br> 여러분의 작은 나눔으로 
-              누군가에게는 사랑을 나눌 수 있고 <br>
+            <p>더 이상 사용하지 않는 물건인데 팔리지는 않지만 버리기엔 아까운 물건이 있으신가요?
+              <br> 그런 물건들을 다른 사람과 나누어보는 건 어떤가요?
+              <br> 여러분의 작은 나눔으로 누군가에게는 사랑을 나눌 수 있고
+              <br> 쓰레기 배출이 줄어돌어 환경보호에 도움이 되어
               세상이 더 행복해질 수 있습니다.😊
             </p>
+            <ul>
+              <li class="divideLi"><i class="bi bi-check-circle-fill"></i> 브링브링의 나눔게시판을 통해 다양한 물품을 나눌 수 있습니다.
+              </li>
+              <li class="divideLi"><i class="bi bi-check-circle-fill"></i> 채팅을 통해 다른 이용자들과 원활하고 빠른 소통을 할 수 있습니다.
+              </li>
+            </ul>
           </div>
           <div class="col-lg-6">
             <div class="content ps-0 ps-lg-5" style="padding-top: 3rem;">
@@ -410,11 +423,13 @@
               <ul>
                 <li>
                   <a data-bs-toggle="collapse" class="collapse" data-bs-target="#accordion-list-1"><span>01</span> 
-                    사이트가 왜 이렇게 예쁜가요? <i class="bx bx-chevron-down icon-show"></i><i
+                    수거기사님이 집 안까지 들어와주실 수 있나요? <i class="bx bx-chevron-down icon-show"></i><i
                       class="bx bx-chevron-up icon-close"></i></a>
                   <div id="accordion-list-1" class="collapse show" data-bs-parent=".accordion-list">
                     <p>
-                      칭찬 항상 감사드립니다 고객님 ^O^! <br>앞으로도 더 좋은 서비스로 찾아뵙는 브링브링이 되도록 노력하겠습니다!
+                      브링브링이 수거해갈 수 있는 폐기물은 외부에 내놓으신 것만 가능합니다<br>
+                      지정된 위치에 내놓으시면 수거 기사님이 수거를 해가십니다<br>
+                      지정된 위치에 폐기물이 없으면 신청이 취소되고<br>  이후 서비스 이용에 어려움이 생길 수 있으니 이 점 유의하시길 바랍니다
                     </p>
                   </div>
                 </li>
