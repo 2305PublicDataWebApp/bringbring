@@ -20,18 +20,17 @@
 	              New York, NY 535022<br>
 	              United States <br><br>
 	              <strong>Phone:</strong> +1 5589 55488 55<br>
-	              <strong>Email:</strong> info@example.com<br>
+	              <strong>Email:</strong> bringbring992@gmail.com<br>
 	            </p>
 	          </div>
 	
 	          <div class="col-lg-3 col-md-6 footer-links">
 	            <h4>Useful Links</h4>
 	            <ul>
-	              <li><i class="bx bx-chevron-right"></i> <a href="#"></a></li>
 	              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
 	              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-	              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-	              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+	              <li><i class="bx bx-chevron-right"></i> <a href="#">FAQ</a></li>
+	              <li><i class="bx bx-chevron-right"></i> <a href="#">Wheather Service</a></li>
 	            </ul>
 	          </div>
 	

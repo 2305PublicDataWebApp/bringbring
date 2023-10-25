@@ -1,5 +1,6 @@
 package com.bringbring.reservation.controller;
 
+import com.bringbring.region.domain.Region;
 import com.bringbring.reservation.domain.*;
 import com.bringbring.reservation.service.PayService;
 import com.bringbring.reservation.service.ReservationService;
@@ -151,6 +152,19 @@ public class RestReservationController {
         List<ReservationComplete> reservationCompletes = reservationService.selectMyReservationDetailImage(connection);
         if (reservationCompletes != null) {
             return ResponseEntity.ok(reservationCompletes);
+        } else {
+            // 데이터가 없는 경우 404 Not Found 상태 코드 반환
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/cityList.do")
+    public ResponseEntity<List<Region>> selectCityList(@RequestParam int selectItem) {
+        List<Region> regionList = reservationService.selectCityList(selectItem);
+
+        // 반환할 데이터가 있는 경우 ResponseEntity로 JSON 형식으로 반환
+        if (!regionList.isEmpty()) {
+            return ResponseEntity.ok(regionList);
         } else {
             // 데이터가 없는 경우 404 Not Found 상태 코드 반환
             return ResponseEntity.notFound().build();

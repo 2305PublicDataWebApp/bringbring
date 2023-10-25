@@ -73,6 +73,9 @@
   .carousel-control-next {
     justify-content: right;
   }
+  .icon:hover {
+    cursor: pointer;
+  }
   </style>
 </head>
 
@@ -130,14 +133,14 @@
             <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
               <div class="icon-box">
                 <div class="icon"><i class="bi bi-geo-alt"></i></div>
-                <h4 class="title"><a href="" class="stretched-link">수거 지역</a></h4>
+                <h4 class="title"><a href="/reservation/city.do" class="stretched-link">수거 지역</a></h4>
               </div>
             </div><!--End Icon Box -->
 
             <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="500">
               <div class="icon-box">
                 <div class="icon"><i class="bi bi-box2-heart"></i></div>
-                <h4 class="title"><a href="" class="stretched-link">나눔</a></h4>
+                <h4 class="title"><a href="/divide/list.do" class="stretched-link">나눔</a></h4>
               </div>
             </div><!--End Icon Box -->
 
@@ -146,7 +149,7 @@
       </div>
 
     </section>
-  <section>
+  <section id="weatherSection">
     <!-- 날씨 -->
     <div class="container mt-5" data-aos="fade-up">
       <div class="section-title">
@@ -318,7 +321,7 @@
         <div class="row gy-4">
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
             <div class="icon-box iconbox-blue">
-              <div class="icon">
+              <div class="icon" id="reservationIcon">
                 <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
                   <path stroke="none" stroke-width="0" fill="#f5f5f5"
                     d="M300,521.0016835830174C376.1290562159157,517.8887921683347,466.0731472004068,529.7835943286574,510.70327084640275,468.03025145048787C554.3714126377745,407.6079735673963,508.03601936045806,328.9844924480964,491.2728898941984,256.3432110539036C474.5976632858925,184.082847569629,479.9380746630129,96.60480741107993,416.23090153303,58.64404602377083C348.86323505073057,18.502131276798302,261.93793281208167,40.57373210992963,193.5410806939664,78.93577620505333C130.42746243093433,114.334589627462,98.30271207620316,179.96522072025542,76.75703585869454,249.04625023123273C51.97151888228291,328.5150500222984,13.704378332031375,421.85034740162234,66.52175969318436,486.19268352777647C119.04800174914682,550.1803526380478,217.28368757567262,524.383925680826,300,521.0016835830174">
@@ -327,13 +330,13 @@
                 <i class="bi bi-truck"></i>
               </div>
               <h4><a href="">배송 예약 서비스</a></h4>
-              <p>배송 예약으로 간편하게 곤란한 대형폐기물 처리하기!</p>
+              <p>배송 예약으로 간편하게<br> 버리기 곤란한 대형폐기물 처리하기!</p>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="200">
             <div class="icon-box iconbox-orange ">
-              <div class="icon">
+              <div class="icon weatherIcon">
                 <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
                   <path stroke="none" stroke-width="0" fill="#f5f5f5"
                     d="M300,532.3542879108572C369.38199826031484,532.3153073249985,429.10787420159085,491.63046689027357,474.5244479745417,439.17860296908856C522.8885846962883,383.3225815378663,569.1668002868075,314.3205725914397,550.7432151929288,242.7694973846089C532.6665558377875,172.5657663291529,456.2379748765914,142.6223662098291,390.3689995646985,112.34683881706744C326.66090330228417,83.06452184765237,258.84405631176094,53.51806209861945,193.32584062364296,78.48882559362697C121.61183558270385,105.82097193414197,62.805066853699245,167.19869350419734,48.57481801355237,242.6138429142374C34.843463184063346,315.3850353017275,76.69343916112496,383.4422959591041,125.22947124332185,439.3748458443577C170.7312796277747,491.8107796887764,230.57421082200815,532.3932930995766,300,532.3542879108572">
@@ -341,14 +344,16 @@
                 </svg>
                 <i class="bi bi-brightness-high"></i>
               </div>
-              <h4><a href="">날씨 안내 서비스</a></h4>
-              <p>날씨를 미리 안내하여 픽업에 유의사항이 발생하거나<br>만일의 상황을 방지할 수 있습니다!</p>
+              <div class="weatherIcon">
+                <h4><a>날씨 안내 서비스</a></h4>
+              </div>
+                <p>날씨를 미리 안내하여 픽업에 <br> 유의사항이 발생하거나<br>만일의 상황을 방지할 수 있습니다!</p>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="300">
             <div class="icon-box iconbox-pink">
-              <div class="icon">
+              <div class="icon" id="chatIcon">
                 <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
                   <path stroke="none" stroke-width="0" fill="#f5f5f5"
                     d="M300,541.5067337569781C382.14930387511276,545.0595476570109,479.8736841581634,548.3450877840088,526.4010558755058,480.5488172755941C571.5218469581645,414.80211281144784,517.5187510058486,332.0715597781072,496.52539010469104,255.14436215662573C477.37192572678356,184.95920475031193,473.57363656557914,105.61284051026155,413.0603344069578,65.22779650032875C343.27470386102294,18.654635553484475,251.2091493199835,5.337323636656869,175.0934190732945,40.62881213300186C97.87086631185822,76.43348514350839,51.98124368387456,156.15599469081315,36.44837278890362,239.84606092416172C21.716077023791087,319.22268207091537,43.775223500013084,401.1760424656574,96.891909868211,461.97329694683043C147.22146801428983,519.5804099606455,223.5754009179313,538.201503339737,300,541.5067337569781">
@@ -356,8 +361,8 @@
                 </svg>
                 <i class="bi bi-chat-heart"></i>
               </div>
-              <h4><a href="">물품 나눔의 채팅</a></h4>
-              <p>버리긴 아깝고 누군가에게 도움이 될 수 있는 물품은<br>마음을 나누어보세요!</p>
+              <h4><a href="/divide/list.do">물품 나눔의 채팅</a></h4>
+              <p>버리긴 아깝고 누군가에게 <br> 도움이 될 수 있는 물품은<br>마음을 나누어보세요!</p>
             </div>
           </div>
 
@@ -375,7 +380,7 @@
             <p> 카테고리, 무게별 더 많은 정보를 확인해보세요</p>
           </div>
           <div class="col-lg-3 cta-btn-container text-center">
-            <a class="cta-btn align-middle" href="#">상세정보</a>
+            <a class="cta-btn align-middle" href="/reservation/guide.do">상세정보</a>
           </div>
         </div>
 
@@ -416,28 +421,23 @@
 
                 <li>
                   <a data-bs-toggle="collapse" data-bs-target="#accordion-list-2" class="collapsed"><span>02</span>
-                    신청을 하고나면 배달기사님이 연락을 주시나요? 처음 신청해봐서요 ㅠㅠ <i class="bx bx-chevron-down icon-show"></i><i
+                    수거 전에 기사님이 연락을 해주시나요?<i class="bx bx-chevron-down icon-show"></i><i
                       class="bx bx-chevron-up icon-close"></i></a>
                   <div id="accordion-list-2" class="collapse" data-bs-parent=".accordion-list">
                     <p>
-                      Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet
-                      id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est
-                      pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt
-                      dui.
+                      수거 전날 입력하신 번호로 배출 안내 메시지가 전송됩니다 <br>
+                      메시지를 확인하시고 배출 신청일 오전 9시까지 지정하신 장소로 배출해주세요😊
                     </p>
                   </div>
                 </li>
-
                 <li>
                   <a data-bs-toggle="collapse" data-bs-target="#accordion-list-3" class="collapsed"><span>03</span>
                     혹시 어플은 없을까요? <i class="bx bx-chevron-down icon-show"></i><i
                       class="bx bx-chevron-up icon-close"></i></a>
                   <div id="accordion-list-3" class="collapse" data-bs-parent=".accordion-list">
                     <p>
-                      Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar
-                      elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque
-                      eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis
-                      sed odio morbi quis
+                      현재 브링브링은 웹 사이트만 지원이 가능합니다
+                      <br>어플은 현재 개발 중이니 많은 기대 부탁드립니다💚
                     </p>
                   </div>
                 </li>
@@ -918,6 +918,21 @@
       sendRequest(0);
     });
 
+  </script>
+
+  <script>
+    document.querySelector("#reservationIcon").addEventListener('click', function () {
+      location.href = "/reservation/select.do"
+    })
+    document.querySelector('.weatherIcon').addEventListener('click', function () {
+      // "id=weatherCarousel" 요소로 스크롤 이동
+      const weatherCarousel = document.getElementById('weatherSection');
+      weatherCarousel.scrollIntoView({ behavior: 'smooth' }); // 부드럽게 스크롤
+    });
+
+    document.querySelector("#chatIcon").addEventListener('click', function () {
+      location.href = "/divide/list.do"
+    })
   </script>
 
 </body>

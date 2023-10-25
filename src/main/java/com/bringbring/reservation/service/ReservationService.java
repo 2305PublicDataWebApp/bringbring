@@ -1,6 +1,7 @@
 package com.bringbring.reservation.service;
 
 import com.bringbring.common.PageInfo;
+import com.bringbring.region.domain.Region;
 import com.bringbring.reservation.domain.*;
 import com.bringbring.user.domain.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,4 +46,6 @@ public interface ReservationService {
     List<ReservationComplete> selectMyReservationDetailList(int rvNo);
 
     List<ReservationComplete> selectInfoByDischargeNo(Reservation reservation);
+
+    List<Region> selectCityList(int selectItem);
 }

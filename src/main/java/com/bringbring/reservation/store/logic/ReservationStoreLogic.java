@@ -2,6 +2,7 @@ package com.bringbring.reservation.store.logic;
 
 import com.bringbring.common.PageInfo;
 import com.bringbring.image.domain.Image;
+import com.bringbring.region.domain.Region;
 import com.bringbring.reservation.domain.*;
 import com.bringbring.reservation.store.ReservationStore;
 import com.bringbring.user.domain.User;
@@ -167,6 +168,11 @@ public class ReservationStoreLogic implements ReservationStore {
     @Override
     public List<ReservationComplete> selectInfoByDischargeNo(Reservation reservation) {
         return sqlSession.selectList("ReservationMapper.selectInfoByDischargeNo", reservation);
+    }
+
+    @Override
+    public List<Region> selectCityList(int selectItem) {
+        return sqlSession.selectList("ReservationMapper.selectCityList", selectItem);
     }
 
 

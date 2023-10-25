@@ -2,6 +2,7 @@ package com.bringbring.reservation.store;
 
 import com.bringbring.common.PageInfo;
 import com.bringbring.image.domain.Image;
+import com.bringbring.region.domain.Region;
 import com.bringbring.reservation.domain.*;
 import com.bringbring.user.domain.User;
 
@@ -65,4 +66,6 @@ public interface ReservationStore {
     List<ReservationComplete> selectMyReservationDetailList(int rvNo);
 
     List<ReservationComplete> selectInfoByDischargeNo(Reservation reservation);
+
+    List<Region> selectCityList(int selectItem);
 }

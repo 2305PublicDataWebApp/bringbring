@@ -2,6 +2,7 @@ package com.bringbring.reservation.service.impl;
 
 import com.bringbring.common.PageInfo;
 import com.bringbring.image.domain.Image;
+import com.bringbring.region.domain.Region;
 import com.bringbring.reservation.domain.*;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.reservation.store.ReservationStore;
@@ -162,6 +163,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<ReservationComplete> selectInfoByDischargeNo(Reservation reservation) {
         return reservationStore.selectInfoByDischargeNo(reservation);
+    }
+
+    @Override
+    public List<Region> selectCityList(int selectItem) {
+        return reservationStore.selectCityList(selectItem);
     }
 
     @Override
