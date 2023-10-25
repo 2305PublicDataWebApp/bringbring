@@ -201,5 +201,10 @@ public class ReservationController {
         return "/reservation/modify";
     }
 
+    @GetMapping("/city.do")
+    public String showCityGuide() {
+        return "/reservation/cityGuide";
+    }
+
 
 }

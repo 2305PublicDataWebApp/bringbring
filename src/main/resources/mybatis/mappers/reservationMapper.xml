@@ -576,4 +576,8 @@
                           join PAY_TBL h on h.RV_DETAIL_NO = f.RV_DETAIL_NO
         where g.RV_DISCHARGE_NO = #{rvDischargeNo} and g.USER_NO = #{userNo }
     </select>
+    <select id="selectCityList" resultMap="region">
+        select * from REGION_TBL
+            where CITY_NO = #{cityNo}
+    </select>
 </mapper>

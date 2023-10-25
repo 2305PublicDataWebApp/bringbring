@@ -1,0 +1,89 @@
+.in-progress-bar {
+    width: 20%;
+    background: #A8DF8E;
+    animation: progressBarAnimation 1s ease-in-out;
+}
+@keyframes progressBarAnimation {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 20%;
+    }
+}
+.selectBox {
+    width: 300px;
+}
+.selectBtn {
+    border: none;
+    background: none;
+}
+.selectBtn > img {
+    width: 30px;
+}
+.itemList {
+    display: flex;
+    align-items: center;
+}
+.category_box {
+    width: 975px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.category_box > button {
+    width: 90px;
+}
+#category_box button {
+    font-size: 18px;
+    width: 100px;
+}
+.table {
+    border-collapse: collapse;
+    width: 90%;
+    margin: 0 auto;
+}
+
+
+.table td {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 10px;
+    /*padding: 8px;*/
+}
+thead {
+    /*background-color: rgba(255,255,255,0.3);*/
+    height: 60px;
+    font-size: 23px;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+#thead {
+    color: white;
+    background-color: #03C988;
+    vertical-align: revert;
+    text-align: center;
+}
+.table>thead>th:nth-child(2) {
+    border-right: 1px solid white;
+    border-left: 1px solid white;
+}
+#listDiv-p {
+    margin: 100px;
+    text-align: center;
+    font-size: 25px;
+}
+td:hover {
+    background-color: #dbffe9;
+}
+/* 클릭 시 색상 변경 스타일 */
+.btn.btn-outline-success.active {
+    background-color: #198754; /* 클릭 시 배경색 */
+    color: #fff; /* 클릭 시 텍스트 색상 */
+}
+#buttonDiv {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}

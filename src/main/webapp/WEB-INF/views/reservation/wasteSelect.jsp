@@ -219,16 +219,6 @@
 
             var selectedInfoNo = item.wasteInfoNos[selectedOptionIndex];
 
-            // 번호 출력 엘리먼트 생성 또는 가져오기
-            // var noInfoCell = trTag.querySelector('.wasteInfoNo');
-            // if (!noInfoCell) {
-            //   noInfoCell = document.createElement('td');
-            //   noInfoCell.setAttribute('class', 'wasteInfoNo');
-            //   noInfoCell.style.display = 'none';
-            //   trTag.appendChild(noInfoCell);
-            //   console.log("gd")
-            // }
-
             noTag.innerText = selectedInfoNo;
             console.log("noInfoCell 내용: ", noTag.innerText);
           };
@@ -276,7 +266,6 @@
           var thirdCell = document.createElement('td');
           var pTag = document.createElement('p');
           var initialMatchingFee = item.wasteInfoFees[0];
-          // console.log("졸려디지겠네2", initialMatchingFee);
           pTag.innerText = initialMatchingFee;
 
           pTag.setAttribute('class', 'listTableP');
@@ -297,7 +286,6 @@
           noTag.innerText = infoNo;
           noTag.setAttribute('class', 'wasteInfoNo');
           thirdCell.appendChild(noTag);
-          console.log("졸려디지겠네", noTag.innerText);
 
           // 네 번째 열 (갯수 및 추가/제거 버튼)
           var fourthCell = document.createElement('td');
@@ -376,10 +364,7 @@
             var wasteCategoryName = trElement.querySelector('label').textContent;
             var wasteInfoStandard = trElement.querySelector('.selectBox').value;
             var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
-            console.log("모깃ㅂ", trElement.querySelector('.wasteInfoNo'))
             var wasteInfoNo = trElement.querySelector('.wasteInfoNo').textContent;
-
-            console.log("tq", wasteInfoNo)
 
             var selectedItem = [];
             selectedItem.push({
@@ -389,7 +374,6 @@
               wasteInfoNo: wasteInfoNo
             });
             // 이 값을 보내야 함
-            console.log(selectedItem);
             if (event.target.checked) {
 
 
@@ -409,8 +393,6 @@
           trTag.appendChild(noInfoCell);
           trTag.appendChild(fourthCell);
           tableBody.appendChild(trTag);
-
-          console.log(trTag);
 
         }
       },
@@ -531,8 +513,6 @@
       infoNo.setAttribute('name', 'wasteInfoNo');
       infoNo.setAttribute('value', item.wasteInfoNo);
 
-      console.log("인포넘", item.wasteInfoNo);
-
       // 제거 버튼에 클릭 이벤트를 추가하여 선택한 아이템을 제거합니다.
       removeButton.addEventListener('click', function () {
         removeFromSelectTable(item);
@@ -565,8 +545,6 @@
       itemInput.value = item.wasteInfoNo;
       form.appendChild(itemInput);
     });
-
-    console.log(form);
 
     // 폼을 문서에 추가
     document.body.appendChild(form);

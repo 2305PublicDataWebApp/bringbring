@@ -179,7 +179,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="enroll_modal_Label">상세 내역</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()"></button>
                     </div>
                     <div id="modal_body_content" class="modal-body container">
                     </div>
@@ -452,16 +452,21 @@
                     selectedOption = selectElement.value;
                 });
             } else {
-                if (selectedOption) {
-                    const userConfirmed = confirm("예약을 취소하시겠습니까? 확인 후 복구할 수 없습니다.");
-                    if (userConfirmed) {
+                const userConfirmed = confirm("예약을 취소하시겠습니까? 확인 후 복구할 수 없습니다.");
+                if (userConfirmed) {
+                    if (selectedOption) {
                         const parsedOption = JSON.parse(selectedOption);
                         cancelPay(parsedOption);
+                    } else {
+                        alert("취소 이유를 선택하세요.");
                     }
-                } else {
-                    alert("취소 이유를 선택하세요.");
                 }
             }
+        }
+
+        function closeModal() {
+            isSelectVisible = false;
+            $('#enroll_modal').modal('hide'); // 모달을 숨깁니다.
         }
 
         function createSelectElement(matchedReservations) {

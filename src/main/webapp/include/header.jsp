@@ -25,6 +25,7 @@
 	
 	      <nav id="navbar" class="navbar">
 	        <ul>
+	          <li><a class="nav-link scrollto" href="/reservation/city.do">지역안내</a></li>
 	          <li><a class="nav-link scrollto" href="/reservation/guide.do">배출안내</a></li>
 	          <li><a class="nav-link scrollto" href="/reservation/select.do">배출신청</a></li>
 	          <!-- <li><a class="nav-link scrollto" href="#services">수거신고</a></li> -->
