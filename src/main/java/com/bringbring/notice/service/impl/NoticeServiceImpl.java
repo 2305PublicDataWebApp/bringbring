@@ -25,7 +25,14 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public int insertNotice(Notice notice) {return noticeStore.insertNotice(notice);}
 
-	public void insertImage(Image image) {noticeStore.insertImage(image);}
+	// 게시글 수정
+	@Override
+	public int updateNotice(Notice notice) {return noticeStore.updateNotice(notice);}
+
+	// 게시글 삭제
+	@Override
+	public int deleteNotice(Integer noticeNo) {return noticeStore.deleteNotice(noticeNo);}
+
 	// 게시글 전체 갯수
 	@Override
 	public Integer getListCount() {return noticeStore.selectListCount();}
@@ -53,20 +60,6 @@ public class NoticeServiceImpl implements NoticeService {
 	public Notice selectNoticeByNo(Integer noticeNo) {return noticeStore.selectNoticeByNo(noticeNo);}
 
 
-	// 게시글 삭제
-	@Override
-	public int deleteNotice(Integer noticeNo) {return noticeStore.deleteNotice(noticeNo);}
-
-
-	@Override
-	public Map<String, Object> selectpreNextInfo(Integer noticeNo) {
-		return noticeStore.selectpreNextInfo(noticeNo);
-	}
-
-	// 게시글 수정
-	@Override
-	public int updateNotice(Notice notice) {return noticeStore.updateNotice(notice);}
-
 	// 검색 게시글 갯수
 	@Override
 	public int getListCount(String searchKeyword) {return noticeStore.selectListCount(searchKeyword);}
@@ -84,6 +77,8 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	public List<Notice> searchUpdateByKeyword(PageInfo pInfo, String searchKeyword) {return noticeStore.searchUpdateByKeyword(pInfo, searchKeyword);}
+
+	public void insertImage(Image image) {noticeStore.insertImage(image);}
 
 	@Override
 	public Image selectImageByNo(Integer noticeNo) {

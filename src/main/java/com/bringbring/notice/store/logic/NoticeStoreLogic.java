@@ -24,8 +24,13 @@ public class NoticeStoreLogic implements NoticeStore {
 	@Override
 	public int insertNotice(Notice notice) {return sqlSession.insert("NoticeMapper.insertNotice", notice);}
 	
+	// 게시글 수정
 	@Override
-	public void insertImage(Image image) {sqlSession.insert("NoticeMapper.insertImage", image);}
+	public int updateNotice(Notice notice) {return sqlSession.update("NoticeMapper.updateNotice", notice);}
+
+	// 게시글 삭제
+	@Override
+	public int deleteNotice(Integer noticeNo) {return sqlSession.update("NoticeMapper.deleteNotice", noticeNo);}
 
 	// 게시글 전체 갯수
 	@Override
@@ -68,14 +73,6 @@ public class NoticeStoreLogic implements NoticeStore {
 		return sqlSession.selectOne("NoticeMapper.selectNoticeByNo", noticeNo);
 	}
 
-	// 게시글 삭제
-	@Override
-	public int deleteNotice(Integer noticeNo) {return sqlSession.update("NoticeMapper.deleteNotice", noticeNo);}
-
-	// 게시글 수정
-	@Override
-	public int updateNotice(Notice notice) {return sqlSession.update("NoticeMapper.updateNotice", notice);}
-
 	// 이전글 다음글 구현
 	@Override
 	public Map<String, Object> selectpreNextInfo(Integer noticeNo) {
@@ -112,6 +109,9 @@ public class NoticeStoreLogic implements NoticeStore {
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		return sqlSession.selectList("NoticeMapper.searchUpdateByKeyword", searchKeyword, rowBounds);
 	}
+
+	@Override
+	public void insertImage(Image image) {sqlSession.insert("NoticeMapper.insertImage", image);}
 
 	@Override
 	public Image selectImageByNo(Integer noticeNo) {

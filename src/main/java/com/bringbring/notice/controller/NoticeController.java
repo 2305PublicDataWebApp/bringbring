@@ -63,32 +63,6 @@ public class NoticeController {
 	}
 	
 	
-	@GetMapping("/delete.do")
-	public String deleteNotice(Model model, @ModelAttribute Notice notice, 
-			@RequestParam("userNo") Integer writerNo, @RequestParam("noticeNo") Integer noticeNo, HttpSession session) {
-		
-		Integer userGrade = (Integer)session.getAttribute("sessionUserGrade");
-		// 현재 로그인한 사람의 회원번호
-		String userId = (String)session.getAttribute("sessionId");
-		User user = userService.selectOneById(userId);
-		Integer userNo = user.getUserNo();
-		
-		if ((writerNo != null && writerNo.equals(userNo)) || userGrade == 3) {
-			int result = noticeService.deleteNotice(noticeNo);
-			if (result > 0) {
-				return "redirect:/notice/list.do";
-			} else {
-				model.addAttribute("msg", "게시글 삭제에 실패하였습니다.");
-				model.addAttribute("url", "/notice/list.do");
-				return "common/error";
-			}
-		} else {
-			model.addAttribute("msg", "본인 글만 삭제 가능!");
-			model.addAttribute("url", "/notice/list.do");
-			return "common/error";
-		}
-	}
-	
 	@PostMapping("/insert.do")
 	public String insertNotice(@ModelAttribute Notice notice, 
 			@RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile, HttpSession session,
@@ -121,7 +95,32 @@ public class NoticeController {
 		}
 		return "redirect:/notice/list.do"; // 예외 상황이나 다른 경우에 대한 기본 다이렉트
 	}
-	
+
+
+	@GetMapping("/update.do")
+	public String showNoticeUpdate(@RequestParam("noticeNo") Integer noticeNo,
+			Model model, HttpSession session) {
+		Integer userGrade = (Integer)session.getAttribute("sessionUserGrade");
+		// 현재 로그인한 사람의 회원번호
+		String userId = (String)session.getAttribute("sessionId");
+		User user = userService.selectOneById(userId);
+		Integer userNo = user.getUserNo();
+		// 게시물 번호
+		Notice notice = noticeService.selectNoticeByNo(noticeNo);
+		// 게시물 작성자 번호 얻어오기
+		Integer writerNo = notice.getUserNo();
+		
+		if((writerNo != null && writerNo.equals(userNo)) || userGrade == 3 ) {
+			model.addAttribute("notice", notice);
+			return "notice/update";
+		}else {
+			model.addAttribute("msg", "본인 글만 수정 가능!");
+			model.addAttribute("url","/notice/detail.do?noticeNo=" + notice.getNoticeNo());
+			return "common/error";
+		}
+	}
+
+
 	@PostMapping("/update.do")
 	public String updateNotice(@ModelAttribute Notice notice, @ModelAttribute Image image
 			, Model model, HttpSession session, HttpServletRequest request
@@ -134,7 +133,7 @@ public class NoticeController {
 		Integer userNo = user.getUserNo();
 		// 게시글 작성자 번호
 		Integer writerNo = notice.getUserNo();
-
+	
 		if((writerNo != null && writerNo.equals(userNo)) || userGrade == 3) {
 			if(uploadFile != null && !uploadFile.getOriginalFilename().equals("")) {
 				String imageRename = image.getImageRename();
@@ -163,39 +162,168 @@ public class NoticeController {
 			return "common/error";
 		}
 	}
-	
-	private void deleteFile(String imageRename, HttpServletRequest request) {
-		String root = request.getSession().getServletContext().getRealPath("resources");
-		String delImgpath = root + "\\nUploadFiles\\" + imageRename;
-		File delFile = new File(delImgpath);
-		if (delFile.exists()) {
-			delFile.delete();
-		}
-	}
 
-	@GetMapping("/update.do")
-	public String showNoticeUpdate(@RequestParam("noticeNo") Integer noticeNo,
-			Model model, HttpSession session) {
+
+	@GetMapping("/delete.do")
+	public String deleteNotice(Model model, @ModelAttribute Notice notice, 
+			@RequestParam("userNo") Integer writerNo, @RequestParam("noticeNo") Integer noticeNo, HttpSession session) {
+		
 		Integer userGrade = (Integer)session.getAttribute("sessionUserGrade");
 		// 현재 로그인한 사람의 회원번호
 		String userId = (String)session.getAttribute("sessionId");
 		User user = userService.selectOneById(userId);
 		Integer userNo = user.getUserNo();
-		// 게시물 번호
-		Notice notice = noticeService.selectNoticeByNo(noticeNo);
-		// 게시물 작성자 번호 얻어오기
-		Integer writerNo = notice.getUserNo();
 		
-		if((writerNo != null && writerNo.equals(userNo)) || userGrade == 3 ) {
-			model.addAttribute("notice", notice);
-			return "notice/update";
-		}else {
-			model.addAttribute("msg", "본인 글만 수정 가능!");
-			model.addAttribute("url","/notice/detail.do?noticeNo=" + notice.getNoticeNo());
+		if ((writerNo != null && writerNo.equals(userNo)) || userGrade == 3) {
+			int result = noticeService.deleteNotice(noticeNo);
+			if (result > 0) {
+				return "redirect:/notice/list.do";
+			} else {
+				model.addAttribute("msg", "게시글 삭제에 실패하였습니다.");
+				model.addAttribute("url", "/notice/list.do");
+				return "common/error";
+			}
+		} else {
+			model.addAttribute("msg", "본인 글만 삭제 가능!");
+			model.addAttribute("url", "/notice/list.do");
 			return "common/error";
 		}
 	}
 	
+	@GetMapping("/detail.do") 
+	public String showNoticeDetail(@RequestParam("noticeNo") Integer noticeNo, Model model) {
+		Notice selectOne = noticeService.selectNoticeByNo(noticeNo);
+	    // 이미지가 하나인 경우에만 이미지 정보를 가져옴
+	    if (selectOne != null) {
+	        Image image = noticeService.selectImageByNo(noticeNo);
+	        model.addAttribute("image", image);
+	    }
+		model.addAttribute("notice", selectOne);
+		return "notice/detail";
+	}
+	
+	@GetMapping("/list.do")
+	public String showNoticeList(
+			@RequestParam(value = "page", required = false, defaultValue = "1") Integer currentPage, Model model) {
+		Integer totalCount = noticeService.getListCount();
+		PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
+		List<Notice> noticeList = noticeService.selectNoticeList(pInfo);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("noticeList", noticeList);
+		model.addAttribute("pInfo", pInfo);
+		return "notice/list";
+	}
+	
+	@GetMapping("/serviceList.do")
+	public String showServiceList(@RequestParam(value = "page", required = false, defaultValue = "1") Integer currentPage, Model model) {
+		Integer serviceTotalCount = noticeService.getServiceListCount();
+		PageInfo pInfo = this.getPageInfo(currentPage, serviceTotalCount);
+		List<Notice> serviceList = noticeService.selectServiceList(pInfo);
+		model.addAttribute("serviceTotalCount", serviceTotalCount);
+		model.addAttribute("serviceList", serviceList);
+		model.addAttribute("pInfo", pInfo);
+		return "notice/serviceList";
+	}
+	
+	@GetMapping("/updateList.do")
+	public String showUpdateList(@RequestParam(value = "page", required = false, defaultValue = "1") Integer currentPage, Model model) {
+		Integer updateTotalCount = noticeService.getUpdateListCount();
+		PageInfo pInfo = this.getPageInfo(currentPage, updateTotalCount);
+		List<Notice> updateList = noticeService.selectUpdateList(pInfo);
+		model.addAttribute("updateTotalCount", updateTotalCount);
+		model.addAttribute("updateList", updateList);
+		model.addAttribute("pInfo", pInfo);
+		return "notice/updateList";
+	}
+	
+	@GetMapping("/search.do")
+	public String searchNoticeList(
+			@RequestParam("searchKeyword")String searchKeyword
+			, @RequestParam(value="page", required=false, defaultValue="1")Integer currentPage
+			, Model model) {
+		int totalCount = noticeService.getListCount(searchKeyword);
+		PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
+		List<Notice>searchList = new ArrayList<Notice>();
+		searchList = noticeService.searchNoticeByKeyword(pInfo, searchKeyword);
+		if(!searchList.isEmpty()) {
+			model.addAttribute("totalCount", totalCount);
+			model.addAttribute("searchKeyword",searchKeyword);
+			model.addAttribute("pInfo",pInfo);
+			model.addAttribute("searchList", searchList);
+			return "notice/search";
+		} else {
+			model.addAttribute("msg", "데이터 조회 실패");
+			model.addAttribute("error", "목록조회실패");
+			model.addAttribute("url", "/index.jsp");
+			return "/common/error";
+		}
+	}
+
+
+	@GetMapping("/serviceSearch.do")
+	public String searchServiceList(
+			@RequestParam("searchKeyword")String searchKeyword
+			, @RequestParam(value="page", required=false, defaultValue="1")Integer currentPage
+			, Model model) {
+		int serviceTotalCount = noticeService.getServiceListCount(searchKeyword);
+		PageInfo pInfo = this.getPageInfo(currentPage, serviceTotalCount);
+		List<Notice>searchServiceList = new ArrayList<Notice>();
+		searchServiceList = noticeService.searchServiceByKeyword(pInfo, searchKeyword);
+		if(!searchServiceList.isEmpty()) {
+			model.addAttribute("serviceTotalCount", serviceTotalCount);
+			model.addAttribute("searchKeyword",searchKeyword);
+			model.addAttribute("pInfo",pInfo);
+			model.addAttribute("searchServiceList", searchServiceList);
+			return "notice/serviceSearch";
+		} else {
+			model.addAttribute("msg", "데이터 조회 실패");
+			model.addAttribute("error", "목록조회실패");
+			model.addAttribute("url", "/index.jsp");
+			return "/common/error";
+		}
+	}
+
+
+	@GetMapping("/updateSearch.do")
+	public String searchUpdateList(
+			@RequestParam("searchKeyword")String searchKeyword
+			, @RequestParam(value="page", required=false, defaultValue="1")Integer currentPage
+			, Model model) {
+		int updateTotalCount = noticeService.getUpdateListCount(searchKeyword);
+		PageInfo pInfo = this.getPageInfo(currentPage, updateTotalCount);
+		List<Notice>searchUpdateList = new ArrayList<Notice>();
+		searchUpdateList = noticeService.searchUpdateByKeyword(pInfo, searchKeyword);
+		if(!searchUpdateList.isEmpty()) {
+			model.addAttribute("updateTotalCount", updateTotalCount);
+			model.addAttribute("searchKeyword",searchKeyword);
+			model.addAttribute("pInfo",pInfo);
+			model.addAttribute("searchUpdateList", searchUpdateList);
+			return "notice/updateSearch";
+		} else {
+			model.addAttribute("msg", "데이터 조회 실패");
+			model.addAttribute("error", "목록조회실패");
+			model.addAttribute("url", "/index.jsp");
+			return "/common/error";
+		}
+	}
+
+
+	private PageInfo getPageInfo(Integer currentPage, Integer totalCount) {
+		int recordCountPerPage = 10;
+		int naviCountPerPage = 10;
+		int naviTotalCount;
+		naviTotalCount = (int) Math.ceil((double) totalCount / recordCountPerPage);
+	
+		int startNavi = ((int) ((double) currentPage / naviCountPerPage + 0.9) - 1) * recordCountPerPage + 1;
+		int endNavi = startNavi + naviCountPerPage - 1;
+		if (endNavi > naviTotalCount) {
+			endNavi = naviTotalCount;
+		}
+		return new PageInfo(currentPage, totalCount, naviTotalCount, recordCountPerPage, naviCountPerPage, startNavi,
+				endNavi);
+	}
+
+
 	private Map<String, Object> saveFile(HttpServletRequest request, MultipartFile uploadFile) throws Exception {
 		Map<String, Object> imgMap = new HashMap<String, Object>();
 		// resources경로 구하기
@@ -225,133 +353,13 @@ public class NoticeController {
 		return imgMap;
 	}
 
-	@GetMapping("/detail.do") 
-	public String showNoticeDetail(@RequestParam("noticeNo") Integer noticeNo, Model model) {
-		Notice selectOne = noticeService.selectNoticeByNo(noticeNo);
-	    // 이미지가 하나인 경우에만 이미지 정보를 가져옴
-	    if (selectOne != null) {
-	        Image image = noticeService.selectImageByNo(noticeNo);
-	        model.addAttribute("image", image);
-	    }
-		model.addAttribute("notice", selectOne);
-		return "notice/detail";
-	}
-	
-	private PageInfo getPageInfo(Integer currentPage, Integer totalCount) {
-		int recordCountPerPage = 10;
-		int naviCountPerPage = 10;
-		int naviTotalCount;
-		naviTotalCount = (int) Math.ceil((double) totalCount / recordCountPerPage);
 
-		int startNavi = ((int) ((double) currentPage / naviCountPerPage + 0.9) - 1) * recordCountPerPage + 1;
-		int endNavi = startNavi + naviCountPerPage - 1;
-		if (endNavi > naviTotalCount) {
-			endNavi = naviTotalCount;
-		}
-		return new PageInfo(currentPage, totalCount, naviTotalCount, recordCountPerPage, naviCountPerPage, startNavi,
-				endNavi);
-	}
-
-	@GetMapping("/list.do")
-	public String showNoticeList(
-			@RequestParam(value = "page", required = false, defaultValue = "1") Integer currentPage, Model model) {
-		Integer totalCount = noticeService.getListCount();
-		PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
-		List<Notice> noticeList = noticeService.selectNoticeList(pInfo);
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("noticeList", noticeList);
-		model.addAttribute("pInfo", pInfo);
-		return "notice/list";
-	}
-	
-	@GetMapping("/search.do")
-	public String searchNoticeList(
-			@RequestParam("searchKeyword")String searchKeyword
-			, @RequestParam(value="page", required=false, defaultValue="1")Integer currentPage
-			, Model model) {
-		int totalCount = noticeService.getListCount(searchKeyword);
-		PageInfo pInfo = this.getPageInfo(currentPage, totalCount);
-		List<Notice>searchList = new ArrayList<Notice>();
-		searchList = noticeService.searchNoticeByKeyword(pInfo, searchKeyword);
-		if(!searchList.isEmpty()) {
-			model.addAttribute("totalCount", totalCount);
-			model.addAttribute("searchKeyword",searchKeyword);
-			model.addAttribute("pInfo",pInfo);
-			model.addAttribute("searchList", searchList);
-			return "notice/search";
-		} else {
-			model.addAttribute("msg", "데이터 조회 실패");
-			model.addAttribute("error", "목록조회실패");
-			model.addAttribute("url", "/index.jsp");
-			return "/common/error";
-		}
-	}
-	
-	@GetMapping("/serviceList.do")
-	public String showServiceList(@RequestParam(value = "page", required = false, defaultValue = "1") Integer currentPage, Model model) {
-		Integer serviceTotalCount = noticeService.getServiceListCount();
-		PageInfo pInfo = this.getPageInfo(currentPage, serviceTotalCount);
-		List<Notice> serviceList = noticeService.selectServiceList(pInfo);
-		model.addAttribute("serviceTotalCount", serviceTotalCount);
-		model.addAttribute("serviceList", serviceList);
-		model.addAttribute("pInfo", pInfo);
-		return "notice/serviceList";
-	}
-	
-	@GetMapping("/serviceSearch.do")
-	public String searchServiceList(
-			@RequestParam("searchKeyword")String searchKeyword
-			, @RequestParam(value="page", required=false, defaultValue="1")Integer currentPage
-			, Model model) {
-		int serviceTotalCount = noticeService.getServiceListCount(searchKeyword);
-		PageInfo pInfo = this.getPageInfo(currentPage, serviceTotalCount);
-		List<Notice>searchServiceList = new ArrayList<Notice>();
-		searchServiceList = noticeService.searchServiceByKeyword(pInfo, searchKeyword);
-		if(!searchServiceList.isEmpty()) {
-			model.addAttribute("serviceTotalCount", serviceTotalCount);
-			model.addAttribute("searchKeyword",searchKeyword);
-			model.addAttribute("pInfo",pInfo);
-			model.addAttribute("searchServiceList", searchServiceList);
-			return "notice/serviceSearch";
-		} else {
-			model.addAttribute("msg", "데이터 조회 실패");
-			model.addAttribute("error", "목록조회실패");
-			model.addAttribute("url", "/index.jsp");
-			return "/common/error";
-		}
-	}
-	
-	@GetMapping("/updateList.do")
-	public String showUpdateList(@RequestParam(value = "page", required = false, defaultValue = "1") Integer currentPage, Model model) {
-		Integer updateTotalCount = noticeService.getUpdateListCount();
-		PageInfo pInfo = this.getPageInfo(currentPage, updateTotalCount);
-		List<Notice> updateList = noticeService.selectUpdateList(pInfo);
-		model.addAttribute("updateTotalCount", updateTotalCount);
-		model.addAttribute("updateList", updateList);
-		model.addAttribute("pInfo", pInfo);
-		return "notice/updateList";
-	}
-	
-	@GetMapping("/updateSearch.do")
-	public String searchUpdateList(
-			@RequestParam("searchKeyword")String searchKeyword
-			, @RequestParam(value="page", required=false, defaultValue="1")Integer currentPage
-			, Model model) {
-		int updateTotalCount = noticeService.getUpdateListCount(searchKeyword);
-		PageInfo pInfo = this.getPageInfo(currentPage, updateTotalCount);
-		List<Notice>searchUpdateList = new ArrayList<Notice>();
-		searchUpdateList = noticeService.searchUpdateByKeyword(pInfo, searchKeyword);
-		if(!searchUpdateList.isEmpty()) {
-			model.addAttribute("updateTotalCount", updateTotalCount);
-			model.addAttribute("searchKeyword",searchKeyword);
-			model.addAttribute("pInfo",pInfo);
-			model.addAttribute("searchUpdateList", searchUpdateList);
-			return "notice/updateSearch";
-		} else {
-			model.addAttribute("msg", "데이터 조회 실패");
-			model.addAttribute("error", "목록조회실패");
-			model.addAttribute("url", "/index.jsp");
-			return "/common/error";
+	private void deleteFile(String imageRename, HttpServletRequest request) {
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		String delImgpath = root + "\\nUploadFiles\\" + imageRename;
+		File delFile = new File(delImgpath);
+		if (delFile.exists()) {
+			delFile.delete();
 		}
 	}
 
