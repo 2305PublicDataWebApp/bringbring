@@ -60,8 +60,8 @@ public interface ReservationStore {
 
     CancelRequest selectPayIdByDischargeNo(String dischargeNo);
 
-
     List<ReservationComplete> selectMyReservationDetailImage(Connection connection);
 
     List<ReservationComplete> selectMyReservationDetailList(int rvNo);
+
 }

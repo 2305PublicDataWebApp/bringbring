@@ -127,7 +127,7 @@
                   <tr>
                       <td class="trHead">사진</td>
                       <td colspan="3">
-                          <img src="${rdList.image.imagePath};}"/>
+                          <img src="${rdList.image.imagePath};" style="max-width: 300px; max-height: 200px;"/>
                       </td>
                   </tr>
               </table>
@@ -213,6 +213,8 @@
     function goBack() {
         window.history.back();
     }
+
+
 
   </script>
   

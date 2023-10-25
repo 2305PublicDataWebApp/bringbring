@@ -109,6 +109,7 @@
 
     <!-- Template Main JS File -->
     <script src="../resources/assets/js/main.js"></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 
 	<script>
 // 	    // 쿠키 삭제 함수

@@ -161,6 +161,7 @@ public class ReservationStoreLogic implements ReservationStore {
     @Override
     public List<ReservationComplete> selectMyReservationDetailList(int rvNo) {
         return sqlSession.selectList("ReservationMapper.selectMyReservationDetailList", rvNo);
+
     }
 
 
