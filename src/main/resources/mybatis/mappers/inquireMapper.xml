@@ -102,6 +102,7 @@
 		JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
 		JOIN CITY_TBL c ON i.CITY_NO = c.CITY_NO
 		WHERE i.ANSWER_YN = #{answerYn}
+		ORDER BY i.INQ_NO DESC
 	</select>
 
 	<select id="selectInquireByCityNo" resultMap="InquireDetailsResultMap">
@@ -111,6 +112,7 @@
 				 JOIN DISTRICT_TBL d ON i.DISTRICT_NO = d.DISTRICT_NO
 				 JOIN CITY_TBL c ON i.CITY_NO = c.CITY_NO
 		WHERE i.CITY_NO = #{cityNo}
+		ORDER BY i.INQ_NO DESC
 	</select>
 
 	<select id="selectInquireCount" resultType="_int">
