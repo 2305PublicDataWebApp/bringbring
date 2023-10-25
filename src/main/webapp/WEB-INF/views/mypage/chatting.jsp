@@ -200,9 +200,11 @@
 
     <!-- Template Main JS File -->
     <script src="../resources/assets/js/main.js"></script>
+  <jsp:include page="/include/chatBot.jsp"></jsp:include>
 
     <!-- 채널톡 api -->
     <script>
+        <jsp:include page="/include/loginJs.jsp"></jsp:include>
 
         function openPopup(url) {
             var name = "브링브링 채팅방";

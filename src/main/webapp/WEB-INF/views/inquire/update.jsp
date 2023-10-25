@@ -223,14 +223,11 @@
 
   <!-- Template Main JS File -->
   <script src="../resources/assets/js/main.js"></script>
+  <jsp:include page="/include/chatBot.jsp"></jsp:include>
   
   <!-- 채널톡 api -->
   <script>
-    // (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-    //
-    // ChannelIO('boot', {
-    //   "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-    // });
+    <jsp:include page="/include/loginJs.jsp"></jsp:include>
 
     $(document).ready(function () {
         // "플러스" 아이콘 클릭 이벤트 처리
@@ -330,7 +327,6 @@
       }
 
     }
-    <jsp:include page="/include/loginJs.jsp"></jsp:include>
 
   </script>
   <script>
