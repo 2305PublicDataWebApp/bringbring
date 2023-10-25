@@ -78,7 +78,7 @@
         <div class="input-group" style="width: 400px; height: 30px;">
           <select name="searchCondition" class="form-select" aria-label=".form-select-lg example" style="width: 20%;">
             <option value="all">전체</option>
-            <option value="city">지역</option>
+            <option value="city">지역구</option>
               <option value="id">작성자</option>
               <option value="category">문의유형</option>
           </select>
@@ -90,7 +90,7 @@
       <br/>
       <div style="display: flex; justify-content: space-between; align-items: baseline; margin: 15px 15px 0 15px; padding-top: 10px; padding-bottom: 10px; border-top:1px solid #ccc;">
           <h6><a href='javascript:void(0);' onclick="handleAnswerYLinkClick(${pInfo.currentPage});" class="answerY">답변 등록 글</a>&nbsp;&nbsp;|&nbsp;&nbsp; <a href='javascript:void(0);' onclick="handleAnswerNLinkClick(${pInfo.currentPage});" class="answerN">답변 미등록 글</a></h6>
-          <select name="cityNo" id="cityNo" style="width:100px;margin-right: 15px;" onchange="handleCityChange(${pInfo.currentPage})">
+          <select name="cityNo" id="cityNo" style="width:100px;margin-right: 15px;" onchange="handleCityChange(${pInfo.currentPage})" >
               <option value="지역" selected>지역</option>
               <c:forEach var="city" items="${cList}" >
                   <option value="${city.cityNo}">${city.cityName}</option>
@@ -116,7 +116,7 @@
                             <th>글번호</th>
                             <th>작성자</th>
                             <th>제목</th>
-                            <th>지역</th>
+                            <th>지역구</th>
                             <th>문의유형</th>
                             <th>작성일</th>
                             <th>답변여부</th>
@@ -236,23 +236,19 @@
       });  
     });
 
-
-    //답변 등록글 불러오기
-    function handleAnswerYLinkClick(pageNumber) {
-        var answerYn = 'Y';
+    function loadData(url, data, pageNumber) {
         $.ajax({
             type: 'POST',
-            url:  '/admin/inquireAnswer.do?page=' + pageNumber,
-            data: {answerYn: answerYn},
+            url: url + '?page=' + pageNumber,
+            data: data,
             dataType: 'json',
-            success: function (data) {
-                var inqList = data.inqList; // 서버에서 받은 inqList 배열
+            success: function (responseData) {
+                var inqList = responseData.inqList;
+                var pageInfo = responseData.pageInfo;
 
-                // 테이블 바디를 찾습니다
                 var tbody = $('#inquireTable tbody');
-                tbody.empty(); // 기존 tbody 내용을 지웁니다.
+                tbody.empty();
 
-                // 서버에서 받은 JSON 데이터를 사용하여 새로운 행을 생성하고 테이블에 추가합니다
                 for (var i = 0; i < inqList.length; i++) {
                     var inq = inqList[i];
                     var row = '<tr>';
@@ -262,7 +258,6 @@
                     row += '<td>' + inq.districtName + '</td>';
                     row += '<td>' + inq.inqCategory + '</td>';
 
-                    // 날짜 포맷에 따라서 수정
                     var inqCreateDate = new Date(inq.inqCreateDate);
                     var formattedDate = inqCreateDate.getFullYear() + '-' +
                         ('0' + (inqCreateDate.getMonth() + 1)).slice(-2) + '-' +
@@ -271,480 +266,74 @@
                     row += '<td>' + formattedDate + '</td>';
                     row += '<td>' + inq.answerYn + '</td>';
                     row += '</tr>';
-                    tbody.append(row); // 새로운 행을 추가합니다.
+
+                    tbody.append(row);
                 }
 
-                // 페이징 처리
-                var pageInfo = data.pageInfo;
+                var paginationContainer = $('.pagination');
+                paginationContainer.empty();
+
                 var paginationContainer = $('.pagination');
                 paginationContainer.empty(); // 기존 페이징 UI를 비웁니다.
 
                 if (pageInfo.startNavi !== 1) {
-                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
+                    paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
                 }
 
                 for (var i = pageInfo.startNavi; i <= pageInfo.endNavi; i++) {
                     if (i === pageInfo.currentPage) {
-                        paginationContainer.append('<li class="page-item active"><a class="page-link" href="/admin/contactList.do?page=' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
+                        paginationContainer.append('<li class="page-item active"><a class="page-link" href="#" data-page="' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
                     } else {
-                        paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + i + '">' + i + '</a></li>');
+                        paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
                     }
                 }
 
                 if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
-                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
+                    paginationContainer.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
                 }
-                $('#user-search-btn').on('click', function(event) {
-                    var searchCondition = $('select[name="searchCondition"]').val();
-                    var searchKeyword = $('input[name="searchKeyword"]').val();
+                paginationContainer.find('.page-link').on('click', function(event) {
                     event.preventDefault();
-                    if (searchCondition !== null && searchCondition !== '') {
-                        $.ajax({
-                            type: 'POST',
-                            url: '/admin/inquireSearch.do?page=' + pageNumber,
-                            data: {searchCondition: searchCondition, searchKeyword: searchKeyword},
-                            dataType: 'json',
-                            async: false,
-                            success: function (searchData) {
-                                var inqList = searchData.inqList; // searchData에서 데이터를 가져와야 합니다.
-                                var pageInfo = searchData.pInfo; // searchData에서 데이터를 가져와야 합니다.
-
-                                // 테이블 바디를 찾습니다
-                                var tbody = $('#inquireTable tbody');
-                                tbody.empty(); // 기존 tbody 내용을 지웁니다.
-
-                                // 서버에서 받은 JSON 데이터를 사용하여 새로운 행을 생성하고 테이블에 추가합니다
-                                for (var i = 0; i < inqList.length; i++) {
-                                    var inq = inqList[i];
-                                    var row = '<tr>';
-                                    row += '<td>' + inq.inqNo + '</td>';
-                                    row += '<td>' + inq.userId + '</td>';
-                                    row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
-                                    row += '<td>' + inq.districtName + '</td>';
-                                    row += '<td>' + inq.inqCategory + '</td>';
-
-                                    // 날짜 포맷에 따라서 수정
-                                    var inqCreateDate = new Date(inq.inqCreateDate);
-                                    var formattedDate = inqCreateDate.getFullYear() + '-' +
-                                        ('0' + (inqCreateDate.getMonth() + 1)).slice(-2) + '-' +
-                                        ('0' + inqCreateDate.getDate()).slice(-2);
-
-                                    row += '<td>' + formattedDate + '</td>';
-                                    row += '<td>' + inq.answerYn + '</td>';
-                                    row += '</tr>';
-                                    tbody.append(row); // 새로운 행을 추가합니다.
-                                }
-
-                                var paginationContainer = $('.pagination');
-                                paginationContainer.empty(); // 기존 페이징 UI를 비웁니다.
-
-                                if (pageInfo.startNavi !== 1) {
-                                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
-                                }
-
-                                for (var i = pageInfo.startNavi; i <= pageInfo.endNavi; i++) {
-                                    if (i === pageInfo.currentPage) {
-                                        paginationContainer.append('<li class="page-item active"><a class="page-link" href="/admin/contactList.do?page=' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
-                                    } else {
-                                        paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + i + '">' + i + '</a></li>');
-                                    }
-                                }
-
-                                if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
-                                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
-                                }
-                            },
-
-                            error: function (error) {
-                                alert("두 번째 에이잭스 오류");
-                                console.error('Error:', error);
-                            }
-                        });
-                    }
+                    var pageNumber = $(this).data('page');
+                    loadData(url, data, pageNumber);
                 });
-                $('.answerN').removeClass('text-success');
-                $('.answerY').addClass('text-success');
             },
             error: function (error) {
-                // 오류 발생 시의 처리
+                alert("에이잭스 오류");
                 console.error('Error:', error);
             }
-        });
-
-        $(document).ready(function() {
-            $('.pagination').on('click', '.page-link', function(event) {
-                event.preventDefault();
-                var pageNumber = $(this).attr('href').split('=')[1]; // 페이지 번호 추출
-                handleAnswerYLinkClick(pageNumber);
-            });
         });
     }
 
     function handleAnswerNLinkClick(pageNumber) {
         var answerYn = 'N';
-        $.ajax({
-            type: 'POST',
-            url:  '/admin/inquireAnswer.do?page=' + pageNumber,
-            data: {answerYn: answerYn},
-            dataType: 'json',
-            success: function (data) {
-                var inqList = data.inqList; // 서버에서 받은 inqList 배열
+        loadData('/admin/inquireAnswer.do', { answerYn: answerYn }, pageNumber);
+        $('.answerY').removeClass('text-success');
+        $('.answerN').addClass('text-success');
+    }
 
-                // 테이블 바디를 찾습니다
-                var tbody = $('#inquireTable tbody');
-                tbody.empty(); // 기존 tbody 내용을 지움
-
-                // 서버에서 받은 JSON 데이터를 사용하여 새로운 행을 생성하고 테이블에 추가
-                for (var i = 0; i < inqList.length; i++) {
-                    var inq = inqList[i];
-                    var row = '<tr>';
-                    row += '<td>' + inq.inqNo + '</td>';
-                    row += '<td>' + inq.userId + '</td>';
-                    row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
-                    row += '<td>' + inq.districtName + '</td>';
-                    row += '<td>' + inq.inqCategory + '</td>';
-
-                    // 날짜 포맷에 따라서 수정
-                    var inqCreateDate = new Date(inq.inqCreateDate);
-                    var formattedDate = inqCreateDate.getFullYear() + '-' +
-                        ('0' + (inqCreateDate.getMonth() + 1)).slice(-2) + '-' +
-                        ('0' + inqCreateDate.getDate()).slice(-2);
-
-                    row += '<td>' + formattedDate + '</td>';
-                    row += '<td>' + inq.answerYn + '</td>';
-                    row += '</tr>';
-                    tbody.append(row); // 새로운 행 추가
-                }
-
-                // 페이징 처리
-                var pageInfo = data.pageInfo;
-                var paginationContainer = $('.pagination');
-                paginationContainer.empty(); // 기존 페이징 UI를 비움
-
-                if (pageInfo.startNavi !== 1) {
-                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
-                }
-
-                for (var i = pageInfo.startNavi; i <= pageInfo.endNavi; i++) {
-                    if (i === pageInfo.currentPage) {
-                        paginationContainer.append('<li class="page-item active"><a class="page-link" href="/admin/contactList.do?page=' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
-                    } else {
-                        paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + i + '">' + i + '</a></li>');
-                    }
-                }
-
-                if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
-                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
-                }
-                $('#user-search-btn').on('click', function(event) {
-                    var searchCondition = $('select[name="searchCondition"]').val();
-                    var searchKeyword = $('input[name="searchKeyword"]').val();
-                    event.preventDefault();
-                    if (searchCondition !== null && searchCondition !== '') {
-                        $.ajax({
-                            type: 'POST',
-                            url: '/admin/inquireSearch.do?page=' + pageNumber,
-                            data: {searchCondition: searchCondition, searchKeyword: searchKeyword},
-                            dataType: 'json',
-                            async: false,
-                            success: function (searchData) {
-                                var inqList = searchData.inqList;
-                                var pageInfo = searchData.pInfo;
-
-                                // 테이블 바디를 찾습니다
-                                var tbody = $('#inquireTable tbody');
-                                tbody.empty(); // 기존 tbody 내용을 지웁니다.
-
-                                // 서버에서 받은 JSON 데이터를 사용하여 새로운 행을 생성하고 테이블에 추가합니다
-                                for (var i = 0; i < inqList.length; i++) {
-                                    var inq = inqList[i];
-                                    var row = '<tr>';
-                                    row += '<td>' + inq.inqNo + '</td>';
-                                    row += '<td>' + inq.userId + '</td>';
-                                    row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
-                                    row += '<td>' + inq.districtName + '</td>';
-                                    row += '<td>' + inq.inqCategory + '</td>';
-
-                                    // 날짜 포맷에 따라서 수정
-                                    var inqCreateDate = new Date(inq.inqCreateDate);
-                                    var formattedDate = inqCreateDate.getFullYear() + '-' +
-                                        ('0' + (inqCreateDate.getMonth() + 1)).slice(-2) + '-' +
-                                        ('0' + inqCreateDate.getDate()).slice(-2);
-
-                                    row += '<td>' + formattedDate + '</td>';
-                                    row += '<td>' + inq.answerYn + '</td>';
-                                    row += '</tr>';
-                                    tbody.append(row); // 새로운 행을 추가합니다.
-                                }
-
-                                var paginationContainer = $('.pagination');
-                                paginationContainer.empty(); // 기존 페이징 UI를 비웁니다.
-
-                                if (pageInfo.startNavi !== 1) {
-                                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
-                                }
-
-                                for (var i = pageInfo.startNavi; i <= pageInfo.endNavi; i++) {
-                                    if (i === pageInfo.currentPage) {
-                                        paginationContainer.append('<li class="page-item active"><a class="page-link" href="/admin/contactList.do?page=' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
-                                    } else {
-                                        paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + i + '">' + i + '</a></li>');
-                                    }
-                                }
-
-                                if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
-                                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
-                                }
-                            },
-
-                            error: function (error) {
-                                alert("두 번째 에이잭스 오류");
-                                console.error('Error:', error);
-                            }
-                        });
-                    }
-                });
-
-                $('.answerY').removeClass('text-success'); // 기존의 success 클래스를 삭제
-                $('.answerN').addClass('text-success'); // 새로운 success 클래스를 추가
-
-            },
-            error: function (error) {
-                // 오류 발생 시의 처리
-                console.error('Error:', error);
-            }
-        });
-
-        $(document).ready(function() {
-            $('.pagination').on('click', '.page-link', function(event) {
-                event.preventDefault();
-                var pageNumber = $(this).attr('href').split('=')[1]; // 페이지 번호 추출
-                handleAnswerNLinkClick(pageNumber);
-            });
-        });
+    function handleAnswerYLinkClick(pageNumber) {
+        var answerYn = 'Y';
+        loadData('/admin/inquireAnswer.do', { answerYn: answerYn }, pageNumber);
+        $('.answerN').removeClass('text-success');
+        $('.answerY').addClass('text-success');
     }
 
     function handleCityChange(pageNumber) {
-        var cityNo = document.getElementById("cityNo").value;
-        $.ajax({
-            type: 'POST',
-            url: '/admin/inquireCity.do?page=' + pageNumber,
-            data: { cityNo: cityNo },
-            dataType: 'json',
-            success: function (data) {
-                console.log(data);
-                var inqList = data.inqList; // 서버에서 받은 inqList 배열
-
-                // 테이블 바디를 찾습니다
-                var tbody = $('#inquireTable tbody');
-                tbody.empty(); // 기존 tbody 내용을 지웁니다.
-
-                // 서버에서 받은 JSON 데이터를 사용하여 새로운 행을 생성하고 테이블에 추가합니다
-                for (var i = 0; i < inqList.length; i++) {
-                    var inq = inqList[i];
-                    var row = '<tr>';
-                    row += '<td>' + inq.inqNo + '</td>';
-                    row += '<td>' + inq.userId + '</td>';
-                    row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
-                    row += '<td>' + inq.districtName + '</td>';
-                    row += '<td>' + inq.inqCategory + '</td>';
-
-                    // 날짜 포맷에 따라서 수정
-                    var inqCreateDate = new Date(inq.inqCreateDate);
-                    var formattedDate = inqCreateDate.getFullYear() + '-' +
-                        ('0' + (inqCreateDate.getMonth() + 1)).slice(-2) + '-' +
-                        ('0' + inqCreateDate.getDate()).slice(-2);
-
-                    row += '<td>' + formattedDate + '</td>';
-                    row += '<td>' + inq.answerYn + '</td>';
-                    row += '</tr>';
-                    tbody.append(row); // 새로운 행을 추가합니다.
-                }
-
-                // 페이징 처리
-                var pageInfo = data.pageInfo;
-                var paginationContainer = $('.pagination');
-                paginationContainer.empty(); // 기존 페이징 UI를 비웁니다.
-
-                if (pageInfo.startNavi !== 1) {
-                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
-                }
-
-                for (var i = pageInfo.startNavi; i <= pageInfo.endNavi; i++) {
-                    if (i === pageInfo.currentPage) {
-                        paginationContainer.append('<li class="page-item active"><a class="page-link" href="/admin/contactList.do?page=' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
-                    } else {
-                        paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + i + '">' + i + '</a></li>');
-                    }
-                }
-
-                if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
-                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
-                }
-                $('#user-search-btn').on('click', function(event) {
-                    var searchCondition = $('select[name="searchCondition"]').val();
-                    var searchKeyword = $('input[name="searchKeyword"]').val();
-                    event.preventDefault();
-                    if (searchCondition !== null && searchCondition !== '') {
-                        $.ajax({
-                            type: 'POST',
-                            url: '/admin/inquireSearch.do?page=' + pageNumber,
-                            data: {searchCondition: searchCondition, searchKeyword: searchKeyword},
-                            dataType: 'json',
-                            async: false,
-                            success: function (searchData) {
-                                var inqList = searchData.inqList; // searchData에서 데이터를 가져와야 합니다.
-                                var pageInfo = searchData.pInfo; // searchData에서 데이터를 가져와야 합니다.
-
-                                // 테이블 바디를 찾습니다
-                                var tbody = $('#inquireTable tbody');
-                                tbody.empty(); // 기존 tbody 내용을 지웁니다.
-
-                                // 서버에서 받은 JSON 데이터를 사용하여 새로운 행을 생성하고 테이블에 추가합니다
-                                for (var i = 0; i < inqList.length; i++) {
-                                    var inq = inqList[i];
-                                    var row = '<tr>';
-                                    row += '<td>' + inq.inqNo + '</td>';
-                                    row += '<td>' + inq.userId + '</td>';
-                                    row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
-                                    row += '<td>' + inq.districtName + '</td>';
-                                    row += '<td>' + inq.inqCategory + '</td>';
-
-                                    // 날짜 포맷에 따라서 수정
-                                    var inqCreateDate = new Date(inq.inqCreateDate);
-                                    var formattedDate = inqCreateDate.getFullYear() + '-' +
-                                        ('0' + (inqCreateDate.getMonth() + 1)).slice(-2) + '-' +
-                                        ('0' + inqCreateDate.getDate()).slice(-2);
-
-                                    row += '<td>' + formattedDate + '</td>';
-                                    row += '<td>' + inq.answerYn + '</td>';
-                                    row += '</tr>';
-                                    tbody.append(row); // 새로운 행을 추가합니다.
-                                }
-
-                                var paginationContainer = $('.pagination');
-                                paginationContainer.empty(); // 기존 페이징 UI를 비웁니다.
-
-                                if (pageInfo.startNavi !== 1) {
-                                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
-                                }
-
-                                for (var i = pageInfo.startNavi; i <= pageInfo.endNavi; i++) {
-                                    if (i === pageInfo.currentPage) {
-                                        paginationContainer.append('<li class="page-item active"><a class="page-link" href="/admin/contactList.do?page=' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
-                                    } else {
-                                        paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + i + '">' + i + '</a></li>');
-                                    }
-                                }
-
-                                if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
-                                    paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
-                                }
-                            },
-
-                            error: function (error) {
-                                alert("두 번째 에이잭스 오류");
-                                console.error('Error:', error);
-                            }
-                        });
-                    }
-                });
-                $('.answerY').removeClass('text-success'); // 기존의 success 클래스를 삭제
-                $('.answerN').removeClass('text-success'); // 새로운 success 클래스를 추가
-
-            },
-            error: function (error) {
-                // 오류 발생 시의 처리
-                console.error('Error:', error);
-            }
-        });
-        $(document).ready(function() {
-            $('.pagination').on('click', '.page-link', function(event) {
-                event.preventDefault();
-                var pageNumber = $(this).attr('href').split('=')[1]; // 페이지 번호 추출
-                handleCityChange(pageNumber);
-            });
-        });
+        var cityNo = $('#cityNo').val();
+        loadData('/admin/inquireCity.do', { cityNo: cityNo }, pageNumber);
+        $('.answerN').removeClass('text-success');
+        $('.answerY').removeClass('text-success');
     }
 
-    $('#user-search-btn').on('click', function(event) {
+    $('#user-search-btn').on('click', function (event) {
         var searchCondition = $('select[name="searchCondition"]').val();
         var searchKeyword = $('input[name="searchKeyword"]').val();
         var pageNumber = $('input[name="pageName"]').val();
         event.preventDefault();
         if (searchCondition !== null && searchCondition !== '') {
-            $.ajax({
-                type: 'POST',
-                url: '/admin/inquireSearch.do?page=' + pageNumber,
-                data: {searchCondition: searchCondition, searchKeyword: searchKeyword},
-                dataType: 'json',
-                async: false,
-                success: function (searchData) {
-                    var inqList = searchData.inqList; // searchData에서 데이터를 가져와야 합니다.
-                    var pageInfo = searchData.pInfo; // searchData에서 데이터를 가져와야 합니다.
-
-                    // 테이블 바디를 찾습니다
-                    var tbody = $('#inquireTable tbody');
-                    tbody.empty(); // 기존 tbody 내용을 지웁니다.
-
-                    // 서버에서 받은 JSON 데이터를 사용하여 새로운 행을 생성하고 테이블에 추가합니다
-                    for (var i = 0; i < inqList.length; i++) {
-                        var inq = inqList[i];
-                        var row = '<tr>';
-                        row += '<td>' + inq.inqNo + '</td>';
-                        row += '<td>' + inq.userId + '</td>';
-                        row += '<td><a href="/inquire/detail.do?inqNo=' + inq.inqNo + '">' + inq.inqTitle + '</a></td>';
-                        row += '<td>' + inq.districtName + '</td>';
-                        row += '<td>' + inq.inqCategory + '</td>';
-
-                        // 날짜 포맷에 따라서 수정
-                        var inqCreateDate = new Date(inq.inqCreateDate);
-                        var formattedDate = inqCreateDate.getFullYear() + '-' +
-                            ('0' + (inqCreateDate.getMonth() + 1)).slice(-2) + '-' +
-                            ('0' + inqCreateDate.getDate()).slice(-2);
-
-                        row += '<td>' + formattedDate + '</td>';
-                        row += '<td>' + inq.answerYn + '</td>';
-                        row += '</tr>';
-                        tbody.append(row); // 새로운 행을 추가합니다.
-                    }
-
-                    var paginationContainer = $('.pagination');
-                    paginationContainer.empty(); // 기존 페이징 UI를 비웁니다.
-
-                    if (pageInfo.startNavi !== 1) {
-                        paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.startNavi - 1) + '"><i class="bi bi-chevron-left"></i></a></li>');
-                    }
-
-                    for (var i = pageInfo.startNavi; i <= pageInfo.endNavi; i++) {
-                        if (i === pageInfo.currentPage) {
-                            paginationContainer.append('<li class="page-item active"><a class="page-link" href="/admin/contactList.do?page=' + i + '" style="background-color:#00AD7C; border-color: #00AD7C">' + i + '</a></li>');
-                        } else {
-                            paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + i + '">' + i + '</a></li>');
-                        }
-                    }
-
-                    if (pageInfo.endNavi !== pageInfo.naviTotalCount) {
-                        paginationContainer.append('<li class="page-item"><a class="page-link" href="/admin/contactList.do?page=' + (pageInfo.endNavi + 1) + '"><i class="bi bi-chevron-right"></i></a></li>');
-                    }
-                },
-
-                error: function (error) {
-                    alert("검색 에이잭스 오류");
-                    console.error('Error:', error);
-                }
-            });
-            $(document).ready(function() {
-                $('.pagination').on('click', '.page-link', function(event) {
-                    event.preventDefault();
-                    var pageNumber = $(this).attr('href').split('=')[1]; // 페이지 번호 추출
-                    handleCityChange(pageNumber);
-                });
-            });
+            loadData('/admin/inquireSearch.do', { searchCondition: searchCondition, searchKeyword: searchKeyword }, pageNumber);
         }
-
     });
-
 
   </script>
   

@@ -137,17 +137,19 @@
                         ${user.isUserDeleted}
                       </td>
                       <td>
+                        <c:if test="${user.isUserDeleted.toString() eq 'N'}">
                         <c:if test="${user.userNo ne 1}">
                           <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                   data-bs-target="#adminModal"  data-user-no="${user.userNo}">
                             관리자 임명
                           </button>
                         </c:if>
+                        </c:if>
                         <c:if test="${user.userNo eq 1}">
                           최고 관리자
                         </c:if>
                         <c:if test="${user.isUserDeleted.toString() eq 'Y'}">
-                          <button type="button" class="btn btn-success" onclick="confirmUserRemoval(${user.userNo})">
+                          <button type="button" class="btn btn-outline-success" onclick="confirmUserRemoval(${user.userNo})">
                             탈퇴 승인
                           </button>
                         </c:if>

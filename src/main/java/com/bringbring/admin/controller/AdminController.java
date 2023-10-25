@@ -55,7 +55,7 @@ public class AdminController {
 			List<City> cList = regionService.selectCityList();
 
 			Map<String, String> categoryMap = new HashMap<>();
-			categoryMap.put("delivery", "배송");
+			categoryMap.put("delivery", "수거");
 			categoryMap.put("divide", "나눔게시판");
 			categoryMap.put("chatting", "채팅");
 			categoryMap.put("improvement", "개선");
