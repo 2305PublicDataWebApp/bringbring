@@ -17,7 +17,22 @@ public interface NoticeStore {
 	 */
 	int insertNotice(Notice notice);
 
-	void insertImage(Image image);
+	/**
+	 * 게시글 수정 Store
+	 * 
+	 * @param notice
+	 * @return
+	 */
+	int updateNotice(Notice notice);
+
+	/**
+	 * 게시글 삭제 Store
+	 * 
+	 * @param notice
+	 * @return
+	 */
+	int deleteNotice(Integer noticeNo);
+
 	/**
 	 * 게시글 전체 갯수 Store
 	 * 
@@ -50,23 +65,6 @@ public interface NoticeStore {
 	Notice selectNoticeByNo(Integer noticeNo);
 
 	/**
-	 * 게시글 삭제 Store
-	 * 
-	 * @param notice
-	 * @return
-	 */
-	int deleteNotice(Integer noticeNo);
-
-	/**
-	 * 게시글 수정 Store
-	 * 
-	 * @param notice
-	 * @return
-	 */
-	int updateNotice(Notice notice);
-
-
-	/**
 	 * 이전글 다음글 구현
 	 * @param noticeNo
 	 * @return
@@ -91,6 +89,8 @@ public interface NoticeStore {
 	List<Notice> searchNoticeByKeyword(PageInfo pInfo, String searchKeyword);
 	List<Notice> searchServiceByKeyword(PageInfo pInfo, String searchKeyword);
 	List<Notice> searchUpdateByKeyword(PageInfo pInfo, String searchKeyword);
+
+	void insertImage(Image image);
 
 	Image selectImageByNo(Integer noticeNo);
 

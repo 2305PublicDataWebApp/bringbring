@@ -154,7 +154,7 @@
     <div class="container mt-5" data-aos="fade-up">
       <div class="section-title">
         <h2>날씨 서비스</h2>
-        <p>기상청에서 제공하는 날씨로 현재 픽업률을 알려줍니다.</p>
+        <p>기상청 날씨 정보를 통해 수거 가능,지연 여부를 제공합니다.</p>
       </div>
       <div id="weatherCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel" >
         <div class="carousel-inner">
@@ -870,7 +870,7 @@
 
 
 // 날씨 정보를 캐러셀에 추가하는 로직
-            var textColor = (ment === "수거가능") ? '#0d6efd' : 'orange';
+            var textColor = (ment === "수거가능") ? '#7ed69b' : '#ffa76e';
             var weatherInfo = '<div class="col-md-2">' +
                     '<div class=icon-box style="margin: 0">' +
                     '<div class="icon" style="margin: 5"><i class="bi ' + iconClass + '"></i></div>' +

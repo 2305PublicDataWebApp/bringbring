@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class RestAdminController {
             List<InquireDetails> inqList = inquireService.selectInquireByCityNo(inquireDetails, pInfo);
 
             Map<String, String> categoryMap = new HashMap<>();
-            categoryMap.put("delivery", "배송");
+            categoryMap.put("delivery", "수거");
             categoryMap.put("divide", "나눔게시판");
             categoryMap.put("chatting", "채팅");
             categoryMap.put("improvement", "개선");
@@ -119,7 +120,7 @@ public class RestAdminController {
             List<InquireDetails> inqList = inquireService.searchInquireByKeyword(pInfo, paramMap);
 
             Map<String, String> categoryMap = new HashMap<>();
-            categoryMap.put("delivery", "배송");
+            categoryMap.put("delivery", "수거");
             categoryMap.put("divide", "나눔게시판");
             categoryMap.put("chatting", "채팅");
             categoryMap.put("improvement", "개선");
