@@ -82,6 +82,11 @@
   .divideLi {
     margin-bottom: 10px;
   }
+  .weatherWholeBox{
+    padding: 20px 30px 30px 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 16px rgba(0, 173, 124, 0.5);
+  }
   </style>
 </head>
 
@@ -885,11 +890,11 @@
 
 
 // 날씨 정보를 캐러셀에 추가하는 로직
-            var textColor = (ment === "수거가능") ? '#7ed69b' : '#ffa76e';
+            var textColor = (ment === "수거가능") ? '#00AD7C' : '#ffa76e';
             var weatherInfo = '<div class="col-md-2">' +
-                    '<div class=icon-box style="margin: 0">' +
-                    '<div class="icon" style="margin: 5"><i class="bi ' + iconClass + '"></i></div>' +
-                    '<h5 class="text-center" style="margin:2; color: #00AD7C;">' + regionName + '</h5>' +
+                    '<div class="icon-box weatherWholeBox" style="margin: 0;">' +
+                    '<div class="icon" style="margin: 5px"><i class="bi ' + iconClass + '"></i></div>' +
+                    '<h5 class="text-center" style="margin : 7px 0px 12px 0px; color: #017b65;">' + regionName + '</h5>' +
                     '<p class="text-center" style="margin:0;">기온:' + temp + ' ℃</p>' +
                     // '<p class="text-center">강수량: ' + rainAmount + ' </p>' +
                     '<p class="text-center" style="margin:0;">강수확률: ' + rainProbability + ' %</p>' +
