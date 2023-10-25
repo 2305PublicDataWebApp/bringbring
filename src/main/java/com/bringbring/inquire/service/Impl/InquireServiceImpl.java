@@ -116,7 +116,7 @@ public class InquireServiceImpl implements InquireService {
     public InquireDetail encodingDetail(InquireDetail inquireDetail) {
 
         if (inquireDetail != null && "delivery".equals(inquireDetail.getInquire().getInqCategory())) {
-            inquireDetail.getInquire().setInqCategory("배송 연착, 배송 환불 관련 문의사항");
+            inquireDetail.getInquire().setInqCategory("수거 연착, 배송 환불 관련 문의사항");
         }else if (inquireDetail != null && "divide".equals(inquireDetail.getInquire().getInqCategory())) {
             inquireDetail.getInquire().setInqCategory("나눔 게시판 관련 문의사항");
         }else if (inquireDetail != null && "chatting".equals(inquireDetail.getInquire().getInqCategory())) {
@@ -165,6 +165,9 @@ public class InquireServiceImpl implements InquireService {
 
     @Override
     public int deleteInquire(int inqNo) { return inquireStore.deleteInquire(inqNo); }
+
+    @Override
+    public int updateYn(int inqNo) { return inquireStore.updateYn(inqNo); }
 
     private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
         Map<String, Object> fileInfoMap = new HashMap<String, Object>();

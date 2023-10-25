@@ -118,10 +118,10 @@
                                             <td class="text-center"><a href="/divide/detail.do?divNo=${divide.divide.divNo}">${divide.divide.divTitle}</a></td>
                                             <td class="text-center">
                                                 <c:if test="${divide.divide.divYn.toString() eq 'N'}">
-                                                    <button class="btn btn-success">나눔 완료</button>
+                                                    <button class="btn btn-success" onclick="goDivYn(${divide.divide.divNo})">나눔 완료</button>
                                                 </c:if>
                                                 <c:if test="${divide.divide.divYn.toString() ne 'N'}">
-                                                    <button class="btn btn-success">나눔 진행중</button>
+                                                    O
                                                 </c:if>
                                             </td>
                                             <td class="text-center">
@@ -197,6 +197,12 @@
         ChannelIO('boot', {
             "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
         });
+
+        function goDivYn(divNo){
+            if(confirm("나눔 완료로 바꾸시겠어요? 한 번 바꾸면 취소할 수 없어요")){
+                location.href = "/mypage/divideYn.do?divNo=" +divNo;
+            }
+        }
 
     </script>
 

@@ -159,7 +159,18 @@
       <!-- 제목 영역 -->
       <div style="width: 100%;border-bottom: 1px solid #ccc;display: flex;" >
         <div style="padding: 35px 15px;width: 92%;">
-          <h3 style="margin-bottom: 15px;">${dData.divide.divTitle}</h3>
+          <h3 style="margin-bottom: 15px;">
+            <c:if test="${dData.divide.divYn.toString() eq 'Y' && sessionId ne null && sessionId ne dData.user.userId}">
+                <button type="button" style="height: 35px;margin-right: 5px;pointer-events: none;" class="btn btn-secondary">나눔 완료</button>
+            </c:if>
+            <c:if test="${dData.divide.divYn.toString() eq 'Y' && sessionId ne null && sessionId eq dData.user.userId}">
+              <button type="button" style="height: 35px;margin-right: 5px;pointer-events: none;" class="btn btn-secondary">나눔 완료</button>
+            </c:if>
+            <c:if test="${sessionId ne null && sessionId eq dData.user.userId && dData.divide.divYn.toString() eq 'N'}">
+              <button onclick="goDivYn(${dData.divide.divNo});" type="button" style="height: 35px;margin-right: 5px;" class="btn btn-dark">나눔 완료</button>
+            </c:if>
+            ${dData.divide.divTitle}
+          </h3>
           <p style="margin-bottom: 5px;">${dData.wasteCategory.wasteCategoryName}</p>
           <p style="margin: 0px;">
 <%--            <fmt:parseDate value="${dData.divide.divCreateDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parseDateTime1" type="both" />--%>
@@ -530,10 +541,19 @@
     function openPopup(url) {
       if(confirm("${dData.user.userName}님께 채팅 신청을 하시겠어요?")){
         var name = "브링브링 채팅방";
-        var option = "width = 516, height = 668, top = 20, left = 200, location = no"
+        var width = 516;
+        var height = 668;
+        var left = (window.innerWidth - width) / 2;
+        var top = (window.innerHeight - height) / 2;
+        var option = "width=" + width + ", height=" + height + ", top=" + top + ", left=" + left + ", location=no";
         window.open(url, name, option);
       }
     }
+        function goDivYn(divNo){
+          if(confirm("나눔 완료로 바꾸시겠어요? 한 번 바꾸면 취소할 수 없어요")){
+            location.href = "/divide/divideYn.do?divNo=" +divNo;
+          }
+        }
 
     <!-- 로그인, 로그아웃 -->
     <jsp:include page="/include/loginJs.jsp"></jsp:include>

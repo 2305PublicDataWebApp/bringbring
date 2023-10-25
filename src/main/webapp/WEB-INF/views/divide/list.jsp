@@ -52,6 +52,14 @@
         main tr{
             border-bottom: 1px solid #d4d0d0;
         }
+        .btnDivide{
+            height: 35px;
+            pointer-events: none;
+            width: 101px;
+            margin-right: 2px;
+            --bs-btn-bg: #A0D8B3;
+            --bs-btn-border-color: #A0D8B3;
+        }
     </style>
 </head>
 
@@ -123,19 +131,27 @@
                         </div>
                     </td >
                     <td style="text-align: left;font-size: 17px;">
-                        <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
+                        <h4 style="padding-top: 15px;font-weight: 600;margin: 0;font-size: 22px;">
                             <c:if test="${data.divide.divYn.toString() eq 'Y'}">
-                                <button class="btn btn-success" style="height: 35px;">나눔 완료</button>
+                                <button class="btn btn-secondary" style="height: 35px;pointer-events: none;width: 87px;margin-right: 2px;">나눔 완료</button>
+                            </c:if>
+                            <c:if test="${data.divide.divYn.toString() eq 'N'}">
+                                <button class="btn btn-warning btnDivide" >나눔 진행중</button>
                             </c:if>
                             <a href="${detailUrl}">${data.divide.divTitle}</a>
                         </h4>
                         <br>
-                        나눔 지역 : ${data.city.cityName} ${data.district.districtName}<br>
-                        카테고리 : ${data.wasteCategory.wasteCategoryName}
+                        <div style="margin-bottom: 10px;">
+                            나눔 지역 : ${data.city.cityName} ${data.district.districtName}<br>
+                        </div>
+                        <div>
+                            카테고리 : ${data.wasteCategory.wasteCategoryName}
+                        </div>
+
                     </td>
                     <td style="width: 100px;position: relative;">
                         <div style="position: absolute;bottom: 10px;">
-                            <c:if test="${sessionId eq null || data.chatRoom.MUserNo eq 0 || data.chatRoom.getUserNo eq 0}">
+                            <c:if test="${sessionId eq null || data.chatRoom.MUserNo eq 0 || data.chatRoom.getUserNo eq 0 || data.chatRoom.MUserNo ne cUserNo && data.chatRoom.getUserNo ne cUserNo}">
                                 <i class="bi bi-chat"></i>
                             </c:if>
                             <c:if test="${sessionId ne null}">

@@ -108,4 +108,9 @@ public class InquireStoreLogic implements InquireStore{
     @Override
     public int deleteInquire(int inqNo) { return sqlSession.update("InquireMapper.deleteInquire", inqNo); }
 
+    @Override
+    public int updateYn(int inqNo) {
+        return sqlSession.update("InquireMapper.updateYn", inqNo);
+    }
+
 }

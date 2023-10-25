@@ -15,10 +15,12 @@
         SELECT * FROM CHAT_TBL WHERE CHATROOM_NO = #{value} ORDER BY CHAT_CREATE_DATE
     </select>
     <insert id="insertChat">
-        INSERT INTO CHAT_TBL VALUES (SEQ_CHAT_NO.NEXTVAL, #{divNo}, #{userNo}, #{getUserNo}, #{chatContent}, DEFAULT, DEFAULT, DEFAULT, #{chatRoomNo})
+        INSERT INTO CHAT_TBL VALUES (SEQ_CHAT_NO.NEXTVAL, #{divNo}, #{userNo}, #{getUserNo}, #{chatContent}, DEFAULT, DEFAULT, #{chatRoomNo})
     </insert>
     <insert id="insertChatRoom">
-        INSERT INTO CHATROOM_TBL VALUES(SEQ_CHATROOM_NO.NEXTVAL, #{divNo}, #{userNo}, #{getUserNo}, DEFAULT)
+        INSERT INTO CHATROOM_TBL VALUES(SEQ_CHATROOM_NO.NEXTVAL, #{divNo}, #{userNo}, #{getUserNo}, DEFAULT, DEFAULT)
     </insert>
-
+    <update id="updateDivYn">
+        UPDATE CHATROOM_TBL SET CHAT_DIV_YN = 'Y' WHERE CHATROOM_NO = #{value}
+    </update>
 </mapper>

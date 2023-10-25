@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.*;
 import com.bringbring.image.domain.Image;
+import com.bringbring.mypage.service.MypageService;
 import com.bringbring.reservation.service.ReservationService;
 import com.bringbring.user.domain.User;
 import com.bringbring.user.service.UserService;
@@ -37,6 +38,7 @@ public class DivideController {
 	private final RegionService regionService;
 	private final ReservationService reservationService;
 	private final UserService userService;
+	private  final MypageService mypageService;
 
 	@GetMapping("/insert.do")
 	public String showDivideInsert(Model model) {
@@ -186,6 +188,11 @@ public class DivideController {
 		return "divide/search";
 	}
 
+	@GetMapping("/divideYn.do")
+	public String updateDivideYn(int divNo){
+		mypageService.updateDivideYn(divNo);
+		return "redirect:/divide/detail.do?divNo="+divNo;
+	}
 
 
 }

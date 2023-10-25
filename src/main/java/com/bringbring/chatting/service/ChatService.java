@@ -15,4 +15,6 @@ public interface ChatService {
     int insertChatRoom(Map<String, Object> chatRoomMap);
 
     List<Chat> selectChatRoomListByNo(int chatroomNo);
+
+    int updateDivYn(int chatroomNo);
 }

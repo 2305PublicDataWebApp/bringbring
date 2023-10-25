@@ -23,4 +23,13 @@ public class RestChatController {
         }
         return "false";
     }
+
+    @PostMapping("/updateDivide.do")
+    public String updateChatDivYN(int chatroomNo) {
+        int result = chatService.updateDivYn(chatroomNo);
+        if(result > 0){
+            return "success";
+        }
+        return "false";
+    }
 }
