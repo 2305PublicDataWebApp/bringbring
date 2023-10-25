@@ -97,9 +97,9 @@ public class AdminServiceImpl implements AdminService  {
 
     @Override
     public int deleteUser(User user) {
-        int result = adminStore.deleteUser(user);
+        int result = deleteRole(user.getUserNo());
         if(result>0){
-            int deleteRole = deleteRole(user.getUserNo());
+            int deleteRole = adminStore.deleteUser(user);
             if(deleteRole > 0){
                 return result;
             } else {
