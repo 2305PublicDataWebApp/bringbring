@@ -147,11 +147,11 @@
     <!--        insert into RESERVATION_DETAIL_TBL values (SEQ_RV_DETAIL_NO.NEXTVAL, SEQ_RV_DETAIL_RV_NO.NEXTVAL, #{rvDetailTotal}, #{rvDetailFee})-->
     <!--    </insert>-->
     <insert id="insertReservationDetail" parameterType="com.bringbring.reservation.domain.ReservationDetail" >
-        <selectKey keyProperty="rvDetailNo" order="AFTER" resultType="int">
-            SELECT SEQ_RV_DETAIL_NO.CURRVAL AS rvNo FROM DUAL
-        </selectKey>
+<!--        <selectKey keyProperty="rvDetailNo" order="AFTER" resultType="int">-->
+--             SELECT SEQ_RV_DETAIL_NO.CURRVAL AS rvNo FROM DUAL
+<!--        </selectKey>-->
         insert into RESERVATION_DETAIL_TBL values (
-            SEQ_RV_DETAIL_NO.NEXTVAL, #{rvNo}, #{rvDetailTotal}, #{rvDetailFee}
+        #{rvNo}, #{rvNo}, #{rvDetailTotal}, #{rvDetailFee}
                                                )
     </insert>
 
@@ -170,7 +170,7 @@
     </insert>
     <insert id="insertPay">
         insert into PAY_TBL values (
-           SEQ_PAY_NO.NEXTVAL, #{rvDetailNo}, #{userId}, #{payId}, #{payMethod}, #{payAmount}, #{payCurrency}, SYSDATE, DEFAULT, DEFAULT
+           #{rvDetailNo}, #{rvDetailNo}, #{userId}, #{payId}, #{payMethod}, #{payAmount}, #{payCurrency}, SYSDATE, DEFAULT, DEFAULT
                                    )
     </insert>
     <update id="updateReservation">
@@ -564,5 +564,16 @@
                           join RESERVATION_TBL g on g.RV_NO = f.RV_NO
                           join PAY_TBL h on h.RV_DETAIL_NO = f.RV_DETAIL_NO
         where d.IMAGE_INDEX_NO = #{imageIndexNo} and d.RV_DETAIL_NO = #{rvDetailNo}
+    </select>
+    <select id="selectInfoByDischargeNo" resultMap="reservationComplete">
+        select * from WASTE_CATEGORY_TBL a
+                          join WASTE_TYPE_TBL b on a.WASTE_CATEGORY_NO = b.WASTE_CATEGORY_NO
+                          join WASTE_INFO_TBL c on b.WASTE_TYPE_NO = c.WASTE_TYPE_NO
+                          join RV_CONNECTION_TBL d on c.WASTE_INFO_NO = d.WASTE_INFO_NO
+                          join IMAGE_TBL e on d.IMAGE_NO = e.IMAGE_NO
+                          join RESERVATION_DETAIL_TBL f on d.RV_DETAIL_NO = f.RV_DETAIL_NO
+                          join RESERVATION_TBL g on g.RV_NO = f.RV_NO
+                          join PAY_TBL h on h.RV_DETAIL_NO = f.RV_DETAIL_NO
+        where g.RV_DISCHARGE_NO = #{rvDischargeNo} and g.USER_NO = #{userNo }
     </select>
 </mapper>

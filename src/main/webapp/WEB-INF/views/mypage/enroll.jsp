@@ -248,13 +248,14 @@
                     // 모달 내용을 채워넣기
                     let modalContent = '<div class="modal_border_bottom p-3" id="modalHeader">';
                     modalContent += '<div>';
-                    modalContent += '<p>예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
+                    modalContent += '<p id="rvDischargeNo">예약 번호 : ' + matchedReservations[0].reservation.rvDischargeNo + '</p>';
                     modalContent += '<p class="m-0">예약 날짜 : ' + matchedReservations[0].reservation.rvRvDate + '</p>';
+                    modalContent += '<input type="hidden" id="modalPayId" name="modalPayId" value="' + matchedReservations[0].pay.payId + '">';
                     modalContent += '</div>';
                     modalContent += '<div>';
-                    modalContent += '<a href="/reservation/modify.do">';
-                    modalContent += '<button class="btn btn-primary" id="modifyButton">정보 수정</button>';
-                    modalContent += '</a>';
+                    // modalContent += '<a href="/reservation/modify.do?rvDischargeNo=' + matchedReservations[0].reservation.rvDischargeNo + '">';
+                    // modalContent += '<button class="btn btn-primary" id="modifyButton">정보 수정</button>';
+                    // modalContent += '</a>';
                     modalContent += '</div>';
                     modalContent += '</div>';
                     modalContent += '<div class="modal_border_bottom p-3">';
@@ -452,9 +453,11 @@
                 });
             } else {
                 if (selectedOption) {
-                    // 선택한 option을 cancelPay 함수에 전달
-                    const parsedOption = JSON.parse(selectedOption);
-                    cancelPay(parsedOption);
+                    const userConfirmed = confirm("예약을 취소하시겠습니까? 확인 후 복구할 수 없습니다.");
+                    if (userConfirmed) {
+                        const parsedOption = JSON.parse(selectedOption);
+                        cancelPay(parsedOption);
+                    }
                 } else {
                     alert("취소 이유를 선택하세요.");
                 }
