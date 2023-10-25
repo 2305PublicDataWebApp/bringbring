@@ -107,7 +107,7 @@
               <button type="button" onclick="showInsertAnswer(this);" class="btn btn-success">답변 추가</button>
             </c:if>
             <c:if test="${inqDetail.answer.ansContent ne null}">
-              <button type="button" class="btn btn-success">답변 수정</button>
+              <button type="button" onclick="showUpdateAnswer(this);" class="btn btn-success">답변 수정</button>
             </c:if>
           </c:if>
         </div>
@@ -115,32 +115,35 @@
 <%--      답변이 안달렸을 떄--%>
       <c:if test="${inqDetail.answer.ansContent eq null}">
         <form name="insertForm" action="/answer/insert.do" method="post">
-            <c:if test="${admin.userNo ne null && admin.userNo ne 0}">
-              <input type="hidden" name="userNo" value="${admin.userNo}">
-            </c:if>
-            <input type="hidden" name="inqNo" value="${inqDetail.inquire.inqNo}">
-            <input type="hidden" name="inqNo" value="${inqDetail.inquire.inqNo}">
-            <div style="width: 850px;margin: 0 auto;">
-              <div style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;background-color: #eee;">
-                <div id="ansContentArea" style="padding: 35px;display:none;">
-                  <textarea name="ansContent" cols="86" rows="15" style="resize: none; border: none; outline: none; width: 100%;padding: 10px;" placeholder="답변을 입력해주세요"></textarea>
-                </div>
+          <input type="hidden" name="inqNo" value="${inqDetail.inquire.inqNo}">
+          <c:if test="${admin.userNo ne null && admin.userNo ne 0}">
+            <input type="hidden" name="userNo" value="${admin.userNo}">
+          </c:if>
+          <div style="width: 850px;margin: 0 auto;">
+            <div style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;background-color: #eee;">
+              <div id="ansContentArea" style="padding: 35px;display:none;">
+                <textarea name="ansContent" cols="86" rows="15" style="resize: none; border: none; outline: none; width: 100%;padding: 10px;" placeholder="답변을 입력해주세요"></textarea>
               </div>
-                <p id="ansContentMessage" style="padding: 30px 10px;">아직 답변이 등록되지 않았습니다.</p>
             </div>
+            <p id="ansContentMessage" style="padding: 30px 10px;">아직 답변이 등록되지 않았습니다.</p>
+          </div>
         </form>
       </c:if>
 <%--      답변이 안달렸을 때--%>
       <%--      답변이 달렸을 때--%>
       <c:if test="${inqDetail.answer.ansContent ne null}">
         <form name="updateForm" action="/answer/update.do" method="post">
-          <div style="width: 850px;margin: 0 auto;">
-            <div style="width: 100%; border-bottom: 2px solid #ccc; display: flex; flex-direction: column; align-items: flex-end;background-color: #eee;">
-              <div id="ansContentAreaUpdate" style="padding: 35px;display:none;">
-                  <div style="border: none; outline: none; width: 780px;height: 380px;padding: 10px;background-color: white;" name="ansContent" readonly>${inqDetail.answer.ansContent}</div>
+            <c:if test="${admin.userNo ne null && admin.userNo ne 0}">
+              <input type="hidden" name="userNo" value="${admin.userNo}">
+            </c:if>
+            <input type="hidden" name="inqNo" value="${inqDetail.inquire.inqNo}">
+            <div style="width: 850px;margin: 0 auto;">
+              <div style="width: 100%; border-bottom: 2px solid #ccc;background-color: #eee;">
+                <div style="padding: 35px;">
+                  <textarea id="ansContentAreaUpdate" style="border: none; outline: none; width: 780px;height: 380px;padding: 10px;background-color: white;" name="ansContent" readonly>${inqDetail.answer.ansContent}</textarea>
+                </div>
               </div>
             </div>
-          </div>
         </form>
       </c:if>
       <%--      답변이 달렸을 때--%>
@@ -181,13 +184,13 @@
     <!-- 로그인, 로그아웃 -->
     <jsp:include page="/include/loginJs.jsp"></jsp:include>
 
+    // 답변 등록할때 자바스크립트
     function showInsertAnswer(obj) {
-      // Get the parent div element
+
       document.getElementById("ansContentArea").style.display="block";
       document.getElementById("ansContentMessage").style.display="none";
       var parentDiv = obj.parentElement;
 
-      // Clear the contents of the parent div
       parentDiv.innerHTML = '';
 
       // Create the "글 등록" button
@@ -211,6 +214,11 @@
       parentDiv.appendChild(insertButton);
       parentDiv.appendChild(backBtn);
     }
+    function insertAnswer() {
+      if (confirm("답변을 등록하시겠습니까?")) {
+        document.forms["insertForm"].submit();
+      }
+    }
   function btnBack() {
     document.getElementById("ansContentArea").style.display="none";
     document.getElementById("ansContentMessage").style.display="block";
@@ -224,6 +232,28 @@
     });
     document.getElementById("btnArea").appendChild(createButton);
   }
+
+// 답변 수정할 때 자바스크립트
+    function showUpdateAnswer(obj) {
+      obj.parentElement.innerHTML = '';
+      var ansContentAreaUpdate = document.getElementById('ansContentAreaUpdate');
+      ansContentAreaUpdate.contentEditable = "true";
+      ansContentAreaUpdate.readOnly = false;
+      var updateBtn = document.createElement('button');
+      updateBtn.type = 'button';
+      updateBtn.className = 'btn btn-success';
+      updateBtn.innerText = '수정 완료';
+      updateBtn.addEventListener('click', function() {
+        modifyAnswer();
+      });
+      document.getElementById("btnArea").appendChild(updateBtn);
+    }
+    function modifyAnswer(){
+      if (confirm("답변을 수정하시겠습니까?")) {
+        document.forms["updateForm"].submit();
+      }
+    }
+
 
     function goUpdate() {
       location.href = "/inquire/update.do?inqNo=${inqDetail.inquire.inqNo}";

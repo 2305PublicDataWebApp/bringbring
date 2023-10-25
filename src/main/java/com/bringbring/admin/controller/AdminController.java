@@ -414,6 +414,7 @@ public class AdminController {
 		if(checkAdmin >= 2) {
 			List<ReservationAdmin> reservationDetail = adminService.selectReservationDetail(rvNo);
 			if(reservationDetail!=null){
+
 				model.addAttribute("rdList", reservationDetail);
 				return "admin/reservationDetail";
 			} else {

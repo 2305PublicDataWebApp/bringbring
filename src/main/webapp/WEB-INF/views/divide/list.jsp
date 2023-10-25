@@ -47,7 +47,7 @@
             top: 0;
             bottom: 0;
             width: 100%;
-            height: 100%;
+            max-height: 200%;
         }
         main tr{
             border-bottom: 1px solid #d4d0d0;
@@ -77,24 +77,33 @@
     
   <main style="width: 100%;margin: 0 auto;padding-top: 50px;">
     <section data-aos="fade-up">
-      <div style="width: 1000px;margin: 0 auto;">    
-          <div class="input-group" style="width: 600px;float: left;" >
-              <select name="searchCondition" class="form-select" aria-label="Default select example" style="margin-right: 8px;border: 1px solid #adb5bd;">
-                  <option value="all">전체</option>
-                  <option value="title">제목</option>
-                  <option value="nickName">지역</option>
-                </select>
-              <input name="searchKeyword" style="width: 200px;border: 1px solid #adb5bd;" class="form-control me-2" type="search" placeholder="검색어를 입력해주세요." aria-label="Search">
-              <button class="btn btn-outline-success" style="border-bottom-right-radius: 5px;border-top-right-radius: 5px;z-index: 1;width: 80px;" type="submit" >Search</button>
-          </div>
+      <div style="width: 1000px;margin: 0 auto;">
+          <form action="/divide/search.do" method="get">
+              <div class="input-group" style="width: 600px;float: left;" >
+                  <select name="searchCondition" class="form-select" aria-label="Default select example" style="margin-right: 8px;border: 1px solid #adb5bd;">
+                      <option value="all">전체</option>
+                      <option value="title">제목</option>
+                      <option value="region">지역</option>
+                      <option value="category">카테고리</option>
+                  </select>
+                  <input name="searchKeyword" style="width: 200px;border: 1px solid #adb5bd;" class="form-control me-2" type="search" placeholder="검색어를 입력해주세요." aria-label="Search">
+                  <button class="btn btn-outline-success" style="border-bottom-right-radius: 5px;border-top-right-radius: 5px;z-index: 1;width: 80px;" type="submit" >Search</button>
+              </div>
+          </form>
           <div style="float: right;">
             <button onclick="showDivdeInsert();" type="button" class="btn btn-success">글 등록</button>
           </div>
           <div style="width: 100%;float: left;border-top: 1px solid #ccc;margin-top: 15px;padding: 10px 0px">
               <p style="float:left;font-size: 18px;margin: 0;padding: 5px;font-weight: 600;font-family: 'SUITE-Regular';letter-spacing: 2px;padding-left: 15px;"># ${pInfo.totalCount}건</p>
               <p style="margin: 0;padding: 7px 13px 0px 8px;margin-left: 3px;float: right;">
-              <a href="/community/certify.tp" style="text-decoration:underline;">최신순 </a>|
-              <a href="/community/certify.tp?sortType=likeDESC">추천순</a>
+                  <c:if test="${searchOption eq 'date'}">
+                      <a href="/divide/list.do" style="text-decoration:underline;text-underline-position:under;">최신순</a> |
+                      <a href="/divide/list.do?searchOption=heart">추천순</a>
+                  </c:if>
+                  <c:if test="${searchOption ne 'date'}">
+                      <a href="/divide/list.do">최신순</a> |
+                      <a href="/divide/list.do?searchOption=heart" style="text-decoration:underline;text-underline-position:under;">추천순</a>
+                  </c:if>
           </div>
           <table data-aos-delay="50" class="table" style="text-align: center;margin:0;margin-top: 5px;">
             <thead>
@@ -115,6 +124,9 @@
                     </td >
                     <td style="text-align: left;font-size: 17px;">
                         <h4 style="padding-top: 20px;font-weight: 600;margin: 0;font-size: 22px;">
+                            <c:if test="${data.divide.divYn.toString() eq 'Y'}">
+                                <button class="btn btn-success" style="height: 35px;">나눔 완료</button>
+                            </c:if>
                             <a href="${detailUrl}">${data.divide.divTitle}</a>
                         </h4>
                         <br>
@@ -128,7 +140,7 @@
                             </c:if>
                             <c:if test="${sessionId ne null}">
                                 <c:if test="${data.chatRoom.MUserNo eq cUserNo || data.chatRoom.getUserNo eq cUserNo}">
-                                    <i class="bi bi-chat-fill"></i>
+                                    <i class="bi bi-chat-fill" style="color: #898888;"></i>
                                 </c:if>
                             </c:if>
                             ${data.chatRoom.chatroomCount} &nbsp;
@@ -136,7 +148,7 @@
                                 <i class="bi bi-heart"></i>
                             </c:if>
                             <c:if test="${sessionId ne null && cUserNo eq data.heart.heartUserNo}">
-                                <i class="bi bi-heart-fill"></i>
+                                <i class="bi bi-heart-fill" style="color: #FF8080;"></i>
                             </c:if>
                             ${data.heart.heartCount}
                         </div>
@@ -151,29 +163,59 @@
     <div style="width: 1000px;margin: 0 auto;margin-top: 60px;">
       <nav aria-label="Page navigation example" style="display: flex;">
         <ul class="pagination" style="margin: 0 auto;">
-            <c:if test="${pInfo.startNavi ne 1}">
-                <c:url var="bPageUrl" value="/divide/list.do">
-                    <c:param name="page" value="${pInfo.startNavi-1}"></c:param>
-                </c:url>
-                <li class="page-item">
-                    <a style="color: black;" class="page-link" href="${bPageUrl}">Previous</a>
-                </li>
+<%--            정렬 최신순일 때--%>
+            <c:if test="${searchOption eq 'date'}">
+                <c:if test="${pInfo.startNavi ne 1}">
+                    <c:url var="bPageUrl" value="/divide/list.do">
+                        <c:param name="page" value="${pInfo.startNavi-1}"></c:param>
+                    </c:url>
+                    <li class="page-item">
+                        <a style="color: black;" class="page-link" href="${bPageUrl}">Previous</a>
+                    </li>
+                </c:if>
+                <c:forEach begin="${pInfo.startNavi}" end="${pInfo.endNavi}" var="p">
+                    <c:url var="pageUrl" value="/divide/list.do">
+                        <c:param name="page" value="${p}"></c:param>
+                    </c:url>
+                    <li class="page-item">
+                        <a style="color: black;" class="page-link" href="${pageUrl}">${p}</a>
+                    </li>
+                </c:forEach>
+                <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount}">
+                    <c:url var="nPageUrl" value="/divide/list.do">
+                        <c:param name="page" value="${pInfo.endNavi+1}"></c:param>
+                    </c:url>
+                    <li class="page-item">
+                        <a style="color: black;" class="page-link" href="${nPageUrl}">Next</a>
+                    </li>
+                </c:if>
             </c:if>
-            <c:forEach begin="${pInfo.startNavi}" end="${pInfo.endNavi}" var="p">
-                <c:url var="pageUrl" value="/divide/list.do">
-                    <c:param name="page" value="${p}"></c:param>
-                </c:url>
-                <li class="page-item">
-                    <a style="color: black;" class="page-link" href="${pageUrl}">${p}</a>
-                </li>
-            </c:forEach>
-            <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount}">
-                <c:url var="nPageUrl" value="/divide/list.do">
-                    <c:param name="page" value="${pInfo.endNavi+1}"></c:param>
-                </c:url>
-                <li class="page-item">
-                    <a style="color: black;" class="page-link" href="${nPageUrl}">Next</a>
-                </li>
+        <%--            정렬 하트순일 때--%>
+            <c:if test="${searchOption ne 'date'}">
+                <c:if test="${pInfo.startNavi ne 1}">
+                    <c:url var="bPageUrl" value="/divide/list.do?searchOption=heart">
+                        <c:param name="page" value="${pInfo.startNavi-1}"></c:param>
+                    </c:url>
+                    <li class="page-item">
+                        <a style="color: black;" class="page-link" href="${bPageUrl}">Previous</a>
+                    </li>
+                </c:if>
+                <c:forEach begin="${pInfo.startNavi}" end="${pInfo.endNavi}" var="p">
+                    <c:url var="pageUrl" value="/divide/list.do?searchOption=heart">
+                        <c:param name="page" value="${p}"></c:param>
+                    </c:url>
+                    <li class="page-item">
+                        <a style="color: black;" class="page-link" href="${pageUrl}">${p}</a>
+                    </li>
+                </c:forEach>
+                <c:if test="${pInfo.endNavi ne pInfo.naviTotalCount}">
+                    <c:url var="nPageUrl" value="/divide/list.do?searchOption=heart">
+                        <c:param name="page" value="${pInfo.endNavi+1}"></c:param>
+                    </c:url>
+                    <li class="page-item">
+                        <a style="color: black;" class="page-link" href="${nPageUrl}">Next</a>
+                    </li>
+                </c:if>
             </c:if>
         </ul>
       </nav>

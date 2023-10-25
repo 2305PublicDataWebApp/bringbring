@@ -56,7 +56,7 @@ public class DivideServiceImpl implements DivideService{
 	public int getListCount() { return divideStore.getListCount(); }
 
 	@Override
-	public List<ResponseData> selectResponseDataList(PageInfo pInfo) { return divideStore.selectResponseDataList(pInfo); }
+	public List<ResponseData> selectResponseDataList(PageInfo pInfo, String searchOption) { return divideStore.selectResponseDataList(pInfo, searchOption); }
 
 	@Override
 	public int selectMaxNo() { return divideStore.selectMaxNo(); }
@@ -126,7 +126,7 @@ public class DivideServiceImpl implements DivideService{
 	public UserData selectUserDataByNo(int divNo) { return divideStore.selectUserDataByNo(divNo); }
 
 	@Override
-	public List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, int userNo) { return divideStore.selectLoginResponseDataList(pageInfo, userNo); }
+	public List<ResponseData> selectLoginResponseDataList(PageInfo pageInfo, Map<String, Object> map) { return divideStore.selectLoginResponseDataList(pageInfo, map); }
 
 	@Override
 	public PageInfo getPageInfo(Integer currentPage, int totalCount) {
@@ -150,6 +150,17 @@ public class DivideServiceImpl implements DivideService{
 				startNavi, endNavi);
 		return pi;
 	}
+
+	@Override
+	public List<ResponseData> selectLoginResponseDataSearchList(PageInfo pInfo, Map<String, Object> map) { return divideStore.selectLoginResponseDataSearchList(pInfo, map); }
+
+    @Override
+    public List<ResponseData> selectResponseDataSearchList(PageInfo pInfo, Map<String, Object> map) { return divideStore.selectResponseDataSearchList(pInfo, map); }
+
+    @Override
+    public int getSearchListCount(Map<String, Object> map) {
+        return divideStore.getSearchListCount(map);
+    }
 
 
 	private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletRequest request) {
