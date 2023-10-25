@@ -36,4 +36,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<Chat> selectChatRoomListByNo(int chatroomNo) { return chatStore.selectChatRoomListByNo(chatroomNo); }
+
+    @Override
+    public int updateDivYn(int chatroomNo) { return chatStore.updateDivYn(chatroomNo); }
 }

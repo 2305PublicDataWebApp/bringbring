@@ -42,35 +42,5 @@ public class ChatHandler extends TextWebSocketHandler {
         }
     }
 
-//    @Override
-//    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-//        if(numSet.size()>=3){
-//            WebSocketSession oldSession = numSet.iterator().next();
-//            oldSession.sendMessage(new TextMessage("채팅이 종료되었습니다."));
-//            numSet.remove(numSet.iterator().next());
-//        }
-//
-//        boolean isSessionAlive = false;
-//
-//        for(WebSocketSession sess: numSet) {
-//            if(sess.getId().equals(session.getId())){
-//                isSessionAlive = true;
-//            }
-//        }
-//        if(isSessionAlive){
-//            for(WebSocketSession sess: numSet) {
-//                sess.sendMessage(message);
-//            }
-//        }
-//    }
 
-//    @Override
-//    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-//        numSet.add(session);
-//    }
-//
-//    @Override
-//    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-//        numSet.remove(session);
-//    }
 }

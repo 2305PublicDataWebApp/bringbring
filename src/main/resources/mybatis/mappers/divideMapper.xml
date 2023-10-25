@@ -45,6 +45,13 @@
 		<association property="user" resultMap="user"/>
 	</resultMap>
 
+	<resultMap id="chatData" type="com.bringbring.chatting.domain.ChatData">
+		<association property="chat" resultMap="chat"/>
+		<association property="user" resultMap="user"/>
+		<association property="divide" resultMap="divide"/>
+		<association property="chatRoom" resultMap="chatRoom"/>
+	</resultMap>
+
 	<resultMap id="divide" type="com.bringbring.divide.domain.Divide">
 		<id property="divNo" column="DIV_NO" />
 		<result property="userNo" column="USER_NO" />
@@ -100,8 +107,12 @@
 	<resultMap id="user" type="com.bringbring.user.domain.User">
 		<id property="userNo" column="USER_NO" />
 		<result property="userId" column="USER_ID" />
+		<result property="sendUserId" column="sendUserId" />
+		<result property="getUserId" column="getUserId" />
 		<result property="userPwd" column="USER_PWD" />
 		<result property="userName" column="USER_NAME" />
+		<result property="sendUserName" column="sendUserName" />
+		<result property="getUserName" column="getUserName" />
 		<result property="userPhone" column="USER_PHONE" />
 		<result property="userPostCode" column="USER_POSTCODE" />
 		<result property="userAddress" column="USER_ADDRESS" />
@@ -120,8 +131,20 @@
 		<result property="userNo" column="USER_NO" />
 		<result property="getUserNo" column="GET_USER_NO" />
 		<result property="chatroomCreateDate" column="CHATROOM_CREATE_DATE" />
+		<result property="chatDivYn" column="CHAT_DIV_YN"/>
 		<result property="mUserNo" column="mUserNo" />
 		<result property="chatroomCount" column="chatroomCount" />
+	</resultMap>
+
+	<resultMap id="chat" type="com.bringbring.chatting.domain.Chat">
+		<id property="chatNo" column="CHAT_NO"/>
+		<result property="divNo" column="DIV_NO"/>
+		<result property="userNo" column="USER_NO"/>
+		<result property="getUserNo" column="GET_USER_NO"/>
+		<result property="chatContent" column="CHAT_CONTENT"/>
+		<result property="chatCreateDate" column="CHAT_CREATE_DATE"/>
+		<result property="isChatDeleted" column="IS_CHAT_DELETED"/>
+		<result property="chatRoomNo" column="CHAT_ROOM_NO"/>
 	</resultMap>
 
 	<select id="selectDetailDataByNo" resultMap="detailData">
@@ -506,6 +529,33 @@
 			  JOIN USER_TBL USING(USER_NO)
 		WHERE USER_NO = #{value}
 	</select>
+	<select id="getChatDataListCountByNo" resultType="_int">
+		SELECT COUNT(*)
+		FROM (
+				 SELECT CHATROOM_NO, MAX(CHAT_CREATE_DATE) AS maxChatCreateDate
+				 FROM CHAT_TBL
+				 GROUP BY CHATROOM_NO
+			 ) D
+				 JOIN CHAT_TBL A ON D.CHATROOM_NO = A.CHATROOM_NO AND D.maxChatCreateDate = A.CHAT_CREATE_DATE
+				 JOIN USER_TBL B ON A.USER_NO = B.USER_NO
+				 JOIN DIVIDE_TBL E ON E.DIV_NO = A.DIV_NO
+				 JOIN CHATROOM_TBL F ON A.CHATROOM_NO = F.CHATROOM_NO
+		WHERE A.USER_NO = #{value} OR A.GET_USER_NO = #{value}
+	</select>
+	<select id="selectMypageChatList" resultMap="chatData">
+		SELECT A.*,B.USER_ID AS sendUserId, B.USER_NAME AS sendUserName, C.USER_ID AS getUserId, C.USER_NAME AS getUserName, E.*,  F.*
+		FROM (
+				 SELECT CHATROOM_NO, MAX(CHAT_CREATE_DATE) AS maxChatCreateDate
+				 FROM CHAT_TBL
+				 GROUP BY CHATROOM_NO
+			 ) D
+				 JOIN CHAT_TBL A ON D.CHATROOM_NO = A.CHATROOM_NO AND D.maxChatCreateDate = A.CHAT_CREATE_DATE
+				 JOIN USER_TBL B ON A.USER_NO = B.USER_NO
+				 JOIN USER_TBL C ON A.GET_USER_NO = C.USER_NO
+				 JOIN DIVIDE_TBL E ON E.DIV_NO = A.DIV_NO
+				 JOIN CHATROOM_TBL F ON A.CHATROOM_NO = F.CHATROOM_NO
+		WHERE A.USER_NO = #{value} OR A.GET_USER_NO = #{value}
+	</select>
   	<insert id="insertDivide">
   		INSERT INTO DIVIDE_TBL VALUES (
       SEQ_DIV_NO.NEXTVAL , #{userNo}, #{wasteCategoryNo}, #{divTitle}, #{divContent},
@@ -534,6 +584,9 @@
 	</update>
 	<update id="updateViewCount">
 		UPDATE DIVIDE_TBL SET VIEW_COUNT = #{viewCount} WHERE DIV_NO = #{divNo}
+	</update>
+	<update id="updateDivideYn">
+		UPDATE DIVIDE_TBL SET DIV_YN = 'Y' WHERE DIV_NO = #{value}
 	</update>
 	<delete id="deleteImage">
 		DELETE FROM IMAGE_TBL WHERE IMAGE_NO = #{value}

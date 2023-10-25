@@ -19,18 +19,27 @@ public class StompChatController {
     //"/pub/chat/enter"
     @MessageMapping(value = "/chat/enter")
     public void enter(ChatMessageDTO message){
-        message.setMessage("님이 채팅방에 참여하였습니다.");
+        message.setMessage("bringbring chatting start");
         template.convertAndSend("/sub/chatting/" + message.getChatroomNo(), message);
     }
 
     @MessageMapping(value = "/chat/close")
     public void close(ChatMessageDTO message){
-        message.setMessage("님이 채팅방에서 퇴장하였습니다.");
+        message.setMessage("bringbring chatting close");
         template.convertAndSend("/sub/chatting/" + message.getChatroomNo(), message);
     }
+
+    @MessageMapping(value = "/chat/divide")
+    public void divideDone(ChatMessageDTO message){
+        message.setMessage("chatting divide complete");
+        template.convertAndSend("/sub/chatting/" + message.getChatroomNo(), message);
+    }
+
 
     @MessageMapping(value = "/chat/message")
     public void message(ChatMessageDTO message){
         template.convertAndSend("/sub/chatting/" + message.getChatroomNo(), message);
     }
+
+
 }
