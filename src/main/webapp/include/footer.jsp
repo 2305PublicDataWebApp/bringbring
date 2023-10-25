@@ -17,10 +17,6 @@
 	            <h3>브링브링</h3>
 	            <p>
 					서울특별시 중구 <br> 남대문로1가 18 <br>그레이츠 청계<br>(GREITS CHEONGGYE)<br><br>
-<%--	              A108 Adam Street <br>--%>
-<%--	              New York, NY 535022<br>--%>
-<%--	              United States <br><br>--%>
-<%--	              <strong>Phone:</strong> +1 5589 55488 55<br>--%>
 
 	              <strong>Email:</strong> bringbring992@gmail.com<br>
 	            </p>
@@ -65,7 +61,7 @@
 	
 	    <div class="container footer-bottom clearfix">
 	      <div class="copyright">
-	        &copy; Copyright <strong><span>Arsha</span></strong>. All Rights Reserved
+	        &copy; Copyright <strong><span>Arsha, JSH</span></strong>. All Rights Reserved
 	      </div>
 	      <div class="credits">
 	        <!-- All the links in the footer should remain intact. -->
