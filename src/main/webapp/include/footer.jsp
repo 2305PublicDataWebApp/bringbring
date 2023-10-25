@@ -21,6 +21,7 @@
 <%--	              New York, NY 535022<br>--%>
 <%--	              United States <br><br>--%>
 <%--	              <strong>Phone:</strong> +1 5589 55488 55<br>--%>
+
 	              <strong>Email:</strong> bringbring992@gmail.com<br>
 	            </p>
 	          </div>

@@ -143,4 +143,6 @@ public interface InquireStore {
      * @return
      */
     int deleteInquire(int inqNo);
+
+    int updateYn(int inqNo);
 }

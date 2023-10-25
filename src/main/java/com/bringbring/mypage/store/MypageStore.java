@@ -2,6 +2,7 @@ package com.bringbring.mypage.store;
 
 import java.util.List;
 
+import com.bringbring.chatting.domain.ChatData;
 import com.bringbring.common.PageInfo;
 import com.bringbring.divide.domain.DivideData;
 import com.bringbring.divide.domain.HeartData;
@@ -34,4 +35,10 @@ public interface MypageStore {
 	int getDivideListCountByNo(int userNo);
 
 	List<DivideData> selectMypageDivideList(PageInfo pInfo, int userNo);
+
+    int getChatDataListCountByNo(int userNo);
+
+	List<ChatData> selectMypageChatList(PageInfo pInfo, int userNo);
+
+    int updateDivideYn(int divNo);
 }

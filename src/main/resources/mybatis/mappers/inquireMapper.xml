@@ -223,6 +223,9 @@
 	<update id="updateAnswer">
 		UPDATE ANSWER_TBL SET ANS_CONTENT = #{ansContent}, ANS_UPDATE_DATE = DEFAULT WHERE INQ_NO = #{inqNo}
 	</update>
+	<update id="updateYn">
+		UPDATE INQUIRE_TBL SET ANSWER_YN = 'Y' WHERE INQ_NO = #{value}
+	</update>
 	<delete id="deleteImage">
 		DELETE FROM IMAGE_TBL WHERE IMAGE_NO = #{value}
 	</delete>

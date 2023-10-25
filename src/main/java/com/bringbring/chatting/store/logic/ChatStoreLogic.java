@@ -30,4 +30,7 @@ public class ChatStoreLogic implements ChatStore {
 
     @Override
     public List<Chat> selectChatRoomListByNo(int chatroomNo) { return sqlSession.selectList("ChatMapper.selectChatRoomListByNo", chatroomNo); }
+
+    @Override
+    public int updateDivYn(int chatroomNo) { return sqlSession.update("ChatMapper.updateDivYn", chatroomNo); }
 }

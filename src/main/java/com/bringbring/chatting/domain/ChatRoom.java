@@ -26,6 +26,7 @@ public class ChatRoom {
 	private int userNo;
 	private int getUserNo;
 	private LocalDateTime chatroomCreateDate;
+	private char chatDivYn;
 
 	private int chatroomCount;
 	private int mUserNo;
