@@ -109,7 +109,7 @@ public class RestReservationController {
         CancelRequest cancelRequest = reservationService.selectPayIdByDischargeNo(request.get("dischargeNo"));
         String payId = cancelRequest.getPay().getPayId();
         String cancel_request_amount = request.get("cancel_request_amount");
-        String reason = request.get("reason");
+        int reasonNo = Integer.parseInt(request.get("reason"));
         Pay payResult = reservationService.selectPayInfoByPayId(payId);
         String token = payService.getToken();
         payService.cancelRequest(request, token);
@@ -117,7 +117,7 @@ public class RestReservationController {
         boolean cancelSuccess = payService.cancelRequest(request, token);
         boolean dbUpdate = false;
         if(cancelSuccess) {
-            dbUpdate = payService.cancelPayInfo(payId);
+            dbUpdate = payService.cancelPayInfo(payId, reasonNo);
         }
 
         if (cancelSuccess && dbUpdate) {
@@ -129,6 +129,17 @@ public class RestReservationController {
         }
     }
 
+    @GetMapping("/selectMyList.do")
+    public ResponseEntity<List<ReservationComplete>> selectMyReservationDetailList(@RequestParam int rvNo) {
+        List<ReservationComplete> reservationCompletes = reservationService.selectMyReservationDetailList(rvNo);
+        if (reservationCompletes != null) {
+            return ResponseEntity.ok(reservationCompletes);
+        } else {
+            // 데이터가 없는 경우 404 Not Found 상태 코드 반환
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/selectImage.do")
     public ResponseEntity<List<ReservationComplete>> selectImages(@RequestParam int rvDetailNo
             , @RequestParam int imageIndexNo) {
@@ -137,7 +148,7 @@ public class RestReservationController {
         connection.setRvDetailNo(rvDetailNo);
 
 
-        List<ReservationComplete> reservationCompletes = reservationService.selectMyReservationDetailList(connection);
+        List<ReservationComplete> reservationCompletes = reservationService.selectMyReservationDetailImage(connection);
         if (reservationCompletes != null) {
             return ResponseEntity.ok(reservationCompletes);
         } else {

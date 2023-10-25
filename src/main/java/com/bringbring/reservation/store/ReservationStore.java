@@ -61,5 +61,7 @@ public interface ReservationStore {
     CancelRequest selectPayIdByDischargeNo(String dischargeNo);
 
 
-    List<ReservationComplete> selectMyReservationDetailList(Connection connection);
+    List<ReservationComplete> selectMyReservationDetailImage(Connection connection);
+
+    List<ReservationComplete> selectMyReservationDetailList(int rvNo);
 }

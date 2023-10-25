@@ -151,7 +151,7 @@
   <div>
     <p class="title">결제 수단</p>
     <hr>
-    <div>
+    <div id="payMethod">
       <div class="form-check" id="card-form">
         <div>
           <input class="form-check-input" type="radio" name="flexRadioDefault" id="card">
@@ -178,7 +178,6 @@
   </div>
   <div id="submit_btn_box">
     <button class="btn btn-success" id="submitBtn" type="button" onclick="handlePayment()">결제하기</button>
-<%--    <button class="btn btn-success" id="kakaoPayBtn" type="button" onclick="kakaoRequestPay()">카카오 페이 결제하기</button>--%>
   </div>
 </main>
 </div><!-- End Hero -->
@@ -208,12 +207,9 @@
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.5/dayjs.min.js"></script>
 
 <!-- 채널톡 api -->
-<script>
-  (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
+<jsp:include page="/include/chatBot.jsp"></jsp:include>
 
-  ChannelIO('boot', {
-    "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-  });
+  <script>
 
   let selectedPaymentMethod = "card"; // 초기 선택: 신용카드
 
@@ -236,8 +232,6 @@
       kakaoRequestPay();
     }
   }
-
-
 
   function requestPay() {
     let uidDate = new dayjs().format("YYYYMMDDTHHmmss");

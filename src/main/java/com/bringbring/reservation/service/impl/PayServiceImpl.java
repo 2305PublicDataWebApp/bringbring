@@ -157,13 +157,14 @@ public class PayServiceImpl implements PayService {
 
 
     @Override
-    public boolean cancelPayInfo(String payId) {
+    public boolean cancelPayInfo(String payId, Integer reasonNo) {
         Pay pay = reservationStore.selectPayInfoByPayId(payId);
         ReservationDetail reservationDetail = reservationStore.selectReservationDetailByDetailNo(pay.getRvDetailNo());
         Reservation reservation = reservationStore.selectReservationNoByRvNo(reservationDetail.getRvNo());
         PayCancel payCancel = new PayCancel();
         payCancel.setPayNo(pay.getPayNo());
         payCancel.setCancelAmount(pay.getPayAmount());
+        payCancel.setReasonNo(reasonNo);
         int totalResult = 0;
         int reservationResult = reservationStore.updateReservationIsCancel(reservation.getRvNo());
         int payUpdate = reservationStore.updatePayIsCancel(reservationDetail.getRvDetailNo());

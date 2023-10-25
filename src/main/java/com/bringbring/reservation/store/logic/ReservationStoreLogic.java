@@ -154,8 +154,13 @@ public class ReservationStoreLogic implements ReservationStore {
     }
 
     @Override
-    public List<ReservationComplete> selectMyReservationDetailList(Connection connection) {
-        return sqlSession.selectList("ReservationMapper.selectMyReservationDetailList", connection);
+    public List<ReservationComplete> selectMyReservationDetailImage(Connection connection) {
+        return sqlSession.selectList("ReservationMapper.selectMyReservationDetailImage", connection);
+    }
+
+    @Override
+    public List<ReservationComplete> selectMyReservationDetailList(int rvNo) {
+        return sqlSession.selectList("ReservationMapper.selectMyReservationDetailList", rvNo);
     }
 
 

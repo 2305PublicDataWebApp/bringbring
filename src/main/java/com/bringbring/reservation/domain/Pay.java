@@ -17,7 +17,7 @@ public class Pay {
     private String userId;
     private String payId;
     private String payMethod;
-    private double payAmount;
+    private long payAmount;
     private String payCurrency;
     private Date payDate;
     private char isPayStatus;

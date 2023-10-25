@@ -143,13 +143,7 @@
 <script src="../../../resources/assets/js/main.js"></script>
 
 <!-- 채널톡 api -->
-<script>
-  (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
-
-  ChannelIO('boot', {
-    "pluginKey": "3e438b51-7087-4b0c-b50f-c1cb50c8f770"
-  });
-</script>
+<jsp:include page="/include/chatBot.jsp"></jsp:include>
 
 <script type="text/javascript">
   // 선택한 아이템을 저장할 배열
@@ -157,6 +151,16 @@
 
   // 버튼 선택 시 리스트 출력
   function wasteSelect(button) {
+
+    // 모든 버튼에서 'active' 클래스 제거
+    var buttons = document.querySelectorAll('.btn.btn-outline-success');
+    buttons.forEach(function(btn) {
+      btn.classList.remove('active');
+    });
+
+    // 클릭한 버튼에 'active' 클래스 추가
+    button.classList.add('active');
+
     let cellNum = 1;
     let selectItem = button.value;
     console.log("선택된 값: " + selectItem);
@@ -184,32 +188,49 @@
         for (var i = 0; i < data.length; i++) {
           var item = data[i];
           var wasteTypeName = item.wasteType.wasteTypeName;
-          let wasteInfoNo = item.wasteInfo.wasteInfoNo;
+          // let wasteInfoNo = item.wasteInfo.wasteInfoNo;
 
           if (!groupedData[wasteTypeName]) {
             groupedData[wasteTypeName] = {
               wasteCategoryName: wasteTypeName,
               wasteInfoStandards: [],
               wasteInfoFees: [],
-              wasteInfoNo:[]
+              wasteInfoNos:[]
             };
           }
 
           groupedData[wasteTypeName].wasteInfoStandards.push(item.wasteInfo.wasteInfoStandard);
           groupedData[wasteTypeName].wasteInfoFees.push(item.wasteInfo.wasteInfoFee);
-          groupedData[wasteTypeName].wasteInfoNo.push(item.wasteInfo.wasteInfoNo);
+          groupedData[wasteTypeName].wasteInfoNos.push(item.wasteInfo.wasteInfoNo);
 
         }
+
+        console.log("그룹", groupedData[wasteTypeName])
 
         var tableBody = document.getElementById('listTable');
 
         // 체크박스 변경 이벤트 리스너를 추가하는 함수
-        function createChangeListener(pTag, item, selectElement) {
+        function createChangeListener(pTag, item, selectElement, noTag) {
 
           return function () {
             var selectedOptionIndex = selectElement.selectedIndex;
             var matchingFee = item.wasteInfoFees[selectedOptionIndex];
             pTag.innerText = matchingFee;
+
+            var selectedInfoNo = item.wasteInfoNos[selectedOptionIndex];
+
+            // 번호 출력 엘리먼트 생성 또는 가져오기
+            // var noInfoCell = trTag.querySelector('.wasteInfoNo');
+            // if (!noInfoCell) {
+            //   noInfoCell = document.createElement('td');
+            //   noInfoCell.setAttribute('class', 'wasteInfoNo');
+            //   noInfoCell.style.display = 'none';
+            //   trTag.appendChild(noInfoCell);
+            //   console.log("gd")
+            // }
+
+            noTag.innerText = selectedInfoNo;
+            console.log("noInfoCell 내용: ", noTag.innerText);
           };
         }
 
@@ -255,6 +276,7 @@
           var thirdCell = document.createElement('td');
           var pTag = document.createElement('p');
           var initialMatchingFee = item.wasteInfoFees[0];
+          // console.log("졸려디지겠네2", initialMatchingFee);
           pTag.innerText = initialMatchingFee;
 
           pTag.setAttribute('class', 'listTableP');
@@ -265,13 +287,17 @@
 
           // 정보를 보내기 위한 태그 추가
           var noInfoCell = document.createElement('td');
-          var inputTag = document.createElement('input');
-          var infoNo = item.wasteInfoNo[0];
-          inputTag.setAttribute("name", 'wasteInfoNo');
-          inputTag.setAttribute("class", 'wasteInfoNo');
-          inputTag.type='hidden';
-          inputTag.value=infoNo;
-          noInfoCell.appendChild(inputTag);
+          var noTag = document.createElement('p');
+          // var inputTag = document.createElement('input');
+          var infoNo = item.wasteInfoNos[0];
+          // inputTag.setAttribute("name", 'wasteInfoNo');
+          // inputTag.setAttribute("class", 'wasteInfoNo');
+          // inputTag.type='hidden';
+          // inputTag.value=infoNo;
+          noTag.innerText = infoNo;
+          noTag.setAttribute('class', 'wasteInfoNo');
+          thirdCell.appendChild(noTag);
+          console.log("졸려디지겠네", noTag.innerText);
 
           // 네 번째 열 (갯수 및 추가/제거 버튼)
           var fourthCell = document.createElement('td');
@@ -286,7 +312,8 @@
             var wasteCategoryName = checkbox.value;
             var wasteInfoStandard = trElement.querySelector('.selectBox').value;
             var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
-            var wasteInfoNo = trElement.querySelector('.wasteInfoNo').value;
+            var wasteInfoNo = trElement.querySelector('.wasteInfoNo').textContent;
+            console.log("여기는?", wasteInfoNo)
             count("minus", this, { wasteCategoryName, wasteInfoStandard, wasteInfoFee, wasteInfoNo});
 
             // 아이템 제거 함수 호출
@@ -313,7 +340,7 @@
             var wasteCategoryName = checkbox.value;
             var wasteInfoStandard = trElement.querySelector('.selectBox').value;
             var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
-            var wasteInfoNo = trElement.querySelector('.wasteInfoNo').value;
+            var wasteInfoNo = trElement.querySelector('.wasteInfoNo').textContent;
             count("plus", this, { wasteCategoryName, wasteInfoStandard, wasteInfoFee, wasteInfoNo});
           });
 
@@ -349,7 +376,10 @@
             var wasteCategoryName = trElement.querySelector('label').textContent;
             var wasteInfoStandard = trElement.querySelector('.selectBox').value;
             var wasteInfoFee = trElement.querySelector('.listTableP').textContent;
-            var wasteInfoNo = trElement.querySelector('wasteInfoNo').value;
+            console.log("모깃ㅂ", trElement.querySelector('.wasteInfoNo'))
+            var wasteInfoNo = trElement.querySelector('.wasteInfoNo').textContent;
+
+            console.log("tq", wasteInfoNo)
 
             var selectedItem = [];
             selectedItem.push({
@@ -371,7 +401,7 @@
 
           // 이벤트 리스너 연결
 
-          selectElement.addEventListener('change', createChangeListener(pTag, item, selectElement));
+          selectElement.addEventListener('change', createChangeListener(pTag, item, selectElement, noTag));
 
           trTag.appendChild(firstCell);
           trTag.appendChild(secondCell);
@@ -379,6 +409,8 @@
           trTag.appendChild(noInfoCell);
           trTag.appendChild(fourthCell);
           tableBody.appendChild(trTag);
+
+          console.log(trTag);
 
         }
       },
@@ -498,6 +530,8 @@
       let infoNo = newRow.insertCell(5);
       infoNo.setAttribute('name', 'wasteInfoNo');
       infoNo.setAttribute('value', item.wasteInfoNo);
+
+      console.log("인포넘", item.wasteInfoNo);
 
       // 제거 버튼에 클릭 이벤트를 추가하여 선택한 아이템을 제거합니다.
       removeButton.addEventListener('click', function () {

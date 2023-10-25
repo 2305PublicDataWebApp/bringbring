@@ -15,6 +15,9 @@
     border: none;
     background: none;
 }
+.pic-Add-Btn:hover {
+    cursor: pointer;
+}
 .selectBtn > img {
     width: 30px;
 }
