@@ -211,13 +211,13 @@
 				 LEFT JOIN (
 			SELECT DIV_NO, COUNT(*) AS heartCount, USER_NO
 			FROM HEART_TBL
-			WHERE USER_NO = #{value}
+			WHERE USER_NO = #{userNo}
 			GROUP BY DIV_NO, USER_NO
 		) G ON A.DIV_NO = G.DIV_NO
 				 LEFT JOIN (
 			SELECT DIV_NO, COUNT(*) AS chatroomNo, MIN(USER_NO) AS USER_NO, MIN(GET_USER_NO) AS GET_USER_NO
 			FROM CHATROOM_TBL
-			WHERE USER_NO = #{value} OR GET_USER_NO = #{value}
+			WHERE USER_NO = #{userNo} OR GET_USER_NO = #{userNo}
 			GROUP BY DIV_NO
 		) H ON A.DIV_NO = H.DIV_NO
 				 LEFT JOIN (
@@ -241,7 +241,7 @@
 		(SELECT COUNT(*) FROM HEART_TBL I WHERE I.DIV_NO = A.DIV_NO) AS heartCount,
 		(SELECT COUNT(*) FROM CHATROOM_TBL J WHERE J.DIV_NO = A.DIV_NO) AS chatroomCount,
 		H.USER_NO AS mUserNo, H.GET_USER_NO,
-		D.IMAGE_PATH AS image_path -- 이미지 경로 가져오기
+		D.IMAGE_PATH AS image_path
 		FROM DIVIDE_TBL A
 		JOIN CITY_TBL B ON A.CITY_NO = B.CITY_NO
 		JOIN DISTRICT_TBL C ON A.DISTRICT_NO = C.DISTRICT_NO
@@ -265,7 +265,7 @@
 		WHERE TABLE_NAME = 'divide'
 		GROUP BY IMAGE_GROUP_NO
 		) MinImages ON A.DIV_NO = MinImages.IMAGE_GROUP_NO
-		LEFT JOIN IMAGE_TBL D ON MinImages.min_image_no = D.IMAGE_NO -- 이미지 테이블 조인
+		LEFT JOIN IMAGE_TBL D ON MinImages.min_image_no = D.IMAGE_NO
 		WHERE A.IS_DIV_DELETED = 'N'
 		AND A.DIV_NO IN (
 		SELECT D.IMAGE_GROUP_NO
@@ -274,9 +274,9 @@
 		AND D.IMAGE_NO = MinImages.min_image_no
 		)
 		<if test="searchCondition == 'all'">
-			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%' OR DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+			AND (DIV_TITLE LIKE '%'||#{searchKeyword}||'%' OR DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
 			OR B.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
-		    OR F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+		    OR F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%')
 		</if>
 		<if test="searchCondition == 'title'">
 			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
@@ -319,7 +319,7 @@
 		GROUP BY IMAGE_GROUP_NO
 		) MinImages ON A.DIV_NO = MinImages.IMAGE_GROUP_NO
 		LEFT JOIN IMAGE_TBL D ON MinImages.min_image_no = D.IMAGE_NO -- 이미지 테이블 조인
-		WHERE A.IS_DIV_DELETED = 'N'
+		WHERE A.IS_DIV_DELETED = 'N'  -- 'N'인 값만 가져오도록 수정
 		AND A.DIV_NO IN (
 		SELECT D.IMAGE_GROUP_NO
 		FROM IMAGE_TBL D
@@ -327,9 +327,13 @@
 		AND D.IMAGE_NO = MinImages.min_image_no
 		)
 		<if test="searchCondition == 'all'">
-			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%' OR DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
-			OR B.CITY_NAME LIKE '%'||#{searchKeyword}||'%' OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
+			AND (
+			DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+			OR DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
+			OR B.CITY_NAME LIKE '%'||#{searchKeyword}||'%'
+			OR C.DISTRICT_NAME LIKE '%'||#{searchKeyword}||'%'
 			OR F.WASTE_CATEGORY_NAME LIKE '%'||#{searchKeyword}||'%'
+			)
 		</if>
 		<if test="searchCondition == 'title'">
 			AND DIV_TITLE LIKE '%'||#{searchKeyword}||'%'
@@ -376,7 +380,7 @@
 		SELECT MIN(IMAGE_NO)
 		FROM IMAGE_TBL
 		WHERE IMAGE_GROUP_NO = A.DIV_NO
-		AND TABLE_NAME = 'divide'
+		AND TABLE_NAME = 'divide' AND A.IS_DIV_DELETED= 'N'
 		)
 		<if test="searchCondition == 'all'">
 			AND (
@@ -431,7 +435,7 @@
 		SELECT MIN(IMAGE_NO)
 		FROM IMAGE_TBL
 		WHERE IMAGE_GROUP_NO = A.DIV_NO
-		AND TABLE_NAME = 'divide'
+		AND TABLE_NAME = 'divide' AND A.IS_DIV_DELETED= 'N'
 		)
 		<if test="searchCondition == 'all'">
 			AND (
