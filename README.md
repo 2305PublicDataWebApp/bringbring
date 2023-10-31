@@ -134,10 +134,19 @@
 <br><br>
 
 ### 2. 회원관리
--수정예정-
+![로그인](https://github.com/2305PublicDataWebApp/bringbring/assets/134674375/9cbecd70-93e2-464a-98d9-f519f586ccde)
+![회원가입](https://github.com/2305PublicDataWebApp/bringbring/assets/134674375/1dd33b6e-5510-4956-b408-5342f592d4bb)
+![아이디 찾기](https://github.com/2305PublicDataWebApp/bringbring/assets/134674375/5069612d-872e-4cf0-8897-ad6adabd2f74)
+![아이디 찾기 모달](https://github.com/2305PublicDataWebApp/bringbring/assets/134674375/8e1c8c81-4135-494a-8fe0-cb34f2268fc9)
+![비밀번호 찾기](https://github.com/2305PublicDataWebApp/bringbring/assets/134674375/54e4fc5d-e962-47fe-afd4-750d2b27fad4)
+![이메일 인증번호](https://github.com/2305PublicDataWebApp/bringbring/assets/134674375/8a41c684-8660-4693-8768-38ea87bb34db)
+![비밀번호 찾기 인증](https://github.com/2305PublicDataWebApp/bringbring/assets/134674375/3cc5a6c5-95a3-41a9-a195-8a1d3c06eb74)
+![비밀번호 모달](https://github.com/2305PublicDataWebApp/bringbring/assets/134674375/4025d9ce-0b74-486f-ae2f-b1d3085c23b6)
+![정보 수정](https://github.com/2305PublicDataWebApp/bringbring/assets/134674375/9bde3d10-7600-4507-ae59-a791a4db4df7)
 <br><br>
 
 ### 3. 마이페이지
+![마이페이지 첫화면](https://github.com/2305PublicDataWebApp/bringbring/assets/134674375/2aa9424e-8193-4f31-a7c7-2047919dd5d9)
 ![FireShot Capture 022 - 신청내역_1 - 127 0 0 1](https://github.com/2305PublicDataWebApp/bringbring/assets/134674358/97b80c7b-c40a-4d12-a923-6c81e00bc388)
 ![FireShot Capture 022 - 신청내역_2 - 127 0 0 1](https://github.com/2305PublicDataWebApp/bringbring/assets/134674358/7167655d-4a83-4c0f-8f12-7e3c23e36a44)
 ![FireShot Capture 022 - 신청내역_3 - 127 0 0 1](https://github.com/2305PublicDataWebApp/bringbring/assets/134674358/bfb52c74-3bdd-4454-9bae-baefe45a764c)
