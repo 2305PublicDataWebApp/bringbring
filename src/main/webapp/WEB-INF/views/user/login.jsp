@@ -119,7 +119,7 @@
 // 	    deleteCookie('_kawlt');
 	
 // 		// 초기화
-		Kakao.init('b82d0f1e81f80d7dfb52a8b896d5b146'); // JavaScript 키
+		Kakao.init(); // JavaScript 키
 		console.log(Kakao.isInitialized());
 
 		function kakao_btn() {

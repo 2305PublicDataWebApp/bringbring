@@ -44,8 +44,8 @@ public class SocialLoginServiceImpl implements SocialLoginService{
 	private final UserStore userStore;
 	
 	// 네이버 로그인 관련
-	private final static String NAVER_CLIENT_ID = "oWq7iXzHYNRYo_as3iSc";
-	private final static String NAVER_CLIENT_SECRET = "9GSiGzyMtY";
+	private final static String NAVER_CLIENT_ID = "";
+	private final static String NAVER_CLIENT_SECRET = "";
 	private final static String NAVER_REDIRECT_URI = "http://127.0.0.1:8888/social/naverLogin.do";
 	private final static String SESSION_STATE = "oauth_state";
 	// 프로필 조회 API URL
@@ -128,7 +128,7 @@ public class SocialLoginServiceImpl implements SocialLoginService{
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
 		StringBuilder sb = new StringBuilder();
 		sb.append("grant_type=authorization_code");
-		sb.append("&client_id=b82d0f1e81f80d7dfb52a8b896d5b146"); // JavaScript 키
+		sb.append("&client_id="); // JavaScript 키
 		sb.append("&redirect_uri=http://127.0.0.1:8888/social/kakaoLogin.do");
 		sb.append("&code=" + code);
 		bw.write(sb.toString());
